@@ -58,9 +58,10 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">computeKNNRefSynthetic</span><span class="op">(</span></span>
+<span>  <span class="va">gdsSample</span>,</span>
 <span>  <span class="va">listEigenvector</span>,</span>
 <span>  <span class="va">listCatPop</span>,</span>
-<span>  <span class="va">study.annot</span>,</span>
+<span>  <span class="va">study.id.syn</span>,</span>
 <span>  <span class="va">spRef</span>,</span>
 <span>  kList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span>,</span>
 <span>  pcaList <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">15</span></span>
@@ -69,7 +70,12 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>listEigenvector</dt>
+    <dl><dt>gdsSample</dt>
+<dd><p>an object of class <code>gds</code> opened related to
+the sample</p></dd>
+
+
+<dt>listEigenvector</dt>
 <dd><p>TODO see return of computePCAsynthetic</p></dd>
 
 
@@ -77,9 +83,8 @@
 <dd><p>TODO</p></dd>
 
 
-<dt>study.annot</dt>
-<dd><p>a  <code>data.frame</code> with one entry from study.annot in
-the gds</p></dd>
+<dt>study.id.syn</dt>
+<dd><p>a the study.id of the synthetic data</p></dd>
 
 
 <dt>spRef</dt>

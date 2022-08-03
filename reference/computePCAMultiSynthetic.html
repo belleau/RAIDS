@@ -57,14 +57,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">computePCAMultiSynthetic</span><span class="op">(</span></span>
-<span>  <span class="va">gdsSample</span>,</span>
-<span>  <span class="va">listPCA</span>,</span>
-<span>  <span class="va">study.annot</span>,</span>
-<span>  algorithm <span class="op">=</span> <span class="st">"exact"</span>,</span>
-<span>  eigen.cnt <span class="op">=</span> <span class="fl">32L</span>,</span>
-<span>  missing.rate <span class="op">=</span> <span class="fl">0.025</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">computePCAMultiSynthetic</span><span class="op">(</span><span class="va">gdsSample</span>, <span class="va">listPCA</span>, <span class="va">sampleRef</span>, <span class="va">study.id.syn</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,24 +71,12 @@ the sample</p></dd>
 <dd><p>TODO</p></dd>
 
 
-<dt>study.annot</dt>
-<dd><p>a  <code>data.frame</code> with one entry for each synthetic
-data to process. The format is the same as study.annot in the gdsSample</p></dd>
+<dt>sampleRef</dt>
+<dd><p>a <code>vector</code> of sample.id from 1KG with one entry for each synthetic to project.</p></dd>
 
 
-<dt>algorithm</dt>
-<dd><p>algorithm of the PCA "exact", "randomized"
-(para snpgdsPCA)</p></dd>
-
-
-<dt>eigen.cnt</dt>
-<dd><p>number of eigenvectors in PCA
-(para snpgdsPCA)</p></dd>
-
-
-<dt>missing.rate</dt>
-<dd><p>number of eigenvectors in PCA
-(para snpgdsPCA)</p></dd>
+<dt>study.id.syn</dt>
+<dd><p>a the study.id of the synthetic data</p></dd>
 
 </dl></div>
     <div id="value">
