@@ -88,6 +88,9 @@
     <loc>/reference/computeAllelicImbDNAChr.html</loc>
   </url>
   <url>
+    <loc>/reference/computeKNNRefSample.html</loc>
+  </url>
+  <url>
     <loc>/reference/computeKNNRefSynthetic.html</loc>
   </url>
   <url>
@@ -115,6 +118,9 @@
     <loc>/reference/computePCAsynthetic.html</loc>
   </url>
   <url>
+    <loc>/reference/computePoolSyntheticAncestry.html</loc>
+  </url>
+  <url>
     <loc>/reference/computePrunedPCARef.html</loc>
   </url>
   <url>
@@ -122,6 +128,9 @@
   </url>
   <url>
     <loc>/reference/computeSyntheticROC.html</loc>
+  </url>
+  <url>
+    <loc>/reference/createStudy2GDS1KG.html</loc>
   </url>
   <url>
     <loc>/reference/estimateAllelicFraction.html</loc>
