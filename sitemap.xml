@@ -4,7 +4,7 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
     <loc>/articles/Create_1KG_GDS_File.html</loc>
@@ -254,5 +254,50 @@
   </url>
   <url>
     <loc>/reference/testEmptyBox.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateAdd1KG2SampleGDS.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateAppendStudy2GDS1KG.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateCharacterString.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateComputeAncestryFromSyntheticFile.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateComputePCARefSample.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateComputePoolSyntheticAncestryGr.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateCreateStudy2GDS1KG.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateEstimateAllelicFraction.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateGDSClass.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateGetTableSNV.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateLogical.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validatePositiveIntegerVector.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validatePruningSample.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateSingleRatio.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateSyntheticGeno.html</loc>
   </url>
 </urlset>
