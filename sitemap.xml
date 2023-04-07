@@ -280,6 +280,9 @@
     <loc>/reference/validateCreateStudy2GDS1KG.html</loc>
   </url>
   <url>
+    <loc>/reference/validateDataRefSynParameter.html</loc>
+  </url>
+  <url>
     <loc>/reference/validateEstimateAllelicFraction.html</loc>
   </url>
   <url>
@@ -289,6 +292,9 @@
     <loc>/reference/validateLogical.html</loc>
   </url>
   <url>
+    <loc>/reference/validatePEDStudyParameter.html</loc>
+  </url>
+  <url>
     <loc>/reference/validatePositiveIntegerVector.html</loc>
   </url>
   <url>
@@ -296,6 +302,9 @@
   </url>
   <url>
     <loc>/reference/validatePruningSample.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateRunExomeAncestry.html</loc>
   </url>
   <url>
     <loc>/reference/validateSingleRatio.html</loc>
