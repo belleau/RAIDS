@@ -64,7 +64,7 @@
     <loc>/reference/addUpdateSegment.html</loc>
   </url>
   <url>
-    <loc>/reference/appendGDSSample.html</loc>
+    <loc>/reference/appendGDSRefSample.html</loc>
   </url>
   <url>
     <loc>/reference/appendGDSSampleOnly.html</loc>
@@ -164,6 +164,9 @@
   </url>
   <url>
     <loc>/reference/generateGDS1KGgenotypeFromSNPPileup.html</loc>
+  </url>
+  <url>
+    <loc>/reference/generateGDSRefSample.html</loc>
   </url>
   <url>
     <loc>/reference/generateGDSSNPinfo.html</loc>
