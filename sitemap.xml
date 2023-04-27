@@ -280,6 +280,12 @@
     <loc>/reference/validateComputeAncestryFromSyntheticFile.html</loc>
   </url>
   <url>
+    <loc>/reference/validateComputeKNNRefSynthetic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateComputePCAMultiSynthetic.html</loc>
+  </url>
+  <url>
     <loc>/reference/validateComputePCARefSample.html</loc>
   </url>
   <url>
