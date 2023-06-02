@@ -139,11 +139,28 @@ Default: <code>seq(2, 15, 1)</code>.</p></dd>
     <h2>Value</h2>
     
 
-<p>a <code>list</code> TODO with the sample.id and eigenvectors
-and a table with KNN call for different K and PCA dimensions.</p><ul><li><p>sample.id TODO</p></li>
-<li><p>sample1Kg TODO</p></li>
-<li><p>sp TODO</p></li>
-<li><p>matKNN TODO</p></li>
+<p>a <code>list</code> containing 4 entries:</p><ul><li><p><code>sample.id</code> a <code>vector</code> of <code>character</code> strings
+representing the identifiers of the synthetic profiles analysed.</p></li>
+<li><p><code>sample1Kg</code> a <code>vector</code> of <code>character</code> strings
+representing the identifiers of the 1KG reference profiles used to
+generate the synthetic profiles.</p></li>
+<li><p><code>sp</code> a <code>vector</code> of <code>character</code> strings representing
+the known super population ancestry of the 1KG reference profiles used
+to generate the synthetic profiles.</p></li>
+<li><p><code>matKNN</code> a <code>data.frame</code> containing the super population
+inference for each synthetic profiles for different values of PCA
+dimensions <code>D</code> and k-neighbors values <code>K</code>. The fourth column title
+corresponds to the <code>fieldPopInfAnc</code> parameter.
+The <code>data.frame</code> contains 4 columns:
+</p><ul><li><p><code>sample.id</code> a <code>character</code> string representing
+the identifier of the synthetic profile analysed.</p></li>
+<li><p><code>D</code> a <code>numeric</code> strings representing
+the value of the PCA dimension used to infer the super population.</p></li>
+<li><p><code>K</code> a <code>numeric</code> strings representing
+the value of the k-neighbors used to infer the super population.</p></li>
+<li><p><code>fieldPopInfAnc</code> value a <code>character</code> string representing
+the inferred ancestry.</p></li>
+</ul></li>
 </ul></div>
     <div id="author">
     <h2>Author</h2>
@@ -153,6 +170,9 @@ and a table with KNN call for different K and PCA dimensions.</p><ul><li><p>samp
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Required library</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/gdsfmt" class="external-link">gdsfmt</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Path to the demo Profile GDS file is located in this package</span></span></span>
 <span class="r-in"><span><span class="va">dataDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/demoKNNSynthetic"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -173,10 +193,16 @@ and a table with KNN call for different K and PCA dimensions.</p><ul><li><p>samp
 <span class="r-in"><span>    listCatPop<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EAS"</span>, <span class="st">"EUR"</span>, <span class="st">"AFR"</span>, <span class="st">"AMR"</span>, <span class="st">"SAS"</span><span class="op">)</span>, studyIDSyn<span class="op">=</span><span class="va">studyID</span>,</span></span>
 <span class="r-in"><span>    spRef<span class="op">=</span><span class="va">refKnownSuperPop</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## The assigned superpopulation to the synthetic profiles</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">sp</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> HG00246 HG00325 HG00611 HG01173 HG02165 HG01112 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   "EUR"   "EUR"   "EAS"   "AMR"   "EAS"   "AMR" </span>
+<span class="r-in"><span><span class="co">## The inferred ancestry for the synthetic profiles for differents values</span></span></span>
+<span class="r-in"><span><span class="co">## of D and K</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">matKNN</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         sample.id D K SuperPop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1.ex1.HG00246.1 2 2      EAS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1.ex1.HG00246.1 2 3      SAS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1.ex1.HG00246.1 2 4      EUR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1.ex1.HG00246.1 2 5      EUR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 1.ex1.HG00246.1 2 6      EAS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 1.ex1.HG00246.1 2 7      EAS</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Close Profile GDS file (important)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/closefn.gds.html" class="external-link">closefn.gds</a></span><span class="op">(</span><span class="va">gdsProfile</span><span class="op">)</span></span></span>

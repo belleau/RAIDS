@@ -111,11 +111,11 @@ reference samples</p></td>
           <p><code><a href="computeAncestryFromSyntheticFile.html">computeAncestryFromSyntheticFile()</a></code> </p>
         </td>
         <td><p>Select the optimal K and D parameters using the synthetic data and
-infer the ancestry of a specific sample</p></td>
+infer the ancestry of a specific profile</p></td>
       </tr><tr><td>
           <p><code><a href="computeKNNRefSample.html">computeKNNRefSample()</a></code> </p>
         </td>
-        <td><p>Run a k-nearest neighbors analysis on a 1KG reference profile</p></td>
+        <td><p>Run a k-nearest neighbors analysis on one specific profile</p></td>
       </tr><tr><td>
           <p><code><a href="computeKNNRefSynthetic.html">computeKNNRefSynthetic()</a></code> </p>
         </td>
@@ -129,8 +129,8 @@ generated using the reference 1KG profiles</p></td>
       </tr><tr><td>
           <p><code><a href="computePCARefSample.html">computePCARefSample()</a></code> </p>
         </td>
-        <td><p>Compute Principal Component Analysis (PCA) on SNV genotype for
-data from a sample</p></td>
+        <td><p>Project specified profile onto PCA axes generated using known
+reference profiles</p></td>
       </tr><tr><td>
           <p><code><a href="computePoolSyntheticAncestry.html">computePoolSyntheticAncestry()</a></code> </p>
         </td>
@@ -149,7 +149,9 @@ reference samples</p></td>
       </tr><tr><td>
           <p><code><a href="computeSyntheticROC.html">computeSyntheticROC()</a></code> </p>
         </td>
-        <td><p>TODO</p></td>
+        <td><p>Calculate the AUROC of the inferences for specific
+values of D and K using the inferred ancestry results from the synthetic
+profiles.</p></td>
       </tr><tr><td>
           <p><code><a href="createStudy2GDS1KG.html">createStudy2GDS1KG()</a></code> </p>
         </td>
@@ -220,7 +222,8 @@ information from the 1KG GDS file and a linkage disequilibrium analysis</p></td>
       </tr><tr><td>
           <p><code><a href="runExomeAncestry.html">runExomeAncestry()</a></code> </p>
         </td>
-        <td><p>TODO</p></td>
+        <td><p>Run most steps leading to the ancestry inference call on a specific
+profile</p></td>
       </tr><tr><td>
           <p><code><a href="select1KGPop.html">select1KGPop()</a></code> </p>
         </td>
