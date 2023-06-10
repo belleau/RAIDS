@@ -20,7 +20,7 @@ allelic fraction for the pruned SNV dataset specific to a DNA-seq profile"><!-- 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.5</span>
       </span>
     </div>
 
@@ -38,6 +38,9 @@ allelic fraction for the pruned SNV dataset specific to a DNA-seq profile"><!-- 
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/Ancestry_Inference_Step_by_Step.html">Genetic Ancestry Inference Step by Step (optional)</a>
+    </li>
+    <li>
       <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from 1000 Genomes (optional)</a>
     </li>
   </ul></li>
@@ -202,7 +205,7 @@ positive for imbalance in at least 1 window)</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Open the reference GDS file (demo version)</span></span></span>
-<span class="r-in"><span><span class="va">gds1KG</span> <span class="op">&lt;-</span> <span class="fu">snpgdsOpen</span><span class="op">(</span><span class="va">fileGDS</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gds1KG</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SNPRelate/man/snpgdsOpen.html" class="external-link">snpgdsOpen</a></span><span class="op">(</span><span class="va">fileGDS</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Profile GDS file for one profile</span></span></span>
 <span class="r-in"><span><span class="va">fileProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDirAllelicFraction</span>, <span class="st">"ex1.gds"</span><span class="op">)</span></span></span>
