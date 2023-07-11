@@ -20,7 +20,7 @@ GDS file and is added into a Reference Phase GDS file. An entry called
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.6</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@ GDS file and is added into a Reference Phase GDS file. An entry called
       <a href="../articles/Ancestry_Inference_Step_by_Step.html">Genetic Ancestry Inference Step by Step (optional)</a>
     </li>
     <li>
-      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from 1000 Genomes (optional)</a>
+      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from the population reference dataset (optional)</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -116,7 +116,7 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
     <h2>Value</h2>
     
 
-<p>The function returns <code>0L</code> when succesful.</p>
+<p>The function returns <code>0L</code> when successful.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -127,7 +127,7 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Required package</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://withr.r-lib.org" class="external-link">withr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/gdsfmt" class="external-link">gdsfmt</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Path to the demo pedigree file is located in this package</span></span></span>
 <span class="r-in"><span><span class="va">dataDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
@@ -142,7 +142,7 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
 <span class="r-in"><span><span class="va">filterSNVFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>, <span class="st">"mapSNVSelected_Demo.rds"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Temporary Reference GDS file containing 1KG information</span></span></span>
-<span class="r-in"><span><span class="va">fileReferenceGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://withr.r-lib.org/reference/with_file.html" class="external-link">local_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>, <span class="st">"1KG_TEMP_02.gds"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fileReferenceGDS</span> <span class="op">&lt;-</span> <span class="st">"1KG_TEMP_02.gds"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create a temporary Reference GDS file containing information from 1KG</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="generateGDS1KG.html">generateGDS1KG</a></span><span class="op">(</span>pathGeno<span class="op">=</span><span class="va">dataDir</span>, filePedRDS<span class="op">=</span><span class="va">pedigreeFile</span>,</span></span>
@@ -151,7 +151,7 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Temporary Phase GDS file that will contain the 1KG Phase information</span></span></span>
-<span class="r-in"><span><span class="va">fileRefPhaseGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://withr.r-lib.org/reference/with_file.html" class="external-link">local_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>, <span class="st">"1KG_TEMP_Phase_02.gds"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fileRefPhaseGDS</span> <span class="op">&lt;-</span> <span class="st">"1KG_TEMP_Phase_02.gds"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create Reference Phase GDS file</span></span></span>
 <span class="r-in"><span><span class="va">gdsPhase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/createfn.gds.html" class="external-link">createfn.gds</a></span><span class="op">(</span><span class="va">fileRefPhaseGDS</span><span class="op">)</span></span></span>
@@ -159,10 +159,10 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
 <span class="r-in"><span><span class="co">## Open Reference GDS file</span></span></span>
 <span class="r-in"><span><span class="va">gdsRef</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/openfn.gds.html" class="external-link">openfn.gds</a></span><span class="op">(</span><span class="va">fileReferenceGDS</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co">## Fill temporary Reference Phase GDS file</span></span></span>
-<span class="r-in"><span><span class="fu">generatePhase1KG2GDS</span><span class="op">(</span>gdsReference<span class="op">=</span><span class="va">gdsRef</span>, gdsReferencePhase<span class="op">=</span><span class="va">gdsPhase</span>,</span></span>
-<span class="r-in"><span>    pathGeno<span class="op">=</span><span class="va">dataDir</span>, fileSNPsRDS<span class="op">=</span><span class="va">filterSNVFile</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">generatePhase1KG2GDS</span><span class="op">(</span>gdsReference<span class="op">=</span><span class="va">gdsRef</span>, gdsReferencePhase<span class="op">=</span><span class="va">gdsPhase</span>,</span></span>
+<span class="r-in"><span>        pathGeno<span class="op">=</span><span class="va">dataDir</span>, fileSNPsRDS<span class="op">=</span><span class="va">filterSNVFile</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Close 1KG Phase information file</span></span></span>
@@ -172,7 +172,9 @@ print messages when running. Default: <code>FALSE</code>.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/closefn.gds.html" class="external-link">closefn.gds</a></span><span class="op">(</span><span class="va">gdsRef</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Remove temporary files</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://withr.r-lib.org/reference/defer.html" class="external-link">deferred_run</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">fileReferenceGDS</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">fileRefPhaseGDS</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

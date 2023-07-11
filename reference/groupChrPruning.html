@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.6</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
       <a href="../articles/Ancestry_Inference_Step_by_Step.html">Genetic Ancestry Inference Step by Step (optional)</a>
     </li>
     <li>
-      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from 1000 Genomes (optional)</a>
+      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from the population reference dataset (optional)</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -66,30 +66,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">groupChrPruning</span><span class="op">(</span><span class="va">pathPrunedGDS</span>, <span class="va">filePref</span>, <span class="va">fileOUT</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">groupChrPruning</span><span class="op">(</span><span class="va">pathPrunedGDS</span>, <span class="va">filePref</span>, <span class="va">fileOut</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pathPrunedGDS</dt>
-<dd><p>TODO</p></dd>
+<dd><p>a <code>character</code> string representing the path where
+the pruned files for each chromosome are located.
+The path must exists.</p></dd>
 
 
 <dt>filePref</dt>
 <dd><p>TODO</p></dd>
 
 
-<dt>fileOUT</dt>
-<dd><p>TODO</p></dd>
+<dt>fileOut</dt>
+<dd><p>a <code>character</code> string representing name of the output
+file that will be created. THe file will contain the information for all
+pruned chromosome. The file must have a ".rds" extension.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>TODO a <code>vector</code> of <code>numeric</code></p>
-
-
+<p>The integer <code>0L</code> when successful.</p>
     </div>
     <div id="author">
     <h2>Author</h2>

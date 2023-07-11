@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.6</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
       <a href="../articles/Ancestry_Inference_Step_by_Step.html">Genetic Ancestry Inference Step by Step (optional)</a>
     </li>
     <li>
-      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from 1000 Genomes (optional)</a>
+      <a href="../articles/Create_1KG_GDS_File.html">Formatting the information from the population reference dataset (optional)</a>
     </li>
   </ul>
 </li>
@@ -96,14 +96,14 @@ Astrid Deschênes and Alexander Krasnitz</h4>
     
 <p><br><strong>Package</strong>: <em>RAIDS</em><br><strong>Authors</strong>: Pascal Belleau [cre, aut] (<a href="https://orcid.org/0000-0002-0802-1071" class="external-link uri">https://orcid.org/0000-0002-0802-1071</a>), Astrid Deschênes
 [aut] (<a href="https://orcid.org/0000-0001-7846-6749" class="external-link uri">https://orcid.org/0000-0001-7846-6749</a>), Alexander
-Krasnitz [aut]<br><strong>Version</strong>: 0.99.5<br><strong>Compiled date</strong>: 2023-06-10<br><strong>License</strong>: Apache License (&gt;= 2)<br></p>
+Krasnitz [aut]<br><strong>Version</strong>: 0.99.6<br><strong>Compiled date</strong>: 2023-07-11<br><strong>License</strong>: Apache License (&gt;= 2)<br></p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This is an overview of genetic ancestry inference from cancer-derived
 molecular data:</p>
 <div class="figure" style="text-align: center">
-<img src="MainSteps_v01.png" alt="An overview of the genetic ancestry inference process." width="120%"><p class="caption">
+<img src="MainSteps_v03.png" alt="An overview of the genetic ancestry inference process." width="120%"><p class="caption">
 An overview of the genetic ancestry inference process.
 </p>
 </div>
@@ -125,8 +125,9 @@ from Step 2, sub-step 4, to Step 4.</p>
 <h3 id="step-1---format-reference-data-from-the-1000-genomes-optional">Step 1 - Format reference data from the 1000 Genomes (optional)<a class="anchor" aria-label="anchor" href="#step-1---format-reference-data-from-the-1000-genomes-optional"></a>
 </h3>
 <div class="figure" style="text-align: center">
-<img src="MainSteps_Step1_v01.png" alt="Step 1 - Formatting the information from 1000 Genomes (optional)" width="120%"><p class="caption">
-Step 1 - Formatting the information from 1000 Genomes (optional)
+<img src="MainSteps_Step1_v03.png" alt="Step 1 - Formatting the information from the population reference dataset (optional)" width="120%"><p class="caption">
+Step 1 - Formatting the information from the population reference
+dataset (optional)
 </p>
 </div>
 <p>The detail execution of this step is presented in the <a href="Create_1KG_GDS_file.html">Formatting the information from 1000
@@ -141,7 +142,7 @@ Genomes (optional)</a> vignette.</p>
 <p>Molecular profiles in a cancer-derived data set must be formatted
 following a series of sub-steps.</p>
 <div class="figure" style="text-align: center">
-<img src="MainSteps_Step2_v01.png" alt="Step 2 - Formatting the information from an external study" width="120%"><p class="caption">
+<img src="MainSteps_Step2_v03.png" alt="Step 2 - Formatting the information from an external study" width="120%"><p class="caption">
 Step 2 - Formatting the information from an external study
 </p>
 </div>
@@ -388,25 +389,13 @@ e.g.,</p>
 <span><span class="co">## Load required library</span></span>
 <span><span class="co">###################################################################</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg38</span><span class="op">)</span></span>
-<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomeInfoDb" class="external-link">GenomeInfoDb</a></span><span class="op">)</span></span>
 <span><span class="co">###################################################################</span></span>
 <span><span class="co">## The length of each chromosome is required</span></span>
 <span><span class="co">## Chromosomes X, Y and M need relabeling (see below)</span></span>
 <span><span class="co">## There are alternative ways to retrieve this information</span></span>
 <span><span class="co">###################################################################</span></span>
-<span><span class="va">chrInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">25L</span><span class="op">)</span></span>
-<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">22L</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">chrInfo</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Hsapiens</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"chr"</span>, <span class="va">i</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="va">chrInfo</span><span class="op">[</span><span class="fl">23</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Hsapiens</span><span class="op">[[</span><span class="st">"chrX"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">chrInfo</span><span class="op">[</span><span class="fl">24</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Hsapiens</span><span class="op">[[</span><span class="st">"chrY"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">chrInfo</span><span class="op">[</span><span class="fl">25</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Hsapiens</span><span class="op">[[</span><span class="st">"chrM"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">chrInfo</span></span>
-<span><span class="co">##  [1] 248956422 242193529 198295559 190214555 181538259 170805979 159345973</span></span>
-<span><span class="co">##  [8] 145138636 138394717 133797422 135086622 133275309 114364328 107043718</span></span>
-<span><span class="co">## [15] 101991189  90338345  83257441  80373285  58617616  64444167  46709983</span></span>
-<span><span class="co">## [22]  50818468 156040895  57227415     16569</span></span></code></pre></div>
+<span><span class="va">chrInfo</span> <span class="op">&lt;-</span> <span class="fu">GenomeInfoDb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html" class="external-link">seqlengths</a></span><span class="op">(</span><span class="va">Hsapiens</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span><span class="op">]</span></span></code></pre></div>
 <p><br><br></p>
 <p>The <strong>estimateAllelicFraction()</strong> function processes one
 profile at the time, as shown in this example.</p>
@@ -433,7 +422,8 @@ profile at the time, as shown in this example.</p>
 <span><span class="co">## The information about the length of the chromosomes</span></span>
 <span><span class="co">#####################################################################</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">chrInfo</span><span class="op">)</span></span>
-<span><span class="co">## [1] 248956422 242193529 198295559 190214555 181538259 170805979</span></span>
+<span><span class="co">##      chr1      chr2      chr3      chr4      chr5      chr6 </span></span>
+<span><span class="co">## 248956422 242193529 198295559 190214555 181538259 170805979</span></span>
 <span></span>
 <span><span class="co">#####################################################################</span></span>
 <span><span class="co">## The function must be called for each profile</span></span>
@@ -486,7 +476,7 @@ Step 2.6 - The information is added into the nodes in light blue.
 <p>At this step, optimization of the parameters is required to maximize
 the the ancestry inference accuracy (next step).</p>
 <div class="figure" style="text-align: center">
-<img src="MainSteps_Step3_v01.png" alt="Step 3 - Find the optimized parameters for the ancestry inference" width="120%"><p class="caption">
+<img src="MainSteps_Step3_v03.png" alt="Step 3 - Find the optimized parameters for the ancestry inference" width="120%"><p class="caption">
 Step 3 - Find the optimized parameters for the ancestry inference
 </p>
 </div>
@@ -498,10 +488,10 @@ Step 3 - Find the optimized parameters for the ancestry inference
 <em>D</em>: the number of PCA components retained</li>
 </ul>
 <p>The accuracy is evaluated using a synthetic data set created from
-merging one cancer profile with multiple 1KG profiles of known ancestry.
-Using the synthetic profiles, a range of <em>K</em> and <em>D</em>
-values are tested. Through that process, the <em>K</em> and <em>D</em>
-values are tuned to maximize accuracy.</p>
+merging one cancer profile with multiple population referecne profiles
+of known ancestry. Using the synthetic profiles, a range of <em>K</em>
+and <em>D</em> values are tested. Through that process, the <em>K</em>
+and <em>D</em> values are tuned to maximize accuracy.</p>
 <p>This step consists of two sub-steps:</p>
 <ol style="list-style-type: decimal">
 <li>Generate the synthetic dataset</li>
@@ -691,7 +681,7 @@ parameters.</p>
 <span>    <span class="va">gdsProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SNPRelate/man/snpgdsOpen.html" class="external-link">snpgdsOpen</a></span><span class="op">(</span><span class="va">fileProfile</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co">## For each row of the sampleRM matrix      </span></span>
-<span>    <span class="kw">for</span><span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sampleRM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">for</span><span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sampleRM</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>        <span class="co">## Run a PCA analysis using 1 synthetic profile from each </span></span>
 <span>        <span class="co">##  sub-continental ancestry</span></span>
 <span>        <span class="co">## The synthetic profiles are projected on the 1KG PCA space </span></span>
@@ -731,7 +721,7 @@ cancer sample is inferred using a k-nearest neighbors classification
 method. The <em>K</em> parameter specifies the number of neighbors used
 for the classification.</p>
 <div class="figure" style="text-align: center">
-<img src="MainSteps_Step4_v01.png" alt="Step 4 - Run the ancestry inference on the external study" width="120%"><p class="caption">
+<img src="MainSteps_Step4_v02.png" alt="Step 4 - Run the ancestry inference on the external study" width="120%"><p class="caption">
 Step 4 - Run the ancestry inference on the external study
 </p>
 </div>
@@ -870,7 +860,7 @@ in which this document was compiled:</p>
 <span><span class="co">##  [5] Biostrings_2.66.0                 XVector_0.38.0                   </span></span>
 <span><span class="co">##  [7] GenomicRanges_1.50.2              GenomeInfoDb_1.34.9              </span></span>
 <span><span class="co">##  [9] IRanges_2.32.0                    S4Vectors_0.36.2                 </span></span>
-<span><span class="co">## [11] BiocGenerics_0.44.0               RAIDS_0.99.5                     </span></span>
+<span><span class="co">## [11] BiocGenerics_0.44.0               RAIDS_0.99.6                     </span></span>
 <span><span class="co">## [13] GENESIS_2.28.0                    SNPRelate_1.32.2                 </span></span>
 <span><span class="co">## [15] gdsfmt_1.34.1                     knitr_1.42                       </span></span>
 <span><span class="co">## [17] BiocStyle_2.26.0                 </span></span>
