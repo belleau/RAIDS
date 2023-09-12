@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.10</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@ Astrid Deschênes and Alexander Krasnitz</h4>
     
 <p><br><strong>Package</strong>: <em>RAIDS</em><br><strong>Authors</strong>: Pascal Belleau [cre, aut] (<a href="https://orcid.org/0000-0002-0802-1071" class="external-link uri">https://orcid.org/0000-0002-0802-1071</a>), Astrid Deschênes
 [aut] (<a href="https://orcid.org/0000-0001-7846-6749" class="external-link uri">https://orcid.org/0000-0001-7846-6749</a>), Alexander
-Krasnitz [aut]<br><strong>Version</strong>: 0.99.8<br><strong>Compiled date</strong>: 2023-08-21<br><strong>License</strong>: Apache License (&gt;= 2)<br></p>
+Krasnitz [aut]<br><strong>Version</strong>: 0.99.10<br><strong>Compiled date</strong>: 2023-09-12<br><strong>License</strong>: Apache License (&gt;= 2)<br></p>
 <p><br><br></p>
 <p>This vignette explains, in further details, the format of the
 population reference files that are required to run the ancestry
@@ -124,34 +124,34 @@ files.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://krasnitzlab.github.io/RAIDS/" class="external-link">RAIDS</a></span><span class="op">)</span>    </span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/SNPRelate" class="external-link">SNPRelate</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pathReference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/example/"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span>
+<span><span class="va">pathRef</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fileReferenceGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathReference</span>, <span class="st">"gdsRef"</span>, <span class="st">"ex1kg.gds"</span><span class="op">)</span></span>
+<span><span class="va">fileReferenceGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathRef</span>, <span class="st">"PopulationReferenceDemo.gds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gdsRef</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SNPRelate/man/snpgdsOpen.html" class="external-link">snpgdsOpen</a></span><span class="op">(</span><span class="va">fileReferenceGDS</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Show the file format</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gdsRef</span><span class="op">)</span></span>
-<span><span class="co">## File: /__w/_temp/Library/RAIDS/extdata/example/gdsRef/ex1kg.gds <span style="color: #555555;">(830.0K)</span></span></span>
+<span><span class="co">## File: /__w/_temp/Library/RAIDS/extdata/PopulationReferenceDemo.gds <span style="color: #555555;">(3.3K)</span></span></span>
 <span><span class="co">## +    [  ] *</span></span>
-<span><span class="co">## |--+ sample.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">156, 1.2K</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ sample.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 80B</span> <span style="color: #555555;">}</span></span></span>
 <span><span class="co">## |--+ sample.annot   [ <span style="color: #555555;">data.frame</span> ] *</span></span>
-<span><span class="co">## |  |--+ sex   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">156, 312B</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |  |--+ pop.group   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">156, 624B</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |  |--+ superPop   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">156, 624B</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |  \--+ batch   <span style="color: #555555;">{</span> <span style="color: #555555;">Float64</span> <span style="color: #555555;">156, 1.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">11000, 103.5K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.chromosome   <span style="color: #555555;">{</span> <span style="color: #555555;">UInt16</span> <span style="color: #555555;">11000, 21.5K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.position   <span style="color: #555555;">{</span> <span style="color: #555555;">Int32</span> <span style="color: #555555;">11000, 43.0K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.allele   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">11000, 43.0K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.EAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.EUR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.AFR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.AMR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ snp.SAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">11000, 32.2K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## |--+ genotype   <span style="color: #555555;">{</span> <span style="color: #555555;">Bit2</span> <span style="color: #555555;">11000x156, 418.9K</span> <span style="color: #555555;">}</span></span></span>
-<span><span class="co">## \--+ sample.ref   <span style="color: #555555;">{</span> <span style="color: #555555;">Bit1</span> <span style="color: #555555;">156, 20B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  |--+ sex   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 20B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  |--+ pop.group   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  |--+ superPop   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  \--+ batch   <span style="color: #555555;">{</span> <span style="color: #555555;">Int32</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.chromosome   <span style="color: #555555;">{</span> <span style="color: #555555;">UInt16</span> <span style="color: #555555;">7, 14B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.position   <span style="color: #555555;">{</span> <span style="color: #555555;">Int32</span> <span style="color: #555555;">7, 28B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.allele   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">7, 28B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.EAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.EUR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AFR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AMR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.SAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">7, 21B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ genotype   <span style="color: #555555;">{</span> <span style="color: #555555;">Bit2</span> <span style="color: #555555;">7x10, 18B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## \--+ sample.ref   <span style="color: #555555;">{</span> <span style="color: #555555;">Float64</span> <span style="color: #555555;">10, 80B</span> <span style="color: #555555;">}</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/closefn.gds.html" class="external-link">closefn.gds</a></span><span class="op">(</span><span class="va">gdsRef</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
@@ -159,15 +159,12 @@ files.</p>
 Reference GDS file</em>. At the first level, it stores variables
 <em>sample.id</em>, <em>snp.id</em>, etc. The additional information
 displayed in the braces indicate the data type, size, compressed or not
-+ compression ratio.</p>
+with compression ratio.</p>
 <p>The mandatory fields are:</p>
 <ul>
 <li>
 <strong>sample.id</strong>: a <em>character</em> string (saved in
 <em>Str8</em> format) used as unique identifier for each sample</li>
-<li>
-<strong>snp.id</strong>: a a <em>character</em> string (saved in
-<em>Str8</em> format) used as unique identifier for each SNV</li>
 <li>
 <strong>sample.annot</strong>: a <em>data.frame</em> where each row
 correspond to a sample and containing those columns:
@@ -189,6 +186,9 @@ sample (ex:EUR, AFR, EAS, SAS, AMR)</li>
 sample</li>
 </ul>
 </li>
+<li>
+<strong>snp.id</strong>: a a <em>character</em> string (saved in
+<em>Str8</em> format) used as unique identifier for each SNV</li>
 <li>
 <strong>snp.chromosome</strong>: an <em>integer</em> or
 <em>character</em> (saved in <em>UInt16 </em> format) mapping for each
@@ -246,16 +246,176 @@ SNVs × number of Samples)</li>
 reference (=1) or removed (=0) as related samples have to be
 discarded</li>
 </ul>
+<p><br></p>
+<p>This following example shows how to create a <em>Population GDS
+Reference file</em>. This example is for demonstration purpose only. A
+working <em>Population GDS Reference file</em> would have to contain
+multiple samples from each continental population and would also have to
+contain the SNVs from the entire genome.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#############################################################################</span></span>
+<span><span class="co">## Load required packages</span></span>
+<span><span class="co">#############################################################################</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://krasnitzlab.github.io/RAIDS/" class="external-link">RAIDS</a></span><span class="op">)</span>    </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/SNPRelate" class="external-link">SNPRelate</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/gdsfmt" class="external-link">gdsfmt</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Create a temporary GDS Reference file in the temporary directory</span></span>
+<span><span class="va">fileNewReferenceGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"reference_DEMO.gds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gdsRefNew</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/createfn.gds.html" class="external-link">createfn.gds</a></span><span class="op">(</span><span class="va">fileNewReferenceGDS</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The entry 'sample.id' contain the unique identifiers of 10 samples </span></span>
+<span><span class="co">## that constitute the reference dataset</span></span>
+<span><span class="va">sample.id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HG00243"</span>, <span class="st">"HG00150"</span>, <span class="st">"HG00149"</span>, <span class="st">"HG00246"</span>, <span class="st">"HG00138"</span>, </span>
+<span>                    <span class="st">"HG01334"</span>, <span class="st">"HG00268"</span>, <span class="st">"HG00275"</span>, <span class="st">"HG00290"</span>, <span class="st">"HG00364"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"sample.id"</span>, val<span class="op">=</span><span class="va">sample.id</span>, </span>
+<span>            storage<span class="op">=</span><span class="st">"string"</span>, check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## A data frame containing the information about the 10 samples </span></span>
+<span><span class="co">## (in the same order than in the 'sample.id') is created and added to </span></span>
+<span><span class="co">## the 'sample.annot' entry</span></span>
+<span><span class="co">## The data frame must contain those columns: </span></span>
+<span><span class="co">##     'sex': '1'=male, '2'=female</span></span>
+<span><span class="co">##     'pop.group': acronym for the population (ex: GBR, CDX, MSL, ASW, etc..)</span></span>
+<span><span class="co">##     'superPop': acronym for the super-population (ex: AFR, EUR, etc...)</span></span>
+<span><span class="co">##     'batch': number identifying the batch of provenance </span></span>
+<span><span class="va">sampleInformation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sex<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"1"</span>, <span class="st">"1"</span>, </span>
+<span>        <span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"2"</span>, <span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span>, pop.group<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"GBR"</span>, <span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"FIN"</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>        superPop<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"EUR"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, batch<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"sample.annot"</span>, val<span class="op">=</span><span class="va">sampleInformation</span>, </span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The identifier of each SNV is added in the 'snp.id' entry</span></span>
+<span><span class="va">snvID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"s29603"</span>, <span class="st">"s29605"</span>, <span class="st">"s29633"</span>, <span class="st">"s29634"</span>, <span class="st">"s29635"</span>, <span class="st">"s29637"</span>, </span>
+<span>            <span class="st">"s29638"</span>, <span class="st">"s29663"</span>, <span class="st">"s29664"</span>, <span class="st">"s29666"</span>, <span class="st">"s29667"</span>, <span class="st">"s29686"</span>, </span>
+<span>            <span class="st">"s29687"</span>, <span class="st">"s29711"</span>, <span class="st">"s29741"</span>, <span class="st">"s29742"</span>, <span class="st">"s29746"</span>, <span class="st">"s29750"</span>, </span>
+<span>            <span class="st">"s29751"</span>, <span class="st">"s29753"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.id"</span>, val<span class="op">=</span><span class="va">snvID</span>, </span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The chromosome of each SNV is added to the 'snp.chromosome' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvChrom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.chromosome"</span>, val<span class="op">=</span><span class="va">snvChrom</span>, storage<span class="op">=</span><span class="st">"uint16"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The position on the chromosome of each SNV is added to </span></span>
+<span><span class="co">## the 'snp.position' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvPos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3467333</span>, <span class="fl">3467428</span>, <span class="fl">3469375</span>, <span class="fl">3469387</span>, <span class="fl">3469502</span>, <span class="fl">3469527</span>, </span>
+<span>                    <span class="fl">3469737</span>, <span class="fl">3471497</span>, <span class="fl">3471565</span>, <span class="fl">3471618</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.position"</span>, val<span class="op">=</span><span class="va">snvPos</span>, storage<span class="op">=</span><span class="st">"int32"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele information of each SNV is added to the 'snp.allele' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.allele' entry</span></span>
+<span><span class="va">snvAllele</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A/G"</span>, <span class="st">"C/G"</span>, <span class="st">"C/T"</span>, <span class="st">"C/T"</span>, <span class="st">"T/G"</span>, <span class="st">"C/T"</span>, </span>
+<span>                    <span class="st">"G/A"</span>, <span class="st">"A/G"</span>, <span class="st">"G/A"</span>, <span class="st">"G/A"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.allele"</span>, val<span class="op">=</span><span class="va">snvAllele</span>, storage<span class="op">=</span><span class="st">"string"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the general population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.86</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the East Asian population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.EAS_AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.02</span>, <span class="fl">0.00</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.EAS_AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the European population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.EUR_AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.91</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.03</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.EUR_AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the African population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.AFR_AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.85</span>, <span class="fl">0.04</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.AFR_AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the American population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.AMR_AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.83</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.02</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.AMR_AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The allele frequency in the South Asian population (between 0 and 1) of each </span></span>
+<span><span class="co">## SNV is added to the 'snp.SAS_AF' entry</span></span>
+<span><span class="co">## The order of the SNVs is the same than in the 'snp.id' entry</span></span>
+<span><span class="va">snvAF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.89</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.05</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span>, <span class="fl">0.01</span>, <span class="fl">0.00</span>, <span class="fl">0.00</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"snp.SAS_AF"</span>, val<span class="op">=</span><span class="va">snvAF</span>, storage<span class="op">=</span><span class="st">"packedreal24"</span>,</span>
+<span>             check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The genotype of each SNV for each sample is added to the 'genotype' entry</span></span>
+<span><span class="co">## The genotype correspond to the number of A alleles</span></span>
+<span><span class="co">## The rows represent the SNVs is the same order than in 'snp.id' entry</span></span>
+<span><span class="co">## The columns represent the samples is the same order than in 'sample.id' entry</span></span>
+<span><span class="va">genotypeInfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, </span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, </span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">10</span>, byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"genotype"</span>, val<span class="op">=</span><span class="va">genotypeInfo</span>, </span>
+<span>            storage<span class="op">=</span><span class="st">"bit2"</span>, check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## The entry 'sample.ref' is filled with 1 indicating that all 10 </span></span>
+<span><span class="co">## samples are retained to be used as reference</span></span>
+<span><span class="co">## The order of the samples is the same than in the 'sample.id' entry</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/add.gdsn.html" class="external-link">add.gdsn</a></span><span class="op">(</span>node<span class="op">=</span><span class="va">gdsRefNew</span>, name<span class="op">=</span><span class="st">"sample.ref"</span>, val<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>            storage<span class="op">=</span><span class="st">"bit1"</span>, check<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Show the file format</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gdsRefNew</span><span class="op">)</span></span>
+<span><span class="co">## File: /tmp/Rtmp7iQe53/reference_DEMO.gds <span style="color: #555555;">(1.6K)</span></span></span>
+<span><span class="co">## +    [  ]</span></span>
+<span><span class="co">## |--+ sample.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 80B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ sample.annot   [ <span style="color: #555555;">data.frame</span> ] *</span></span>
+<span><span class="co">## |  |--+ sex   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 20B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  |--+ pop.group   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  |--+ superPop   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |  \--+ batch   <span style="color: #555555;">{</span> <span style="color: #555555;">Float64</span> <span style="color: #555555;">10, 80B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.id   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">20, 140B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.chromosome   <span style="color: #555555;">{</span> <span style="color: #555555;">UInt16</span> <span style="color: #555555;">20, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.position   <span style="color: #555555;">{</span> <span style="color: #555555;">Int32</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.allele   <span style="color: #555555;">{</span> <span style="color: #555555;">Str8</span> <span style="color: #555555;">10, 40B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.EAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.EUR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AFR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.AMR_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ snp.SAS_AF   <span style="color: #555555;">{</span> <span style="color: #555555;">PackedReal24</span> <span style="color: #555555;">10, 30B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## |--+ genotype   <span style="color: #555555;">{</span> <span style="color: #555555;">Bit2</span> <span style="color: #555555;">10x10, 25B</span> <span style="color: #555555;">}</span></span></span>
+<span><span class="co">## \--+ sample.ref   <span style="color: #555555;">{</span> <span style="color: #555555;">Bit1</span> <span style="color: #555555;">10, 2B</span> <span style="color: #555555;">}</span></span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/closefn.gds.html" class="external-link">closefn.gds</a></span><span class="op">(</span><span class="va">gdsRefNew</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">fileNewReferenceGDS</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><br><br></p>
 </div>
 <div class="section level2">
 <h2 id="population-reference-annotation-gds-file">Population Reference Annotation GDS file<a class="anchor" aria-label="anchor" href="#population-reference-annotation-gds-file"></a>
 </h2>
 <p>The <em>Population Reference Annotation GDS file</em> contains phase
-information and block group information forl all the SNVs present in
+information and block group information for all the SNVs present in
 <em>Population Reference GDS file</em>. A block can be a linkage
 disequelibrium block relative to a population or a gene.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#############################################################################</span></span>
 <span><span class="co">## Load required packages</span></span>
 <span><span class="co">#############################################################################</span></span>
@@ -333,9 +493,9 @@ available at this address:</p>
 </h2>
 <p>Here is the output of <code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo()</a></code> on the system on
 which this document was compiled:</p>
-<pre><code><span><span class="co">## R version 4.3.0 (2023-04-21)</span></span>
+<pre><code><span><span class="co">## R version 4.3.1 (2023-06-16)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.2 LTS</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.3 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -356,20 +516,20 @@ which this document was compiled:</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] RAIDS_0.99.8     GENESIS_2.30.0   SNPRelate_1.34.1 gdsfmt_1.36.1   </span></span>
-<span><span class="co">## [5] knitr_1.43       BiocStyle_2.28.0</span></span>
+<span><span class="co">## [1] RAIDS_0.99.10    GENESIS_2.30.0   SNPRelate_1.34.1 gdsfmt_1.36.1   </span></span>
+<span><span class="co">## [5] knitr_1.44       BiocStyle_2.28.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] jsonlite_1.8.7              shape_1.4.6                </span></span>
 <span><span class="co">##   [3] magrittr_2.0.3              jomo_2.7-6                 </span></span>
-<span><span class="co">##   [5] GenomicFeatures_1.52.1      logistf_1.26.0             </span></span>
+<span><span class="co">##   [5] GenomicFeatures_1.52.2      logistf_1.26.0             </span></span>
 <span><span class="co">##   [7] nloptr_2.0.3                rmarkdown_2.24             </span></span>
 <span><span class="co">##   [9] fs_1.6.3                    BiocIO_1.10.0              </span></span>
 <span><span class="co">##  [11] zlibbioc_1.46.0             ragg_1.2.5                 </span></span>
 <span><span class="co">##  [13] vctrs_0.6.3                 memoise_2.0.1              </span></span>
-<span><span class="co">##  [15] minqa_1.2.5                 Rsamtools_2.16.0           </span></span>
+<span><span class="co">##  [15] minqa_1.2.6                 Rsamtools_2.16.0           </span></span>
 <span><span class="co">##  [17] RCurl_1.98-1.12             quantsmooth_1.66.0         </span></span>
-<span><span class="co">##  [19] htmltools_0.5.6             S4Arrays_1.0.5             </span></span>
+<span><span class="co">##  [19] htmltools_0.5.6             S4Arrays_1.0.6             </span></span>
 <span><span class="co">##  [21] progress_1.2.2              curl_5.0.2                 </span></span>
 <span><span class="co">##  [23] broom_1.0.5                 pROC_1.18.4                </span></span>
 <span><span class="co">##  [25] mitml_0.4-5                 sass_0.4.7                 </span></span>
@@ -378,7 +538,7 @@ which this document was compiled:</p>
 <span><span class="co">##  [31] zoo_1.8-12                  cachem_1.0.8               </span></span>
 <span><span class="co">##  [33] GenomicAlignments_1.36.0    lifecycle_1.0.3            </span></span>
 <span><span class="co">##  [35] iterators_1.0.14            pkgconfig_2.0.3            </span></span>
-<span><span class="co">##  [37] Matrix_1.6-0                R6_2.5.1                   </span></span>
+<span><span class="co">##  [37] Matrix_1.6-1                R6_2.5.1                   </span></span>
 <span><span class="co">##  [39] fastmap_1.1.1               GenomeInfoDbData_1.2.10    </span></span>
 <span><span class="co">##  [41] MatrixGenerics_1.12.3       digest_0.6.33              </span></span>
 <span><span class="co">##  [43] GWASTools_1.46.0            AnnotationDbi_1.62.2       </span></span>
@@ -386,34 +546,34 @@ which this document was compiled:</p>
 <span><span class="co">##  [47] textshaping_0.3.6           GenomicRanges_1.52.0       </span></span>
 <span><span class="co">##  [49] RSQLite_2.3.1               filelock_1.0.2             </span></span>
 <span><span class="co">##  [51] fansi_1.0.4                 httr_1.4.7                 </span></span>
-<span><span class="co">##  [53] abind_1.4-5                 mgcv_1.8-42                </span></span>
-<span><span class="co">##  [55] compiler_4.3.0              bit64_4.0.5                </span></span>
+<span><span class="co">##  [53] abind_1.4-5                 mgcv_1.9-0                 </span></span>
+<span><span class="co">##  [55] compiler_4.3.1              bit64_4.0.5                </span></span>
 <span><span class="co">##  [57] backports_1.4.1             BiocParallel_1.34.2        </span></span>
-<span><span class="co">##  [59] DBI_1.1.3                   pan_1.8                    </span></span>
-<span><span class="co">##  [61] biomaRt_2.56.1              MASS_7.3-59                </span></span>
+<span><span class="co">##  [59] DBI_1.1.3                   pan_1.9                    </span></span>
+<span><span class="co">##  [61] biomaRt_2.56.1              MASS_7.3-60                </span></span>
 <span><span class="co">##  [63] quantreg_5.97               rappdirs_0.3.3             </span></span>
 <span><span class="co">##  [65] DelayedArray_0.26.7         rjson_0.2.21               </span></span>
-<span><span class="co">##  [67] DNAcopy_1.74.1              tools_4.3.0                </span></span>
-<span><span class="co">##  [69] lmtest_0.9-40               nnet_7.3-18                </span></span>
+<span><span class="co">##  [67] DNAcopy_1.74.1              tools_4.3.1                </span></span>
+<span><span class="co">##  [69] lmtest_0.9-40               nnet_7.3-19                </span></span>
 <span><span class="co">##  [71] glue_1.6.2                  restfulr_0.0.15            </span></span>
-<span><span class="co">##  [73] nlme_3.1-162                grid_4.3.0                 </span></span>
+<span><span class="co">##  [73] nlme_3.1-163                grid_4.3.1                 </span></span>
 <span><span class="co">##  [75] generics_0.1.3              operator.tools_1.6.3       </span></span>
 <span><span class="co">##  [77] BSgenome_1.68.0             formula.tools_1.7.1        </span></span>
-<span><span class="co">##  [79] class_7.3-21                tidyr_1.3.0                </span></span>
+<span><span class="co">##  [79] class_7.3-22                tidyr_1.3.0                </span></span>
 <span><span class="co">##  [81] ensembldb_2.24.0            hms_1.1.3                  </span></span>
 <span><span class="co">##  [83] data.table_1.14.8           xml2_1.3.5                 </span></span>
 <span><span class="co">##  [85] utf8_1.2.3                  XVector_0.40.0             </span></span>
 <span><span class="co">##  [87] BiocGenerics_0.46.0         GWASExactHW_1.01           </span></span>
 <span><span class="co">##  [89] foreach_1.5.2               pillar_1.9.0               </span></span>
-<span><span class="co">##  [91] stringr_1.5.0               splines_4.3.0              </span></span>
-<span><span class="co">##  [93] dplyr_1.1.2                 BiocFileCache_2.8.0        </span></span>
-<span><span class="co">##  [95] lattice_0.21-8              survival_3.5-5             </span></span>
+<span><span class="co">##  [91] stringr_1.5.0               splines_4.3.1              </span></span>
+<span><span class="co">##  [93] dplyr_1.1.3                 BiocFileCache_2.8.0        </span></span>
+<span><span class="co">##  [95] lattice_0.21-8              survival_3.5-7             </span></span>
 <span><span class="co">##  [97] rtracklayer_1.60.1          bit_4.0.5                  </span></span>
 <span><span class="co">##  [99] SparseM_1.81                tidyselect_1.2.0           </span></span>
 <span><span class="co">## [101] SeqVarTools_1.38.0          Biostrings_2.68.1          </span></span>
 <span><span class="co">## [103] bookdown_0.35               ProtGenerics_1.32.0        </span></span>
 <span><span class="co">## [105] IRanges_2.34.1              SummarizedExperiment_1.30.2</span></span>
-<span><span class="co">## [107] stats4_4.3.0                xfun_0.40                  </span></span>
+<span><span class="co">## [107] stats4_4.3.1                xfun_0.40                  </span></span>
 <span><span class="co">## [109] Biobase_2.60.0              matrixStats_1.0.0          </span></span>
 <span><span class="co">## [111] stringi_1.7.12              lazyeval_0.2.2             </span></span>
 <span><span class="co">## [113] yaml_2.3.7                  boot_1.3-28.1              </span></span>
@@ -421,13 +581,13 @@ which this document was compiled:</p>
 <span><span class="co">## [117] tibble_3.2.1                BiocManager_1.30.22        </span></span>
 <span><span class="co">## [119] cli_3.6.1                   rpart_4.1.19               </span></span>
 <span><span class="co">## [121] systemfonts_1.0.4           jquerylib_0.1.4            </span></span>
-<span><span class="co">## [123] Rcpp_1.0.11                 GenomeInfoDb_1.36.1        </span></span>
+<span><span class="co">## [123] Rcpp_1.0.11                 GenomeInfoDb_1.36.3        </span></span>
 <span><span class="co">## [125] dbplyr_2.3.3                png_0.1-8                  </span></span>
-<span><span class="co">## [127] XML_3.99-0.14               parallel_4.3.0             </span></span>
+<span><span class="co">## [127] XML_3.99-0.14               parallel_4.3.1             </span></span>
 <span><span class="co">## [129] MatrixModels_0.5-2          pkgdown_2.0.7              </span></span>
 <span><span class="co">## [131] blob_1.2.4                  prettyunits_1.1.1          </span></span>
 <span><span class="co">## [133] AnnotationFilter_1.24.0     bitops_1.0-7               </span></span>
-<span><span class="co">## [135] lme4_1.1-34                 glmnet_4.1-7               </span></span>
+<span><span class="co">## [135] lme4_1.1-34                 glmnet_4.1-8               </span></span>
 <span><span class="co">## [137] SeqArray_1.40.1             purrr_1.0.2                </span></span>
 <span><span class="co">## [139] crayon_1.5.2                rlang_1.1.1                </span></span>
 <span><span class="co">## [141] KEGGREST_1.40.0             mice_3.16.0</span></span></code></pre>

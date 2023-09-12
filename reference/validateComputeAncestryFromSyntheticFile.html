@@ -20,7 +20,7 @@ computeAncestryFromSyntheticFile function."><!-- mathjax --><script src="https:/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.10</span>
       </span>
     </div>
 
@@ -209,7 +209,8 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span><span class="va">dataDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The 1KG Population Reference GDS demo file (opened)</span></span></span>
-<span class="r-in"><span><span class="va">gds1KG</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/openfn.gds.html" class="external-link">openfn.gds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>, <span class="st">"gds1KG.gds"</span><span class="op">)</span>, readonly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gds1KG</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/openfn.gds.html" class="external-link">openfn.gds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>,</span></span>
+<span class="r-in"><span>            <span class="st">"PopulationReferenceDemo.gds"</span><span class="op">)</span>, readonly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The Profile GDS (opened)</span></span></span>
 <span class="r-in"><span><span class="va">gdsSample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/openfn.gds.html" class="external-link">openfn.gds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>,</span></span>
