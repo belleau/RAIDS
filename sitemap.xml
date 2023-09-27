@@ -115,6 +115,12 @@
     <loc>/reference/createStudy2GDS1KG.html</loc>
   </url>
   <url>
+    <loc>/reference/demoPCA1KG.html</loc>
+  </url>
+  <url>
+    <loc>/reference/demoPCASyntheticProfiles.html</loc>
+  </url>
+  <url>
     <loc>/reference/estimateAllelicFraction.html</loc>
   </url>
   <url>
@@ -160,6 +166,12 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/matKNNSynthetic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pedSynthetic.html</loc>
+  </url>
+  <url>
     <loc>/reference/prepPed1KG.html</loc>
   </url>
   <url>
@@ -203,6 +215,9 @@
   </url>
   <url>
     <loc>/reference/select1KGPop.html</loc>
+  </url>
+  <url>
+    <loc>/reference/snpPositionDemo.html</loc>
   </url>
   <url>
     <loc>/reference/snvListVCF.html</loc>
