@@ -20,7 +20,7 @@ and the Profile GDS file."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -128,25 +128,48 @@ when the function is running.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>data.frame</code> containing:</p><ul><li><p>cnt.tot a single <code>integer</code> representing the total coverage for
-the SNV.</p></li>
-<li><p>cnt.ref a single <code>integer</code> representing the coverage for
-the reference allele.</p></li>
-<li><p>cnt.alt a single <code>integer</code> representing the coverage for
-the alternative allele.</p></li>
-<li><p>snpPos a single <code>integer</code> representing the SNV position.</p></li>
-<li><p>snp.chr a single <code>integer</code> representing the SNV chromosome.</p></li>
-<li><p>normal.geno a single <code>numeric</code> indicating the genotype of the
+    <p>a <code>data.frame</code> containing:</p><dl><dt>cnt.tot</dt>
+<dd><p>a single <code>integer</code> representing the total coverage for
+the SNV.</p></dd>
+
+<dt>cnt.ref</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the reference allele.</p></dd>
+
+<dt>cnt.alt</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the alternative allele.</p></dd>
+
+<dt>snpPos</dt>
+<dd><p>a single <code>integer</code> representing the SNV position.</p></dd>
+
+<dt>snp.chr</dt>
+<dd><p>a single <code>integer</code> representing the SNV chromosome.</p></dd>
+
+<dt>normal.geno</dt>
+<dd><p>a single <code>numeric</code> indicating the genotype of the
 SNV. The possibles are: <code>0</code> (wild-type homozygote), <code>1</code>
 (heterozygote), <code>2</code> (altenative homozygote), <code>3</code> indicating that
-the normal genotype is unknown.</p></li>
-<li><p>pruned  a <code>logical</code></p></li>
-<li><p>snp.index a <code>vector</code> of <code>integer</code> representing the
-position of the SNVs in the Reference GDS file.</p></li>
-<li><p>keep a <code>logical</code></p></li>
-<li><p>hetero a <code>logical</code></p></li>
-<li><p>homo a <code>logical</code></p></li>
-</ul></div>
+the normal genotype is unknown.</p></dd>
+
+<dt>pruned</dt>
+<dd><p>a <code>logical</code></p></dd>
+
+<dt>snp.index</dt>
+<dd><p>a <code>vector</code> of <code>integer</code> representing the
+position of the SNVs in the Reference GDS file.</p></dd>
+
+<dt>keep</dt>
+<dd><p>a <code>logical</code></p></dd>
+
+<dt>hetero</dt>
+<dd><p>a <code>logical</code></p></dd>
+
+<dt>homo</dt>
+<dd><p>a <code>logical</code></p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

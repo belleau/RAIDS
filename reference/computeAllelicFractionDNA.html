@@ -18,7 +18,7 @@ allelic fraction for the pruned SNV dataset specific to a DNA-seq profile"><!-- 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -153,27 +153,56 @@ message when running.</p></dd>
     <h2>Value</h2>
     <p>a <code>data.frame</code> containing the allelic information for the
 pruned SNV dataset with coverage &gt; <code>minCov</code>. The <code>data.frame</code>
-contains those columns:</p><ul><li><p>cnt.tot a <code>integer</code> representing the total allele count</p></li>
-<li><p>cnt.ref a <code>integer</code> representing the reference allele count</p></li>
-<li><p>cnt.alt a <code>integer</code> representing the alternative allele count</p></li>
-<li><p>snp.pos a <code>integer</code> representing the position on the chromosome</p></li>
-<li><p>snp.chr a <code>integer</code> representing the chromosome</p></li>
-<li><p>normal.geno a <code>integer</code> representing the genotype
-(0=wild-type reference; 1=heterozygote; 2=homozygote alternative; 3=unkown)</p></li>
-<li><p>pruned a <code>logical</code> indicating if the SNV is retained after
-pruning</p></li>
-<li><p>snp.index a <code>integer</code> representing the index position of the
-SNV in the Reference GDS file that contains all SNVs</p></li>
-<li><p>keep a <code>logical</code> indicating if the genotype exists for the SNV</p></li>
-<li><p>hetero a <code>logical</code> indicating if the SNV is heterozygote</p></li>
-<li><p>homo a <code>logical</code> indicating if the SNV is homozygote</p></li>
-<li><p>lap a <code>numeric</code> representing the lower allelic fraction</p></li>
-<li><p>LOH a <code>integer</code> indicating if the SNV is in an LOH region
-(0=not LOH, 1=in LOH)</p></li>
-<li><p>imbAR a <code>integer</code> indicating if the SNV is in an imbalanced
+contains those columns:</p><dl><dt>cnt.tot</dt>
+<dd><p>a <code>integer</code> representing the total allele count</p></dd>
+
+<dt>cnt.ref</dt>
+<dd><p>a <code>integer</code> representing the reference allele count</p></dd>
+
+<dt>cnt.alt</dt>
+<dd><p>a <code>integer</code> representing the alternative allele count</p></dd>
+
+<dt>snp.pos</dt>
+<dd><p>a <code>integer</code> representing the position on the chromosome</p></dd>
+
+<dt>snp.chr</dt>
+<dd><p>a <code>integer</code> representing the chromosome</p></dd>
+
+<dt>normal.geno</dt>
+<dd><p>a <code>integer</code> representing the genotype
+(0=wild-type reference; 1=heterozygote; 2=homozygote alternative; 3=unkown)</p></dd>
+
+<dt>pruned</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is retained after
+pruning</p></dd>
+
+<dt>snp.index</dt>
+<dd><p>a <code>integer</code> representing the index position of the
+SNV in the Reference GDS file that contains all SNVs</p></dd>
+
+<dt>keep</dt>
+<dd><p>a <code>logical</code> indicating if the genotype exists for the SNV</p></dd>
+
+<dt>hetero</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is heterozygote</p></dd>
+
+<dt>homo</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is homozygote</p></dd>
+
+<dt>lap</dt>
+<dd><p>a <code>numeric</code> representing the lower allelic fraction</p></dd>
+
+<dt>LOH</dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an LOH region
+(0=not LOH, 1=in LOH)</p></dd>
+
+<dt>imbAR</dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an imbalanced
 region (-1=not classified as imbalanced or LOH, 0=in LOH; 1=tested
-positive for imbalance in at least 1 window)</p></li>
-</ul></div>
+positive for imbalance in at least 1 window)</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

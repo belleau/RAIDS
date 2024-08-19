@@ -20,7 +20,7 @@ RDS Sample description file and the Population Reference GDS file."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -147,13 +147,20 @@ representing the length of the chromosomes. See 'details' section.</p></dd>
 <dt id="arg-syntheticrefdf">syntheticRefDF<a class="anchor" aria-label="anchor" href="#arg-syntheticrefdf"></a></dt>
 <dd><p>a <code>data.frame</code> containing a subset of
 reference profiles for each sub-population present in the Reference GDS
-file. The <code>data.frame</code> must have those columns:</p><ul><li><p>sample.id  a <code>character</code> string representing the sample
-identifier.</p></li>
-<li><p>pop.group  a <code>character</code> string representing the
-subcontinental population assigned to the sample.</p></li>
-<li><p>superPop  a <code>character</code> string representing the
-super-population assigned to the sample.</p></li>
-</ul></dd>
+file. The <code>data.frame</code> must have those columns:</p><dl><dt>sample.id</dt>
+<dd><p>a <code>character</code> string representing the sample
+identifier.</p></dd>
+
+<dt>pop.group</dt>
+<dd><p>a <code>character</code> string representing the
+subcontinental population assigned to the sample.</p></dd>
+
+<dt>superPop</dt>
+<dd><p>a <code>character</code> string representing the
+super-population assigned to the sample.</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-genosource">genoSource<a class="anchor" aria-label="anchor" href="#arg-genosource"></a></dt>
@@ -193,13 +200,20 @@ more information about the generated output files.</p>
     <div id="details">
     <h2>Details</h2>
     <p>The runExomeAncestry() function generates 3 types of files
-in the OUTPUT directory.</p><ul><li><p>Ancestry InferenceThe ancestry inference CSV file
-(".Ancestry.csv" file)</p></li>
-<li><p>Inference InformatonThe inference information RDS file
-(".infoCall.rds" file)</p></li>
-<li><p>Synthetic InformationThe parameter information RDS files
-from the synthetic inference ("KNN.synt.*.rds" files in a sub-directory)</p></li>
-</ul><p>In addition, a sub-directory (named using the profile ID) is
+in the OUTPUT directory.</p><dl><dt>Ancestry Inference</dt>
+<dd><p>The ancestry inference CSV file
+(".Ancestry.csv" file)</p></dd>
+
+<dt>Inference Informaton</dt>
+<dd><p>The inference information RDS file
+(".infoCall.rds" file)</p></dd>
+
+<dt>Synthetic Information</dt>
+<dd><p>The parameter information RDS files
+from the synthetic inference ("KNN.synt.*.rds" files in a sub-directory)</p></dd>
+
+
+</dl><p>In addition, a sub-directory (named using the profile ID) is
 also created.</p>
     </div>
     <div id="references">

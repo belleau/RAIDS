@@ -20,7 +20,7 @@ function."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -107,18 +107,31 @@ the process in the <code><a href="https://rdrr.io/pkg/SNPRelate/man/snpgdsIBDKIN
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>list</code> containing:</p><ul><li><p>sample.ida <code>character</code> string representing the sample
-ids used in the analysis</p></li>
-<li><p>snp.ida <code>character</code> string representing the SNP ids
-used in the analysis</p></li>
-<li><p>k0a <code>numeric</code>, the IBD coefficient, the probability of
-sharing zero IBD</p></li>
-<li><p>k1a <code>numeric</code>, the IBD coefficient, the probability of
-sharing one IBD</p></li>
-<li><p>IBS0a <code>numeric</code>, the proportion of SNPs with zero IBS</p></li>
-<li><p>kinshipa <code>numeric</code>, the proportion of SNPs with zero IBS,
-if the parameter kinship=TRUE</p></li>
-</ul></div>
+    <p>a <code>list</code> containing:</p><dl><dt>sample.id</dt>
+<dd><p>a <code>character</code> string representing the sample
+ids used in the analysis</p></dd>
+
+<dt>snp.id</dt>
+<dd><p>a <code>character</code> string representing the SNP ids
+used in the analysis</p></dd>
+
+<dt>k0</dt>
+<dd><p>a <code>numeric</code>, the IBD coefficient, the probability of
+sharing zero IBD</p></dd>
+
+<dt>k1</dt>
+<dd><p>a <code>numeric</code>, the IBD coefficient, the probability of
+sharing one IBD</p></dd>
+
+<dt>IBS0</dt>
+<dd><p>a <code>numeric</code>, the proportion of SNPs with zero IBS</p></dd>
+
+<dt>kinship</dt>
+<dd><p>a <code>numeric</code>, the proportion of SNPs with zero IBS,
+if the parameter kinship=TRUE</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

@@ -18,7 +18,7 @@ chromosome using the homozygote SNVs present on the chromosome."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -87,26 +87,49 @@ package 'BSgenome.Hsapiens.UCSC.hg38'.</p></dd>
 <dt id="arg-snppos">snpPos<a class="anchor" aria-label="anchor" href="#arg-snppos"></a></dt>
 <dd><p>a <code>data.frame</code> containing the SNV information for the
 chromosome specified by the <code>chr</code> argument. The <code>data.frame</code> must
-contain:</p><ul><li><p>cnt.tot a single <code>integer</code> representing the total coverage for
-the SNV.</p></li>
-<li><p>cnt.ref a single <code>integer</code> representing the coverage for
-the reference allele.</p></li>
-<li><p>cnt.alt a single <code>integer</code> representing the coverage for
-the alternative allele.</p></li>
-<li><p>snp.pos a single <code>integer</code> representing the SNV position.</p></li>
-<li><p>snp.chr a single <code>integer</code> representing the SNV chromosome.</p></li>
-<li><p>normal.geno a single <code>numeric</code> indicating the genotype of the
+contain:</p><dl><dt>cnt.tot</dt>
+<dd><p>a single <code>integer</code> representing the total coverage for
+the SNV.</p></dd>
+
+<dt>cnt.ref</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the reference allele.</p></dd>
+
+<dt>cnt.alt</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the alternative allele.</p></dd>
+
+<dt>snp.pos</dt>
+<dd><p>a single <code>integer</code> representing the SNV position.</p></dd>
+
+<dt>snp.chr</dt>
+<dd><p>a single <code>integer</code> representing the SNV chromosome.</p></dd>
+
+<dt>normal.geno</dt>
+<dd><p>a single <code>numeric</code> indicating the genotype of the
 SNV. The possibles are: <code>0</code> (wild-type homozygote), <code>1</code>
 (heterozygote), <code>2</code> (altenative homozygote), <code>3</code> indicating that
-the normal genotype is unknown.</p></li>
-<li><p>pruned a <code>logical</code> indicating if the SNV is retained after
-pruning</p></li>
-<li><p>snp.index a <code>integer</code> representing the index position of the
-SNV in the Reference GDS file that contains all SNVs</p></li>
-<li><p>keep a <code>logical</code> indicating if the genotype exists for the SNV</p></li>
-<li><p>hetero a <code>logical</code> indicating if the SNV is heterozygote</p></li>
-<li><p>homo a <code>logical</code> indicating if the SNV is homozygote</p></li>
-</ul></dd>
+the normal genotype is unknown.</p></dd>
+
+<dt>pruned</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is retained after
+pruning</p></dd>
+
+<dt>snp.index</dt>
+<dd><p>a <code>integer</code> representing the index position of the
+SNV in the Reference GDS file that contains all SNVs</p></dd>
+
+<dt>keep</dt>
+<dd><p>a <code>logical</code> indicating if the genotype exists for the SNV</p></dd>
+
+<dt>hetero</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is heterozygote</p></dd>
+
+<dt>homo</dt>
+<dd><p>a <code>logical</code> indicating if the SNV is homozygote</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-chr">chr<a class="anchor" aria-label="anchor" href="#arg-chr"></a></dt>
@@ -123,34 +146,57 @@ probability of sequencing error. Default: <code>0.0001</code>.</p></dd>
     <div id="value">
     <h2>Value</h2>
     <p>a <code>data.frame</code> with the informations about LOH on a specific
-chromosome. The <code>data.frame</code> contains those columns:</p><ul><li><p>chr a <code>integer</code> representing the current chromosome</p></li>
-<li><p>start a <code>integer</code> representing the starting position on the
+chromosome. The <code>data.frame</code> contains those columns:</p><dl><dt>chr</dt>
+<dd><p>a <code>integer</code> representing the current chromosome</p></dd>
+
+<dt>start</dt>
+<dd><p>a <code>integer</code> representing the starting position on the
 box containing only homozygote SNVs (or not SNV). The first box starts at
-position <code>1</code>.</p></li>
-<li><p>end a <code>integer</code> representing the end position on the
+position <code>1</code>.</p></dd>
+
+<dt>end</dt>
+<dd><p>a <code>integer</code> representing the end position on the
 box containing only homozygote SNVs (or not SNV). The last box ends at the
-length of the chromosome.</p></li>
-<li><p>logLHR a <code>numeric</code> representing the LOH score basde on
+length of the chromosome.</p></dd>
+
+<dt>logLHR</dt>
+<dd><p>a <code>numeric</code> representing the LOH score basde on
 population frequencies. It is the sum of
 the log10 of the frequencies of the observed gegenotype minus the
 the sum of the log10 of the higher frequent genotype.
-(-100 when normal genotype are present)</p></li>
-<li><p>LH1  a <code>numeric</code>  representing the probability to be
+(-100 when normal genotype are present)</p></dd>
+
+<dt>LH1</dt>
+<dd><p>a <code>numeric</code>  representing the probability to be
 heterozygote based on the coverage of each allele when normal
-genotype is present</p></li>
-<li><p>LM1 a <code>numeric</code> representing the max probability
-for the read coverage at the position</p></li>
-<li><p>homoScore a <code>numeric</code> representing <code>LH1</code> - <code>LM1</code></p></li>
-<li><p>nbSNV a <code>integer</code> representing th number of SNVs in
-the box</p></li>
-<li><p>nbPruned a <code>integer</code> representing the number of pruned SNVs in
-the box</p></li>
-<li><p>nbNorm  a <code>integer</code> representing of the number of
-heterozygote genotypes for the normal SNVs in the block</p></li>
-<li><p>LOH  a <code>integer</code> representing a flag, if <code>1</code> it means
+genotype is present</p></dd>
+
+<dt>LM1</dt>
+<dd><p>a <code>numeric</code> representing the max probability
+for the read coverage at the position</p></dd>
+
+<dt>homoScore</dt>
+<dd><p>a <code>numeric</code> representing <code>LH1</code> - <code>LM1</code></p></dd>
+
+<dt>nbSNV</dt>
+<dd><p>a <code>integer</code> representing th number of SNVs in
+the box</p></dd>
+
+<dt>nbPruned</dt>
+<dd><p>a <code>integer</code> representing the number of pruned SNVs in
+the box</p></dd>
+
+<dt>nbNorm</dt>
+<dd><p>a <code>integer</code> representing of the number of
+heterozygote genotypes for the normal SNVs in the block</p></dd>
+
+<dt>LOH</dt>
+<dd><p>a <code>integer</code> representing a flag, if <code>1</code> it means
 the block is satisfying the criteria to be LOH. The value is not assigned
-in this function; the value <code>0</code> is assigned</p></li>
-</ul></div>
+in this function; the value <code>0</code> is assigned</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

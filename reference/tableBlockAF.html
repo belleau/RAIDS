@@ -21,7 +21,7 @@ In the case of RNA-seq, the blocks are genes."><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -87,33 +87,60 @@ the SNVs with coverage &gt; <code>minCov</code>, for a specific chromosome.</p><
     <h2>Value</h2>
     <p>a <code>data.frame</code> containing only heterozygote
 SNV information. The
-<code>data.frame</code> contain those columns:</p><ul><li><p>block a single <code>integer</code> representing the unique identifier
-of the block.</p></li>
-<li><p>aRF a single <code>numeric</code> representing the final allelic
-fraction; not computed yet, <code>-1</code> value assigned to all entries.</p></li>
-<li><p>aFraction a single <code>integer</code> representing the possible allelic
-fraction in absence of loss of heterozygosity (LOH).</p></li>
-<li><p>lR a single <code>integer</code> representing the coverage for
-the alternative allele.</p></li>
-<li><p>nPhase a single <code>integer</code> representing the number of SNV
-phases.</p></li>
-<li><p>sumAlleleLow a single <code>integer</code> representing the sum of the
-alleles with the less coverage.</p></li>
-<li><p>sumAlleleHigh a single <code>integer</code> representing the sum of
-the alleles with more coverage.</p></li>
-<li><p>lH a single <code>numeric</code> for the homozygotes log10 of the product
-frequencies of the allele not found in the profile (not a probability).</p></li>
-<li><p>lM a single <code>numeric</code> log10 product frequency allele
-in population.</p></li>
-<li><p>lRhomo a single <code>numeric</code> representing the score
-<code>lH</code> - <code>lM</code>.</p></li>
-<li><p>nbHomo a single <code>integer</code> representing the number of
-homozygote SNVs per block.</p></li>
-<li><p>nbKeep a single <code>integer</code> representing the number of
-SNVs retained per block.</p></li>
-<li><p>nbHetero a single <code>integer</code> representing the number of
-heterozygote SNVs per block.</p></li>
-</ul></div>
+<code>data.frame</code> contain those columns:</p><dl><dt>block</dt>
+<dd><p>a single <code>integer</code> representing the unique identifier
+of the block.</p></dd>
+
+<dt>aRF</dt>
+<dd><p>a single <code>numeric</code> representing the final allelic
+fraction; not computed yet, <code>-1</code> value assigned to all entries.</p></dd>
+
+<dt>aFraction</dt>
+<dd><p>a single <code>integer</code> representing the possible allelic
+fraction in absence of loss of heterozygosity (LOH).</p></dd>
+
+<dt>lR</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the alternative allele.</p></dd>
+
+<dt>nPhase</dt>
+<dd><p>a single <code>integer</code> representing the number of SNV
+phases.</p></dd>
+
+<dt>sumAlleleLow</dt>
+<dd><p>a single <code>integer</code> representing the sum of the
+alleles with the less coverage.</p></dd>
+
+<dt>sumAlleleHigh</dt>
+<dd><p>a single <code>integer</code> representing the sum of
+the alleles with more coverage.</p></dd>
+
+<dt>lH</dt>
+<dd><p>a single <code>numeric</code> for the homozygotes log10 of the product
+frequencies of the allele not found in the profile (not a probability).</p></dd>
+
+<dt>lM</dt>
+<dd><p>a single <code>numeric</code> log10 product frequency allele
+in population.</p></dd>
+
+<dt>lRhomo</dt>
+<dd><p>a single <code>numeric</code> representing the score
+<code>lH</code> - <code>lM</code>.</p></dd>
+
+<dt>nbHomo</dt>
+<dd><p>a single <code>integer</code> representing the number of
+homozygote SNVs per block.</p></dd>
+
+<dt>nbKeep</dt>
+<dd><p>a single <code>integer</code> representing the number of
+SNVs retained per block.</p></dd>
+
+<dt>nbHetero</dt>
+<dd><p>a single <code>integer</code> representing the number of
+heterozygote SNVs per block.</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

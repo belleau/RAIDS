@@ -36,6 +36,7 @@
 <url><loc>/reference/computePoolSyntheticAncestryGr.html</loc></url>
 <url><loc>/reference/computeSyntheticConfMat.html</loc></url>
 <url><loc>/reference/computeSyntheticROC.html</loc></url>
+<url><loc>/reference/createAccuracyGraph.html</loc></url>
 <url><loc>/reference/createStudy2GDS1KG.html</loc></url>
 <url><loc>/reference/demoKnownSuperPop1KG.html</loc></url>
 <url><loc>/reference/demoPCA1KG.html</loc></url>
@@ -91,6 +92,7 @@
 <url><loc>/reference/validateComputePCARefSample.html</loc></url>
 <url><loc>/reference/validateComputePoolSyntheticAncestryGr.html</loc></url>
 <url><loc>/reference/validateComputeSyntheticRoc.html</loc></url>
+<url><loc>/reference/validateCreateAccuracyGraph.html</loc></url>
 <url><loc>/reference/validateCreateStudy2GDS1KG.html</loc></url>
 <url><loc>/reference/validateDataRefSynParameter.html</loc></url>
 <url><loc>/reference/validateEstimateAllelicFraction.html</loc></url>

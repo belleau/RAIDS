@@ -20,7 +20,7 @@ haplotype are grouped together."><!-- mathjax --><script src="https://cdnjs.clou
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -79,30 +79,46 @@ haplotype are grouped together.</p>
 <dl><dt id="arg-snpposhetero">snpPosHetero<a class="anchor" aria-label="anchor" href="#arg-snpposhetero"></a></dt>
 <dd><p>a <code>data.frame</code>
 containing the SNV information for a specific block (gene if RNA-seq).
-The <code>data.frame</code> must contain those columns:</p><ul><li><p>cnt.ref a single <code>integer</code> representing the coverage for
-the reference allele.</p></li>
-<li><p>cnt.alt a single <code>integer</code> representing the coverage for
-the alternative allele.</p></li>
-<li><p>phase  a single <code>integer</code> indicating the phase of the variant
-if known, <code>3</code> if not known</p></li>
-</ul></dd>
+The <code>data.frame</code> must contain those columns:</p><dl><dt>cnt.ref</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the reference allele.</p></dd>
+
+<dt>cnt.alt</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the alternative allele.</p></dd>
+
+<dt>phase</dt>
+<dd><p>a single <code>integer</code> indicating the phase of the variant
+if known, <code>3</code> if not known</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>a <code>list</code> for the block with the information
 relative to the heterozygotes.
-The <code>list</code> contains:</p><ul><li><p>lR  a single <code>numeric</code> representing the sum of the log of
+The <code>list</code> contains:</p><dl><dt>lR</dt>
+<dd><p>a single <code>numeric</code> representing the sum of the log of
 read depth of the lowest depth divide by the total depth of the position
-minus of likelihood of the allelic fraction of 0.5.</p></li>
-<li><p>aFraction  a single <code>numeric</code> representing the allele
-fraction estimation.</p></li>
-<li><p>sumAlleleLow  a <code>integer</code> representing the
-sum of the allele read depth of the lowest read allele depth</p></li>
-<li><p>sumAlleleHigh  a <code>integer</code> representing the
+minus of likelihood of the allelic fraction of 0.5.</p></dd>
+
+<dt>aFraction</dt>
+<dd><p>a single <code>numeric</code> representing the allele
+fraction estimation.</p></dd>
+
+<dt>sumAlleleLow</dt>
+<dd><p>a <code>integer</code> representing the
+sum of the allele read depth of the lowest read allele depth</p></dd>
+
+<dt>sumAlleleHigh</dt>
+<dd><p>a <code>integer</code> representing the
 sum of the allele read depth
-of the highest read allele depth</p></li>
-</ul></div>
+of the highest read allele depth</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>

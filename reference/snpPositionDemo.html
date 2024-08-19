@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -69,73 +69,146 @@
     <div id="format">
     <h2>Format</h2>
     <p>The <code>data.frame</code> containing the information about the
-synthetic profiles. The <code>data.frame</code> contains 4 columns:</p><ul><li><p><code>cnt.tot</code> a <code>integer</code> representing the number of reads at
-the SNV position.</p></li>
-<li><p><code>cnt.ref</code> a <code>integer</code> representing the number of reads
-corresponding to the reference at the SNV position.</p></li>
-<li><p><code>cnt.alt</code> a <code>integer</code> representing the number of reads
-different than the reference at the SNV position.</p></li>
-<li><p><code>snp.pos</code> a <code>integer</code> representing the position of the
-SNV on the chromosome.</p></li>
-<li><p><code>snp.chr</code> a <code>integer</code> representing the chromosome on which
-the SNV is located.</p></li>
-<li><p><code>normal.geno</code> a <code>integer</code> representing the genotype
-(0=wild-type reference; 1=heterozygote; 2=homozygote alternative; 3=unkown).</p></li>
-<li><p><code>pruned</code> a <code>logical</code> indicated if the SNV is pruned.</p></li>
-<li><p><code>snp.index</code> a <code>integer</code> representing the index of the
-SNV in the reference SNV GDS file.</p></li>
-<li><p><code>keep</code> a <code>logical</code> indicated if the genotype
-exists for the SNV.</p></li>
-<li><p><code>hetero</code> a <code>logical</code> indicated if the SNV is heterozygote.</p></li>
-<li><p><code>homo</code> a <code>logical</code> indicated if the SNV is homozygote.</p></li>
-<li><p><code>block.id</code> a <code>integer</code> representing the block identifier
-associated to the current SNV.</p></li>
-<li><p><code>phase</code> a <code>integer</code> representing the block identifier
-associated to the current SNV.</p></li>
-<li><p><code>lap</code> a <code>numeric</code> representing the lower allelic fraction.</p></li>
-<li><p><code>LOH</code> a <code>integer</code> indicating if the SNV is in an LOH region
-(0=not LOH, 1=in LOH).</p></li>
-<li><p><code>imbAR</code> a <code>integer</code> indicating if the SNV is in an
+synthetic profiles. The <code>data.frame</code> contains 4 columns:</p><dl><dt><code>cnt.tot</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads at
+the SNV position.</p></dd>
+
+<dt><code>cnt.ref</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads
+corresponding to the reference at the SNV position.</p></dd>
+
+<dt><code>cnt.alt</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads
+different than the reference at the SNV position.</p></dd>
+
+<dt><code>snp.pos</code></dt>
+<dd><p>a <code>integer</code> representing the position of the
+SNV on the chromosome.</p></dd>
+
+<dt><code>snp.chr</code></dt>
+<dd><p>a <code>integer</code> representing the chromosome on which
+the SNV is located.</p></dd>
+
+<dt><code>normal.geno</code></dt>
+<dd><p>a <code>integer</code> representing the genotype
+(0=wild-type reference; 1=heterozygote; 2=homozygote alternative;
+3=unkown).</p></dd>
+
+<dt><code>pruned</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is pruned.</p></dd>
+
+<dt><code>snp.index</code></dt>
+<dd><p>a <code>integer</code> representing the index of the
+SNV in the reference SNV GDS file.</p></dd>
+
+<dt><code>keep</code></dt>
+<dd><p>a <code>logical</code> indicated if the genotype
+exists for the SNV.</p></dd>
+
+<dt><code>hetero</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is
+heterozygote.</p></dd>
+
+<dt><code>homo</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is homozygote.</p></dd>
+
+<dt><code>block.id</code></dt>
+<dd><p>a <code>integer</code> representing the block identifier
+associated to the current SNV.</p></dd>
+
+<dt><code>phase</code></dt>
+<dd><p>a <code>integer</code> representing the block identifier
+associated to the current SNV.</p></dd>
+
+<dt><code>lap</code></dt>
+<dd><p>a <code>numeric</code> representing the lower allelic
+fraction.</p></dd>
+
+<dt><code>LOH</code></dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an LOH
+region (0=not LOH, 1=in LOH).</p></dd>
+
+<dt><code>imbAR</code></dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an
 imbalanced region (-1=not classified as imbalanced or LOH, 0=in LOH;
-1=tested positive for imbalance in at least 1 window).</p></li>
-<li><p><code>freq</code> a <code>numeric</code> representing the frequency of the
-variant in the the reference.</p></li>
-</ul></div>
+1=tested positive for imbalance in at least 1 window).</p></dd>
+
+<dt><code>freq</code></dt>
+<dd><p>a <code>numeric</code> representing the frequency of the
+variant in the the reference.</p></dd>
+
+
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>The <code>data.frame</code> containing the information about the
-synthetic profiles. The <code>data.frame</code> contains 4 columns:</p><ul><li><p><code>cnt.tot</code> a <code>integer</code> representing the number of reads at
-the SNV position.</p></li>
-<li><p><code>cnt.ref</code> a <code>integer</code> representing the number of reads
-corresponding to the reference at the SNV position.</p></li>
-<li><p><code>cnt.alt</code> a <code>integer</code> representing the number of reads
-different than the reference at the SNV position.</p></li>
-<li><p><code>snp.pos</code> a <code>integer</code> representing the position of the
-SNV on the chromosome.</p></li>
-<li><p><code>snp.chr</code> a <code>integer</code> representing the chromosome on which
-the SNV is located.</p></li>
-<li><p><code>normal.geno</code> a <code>integer</code> representing the genotype
-(0=wild-type reference; 1=heterozygote; 2=homozygote alternative; 3=unkown).</p></li>
-<li><p><code>pruned</code> a <code>logical</code> indicated if the SNV is pruned.</p></li>
-<li><p><code>snp.index</code> a <code>integer</code> representing the index of the
-SNV in the reference SNV GDS file.</p></li>
-<li><p><code>keep</code> a <code>logical</code> indicated if the genotype
-exists for the SNV.</p></li>
-<li><p><code>hetero</code> a <code>logical</code> indicated if the SNV is heterozygote.</p></li>
-<li><p><code>homo</code> a <code>logical</code> indicated if the SNV is homozygote.</p></li>
-<li><p><code>block.id</code> a <code>integer</code> representing the block identifier
-associated to the current SNV.</p></li>
-<li><p><code>phase</code> a <code>integer</code> representing the block identifier
-associated to the current SNV.</p></li>
-<li><p><code>lap</code> a <code>numeric</code> representing the lower allelic fraction.</p></li>
-<li><p><code>LOH</code> a <code>integer</code> indicating if the SNV is in an LOH region
-(0=not LOH, 1=in LOH).</p></li>
-<li><p><code>imbAR</code> a <code>integer</code> indicating if the SNV is in an
+synthetic profiles. The <code>data.frame</code> contains 4 columns:</p><dl><dt><code>cnt.tot</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads at
+the SNV position.</p></dd>
+
+<dt><code>cnt.ref</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads
+corresponding to the reference at the SNV position.</p></dd>
+
+<dt><code>cnt.alt</code></dt>
+<dd><p>a <code>integer</code> representing the number of reads
+different than the reference at the SNV position.</p></dd>
+
+<dt><code>snp.pos</code></dt>
+<dd><p>a <code>integer</code> representing the position of the
+SNV on the chromosome.</p></dd>
+
+<dt><code>snp.chr</code></dt>
+<dd><p>a <code>integer</code> representing the chromosome on which
+the SNV is located.</p></dd>
+
+<dt><code>normal.geno</code></dt>
+<dd><p>a <code>integer</code> representing the genotype
+(0=wild-type reference; 1=heterozygote; 2=homozygote alternative; 3=unkown).</p></dd>
+
+<dt><code>pruned</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is pruned.</p></dd>
+
+<dt><code>snp.index</code></dt>
+<dd><p>a <code>integer</code> representing the index of the
+SNV in the reference SNV GDS file.</p></dd>
+
+<dt><code>keep</code></dt>
+<dd><p>a <code>logical</code> indicated if the genotype
+exists for the SNV.</p></dd>
+
+<dt><code>hetero</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is heterozygote.</p></dd>
+
+<dt><code>homo</code></dt>
+<dd><p>a <code>logical</code> indicated if the SNV is homozygote.</p></dd>
+
+<dt><code>block.id</code></dt>
+<dd><p>a <code>integer</code> representing the block identifier
+associated to the current SNV.</p></dd>
+
+<dt><code>phase</code></dt>
+<dd><p>a <code>integer</code> representing the block identifier
+associated to the current SNV.</p></dd>
+
+<dt><code>lap</code></dt>
+<dd><p>a <code>numeric</code> representing the lower allelic fraction.</p></dd>
+
+<dt><code>LOH</code></dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an LOH region
+(0=not LOH, 1=in LOH).</p></dd>
+
+<dt><code>imbAR</code></dt>
+<dd><p>a <code>integer</code> indicating if the SNV is in an
 imbalanced region (-1=not classified as imbalanced or LOH, 0=in LOH;
-1=tested positive for imbalance in at least 1 window).</p></li>
-<li><p><code>freq</code> a <code>numeric</code> representing the frequency of the
-variant in the the reference.</p></li>
-</ul></div>
+1=tested positive for imbalance in at least 1 window).</p></dd>
+
+<dt><code>freq</code></dt>
+<dd><p>a <code>numeric</code> representing the frequency of the
+variant in the the reference.</p></dd>
+
+
+</dl></div>
     <div id="details">
     <h2>Details</h2>
     <p>This dataset can be

@@ -20,7 +20,7 @@ including statistic for the region represented by all the SNVs."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RAIDS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -78,11 +78,16 @@ including statistic for the region represented by all the SNVs.</p>
 
 <dl><dt id="arg-matcov">matCov<a class="anchor" aria-label="anchor" href="#arg-matcov"></a></dt>
 <dd><p>a <code>data.frame</code> containing only heterozygote SNVs. The
-<code>data.frame</code> must contain those columns:</p><ul><li><p>cnt.ref a single <code>integer</code> representing the coverage for
-the reference allele.</p></li>
-<li><p>cnt.alt a single <code>integer</code> representing the coverage for
-the alternative allele.</p></li>
-</ul></dd>
+<code>data.frame</code> must contain those columns:</p><dl><dt>cnt.ref</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the reference allele.</p></dd>
+
+<dt>cnt.alt</dt>
+<dd><p>a single <code>integer</code> representing the coverage for
+the alternative allele.</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-pcutoff">pCutOff<a class="anchor" aria-label="anchor" href="#arg-pcutoff"></a></dt>
@@ -100,17 +105,26 @@ reference to see if there is a allelic fraction change.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>list</code> containing 4 entries:</p><ul><li><p>pWin a <code>vector</code> of <code>numeric</code> representing the
+    <p>a <code>list</code> containing 4 entries:</p><dl><dt>pWin</dt>
+<dd><p>a <code>vector</code> of <code>numeric</code> representing the
 probability (x2) of obtaining the current
 alternative/(alternative+reference) ratio from a reference distribution
-specified by user.</p></li>
-<li><p>pa <code>integer</code> indicating if all SNVs tested
-positive (1=TRUE, 0=FALSE). The cut-off is 0.5.</p></li>
-<li><p>pCuta <code>integer</code> indicating if all SNVs tested
-positive (1=TRUE, 0-FALSE).</p></li>
-<li><p>pCut1a <code>integer</code> indicating if the region tested
-positive (1=TRUE, 0=FALSE) for allelic ratio change.</p></li>
-</ul></div>
+specified by user.</p></dd>
+
+<dt>p</dt>
+<dd><p>a <code>integer</code> indicating if all SNVs tested
+positive (1=TRUE, 0=FALSE). The cut-off is 0.5.</p></dd>
+
+<dt>pCut</dt>
+<dd><p>a <code>integer</code> indicating if all SNVs tested
+positive (1=TRUE, 0-FALSE).</p></dd>
+
+<dt>pCut1</dt>
+<dd><p>a <code>integer</code> indicating if the region tested
+positive (1=TRUE, 0=FALSE) for allelic ratio change.</p></dd>
+
+
+</dl></div>
     <div id="author">
     <h2>Author</h2>
     <p>Pascal Belleau, Astrid Deschênes and Alexander Krasnitz</p>
