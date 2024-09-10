@@ -67,11 +67,13 @@
 <url><loc>/reference/readSNVFileGeneric.html</loc></url>
 <url><loc>/reference/readSNVPileupFile.html</loc></url>
 <url><loc>/reference/readSNVVCF.html</loc></url>
+<url><loc>/reference/runDNAAncestryProfile.html</loc></url>
 <url><loc>/reference/runExomeAncestry.html</loc></url>
 <url><loc>/reference/runIBDKING.html</loc></url>
 <url><loc>/reference/runLDPruning.html</loc></url>
 <url><loc>/reference/runProfileAncestry.html</loc></url>
 <url><loc>/reference/runRNAAncestry.html</loc></url>
+<url><loc>/reference/runRNAAncestryProfile.html</loc></url>
 <url><loc>/reference/runWrapperAncestry.html</loc></url>
 <url><loc>/reference/selParaPCAUpQuartile.html</loc></url>
 <url><loc>/reference/select1KGPop.html</loc></url>
