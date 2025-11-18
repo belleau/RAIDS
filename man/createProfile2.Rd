@@ -47,26 +47,27 @@ samplePED <- data.frame(Name.ID=c("ex1"),
                     drop=FALSE)
 rownames(samplePED) <- samplePED$Name.ID
 
+pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+    studyDF=studyDF,
+    genoSource="snp-pileup",
+    pedStudy=samplePED,
+    pathProfileGDS=tempdir(),
+    fileReferenceGDS=fileGDS
+    )
 ## Create the Profile GDS File for samples in 'listSamples' vector
 ## (in this case, samples "ex1")
 ## The Profile GDS file is created in the pathProfileGDS directory
-result <- RAIDS:::createProfile(profileFile=file.path(dataDir, "ex1.txt.gz"),
-            profileName="ex1",
-            pedStudy=samplePED, fileNameGDS=fileGDS,
-            studyDF=studyDF, listProfiles=c("ex1"),
-            pathProfileGDS=tempdir(),
-            genoSource="snp-pileup",
-            verbose=FALSE)
+pRAIDS <- RAIDS:::createProfile2(pRAIDS)
 
 ## The function returns OL when successful
 result
 
 ## The Profile GDS file 'ex1.gds' has been created in the
 ## specified directory
-list.files(tempdir())
+list.files(pRAIDS$pathProfileGDS)
 
 ## Remove Profile GDS file (created for demo purpose)
-unlink(file.path(tempdir(), "ex1.gds"), force=TRUE)
+unlink(file.path(pRAIDS$pathProfileGDS, "ex1.gds"), force=TRUE)
 
 
 }

@@ -74,6 +74,10 @@
 #' @param seqError a single \code{numeric} between \code{0} and \code{1}
 #' representing the probability of sequencing error. Default: \code{0.001}.
 #'
+#' @param seqErrorSyn a single \code{numeric} between \code{0} and \code{1}
+#' representing the probability of sequencing error for synthetic.
+#' Default: \code{0.001}.
+#'
 #' @param np a single positive \code{integer} specifying the number of
 #' threads to be used. Default: \code{1L}.
 #'
@@ -98,6 +102,13 @@
 #' be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 #' are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.
+#'
+#' @param  specificSNV a \code{data.frame} containing 2 columns. The first column,
+#' called "snp.chromosome" contains the name of the chromosome where the
+#' SNV is located. The second column, called "snp.position" contains the
+#' position of the SNV on the chromosome. Optionel the column snvKeep add by
+#' contains index in the reference or -1  if not in the reference. It is using
+#' be at pruning step.
 #'
 #' @param verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
@@ -157,6 +168,7 @@ paramRAIDS <- function(studyDF=NULL,
                        minCov=10,
                        minProb=0.999,
                        seqError=0.001,
+                       seqErrorSyn=0.001,
                        np=1L,
                        listPos=NULL,
                        syntheticRefDF=NULL,
@@ -231,6 +243,7 @@ paramRAIDS <- function(studyDF=NULL,
                       minCov=minCov,
                       minProb=minProb,
                       seqError=seqError,
+                      seqErrorSyn=seqErrorSyn,
                       np=np,
                       listPos=listPos,
                       syntheticRefDF=syntheticRefDF,
