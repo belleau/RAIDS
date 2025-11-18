@@ -8,6 +8,7 @@ function}
 \usage{
 paramRAIDS(
   studyDF = NULL,
+  studyDFSyn = NULL,
   pedStudy = NULL,
   studyType = NULL,
   genoSource = NULL,
@@ -28,12 +29,22 @@ paramRAIDS(
   seqError = 0.001,
   np = 1L,
   listPos = NULL,
+  syntheticRefDF = NULL,
+  pruningMethod = c("corr", "r", "dprime", "composite"),
+  slideWindowMaxBP = 500000L,
+  thresholdLD = sqrt(0.1),
+  specificSNV = NULL,
   verbose = FALSE
 )
 }
 \arguments{
 \item{studyDF}{a \code{data.frame} containing the information about the
 study associated to the analysed sample(s). The \code{data.frame} must have
+those 3 columns: "study.id", "study.desc", "study.platform". All columns
+must be in \code{character} strings (no factor).}
+
+\item{studyDFSyn}{a \code{data.frame} containing the information about the
+synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
 must be in \code{character} strings (no factor).}
 
@@ -90,10 +101,30 @@ Default: \code{0.999}.}
 \item{seqError}{a single \code{numeric} between \code{0} and \code{1}
 representing the probability of sequencing error. Default: \code{0.001}.}
 
+\item{np}{a single positive \code{integer} specifying the number of
+threads to be used. Default: \code{1L}.}
+
 \item{listPos}{a \code{data.frame} containing 2 columns. The first column,
 called "snp.chromosome" contains the name of the chromosome where the
 SNV is located. The second column, called "snp.position" contains the
 position of the SNV on the chromosome.}
+
+\item{syntheticRefDF}{a \code{data.frame} containing a subset of
+reference profiles for each sub-population present in the Reference GDS
+file. The \code{data.frame} must have those columns:
+\describe{
+\item{sample.id}{ a \code{character} string representing the sample
+identifier. }
+\item{pop.group}{ a \code{character} string representing the
+subcontinental population assigned to the sample. }
+\item{superPop}{ a \code{character} string representing the
+super-population assigned to the sample. }
+}}
+
+\item{pruningMethod}{a \code{character} string that represents the method that will
+be used to calculate the linkage disequilibrium in the
+\code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
+are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
@@ -140,4 +171,3 @@ closefn.gds(gdsProfile)
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }
-\keyword{internal}

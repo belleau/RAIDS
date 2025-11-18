@@ -10,7 +10,8 @@
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
 #'
-#' @return The function returns \code{0L} when successful.
+#' @return The function returns a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters updated.
 #'
 #' @examples
 #'
@@ -150,5 +151,5 @@ createProfile2 <- function(pRAIDS) {
     closefn.gds(gdsReference)
 
     ## Return successful code
-    return(0L)
+    return(pRAIDS)
 }

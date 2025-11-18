@@ -14,7 +14,8 @@ createProfile2(pRAIDS)
 parameters}
 }
 \value{
-The function returns \code{0L} when successful.
+The function returns a \code{parametersRAIDS} an object with all the RAIDS
+parameters updated.
 }
 \description{
 The function uses the information for the Reference GDS file

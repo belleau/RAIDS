@@ -8,6 +8,11 @@
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
 #' must be in \code{character} strings (no factor).
 #'
+#' @param studyDFSyn a \code{data.frame} containing the information about the
+#' synthetic data to the analysed sample(s). The \code{data.frame} must have
+#' those 3 columns: "study.id", "study.desc", "study.platform". All columns
+#' must be in \code{character} strings (no factor).
+#'
 #' @param pedStudy a \code{data.frame} with those mandatory columns: "Name.ID",
 #' "Case.ID", "Sample.Type", "Diagnosis", "Source". All columns must be in
 #' \code{character} strings (no factor). The \code{data.frame}
@@ -69,6 +74,31 @@
 #' @param seqError a single \code{numeric} between \code{0} and \code{1}
 #' representing the probability of sequencing error. Default: \code{0.001}.
 #'
+#' @param np a single positive \code{integer} specifying the number of
+#' threads to be used. Default: \code{1L}.
+#'
+#' @param listPos a \code{data.frame} containing 2 columns. The first column,
+#' called "snp.chromosome" contains the name of the chromosome where the
+#' SNV is located. The second column, called "snp.position" contains the
+#' position of the SNV on the chromosome.
+#'
+#' @param syntheticRefDF a \code{data.frame} containing a subset of
+#' reference profiles for each sub-population present in the Reference GDS
+#' file. The \code{data.frame} must have those columns:
+#' \describe{
+#' \item{sample.id}{ a \code{character} string representing the sample
+#' identifier. }
+#' \item{pop.group}{ a \code{character} string representing the
+#' subcontinental population assigned to the sample. }
+#' \item{superPop}{ a \code{character} string representing the
+#' super-population assigned to the sample. }
+#' }
+#'
+#' @param pruningMethod a \code{character} string that represents the method that will
+#' be used to calculate the linkage disequilibrium in the
+#' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
+#' are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.
+#'
 #' @param verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
 #'
@@ -105,8 +135,10 @@
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' @keywords internal
+#' @export
+
 paramRAIDS <- function(studyDF=NULL,
+                       studyDFSyn=NULL,
                        pedStudy=NULL,
                        studyType=NULL,
                        genoSource=NULL,
@@ -127,8 +159,19 @@ paramRAIDS <- function(studyDF=NULL,
                        seqError=0.001,
                        np=1L,
                        listPos=NULL,
+                       syntheticRefDF=NULL,
+                       pruningMethod=c("corr", "r", "dprime", "composite"),
+                       slideWindowMaxBP=500000L,
+                       thresholdLD=sqrt(0.1),
+                       specificSNV=NULL,
                        verbose=FALSE) {
 
+    # listSNP=NULL, # not yet implemented
+    # superPopMinAF=NULL,
+    # keepPrunedGDS=TRUE,
+    # pathProfileGDS=NULL,
+    # keepFile=FALSE,
+    # pathPrunedGDS=".", outPrefix="pruned"
     if(is.null(studyDF)){
         studyDF <- data.frame(study.id="NotDef",
                               study.desc="NotDef",
@@ -143,7 +186,15 @@ paramRAIDS <- function(studyDF=NULL,
                                Source=c("NotDef"),
                                stringsAsFactors=FALSE)
         row.names(pedStudy) <- pedStudy$Name.ID
+
+
     }
+    if(is.null(studyDFSyn)){
+        studyDFSyn <- data.frame(study.id=paste0(studyDF$study.id, ".Synthetic"),
+                                 study.desc=paste0(studyDF$study.id, " synthetic data"),
+                                 study.platform=studyDF$study.platform, stringsAsFactors=FALSE)
+    }
+
     if(is.null(chrInfo) && genome=="HG38"){
         chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
     }else if(is.null(chrInfo)){
@@ -154,16 +205,20 @@ paramRAIDS <- function(studyDF=NULL,
                            PileupParam=NULL,
                            yieldSize=10000000)
     }
-    # studyType=c("LD", "GeneAware")
-    # genoSource=c("snp-pileup", "generic", "VCF", "bam"),
-    # studyType=c("LD", "GeneAware"), np=1L, blockTypeID=NULL,
+
+    # studyDF,
+    # currentProfile, pathProfileGDS, chrInfo, syntheticRefDF,
+    # studyDFSyn, listProfileRef, studyType=c("LD", "GeneAware"),
+    # np=1L, blockTypeID=NULL, verbose=FALSE
+    pruningMethod <- arg_match(pruningMethod)
 
     parameter <- list(reference="1KG",
                       studyDF=studyDF,
+                      studyDFSyn=studyDFSyn,
                       pedStudy=pedStudy,
                       studyType=studyType,
                       genoSource=genoSource,
-                      blockTypeId="GeneS.Ensembl.Hsapiens.v86",
+                      blockTypeId=blockTypeId,
                       genome=genome,
                       chrInfo=chrInfo,
                       profileFile=profileFile,
@@ -178,11 +233,45 @@ paramRAIDS <- function(studyDF=NULL,
                       seqError=seqError,
                       np=np,
                       listPos=listPos,
+                      syntheticRefDF=syntheticRefDF,
+                      pruningMethod=pruningMethod,
+                      slideWindowMaxBP=slideWindowMaxBP,
+                      thresholdLD=thresholdLD,
+                      specificSNV=specificSNV,
                       nReads = 22,
                       K=33,
                       verbose=verbose)
     class(parameter) <- "parametersRAIDS"
     return(parameter)
+}
+
+specificSNVKeep <- function(pRAIDS){
+    if(!is.null(pRAIDS$specificSNV)){
+        if(! "snvKeep" %in% colnames(pRAIDS$specificSNV)){
+            gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+            snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
+            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
+
+            z <- cbind(c(pRAIDS$specificSNV$snp.chromosome,
+                         snp.chromosome,
+                         pRAIDS$specificSNV$snp.chromosome),
+                       c(pRAIDS$specificSNV$snp.position,
+                         snp.position,
+                         pRAIDS$specificSNV$snp.position),
+                       c(-1 * seq_len(nrow(pRAIDS$specificSNV)),
+                         rep(0, length(snp.position)),
+                         seq_len(nrow(pRAIDS$specificSNV))),
+                       c(rep(0, nrow(pRAIDS$specificSNV)),
+                         seq_len(length(snp.position)),
+                         rep(0, nrow(pRAIDS$specificSNV))))
+            z <- z[order(z[,1], z[,2], z[,3]),]
+            pRAIDS$specificSNV$snvKeep <- rep(-1, nrow(pRAIDS$specificSNV$snvKeep))
+            pRAIDS$specificSNV$snvKeep[-1*cumsum(z[,3])[z[,3] == 0]] <- z[cumsum(z[,3]) < 0 & z[,3] == 0, 4]
+
+        }
+    }
+
+    return(pRAIDS)
 }
 
 
