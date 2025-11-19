@@ -126,8 +126,14 @@ pruningProfile2 <- function(pRAIDS) {
     }
 
     ## Get the SNV genotype information for the current profile
-    g <- read.gdsn(index.gdsn(gdsSample, "geno.ref"),
-                   start=c(1, posSample), count=c(-1,1))
+    # "geno.ref"
+    if(pRAIDS$genoType %in% ls.gdsn(gdsProfile)){
+        g <- read.gdsn(index.gdsn(gdsSample, pRAIDS$genoType),
+                       start=c(1, posSample), count=c(-1,1))
+
+    }else{
+        stop("The genotype type don't exists")
+    }
 
     ## Close the Profile GDS file
     closefn.gds(gdsSample)

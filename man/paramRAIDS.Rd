@@ -18,6 +18,7 @@ paramRAIDS(
   chrInfo = NULL,
   paramAncestry = NULL,
   profileFile = NULL,
+  profileFileGeno = NULL,
   pathProfileGDS = NULL,
   fileReferenceGDS = NULL,
   fileReferenceAnnotGDS = NULL,
@@ -35,6 +36,7 @@ paramRAIDS(
   slideWindowMaxBP = 500000L,
   thresholdLD = sqrt(0.1),
   specificSNV = NULL,
+  genoType = "geno.ref",
   verbose = FALSE
 )
 }

@@ -495,7 +495,7 @@ readGenoVCF <- function(fileName, profileName=NULL, offset=0L) {
     listKeep <- listKeep[which(widthRef == 1)]
 
 
-    matSample <- data.frame(Chromosome=as.character(seqnames(infoPos)[listKeep]),
+    matSample <- data.frame(Chromosome=gsub("chr", "", as.character(seqnames(infoPos)[listKeep])),
                       Position=start(infoPos[listKeep]),
                       geno=gtCur$GT[listKeep,genoPos],
                       ref=as.character(infoPos$REF[listKeep]),
@@ -507,9 +507,17 @@ readGenoVCF <- function(fileName, profileName=NULL, offset=0L) {
                       phase=unname(substr(gtCur$GT[listKeep,1],2,2)),
                       stringsAsFactors=FALSE)
     matSample <- matSample[which(matSample$alt %in% c("A", "C", "G", "T")),]
-
+    if(length(which(unique(matSample$Chromosome) %in% c("X", "Y", "M"))) > 0){
+        for(chr in c("X", "Y", "M")){
+            tmp <- which(matSample$Chromosome == chr)
+            if(length(tmp) > 0){
+                matSample$Chromosome[tmp] <- ifelse(chr == "X", 23,
+                                                    ifelse(chr=="Y", 24,25))
+            }
+        }
+    }
     matSample$Position <- matSample$Position + offset
-
+    matSample$Chromosome <- as.integer(matSample$Chromosome)
     return(matSample)
 }
 
