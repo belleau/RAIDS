@@ -404,7 +404,7 @@ readSNVVCF <- function(fileName, profileName=NULL, offset=0L) {
             keep <- ifelse(listAlt[2] %in% c("A", "C", "G", "T"), TRUE, FALSE)
 
             res <- data.frame(Alt=as.character(listAlt[2]),
-                        File1R=countA[[x]][1], File1A=countA[[x]][2], 
+                        File1R=countA[x,genoPos][[1]][1], File1A=countA[x,genoPos][[1]][2],
                         keep=keep)
 
             return(res)
@@ -421,10 +421,98 @@ readSNVVCF <- function(fileName, profileName=NULL, offset=0L) {
                     Ref=refCur[listKeep], Alt=matCur$Alt[listTmp],
                     File1R=matCur$File1R[listTmp],
                     File1A=matCur$File1A[listTmp],
-                    count=gtCur$DP[,1], stringsAsFactors=FALSE)
+                    count=unname(gtCur$DP[listKeep,genoPos]),
+                    stringsAsFactors=FALSE)
 
     return(matSample)
 }
+
+#' @title Read a VCF file with the genotypes use for the ancestry call
+#'
+#' @description The function reads VCF file and returns a data frame
+#' containing the information about the read counts for the SNVs present in
+#' the file.
+#'
+#' @param fileName a \code{character} string representing the name, including
+#' the path, of a VCF file containing the SNV read counts.
+#' The VCF must contain those genotype fields: GT, AD, DP.
+#'
+#' @param profileName a \code{character} with Name.ID for the genotype name.
+#' Default: \code{NULL}.
+#'
+#' @param offset a \code{integer} representing the offset to be added to the
+#' position of the SNVs. The value of offset
+#' is added to the position present in the file. Default: \code{0L}.
+#'
+#' @return a \code{data.frame} containing at least:
+#' \describe{
+#' \item{Chromosome}{ a \code{numeric} representing the name of
+#' the chromosome}
+#' \item{Position}{ a \code{numeric} representing the position on the
+#' chromosome}
+#' \item{geno}{ a \code{character} string representing the genotype}
+#' \item{ref}{ a \code{character} string representing the reference nucleotide}
+#' \item{alt}{ a \code{character} string representing the alternative
+#' nucleotide}
+#' \item{phase}{ a \code{character} representing the phase state}
+#' }
+#'
+#' @examples
+#'
+#'
+#' ## Directory where demo SNP-pileup file
+#' dataDir <- system.file("extdata/example/snpPileup", package="RAIDS")
+#'
+#' ## The SNP-pileup file
+#' snpPileupFile <- file.path(dataDir, "ex1.vcf.gz")
+#'
+#' info <- RAIDS:::readGenoVCF(fileName=snpPileupFile)
+#' head(info)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom VariantAnnotation readVcf geno
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom GenomicRanges seqnames start width
+#' @encoding UTF-8
+#' @keywords internal
+readGenoVCF <- function(fileName, profileName=NULL, offset=0L) {
+    vcf <- NULL
+    suppressWarnings(vcf <- readVcf(fileName))
+
+    gtCur <- geno(vcf)
+    genoPos <- 1
+    if(! is.null(profileName)){
+        listVcfSample <- colnames(gtCur$GT)
+        genoPos <- which(listVcfSample == profileName)
+    }
+
+
+    infoPos <- rowRanges(vcf)
+    #start <- start(infoPos)
+    widthRef <- width(infoPos$REF)
+    refCur <- as.character(infoPos$REF)
+    listKeep <- seq_len(length(refCur))
+    listKeep <- listKeep[which(widthRef == 1)]
+
+
+    matSample <- data.frame(Chromosome=as.character(seqnames(infoPos)[listKeep]),
+                      Position=start(infoPos[listKeep]),
+                      geno=gtCur$GT[listKeep,genoPos],
+                      ref=as.character(infoPos$REF[listKeep]),
+                      alt=unlist(lapply(listKeep, FUN=function(x, infoPos){
+                          altSeq <- paste(as.character(infoPos$ALT[[x]]),collapse = ":")
+                          return(altSeq)
+                      },
+                      infoPos=infoPos)),
+                      phase=unname(substr(gtCur$GT[listKeep,1],2,2)),
+                      stringsAsFactors=FALSE)
+    matSample <- matSample[which(matSample$alt %in% c("A", "C", "G", "T")),]
+
+    matSample$Position <- matSample$Position + offset
+
+    return(matSample)
+}
+
 
 #' @title Filtering the read counts for a specific nucleotide
 #'
@@ -620,8 +708,8 @@ processPileupChrBin <- function(chr, resPileup, varDf, verbose) {
 #' the path, of a BAM file with the index file in the same directory
 #'
 #'
-#' @param paramSNVBAM a \code{list} containing the parameters passed to the 
-#' BamFile() function. Default: \code{list(ScanBamParam=NULL, PileupParam=NULL, 
+#' @param paramSNVBAM a \code{list} containing the parameters passed to the
+#' BamFile() function. Default: \code{list(ScanBamParam=NULL, PileupParam=NULL,
 #' yieldSize=10000000)}.
 #'
 #' @param varSelected a \code{data.frame} representing the position to keep
@@ -655,13 +743,13 @@ processPileupChrBin <- function(chr, resPileup, varDf, verbose) {
 #' ## Required library for this example to run correctly
 #' if (requireNamespace("Rsamtools", quietly=TRUE)) {
 #'     ## Demo bam
-#'     fl <- system.file("extdata", "no_which_buffered_pileup.bam", 
+#'     fl <- system.file("extdata", "no_which_buffered_pileup.bam",
 #'             package="Rsamtools", mustWork=TRUE)
-#'           
-#'     RAIDS:::readSNVBAM(fl, varSelected=data.frame(chr=c(1,1), 
+#'
+#'     RAIDS:::readSNVBAM(fl, varSelected=data.frame(chr=c(1,1),
 #'                 start=c(3,5), REF=c("A", "A"), ALT=c("C", "C")))
 #' }
-#' 
+#'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom Rsamtools BamFile ScanBamParam PileupParam pileup
 #' @importFrom MatrixGenerics rowRanges
@@ -739,7 +827,7 @@ readSNVBAM <- function(fileName, varSelected, offset=0L,
             if(length(tmpChr) != length(listChr)){
                 listChg <- listChr[-1* tmpChr]
                 for(i in seq_len(length(listChg))){
-                    resPileup$seqnames[resPileup$seqnames == listChg[i]] <- 
+                    resPileup$seqnames[resPileup$seqnames == listChg[i]] <-
                             paste0("chr", listChg[i])
                 }
                 listChr <- unique(as.character(resPileup$seqnames))
@@ -753,13 +841,13 @@ readSNVBAM <- function(fileName, varSelected, offset=0L,
                                  Sys.time()) }
             tmp <- lapply(listChr,
                     FUN=function(x, res, varSelected){
-                            return(processPileupChrBin(chr=x, res, 
+                            return(processPileupChrBin(chr=x, res,
                                 varDf=varSelected, verbose=verbose))
                           }, res=resPileup,
                           varSelected=varSelected)
             if(verbose) { message("readSNVBAM processPileupChrBin end ",
                                  Sys.time()) }
-            
+
             if(length(tmp) > 0) {
                 res[[i]] <- do.call(rbind, tmp)
                 i <- i + 1
@@ -796,9 +884,9 @@ readSNVBAM <- function(fileName, varSelected, offset=0L,
             resSNP$File1A[tmp] <- resSNP[tmp, nuc]
         }
     }
-    resSNP <- resSNP[, c("seqnames", "pos", "REF", "ALT", "File1R", "File1A", 
+    resSNP <- resSNP[, c("seqnames", "pos", "REF", "ALT", "File1R", "File1A",
                                 "count", "A", "C", "G", "T")]
-    colnames(resSNP) <- c("Chromosome", "Position", "Ref", "Alt", "File1R", 
+    colnames(resSNP) <- c("Chromosome", "Position", "Ref", "Alt", "File1R",
                                 "File1A", "count", "A", "C", "G", "T")
     resSNP$Position <- resSNP$Position  + offset
 
@@ -861,7 +949,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
              "representing the Reference GDS file. The file must exist.")
     }
     if (!(is.character(fileBlock) && (file.exists(fileBlock)))) {
-        stop("The \'fileBlock\' must be a character string representing the", 
+        stop("The \'fileBlock\' must be a character string representing the",
                 " file .det from plink block result. The file must exist.")
     }
 
