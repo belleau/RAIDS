@@ -53,7 +53,7 @@ pedInformation <- data.frame(sample.id=c("sample_01", "sample_02"),
         sex=c(1,1),  # 1:Male  2: Female
         pop.group=c("ACB", "ACB"),
         superPop=c("AFR", "AFR"),
-        project = c("1000 Genomes Project", "1000 Genomes Project")
+        project = c("1000 Genomes Project", "1000 Genomes Project"),
         batch=c(1, 1),
         stringsAsFactors=FALSE)
 

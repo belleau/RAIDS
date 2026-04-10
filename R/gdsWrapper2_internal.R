@@ -47,269 +47,8 @@
 #'     fileReferenceGDS=fileGDS
 #'     )
 #'
-#' pRAIDS <- RAIDS:::generateProfileGDS2(pRAIDS)
-#'
-#' ## The Profile GDS file 'ex1.gds' has been created in the
-#' ## specified directory
-#' list.files(dataDir)
-#'
-#' ## Unlink Profile GDS file (created for demo purpose)
-#' unlink(file.path(dataDir, "ex1.gds"))
-#' unlink(file.path(dataDir, "ex1.txt.gz"))
-#'
-#'
-#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt add.gdsn write.gdsn openfn.gds
-#' @importFrom stats qbinom
-#' @importFrom utils read.csv
-#' @encoding UTF-8
-#' @keywords internal
-generateProfileGDS2 <- function(pRAIDS=pRAIDS) {
-
-    if( is.null(pRAIDS$listPos)){
-        gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-        if(pRAIDS$genoSource == "bam"){
-            alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
-            alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
-            pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
-                                         snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
-                                         REF = alDf[1,],
-                                         ALT = alDf[2,],
-                                         stringsAsFactors = FALSE
-            )
-            # listChr <- unique(listPos$chr)
-            # We can optimize
-            # listPos <- lapply(listChr,
-            #                 FUN=function(x, varDf){
-            #                     return(varDf[which(varDf$chr == x),])
-            #                 },
-            #                 varDf=listPos)
-            # names(listPos) <- paste0("chr", listChr)
-            rm(alDf)
-        } else{
-            pRAIDS$listPos <- data.frame(snp.chromosome=read.gdsn(index.gdsn(node=gdsReference, "snp.chromosome")),
-                                         snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position")))
-        }
-        #pRAIDS$listPos <- listPos
-        closefn.gds(gdsReference)
-    }
-
-    # for(i in seq_len(length(listSamples))) {
-    #pos <- which(listSampleFile == listSamples[i])
-
-    if(pRAIDS$verbose) { message("generateProfileGDS start ", " ", Sys.time()) }
-
-    #    if(length(pos) == 1) {
-
-    #
-
-    if(pRAIDS$genoSource == "snp-pileup") {
-        matSample <- readSNVPileupFile(pRAIDS$profileFile, pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "generic") {
-        matSample <- readSNVFileGeneric(pRAIDS$profileFile, pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "VCF") {
-        # tmpProfile <- gsub(".vcf.gz", "",listMat[pos])
-        matSample <- readSNVVCF(pRAIDS$profileFile,
-                                profileName=pRAIDS$pedStudy$Name.ID[1], pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "bam"){
-        colnames(pRAIDS$listPos)[seq_len(2)] <- c("chr", "start")
-        matSample <- readSNVBAM(fileName=pRAIDS$profileFile,
-                                varSelected=pRAIDS$listPos, paramSNVBAM=pRAIDS$paramProfileGDS,
-                                pRAIDS$offset,
-                                verbose=pRAIDS$verbose)
-        # listPos <- do.call(rbind, listPos)
-        colnames(pRAIDS$listPos)[seq_len(2)] <- c("snp.chromosome", "snp.position")
-
-    }
-    # matAll <- merge(matSample[,c( "Chromosome", "Position",
-    #                               "File1R",  "File1A",
-    #                               "count" )],
-    #                 listPos,
-    #                 by.x = c("Chromosome", "Position"),
-    #                 by.y = c("snp.chromosome", "snp.position"),
-    #                 all.y = TRUE,
-    #                 all.x = FALSE)
-    #
-    # below same as the merge above but faster
-
-    if(pRAIDS$verbose) { message("End read ", Sys.time()) }
-    g <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
-    z <- cbind(c(pRAIDS$listPos$snp.chromosome, matSample$Chromosome,
-                 matSample$Chromosome),
-               c(pRAIDS$listPos$snp.position, matSample$Position,
-                 matSample$Position),
-               c(rep(1,nrow(pRAIDS$listPos)), rep(0,nrow(matSample)),
-                 rep(2,nrow(matSample))),
-               c(rep(0,nrow(pRAIDS$listPos)), matSample[, "File1R"],
-                 -1 * matSample[, "File1R"]),
-               c(rep(0,nrow(pRAIDS$listPos)), matSample[, "File1A"],
-                 -1 * matSample[, "File1A"]),
-               c(rep(0,nrow(pRAIDS$listPos)), matSample[, "count"],
-                 -1 * matSample[, "count"]))
-    rm(matSample)
-    z <- z[order(z[,1], z[,2], z[,3]),]
-
-    matAll <- data.frame(Chromosome=z[z[, 3] == 1, 1],
-                         Position=z[z[, 3] == 1, 2], File1R=cumsum(z[, 4])[z[, 3] == 1],
-                         File1A=cumsum(z[,5])[z[, 3] == 1],
-                         count=cumsum(z[, 6])[z[, 3] == 1])
-    rm(z)
-
-    if(is.null(pRAIDS$pathProfileGDS)){
-        stop("pathProfileGDS is NULL in ",
-             "generateProfileGDS2\n")
-    } else{
-        if(!dir.exists(pRAIDS$pathProfileGDS)) { dir.create(pRAIDS$pathProfileGDS) }
-    }
-    fileGDSSample <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-
-    if(file.exists(fileGDSSample)) {
-        gdsSample <- openfn.gds(fileGDSSample, readonly=FALSE)
-    } else{
-        gdsSample <- createfn.gds(fileGDSSample)
-    }
-
-    if (! "Ref.count" %in% ls.gdsn(gdsSample)) {
-        var.Ref <- add.gdsn(gdsSample, "Ref.count", matAll$File1R,
-                            valdim=c( nrow(pRAIDS$listPos), 1), storage="sp.int16")
-        var.Alt <- add.gdsn(gdsSample, "Alt.count", matAll$File1A,
-                            valdim=c( nrow(pRAIDS$listPos), 1), storage="sp.int16")
-        var.Count <- add.gdsn(gdsSample, "Total.count", matAll$count,
-                              valdim=c( nrow(pRAIDS$listPos), 1), storage="sp.int16")
-    } else {
-        # you must append
-        var.Ref <- append.gdsn(index.gdsn(gdsSample, "Ref.count"),
-                               matAll$File1R)
-        var.Alt <- append.gdsn(index.gdsn(gdsSample, "Alt.count"),
-                               matAll$File1A)
-        var.Count <- append.gdsn(index.gdsn(gdsSample, "Total.count"),
-                                 matAll$count)
-    }
-
-    listSampleGDS <- addStudyGDSSample(gdsSample, pedProfile=pRAIDS$pedStudy,
-                                       batch=batch, listSamples=c(pRAIDS$pedStudy$Name.ID[1]), studyDF=pRAIDS$studyDF,
-                                       verbose=pRAIDS$verbose)
-
-    listCount <- table(matAll$count[matAll$count >= pRAIDS$minCov])
-    cutOffA <-
-        data.frame(count=unlist(vapply(as.integer(names(listCount)),
-                                       FUN=function(x, minProb, eProb){
-                                           return(max(2,qbinom(minProb, x, eProb))) },
-                                       FUN.VALUE=numeric(1),
-                                       minProb=pRAIDS$minProb,
-                                       eProb=2 * pRAIDS$seqError)),
-                   allele=unlist(vapply(as.integer(names(listCount)),
-                                        FUN=function(x, minProb, eProb){
-                                            return(max(2,qbinom(minProb, x, eProb))) },
-                                        FUN.VALUE=numeric(1),
-                                        minProb=pRAIDS$minProb,
-                                        eProb=pRAIDS$seqError)))
-
-    row.names(cutOffA) <- names(listCount)
-    # Initialize the genotype array at -1
-
-    # Select the position where the coverage of the 2 alleles is enough
-    listCov <- which(rowSums(matAll[, c("File1R", "File1A")]) >= pRAIDS$minCov)
-
-    matAllC <- matAll[listCov,]
-
-    # The difference  depth - (nb Ref + nb Alt) can be realistically
-    # explain by sequencing error
-    listCov <- listCov[(matAllC$count -
-                            (matAllC$File1R + matAllC$File1A)) <
-                           cutOffA[as.character(matAllC$count), "count"]]
-
-    matAllC <- matAll[listCov,]
-    rm(matAll)
-
-    g <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
-    # The sample is homozygote if the other known allele have a
-    # coverage of 0
-    g[listCov][which(matAllC$File1A == 0)] <- 0
-    g[listCov][which(matAllC$File1R == 0)] <- 2
-
-    # The sample is heterozygote if explain the coverage of
-    # the minor allele by sequencing error is not realistic.
-    g[listCov][which(matAllC$File1A >=
-                         cutOffA[as.character(matAllC$count), "allele"] &
-                         matAllC$File1R >= cutOffA[as.character(matAllC$count),
-                                                   "allele"])] <- 1
-
-    #g <- as.matrix(g)
-    if("geno.ref" %in% ls.gdsn(gdsSample)){
-        var.geno <- index.gdsn(gdsSample, "geno.ref")
-
-        compression.gdsn(var.geno, compress="")
-        append.gdsn(var.geno, g, check=TRUE)
-        compression.gdsn(var.geno, compress="LZMA_RA.fast")
-        readmode.gdsn(var.geno)
-
-    }else{
-        var.geno <- add.gdsn(gdsSample, "geno.ref", valdim=c(length(g), 1),
-                             g, storage="bit2", compress = "LZMA_RA.fast")
-        readmode.gdsn(var.geno)
-    }
-
-    rm(g)
-    closefn.gds(gdsfile=gdsSample)
-
-    if (pRAIDS$verbose) { message("End ", profileName, " ",  Sys.time()) }
-
-    ## Success
-    return(pRAIDS)
-}
-
-#' @title Append the genotype information from a profile into the associated
-#' Profile GDS File
-#'
-#' @description This function append the genotype information from a specific
-#' profile into the Profile GDS file. The genotype information is extracted
-#' from a SNV file as generated by SNP-pileup or other tools.
-#'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
-#'
-#' @return The function returns a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters updated.
-#'
-#' @examples
-#'
-#' ## Current directory
-#' dataDir <- file.path(tempdir())
-#'
-#' fileGDS <- file.path(system.file("extdata/tests", package="RAIDS"), "ex1_good_small_1KG.gds")
-#'
-#' ## Copy required file into current directory
-#' file.copy(from=file.path(system.file("extdata/tests", package="RAIDS"),
-#'                     "ex1.txt.gz"), to=dataDir)
-#'
-#' ## The data.frame containing the information about the study
-#' ## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
-#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
-#' studyDF <- data.frame(study.id = "MYDATA",
-#'                         study.desc = "Description",
-#'                         study.platform = "PLATFORM",
-#'                         stringsAsFactors = FALSE)
-#'
-#' ## The data.frame containing the information about the samples
-#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
-#' samplePED <- data.frame(Name.ID=c("ex1", "ex2"),
-#'                     Case.ID=c("Patient_h11", "Patient_h12"),
-#'                     Diagnosis=rep("Cancer", 2),
-#'                     Sample.Type=rep("Primary Tumor", 2),
-#'                     Source=rep("Databank B", 2), stringsAsFactors=FALSE)
-#' rownames(samplePED) <- samplePED$Name.ID
-#'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
-#'     studyDF=studyDF,
-#'     genoSource="snp-pileup",
-#'     pedStudy=samplePED,
-#'     pathProfileGDS=dataDir,
-#'     fileReferenceGDS=fileGDS
-#'     )
-#'
 #' ## Parse the coverage to the Profile GDS file
-#' pRAIDS <- generateProfileRawGDS2(pRAIDS=pRAIDS)
+#' pRAIDS <- RAIDS:::generateProfileRawGDS2(pRAIDS=pRAIDS)
 #'
 #'
 #' ## The Profile GDS file 'ex1.gds' has been created in the
@@ -341,14 +80,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
                                          ALT = alDf[2,],
                                          stringsAsFactors = FALSE
             )
-            # listChr <- unique(listPos$chr)
-            # We can optimize
-            # listPos <- lapply(listChr,
-            #                 FUN=function(x, varDf){
-            #                     return(varDf[which(varDf$chr == x),])
-            #                 },
-            #                 varDf=listPos)
-            # names(listPos) <- paste0("chr", listChr)
+
             rm(alDf)
         } else{
             pRAIDS$listPos <- data.frame(snp.chromosome=read.gdsn(index.gdsn(node=gdsReference, "snp.chromosome")),
@@ -396,7 +128,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
     # below same as the merge above but faster
 
     if(pRAIDS$verbose) { message("End read ", Sys.time()) }
-    g <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
+
     z <- cbind(c(pRAIDS$listPos$snp.chromosome, matSample$Chromosome,
                  matSample$Chromosome),
                c(pRAIDS$listPos$snp.position, matSample$Position,
@@ -511,11 +243,11 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 #'     )
 #'
 #' ## Parse the coverage to the Profile GDS file
-#' pRAIDS <- generateProfileRawGDS2(pRAIDS=pRAIDS)
+#' pRAIDS <- RAIDS:::generateProfileRawGDS2(pRAIDS=pRAIDS)
 #'
 #'
 #' ## The function returns OL when successful
-#' result <- generateProfileGenoStdGDS2(pRAIDS=pRAIDS)
+#' result <- RAIDS:::generateProfileGenoCall(pRAIDS=pRAIDS)
 #'
 #' ## The Profile GDS file 'ex1.gds' has been created in the
 #' ## specified directory
@@ -532,7 +264,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 #' @importFrom utils read.csv
 #' @encoding UTF-8
 #' @keywords internal
-generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
+generateProfileGenoCall <- function(pRAIDS=pRAIDS) {
 
 
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
@@ -599,7 +331,7 @@ generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
 
     #g <- as.matrix(g)
     if("geno.ref" %in% ls.gdsn(gdsProfile)){
-        var.geno <- index.gdsn(gdsProfile, "geno.ref")
+        var.geno <- index.gdsn(gdsProfile, pRAIDS$genoType)
 
         compression.gdsn(var.geno, compress="")
         append.gdsn(var.geno, g, check=TRUE)
@@ -607,7 +339,7 @@ generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
         readmode.gdsn(var.geno)
 
     }else{
-        var.geno <- add.gdsn(gdsProfile, "geno.ref", valdim=c(length(g), 1),
+        var.geno <- add.gdsn(gdsProfile, pRAIDS$genoType, valdim=c(length(g), 1),
                              g, storage="bit2", compress = "LZMA_RA.fast")
         readmode.gdsn(var.geno)
     }
@@ -666,7 +398,7 @@ generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
 #' rownames(samplePED) <- samplePED$Name.ID
 #'
 #' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
-#'     profileFileGeno=file.path(dataDir, "ex1.vcf.gz")
+#'     profileFileGeno=file.path(dataDir, "ex1.vcf.gz"),
 #'     studyDF=studyDF,
 #'     genoSource="snp-pileup",
 #'     pedStudy=samplePED,
@@ -675,11 +407,11 @@ generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
 #'     )
 #'
 #' ## Parse the coverage to the Profile GDS file
-#' pRAIDS <- generateProfileRawGDS2(pRAIDS=pRAIDS)
+#' pRAIDS <- RAIDS:::generateProfileRawGDS2(pRAIDS=pRAIDS)
 #'
 #'
 #' ## The function returns OL when successful
-#' result <- generateProfileLoadPhaseIGDS2(pRAIDS=pRAIDS)
+#' result <- RAIDS:::generateProfileLoadGenoVCF(pRAIDS=pRAIDS)
 #'
 #' ## The Profile GDS file 'ex1.gds' has been created in the
 #' ## specified directory
@@ -697,24 +429,9 @@ generateProfileGenoStdGDS2 <- function(pRAIDS=pRAIDS) {
 #' @importFrom utils read.csv
 #' @encoding UTF-8
 #' @keywords internal
-generateProfileLoadPhaseIGDS2 <- function(pRAIDS=pRAIDS) {
+generateProfileLoadGenoVCF <- function(pRAIDS=pRAIDS) {
 
-    # }else{
-    #     genoP <- read.gdsn(index.gdsn(gdsSample, pRAIDS$genoType),
-    #                        start=c(1, posSample), count=c(-1,1))
-    #     tmpF <- c(0, 0,1, 1,2, 2)
-    #     names(tmpF) <- c("0|0", "0/0", "0|1", "0/1", "1|1", "1/1")
-    #     g <- rep(3, length(genoP))
-    #     g[genoP %in% names(tmpF)] <- tmpF[genoP[genoP %in% names(tmpF)]]
-    # }
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-
-    if(file.exists(fileGDSProfile)) {
-        gdsProfile <- openfn.gds(fileGDSProfile, readonly=FALSE)
-    }else{
-        stop(paste("The file ", fileGDSProfile, "doesn't exists"))
-    }
-
     if(pRAIDS$verbose) { message("generateProfileLoadGenoGDS2 start ", " ", Sys.time()) }
 
     if(is.null(pRAIDS$profileFileGeno) || ! file.exists(pRAIDS$profileFileGeno)){
@@ -722,7 +439,7 @@ generateProfileLoadPhaseIGDS2 <- function(pRAIDS=pRAIDS) {
                          "existing vcf file before calling generateProfileLoadGenoGDS2\n")
         stop(paste0(mesCur))
     }
-    matGeno <- readGenoVCF(fileName = pRAIDS$profileFileGeno, offset = pRAIDS$offset)
+    matGeno <- readGenoVCF3(pRAIDS = pRAIDS)
     if(is.null(pRAIDS$listPos) ||
        !"REF" %in% colnames(pRAIDS$listPos) ||
        !"ALT" %in% colnames(pRAIDS$listPos)){
@@ -737,41 +454,24 @@ generateProfileLoadPhaseIGDS2 <- function(pRAIDS=pRAIDS) {
         )
         closefn.gds(gdsReference)
     }
-    z <- cbind(c(pRAIDS$listPos$snp.chromosome, matGeno$Chromosome,
-                 pRAIDS$listPos$snp.chromosome),
-               c(pRAIDS$listPos$snp.position, matGeno$Position,
-                 pRAIDS$listPos$snp.position),
-               c(-1*seq_len(nrow(pRAIDS$listPos)), rep(0,nrow(matGeno)),
-                 seq_len(nrow(pRAIDS$listPos))),
-               c(rep(0,nrow(pRAIDS$listPos)), seq_len(nrow(matGeno)),
-                 rep(0,nrow(pRAIDS$listPos))))
-    z <- z[order(z[,1],z[,2],z[,3]),]
-    pos <- -1*cumsum(z[,3])[cumsum(z[,3]) < 0 & z[,3] == 0]
-    z<- z[cumsum(z[,3]) < 0 & z[,3] == 0,]
-    tmp <- cbind(matGeno$ref[z[,4]], matGeno$alt[z[,4]],
-                 pRAIDS$listPos$REF[pos], pRAIDS$listPos$ALT[pos])
-    listKeep <- which(tmp[,1] == tmp[,3] & tmp[,2] == tmp[,4])
-    matGeno <- matGeno[z[listKeep,4],]
-    pos <- pos[listKeep]
-    rm(tmp, listKeep)
-    matGeno$a1 <- substr(matGeno$geno,1,1)
-    matGeno$a2 <- substr(matGeno$geno,3,3)
-    listKeep <- which(matGeno$a1 %in% c("0", "1") & matGeno$a2 %in% c("0", "1"))
-    matGeno <- matGeno[listKeep,]
-    matGeno$a1 <- as.integer(matGeno$a1)
-    matGeno$a2 <- as.integer(matGeno$a2)
-    pos <- pos[listKeep]
-    rm(listKeep)
 
     g <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
-    g[pos] <- rowSums(matGeno[, c("a1", "a2")])
-    p <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
-    p[pos] <- matGeno$a1
-    p[pos][which(matGeno$phase != "|")] <- -1
+    g[matGeno$refIndex] <- matGeno$g
+    p <- NULL
+    if(pRAIDS$phase){
+        p <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
+        p[matGeno$refIndex] <- matGeno$p
+    }
+    #p[pos][which(matGeno$phase != "|")] <- -1
 
+    if(file.exists(fileGDSProfile)) {
+        gdsProfile <- openfn.gds(fileGDSProfile, readonly=FALSE)
+    }else{
+        stop(paste("The file ", fileGDSProfile, "doesn't exists"))
+    }
 
-    if("geno.refI" %in% ls.gdsn(gdsProfile)){
-        var.geno <- index.gdsn(gdsProfile, "geno.refI")
+    if(pRAIDS$genoType %in% ls.gdsn(gdsProfile)){
+        var.geno <- index.gdsn(gdsProfile, pRAIDS$genoType)
 
         compression.gdsn(var.geno, compress="")
         append.gdsn(var.geno, g, check=TRUE)
@@ -779,22 +479,25 @@ generateProfileLoadPhaseIGDS2 <- function(pRAIDS=pRAIDS) {
         readmode.gdsn(var.geno)
 
     }else{
-        var.geno <- add.gdsn(gdsProfile, "geno.refI", valdim=c(length(g), 1),
+        var.geno <- add.gdsn(gdsProfile, pRAIDS$genoType, valdim=c(length(g), 1),
                              g, storage="bit2", compress = "LZMA_RA.fast")
         readmode.gdsn(var.geno)
     }
-    if("phase.refI" %in% ls.gdsn(gdsProfile)){
-        var.phase <- index.gdsn(gdsProfile, "phase.refI")
+    if(pRAIDS$phase){
+        if(pRAIDS$phaseType %in% ls.gdsn(gdsProfile)){
+            var.phase <- index.gdsn(gdsProfile, pRAIDS$phaseType)
 
-        compression.gdsn(var.phase, compress="")
-        append.gdsn(var.phase, p, check=TRUE)
-        compression.gdsn(var.phase, compress="LZMA_RA.fast")
-        readmode.gdsn(var.phase)
+            compression.gdsn(var.phase, compress="")
+            append.gdsn(var.phase, p, check=TRUE)
+            compression.gdsn(var.phase, compress="LZMA_RA.fast")
+            readmode.gdsn(var.phase)
 
-    }else{
-        var.phase <- add.gdsn(gdsProfile, "phase.refI", valdim=c(length(p), 1),
-                              p, storage="bit2", compress = "LZMA_RA.fast")
-        readmode.gdsn(var.phase)
+        }else{
+            var.phase <- add.gdsn(gdsProfile, pRAIDS$phaseType, valdim=c(length(p), 1),
+                                  p, storage="bit2", compress = "LZMA_RA.fast")
+            readmode.gdsn(var.phase)
+        }
+        rm(p)
     }
     rm(g)
     closefn.gds(gdsfile=gdsProfile)
@@ -805,163 +508,454 @@ generateProfileLoadPhaseIGDS2 <- function(pRAIDS=pRAIDS) {
     return(pRAIDS)
 }
 
-
-#' @title Append the genotype and phase information from a
-#' profile into the associated Profile GDS File
+#' @title Add the genotype information for the list of pruned SNVs
+#' into the Profile GDS file
 #'
-#' @description This function append the genotype information from a specific
-#' profile into the Profile GDS file. The genotype information is extracted
-#' from a SNV file as generated by SNP-pileup or other tools.
+#' @description The function extracts the information about the pruned SNVs
+#' from the 1KG GDS file and adds entries related to the pruned SNVs in
+#' the Profile GDS file. The nodes are added to the Profile GDS file:
+#' 'sample.id', 'snp.id', 'snp.chromosome', 'snp.position', 'snp.index',
+#' 'genotype' and 'lap'.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
+#' @param gdsReference an object of class
+#' \link[gdsfmt]{gds.class} (a GDS file), the opened 1KG GDS file.
 #'
-#' @return The function returns a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters updated.
+#' @param fileProfileGDS a \code{character} string representing the path and
+#' file name of the Profile GDS file. The Profile GDS file must exist.
+#'
+#' @param currentProfile a \code{character} string corresponding to the sample
+#' identifier associated to the current list of pruned SNVs.
+#'
+#' @param studyID a \code{character} string corresponding to the study
+#' identifier associated to the current list of pruned SNVs.
+#'
+#' @return The function returns \code{0L} when successful.
 #'
 #' @examples
 #'
-#' ## Current directory
-#' dataDir <- file.path(tempdir())
+#' ## Required library for GDS
+#' library(SNPRelate)
 #'
-#' fileGDS <- file.path(system.file("extdata/tests", package="RAIDS"), "ex1_good_small_1KG.gds")
-#'
-#' ## Copy required file into current directory
-#' file.copy(from=file.path(system.file("extdata/tests", package="RAIDS"),
-#'                     "ex1.txt.gz"), to=dataDir)
-#'
-#' file.copy(from=file.path(system.file("extdata/example/snpPileup", package="RAIDS"),
-#'                     "ex1.vcf.gz"), to=dataDir)
+#' ## Path to the demo 1KG GDS file is located in this package
+#' dataDir <- system.file("extdata/tests", package="RAIDS")
+#' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
 #'
 #' ## The data.frame containing the information about the study
-#' ## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
+#' ## The 3 mandatory columns: "studyID", "study.desc", "study.platform"
 #' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
-#' studyDF <- data.frame(study.id = "MYDATA",
-#'                         study.desc = "Description",
-#'                         study.platform = "PLATFORM",
-#'                         stringsAsFactors = FALSE)
+#' studyDF <- data.frame(study.id="MYDATA",
+#'                         study.desc="Description",
+#'                         study.platform="PLATFORM",
+#'                         stringsAsFactors=FALSE)
 #'
-#' ## The data.frame containing the information about the samples
-#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
-#' samplePED <- data.frame(Name.ID=c("ex1", "ex2"),
-#'                     Case.ID=c("Patient_h11", "Patient_h12"),
-#'                     Diagnosis=rep("Cancer", 2),
-#'                     Sample.Type=rep("Primary Tumor", 2),
-#'                     Source=rep("Databank B", 2), stringsAsFactors=FALSE)
-#' rownames(samplePED) <- samplePED$Name.ID
+#' ## Temporary Profile file
+#' fileProfile <- file.path(tempdir(), "ex2.gds")
 #'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
-#'     profileFileGeno=file.path(dataDir, "ex1.vcf.gz")
-#'     studyDF=studyDF,
-#'     genoSource="snp-pileup",
-#'     pedStudy=samplePED,
-#'     pathProfileGDS=dataDir,
-#'     fileReferenceGDS=fileGDS
-#'     )
+#' ## Copy required file
+#' file.copy(file.path(dataDir, "ex1_demo_with_pruning.gds"),
+#'         fileProfile)
 #'
-#' ## Parse the coverage to the Profile GDS file
-#' pRAIDS <- generateProfileRawGDS2(pRAIDS=pRAIDS)
+#' ## Open 1KG file
+#' gds1KG <- snpgdsOpen(fileGDS)
 #'
+#' ## Compute the list of pruned SNVs for a specific profile 'ex1'
+#' ## and save it in the Profile GDS file 'ex2.gds'
+#' add1KG2SampleGDS(gdsReference=gds1KG,
+#'         fileProfileGDS=fileProfile,
+#'         currentProfile=c("ex1"),
+#'         studyID=studyDF$study.id)
 #'
-#' ## The function returns OL when successful
-#' result <- generateProfileLoadGenoRefGDS2(pRAIDS=pRAIDS)
+#' ## Close the 1KG GDS file (important)
+#' closefn.gds(gds1KG)
 #'
-#' ## The Profile GDS file 'ex1.gds' has been created in the
-#' ## specified directory
-#' list.files(dataDir)
+#' ## Check content of Profile GDS file
+#' ## The 'pruned.study' entry should be present
+#' content <- openfn.gds(fileProfile)
+#' content
 #'
-#' ## Unlink Profile GDS file (created for demo purpose)
-#' unlink(file.path(dataDir, "ex1.gds"))
-#' unlink(file.path(dataDir, "ex1.txt.gz"))
-#' unlink(file.path(dataDir, "ex1.vcf.gz"))
+#' ## Close the Profile GDS file (important)
+#' closefn.gds(content)
+#'
+#' ## Remove Profile GDS file (created for demo purpose)
+#' unlink(fileProfile, force=TRUE)
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt add.gdsn write.gdsn openfn.gds
-#' @importFrom stats qbinom
-#' @importFrom utils read.csv
+#' @importFrom gdsfmt index.gdsn read.gdsn objdesp.gdsn
+#' @encoding UTF-8
+#' @export
+addGenotypeProfile <- function(pRAIDS=pRAIDS) {
+
+    ## Validate inputs
+    # validateAdd1KG2SampleGDS(gdsReference=gdsReference,
+    #                          gdsProfileFile=fileProfileGDS, currentProfile=currentProfile,
+    #                          studyID=studyID)
+    ## Profile GDS file name
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
+                                               profile=pRAIDS$pedStudy$Name.ID[1])
+    ## Open Profile GDS file
+    gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
+    if(! ("pruned.study" %in% ls.gdsn(gdsProfile))){
+        closefn(gdsProfile)
+        stop(paste0("Call addGenotypeProfileGDS without pruned.study\n"))
+    }
+
+    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+
+    ## Extract needed information from 1KG GDS file
+    snp.id <- read.gdsn(index.gdsn(gdsReference, "snp.id"))
+
+    ## Extract list of pruned SNVs from the GDS Sample file
+    pruned <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
+
+    listSNP <- which(snp.id %in% pruned)
+
+
+    snp.chromosome <- read.gdsn(index.gdsn(gdsReference,
+                                           "snp.chromosome"))[listSNP]
+    snp.position <-  read.gdsn(index.gdsn(gdsReference,
+                                          "snp.position"))[listSNP]
+
+    add.gdsn(gdsProfile, "sample.id", c(pRAIDS$pedStudy$Name.ID[1]))
+
+    add.gdsn(gdsProfile, "snp.id", snp.id[listSNP])
+    add.gdsn(gdsProfile, "snp.chromosome", snp.chromosome)
+    add.gdsn(gdsProfile, "snp.position", snp.position)
+    # snp.index is the index of the snp pruned in snp.id from 1KG gds
+    add.gdsn(gdsProfile, "snp.index", listSNP)
+
+    study.annot <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
+
+    posCur <- which(study.annot$data.id == pRAIDS$pedStudy$Name.ID[1] &
+                        study.annot$study.id == pRAIDS$studyDF$study.id[1])
+
+
+    g <- read.gdsn(index.gdsn(gdsProfile, pRAIDS$genoType), start=c(1, posCur),
+                   count=c(-1, 1))[listSNP]
+    if(! ("genotype" %in% ls.gdsn(gdsProfile))){
+        var.geno <- add.gdsn(gdsProfile, "genotype",
+                             valdim=c(length(listSNP), 1), g, storage="bit2")
+    }else {
+        if(is.null(var.geno)){
+            var.geno <- index.gdsn(gdsProfile, "genotype")
+        }
+        append.gdsn(var.geno, g)
+    }
+
+
+    add.gdsn(gdsProfile, "lap",
+             rep(0.5, objdesp.gdsn(index.gdsn(gdsProfile, "genotype"))$dim[1]),
+             storage="packedreal8")
+
+    ## Close the GDS Sample file
+    closefn.gds(gdsProfile)
+    closefn.gds(gdsReference)
+
+    return(0L)
+}
+
+
+#' @title Add information related to a specific study and specific samples
+#' into a GDS Sample file
+#'
+#' @description This function add entries related to 1) a specific study and
+#' 2) specific samples into a GDS Sample file.
+#' The study information is appended to the GDS Sample file "study.list" node
+#' when the node is already present in the file. Otherwise, the node is
+#' created and then, the information is added.
+#' The sample information for all selected samples is appended to the GDS
+#' Sample file "study.annot" node
+#' when the node is already present in the file. Otherwise, the node is
+#' created and then, the information is added.
+#'
+#' @param gdsProfile an object of class
+#' \link[gdsfmt]{gds.class} (a GDS file), the opened GDS file.
+#'
+#' @param pedProfile a \code{data.frame} with the sample information. The
+#' \code{data.frame} must have the columns:
+#' "Name.ID", "Case.ID", "Sample.Type", "Diagnosis" and "Source".
+#' The unique sample identifier of the \code{data.frame} is the "Name.ID"
+#' column and the row names of the \code{data.frame} must be the "Name.ID"
+#' values.
+#'
+#' @param batch a \code{integer} corresponding the batch associated to the
+#' study.
+#'
+#' @param listSamples a \code{vector} of \code{character} string representing
+#' the samples (samples identifiers) that are saved into the GDS. All the
+#' samples must be present in the 'pdeDF' \code{data.frame}.
+#' If \code{NULL}, all samples present in the \code{dfPedProfile} are used.
+#'
+#' @param studyDF a \code{data.frame} with at least the 3 columns: "study.id",
+#' "study.desc" and "study.platform". The three columns are in character
+#' string format (no factor).
+#'
+#' @param verbose a \code{logical} indicating if messages should be printed
+#' to show how the different steps in the function.
+#'
+#' @return a \code{vector} of \code{character} strings representing the sample
+#' identifiers that have been saved in the GDS Sample file.
+#'
+#' @examples
+#'
+#' ## Required library
+#' library(gdsfmt)
+#'
+#' ## Create a temporary GDS file in an current directory
+#' gdsFilePath <- file.path(tempdir(), "GDS_TEMP_11.gds")
+#'
+#' ## Create and open the GDS file
+#' tmpGDS  <- createfn.gds(filename=gdsFilePath)
+#'
+#' ## Create a PED data frame with sample information
+#' ped1KG <- data.frame(Name.ID=c("1KG_sample_01", "1KG_sample_02"),
+#'         Case.ID=c("1KG_sample_01", "1KG_sample_02"),
+#'         Sample.Type=rep("Reference", 2), Diagnosis=rep("Reference", 2),
+#'         Source=rep("IGSR", 2), stringsAsFactors=FALSE)
+#'
+#' ## Create a Study data frame with information about the study
+#' ## All samples are associated to the same study
+#' studyInfo <- data.frame(study.id="Ref.1KG",
+#'         study.desc="Unrelated samples from 1000 Genomes",
+#'         study.platform="GRCh38 1000 genotypes",
+#'         stringsAsFactors=FALSE)
+#'
+#' ## Add the sample information to the GDS Sample file
+#' ## The information for all samples is added (listSamples=NULL)
+#' RAIDS:::addStudyGDSSample(gdsProfile=tmpGDS, pedProfile=ped1KG, batch=1,
+#'         listSamples=NULL, studyDF=studyInfo, verbose=FALSE)
+#'
+#' ## Read study information from GDS Sample file
+#' read.gdsn(index.gdsn(node=tmpGDS, path="study.list"))
+#'
+#' ## Read sample information from GDS Sample file
+#' read.gdsn(index.gdsn(node=tmpGDS, path="study.annot"))
+#'
+#' ## Close GDS file
+#' closefn.gds(gdsfile=tmpGDS)
+#'
+#' ## Delete the temporary GDS file
+#' unlink(x=gdsFilePath, force=TRUE)
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn append.gdsn
 #' @encoding UTF-8
 #' @keywords internal
-generateProfileLoadGenoRefGDS2 <- function(pRAIDS=pRAIDS) {
-
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-
-    if(file.exists(fileGDSProfile)) {
-        gdsProfile <- openfn.gds(fileGDSProfile, readonly=FALSE)
-    }else{
-        stop(paste("The file ", fileGDSProfile, "doesn't exists"))
+addStudyGDSProfileSyn <- function(profileSyn, pRAIDS=pRAIDS) {
+    # gdsProfile, pedProfile, batch, listSamples,
+    # studyDF,
+    ## Used only the selected samples (all when listSamples == NULL)
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
+                                               profile=pRAIDS$pedStudy$Name.ID[1])
+    ## Open Profile GDS file
+    gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
+    studyList <- read.gdsn(index.gdsn(gdsProfile, "study.list"))
+    if(! pRAIDS$studyDFSyn$study.id %in% studyList$study.id){
+        if(! "study.list" %in% ls.gdsn(gdsProfile)) {
+            add.gdsn(gdsProfile, "study.list", pRAIDS$studyDFSyn$study.id)
+        }else{
+            append.gdsn(index.gdsn(gdsProfile, "study.list/study.id"),
+                        pRAIDS$studyDFSyn$study.id, check=TRUE)
+            append.gdsn(index.gdsn(gdsProfile, "study.list/study.desc"),
+                        pRAIDS$studyDFSyn$study.desc, check=TRUE)
+            append.gdsn(index.gdsn(gdsProfile, "study.list/study.platform"),
+                        pRAIDS$studyDFSyn$study.platform, check=TRUE)
+        }
     }
 
-    if(pRAIDS$verbose) { message("generateProfileLoadGenoGDS2 start ", " ", Sys.time()) }
+    studyAnnot <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
+    if(profileSyn %in% studyAnnot$data.id){
+        stop(paste("The synthetic profile", profileSyn, "already exists"))
+    }
+    study.annot <- data.frame(data.id=profileSyn,
+                              case.id=profileSyn,
+                              sample.type="Synthetic",
+                              diagnosis=pRAIDS$pedStudy$Diagnosis,
+                              source="Synthetic",
+                              study.id=pRAIDS$studyDFSyn$study.id,
+                              stringsAsFactors=FALSE)
 
-    if(is.null(pRAIDS$profileFileGeno) || ! file.exists(pRAIDS$profileFileGeno)){
-        mesCur <- paste0("You need too set the parameter profileFileGeno to an \n",
-                         "existing vcf file before calling generateProfileLoadGenoGDS2\n")
-        stop(paste0(mesCur))
+
+    ## Append study information to "study.list" when node already present
+    ## Otherwise, create node and add study information into it
+    if(! "study.list" %in% ls.gdsn(gdsProfile)) {
+        ## Create study node and add study information into GDS Sample file
+        #add.gdsn(gdsProfile, "study.list", pRAIDS$studyDFSyn)
+
+
+        add.gdsn(gdsProfile, "study.annot", study.annot)
+
+        if(pRAIDS$verbose) { message("study.list DONE ", Sys.time()) }
+    } else{
+        ## Append study information to existing node
+        # append.gdsn(index.gdsn(gdsProfile, "study.list/study.id"),
+        #             pRAIDS$studyDFSyn$study.id, check=TRUE)
+        # append.gdsn(index.gdsn(gdsProfile, "study.list/study.desc"),
+        #             pRAIDS$studyDFSyn$study.desc, check=TRUE)
+        # append.gdsn(index.gdsn(gdsProfile, "study.list/study.platform"),
+        #             pRAIDS$studyDFSyn$study.platform, check=TRUE)
+
+        ## Append sample information to existing node
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/data.id"),
+                    study.annot$data.id, check=TRUE)
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/case.id"),
+                    study.annot$case.id, check=TRUE)
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/sample.type"),
+                    study.annot$sample.type, check=TRUE)
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/diagnosis"),
+                    study.annot$diagnosis, check=TRUE)
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/source"),
+                    study.annot$source, check=TRUE)
+        append.gdsn(index.gdsn(gdsProfile, "study.annot/study.id"),
+                    study.annot$study.id, check=TRUE)
+
+        if(pRAIDS$verbose) { message("study.annot DONE ", Sys.time()) }
     }
-    matGeno <- readGenoVCF(fileName = pRAIDS$profileFileGeno, offset = pRAIDS$offset)
-    if(is.null(pRAIDS$listPos) ||
-       !"REF" %in% colnames(pRAIDS$listPos) ||
-       !"ALT" %in% colnames(pRAIDS$listPos)){
-        gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-        alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
-        alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
-        pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
-                                     snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
-                                     REF = alDf[1,],
-                                     ALT = alDf[2,],
-                                     stringsAsFactors = FALSE
-        )
-        closefn.gds(gdsReference)
-    }
-    z <- cbind(c(pRAIDS$listPos$snp.chromosome, matGeno$Chromosome,
-                 pRAIDS$listPos$snp.chromosome),
-               c(pRAIDS$listPos$snp.position, matGeno$Position,
-                 pRAIDS$listPos$snp.position),
-               c(-1*seq_len(nrow(pRAIDS$listPos)), rep(0,nrow(matGeno)),
-                 seq_len(nrow(pRAIDS$listPos))),
-               c(rep(0,nrow(pRAIDS$listPos)), seq_len(nrow(matGeno)),
-                 rep(0,nrow(pRAIDS$listPos))))
-    z <- z[order(z[,1],z[,2],z[,3]),]
-    pos <- -1*cumsum(z[,3])[cumsum(z[,3]) < 0 & z[,3] == 0]
-    z<- z[cumsum(z[,3]) < 0 & z[,3] == 0,]
-    tmp <- cbind(matGeno$ref[z[,4]], matGeno$alt[z[,4]],
-                 pRAIDS$listPos$REF[pos], pRAIDS$listPos$ALT[pos])
-    listKeep <- which(tmp[,1] == tmp[,3] & tmp[,2] == tmp[,4])
-    matGeno <- matGeno[z[listKeep,4],]
-    pos <- pos[listKeep]
-    rm(tmp, listKeep)
-    matGeno$a1 <- substr(matGeno$geno,1,1)
-    matGeno$a2 <- substr(matGeno$geno,3,3)
-    listKeep <- which(matGeno$a1 %in% c("0", "1") & matGeno$a2 %in% c("0", "1"))
-    matGeno <- matGeno[listKeep,]
-    matGeno$a1 <- as.integer(matGeno$a1)
-    matGeno$a2 <- as.integer(matGeno$a2)
-    pos <- pos[listKeep]
-    rm(listKeep)
+    closefn.gds(gdsProfile)
+    ## Return the vector of profile IDs that have been added to Profile GDS file
+    return(c(profileSyn))
+}
+
+#' @title Add the genotype from synthetic vcf information for the list
+#' of pruned SNVs
+#' into the Profile GDS file
+#'
+#' @description The function extracts the information about the pruned SNVs
+#' from the 1KG GDS file and adds entries related to the pruned SNVs in
+#' the Profile GDS file. The nodes are added to the Profile GDS file:
+#' 'sample.id', 'snp.id', 'snp.chromosome', 'snp.position', 'snp.index',
+#' 'genotype' and 'lap'.
+#'
+#' @param gdsReference an object of class
+#' \link[gdsfmt]{gds.class} (a GDS file), the opened 1KG GDS file.
+#'
+#' @param fileProfileGDS a \code{character} string representing the path and
+#' file name of the Profile GDS file. The Profile GDS file must exist.
+#'
+#' @param currentProfile a \code{character} string corresponding to the sample
+#' identifier associated to the current list of pruned SNVs.
+#'
+#' @param studyID a \code{character} string corresponding to the study
+#' identifier associated to the current list of pruned SNVs.
+#'
+#' @return The function returns \code{0L} when successful.
+#'
+#' @examples
+#'
+#' ## Required library for GDS
+#' library(SNPRelate)
+#'
+#' ## Path to the demo 1KG GDS file is located in this package
+#' dataDir <- system.file("extdata/tests", package="RAIDS")
+#' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
+#'
+#' ## The data.frame containing the information about the study
+#' ## The 3 mandatory columns: "studyID", "study.desc", "study.platform"
+#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
+#' studyDF <- data.frame(study.id="MYDATA",
+#'                         study.desc="Description",
+#'                         study.platform="PLATFORM",
+#'                         stringsAsFactors=FALSE)
+#'
+#' ## Temporary Profile file
+#' fileProfile <- file.path(tempdir(), "ex2.gds")
+#'
+#' ## Copy required file
+#' file.copy(file.path(dataDir, "ex1_demo_with_pruning.gds"),
+#'         fileProfile)
+#'
+#' ## Open 1KG file
+#' gds1KG <- snpgdsOpen(fileGDS)
+#'
+#' ## Compute the list of pruned SNVs for a specific profile 'ex1'
+#' ## and save it in the Profile GDS file 'ex2.gds'
+#' add1KG2SampleGDS(gdsReference=gds1KG,
+#'         fileProfileGDS=fileProfile,
+#'         currentProfile=c("ex1"),
+#'         studyID=studyDF$study.id)
+#'
+#' ## Close the 1KG GDS file (important)
+#' closefn.gds(gds1KG)
+#'
+#' ## Check content of Profile GDS file
+#' ## The 'pruned.study' entry should be present
+#' content <- openfn.gds(fileProfile)
+#' content
+#'
+#' ## Close the Profile GDS file (important)
+#' closefn.gds(content)
+#'
+#' ## Remove Profile GDS file (created for demo purpose)
+#' unlink(fileProfile, force=TRUE)
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn objdesp.gdsn
+#' @encoding UTF-8
+#' @export
+addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
+
+    ## Validate inputs
+    # validateAdd1KG2SampleGDS(gdsReference=gdsReference,
+    #                          gdsProfileFile=fileProfileGDS, currentProfile=currentProfile,
+    #                          studyID=studyID)
+    ## Profile GDS file name
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
+                                               profile=pRAIDS$pedStudy$Name.ID[1])
+    ## Open Profile GDS file
+    gdsProfile <- openfn.gds(fileProfileGDS, readonly=TRUE)
+
+    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+
+    alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+    alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
+    pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+                                 snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
+                                 REF = alDf[1,],
+                                 ALT = alDf[2,],
+                                 stringsAsFactors = FALSE)
+    snp.id <- read.gdsn(index.gdsn(gdsReference, "snp.id"))
+
+    ## Extract list of pruned SNVs from the GDS Sample file
+    pruned <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
+    closefn.gds(gdsProfile)
+    closefn.gds(gdsReference)
+    listSNP <- which(snp.id %in% pruned)
+    #pRAIDS$listPos
+    pRAIDS$listPos <- pRAIDS$listPos[listSNP,]
+    pRAIDS$profileFileGeno <- synVCFfile
+
+    matGeno <- readGenoVCF3(pRAIDS = pRAIDS)
+
+    sampleSim <- paste(paste0(pRAIDS$prefix, ".", pRAIDS$pedStudy$Name.ID[1]),
+                       paste(rep(synProfileRef,each=pRAIDS$nbSim),
+                             seq_len(pRAIDS$nbSim), sep="."), sep = ".")
+
+    addStudyGDSProfileSyn(profileSyn=sampleSim, pRAIDS=pRAIDS)
 
     g <- as.matrix(rep(-1, nrow(pRAIDS$listPos)))
-    g[pos] <- rowSums(matGeno[, c("a1", "a2")])
+    g[matGeno$refIndex] <- matGeno$g
+    gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
+    if(! ("genotype" %in% ls.gdsn(gdsProfile))){
+        add.gdsn(gdsSample, "sample.id", c(sampleSim))
+        var.geno <- add.gdsn(gdsProfile, "genotype",
+                             valdim=c(length(listSNP), 1), g, storage="bit2")
 
-    if("geno.ref" %in% ls.gdsn(gdsProfile)){
-        var.geno <- index.gdsn(gdsProfile, "geno.ref")
 
-        compression.gdsn(var.geno, compress="")
-        append.gdsn(var.geno, g, check=TRUE)
-        compression.gdsn(var.geno, compress="LZMA_RA.fast")
-        readmode.gdsn(var.geno)
+    }else {
+        appendGDSSampleOnly(gds=gdsProfile, listSamples=c(sampleSim))
+        var.geno <- index.gdsn(gdsProfile, "genotype")
 
-    }else{
-        var.geno <- add.gdsn(gdsProfile, "geno.ref", valdim=c(length(g), 1),
-                             g, storage="bit2", compress = "LZMA_RA.fast")
-        readmode.gdsn(var.geno)
+        append.gdsn(var.geno, g)
+
     }
 
-    rm(g)
-    closefn.gds(gdsfile=gdsProfile)
 
-    if (pRAIDS$verbose) { message("End ", profileName, " ",  Sys.time()) }
 
-    ## Success
-    return(pRAIDS)
+    ## Close the GDS Sample file
+    closefn.gds(gdsProfile)
+
+
+    return(0L)
 }

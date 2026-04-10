@@ -58,7 +58,7 @@ pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
     )
 
 ## Parse the coverage to the Profile GDS file
-pRAIDS <- generateProfileRawGDS2(pRAIDS=pRAIDS)
+pRAIDS <- RAIDS:::generateProfileRawGDS2(pRAIDS=pRAIDS)
 
 
 ## The Profile GDS file 'ex1.gds' has been created in the

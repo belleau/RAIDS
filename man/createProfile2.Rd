@@ -59,8 +59,6 @@ pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
 ## The Profile GDS file is created in the pathProfileGDS directory
 pRAIDS <- RAIDS:::createProfile2(pRAIDS)
 
-## The function returns OL when successful
-result
 
 ## The Profile GDS file 'ex1.gds' has been created in the
 ## specified directory

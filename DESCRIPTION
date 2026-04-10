@@ -30,7 +30,9 @@ Depends: R (>= 4.2.0),
     utils,
     GENESIS,
     dplyr,
-    Rsamtools
+    Rsamtools,
+    BiocParallel,
+    genio
 Imports: S4Vectors,
     GenomicRanges,
     ensembldb,

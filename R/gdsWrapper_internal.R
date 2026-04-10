@@ -1116,7 +1116,8 @@ runIBDKING <- function(gds, profileID=NULL, snpID=NULL, maf=0.05, verbose) {
 #' @param method a \code{character} string that represents the method that will
 #' be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
-#' are: "corr", "r", "dprime" and "composite".
+#' are: "corr", "r", "dprime" and "composite"Default: \code{"corrv5t1030p
+#' "}.
 #'
 #' @param listSamples a \code{vector} of \code{character} strings
 #' corresponding to the sample identifiers used in LD pruning done by the
@@ -1179,7 +1180,7 @@ runIBDKING <- function(gds, profileID=NULL, snpID=NULL, maf=0.05, verbose) {
 #' @importFrom gdsfmt closefn.gds
 #' @encoding UTF-8
 #' @keywords internal
-runLDPruning <- function(gds, method,
+runLDPruning <- function(gds, method="corr",
         listSamples=NULL, listKeep=NULL, slideWindowMaxBP=500000L,
         thresholdLD=sqrt(0.1), np=1L, verbose) {
 

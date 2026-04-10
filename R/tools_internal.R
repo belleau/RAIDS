@@ -521,6 +521,654 @@ readGenoVCF <- function(fileName, profileName=NULL, offset=0L) {
     return(matSample)
 }
 
+#' @title Read a VCF file with the genotypes use for the ancestry call
+#'
+#' @description The function reads VCF file and returns a data frame
+#' containing the information about the read counts for the SNVs present in
+#' the file.
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return a \code{data.frame} containing at least:
+#' \describe{
+#' \item{Chromosome}{ a \code{numeric} representing the name of
+#' the chromosome}
+#' \item{Position}{ a \code{numeric} representing the position on the
+#' chromosome}
+#' \item{ref}{ a \code{character} string representing the reference nucleotide}
+#' \item{alt}{ a \code{character} string representing the alternative
+#' nucleotide}
+#' \item{index}{ a \code{integer} index of the data.frame}
+#' \item{refIndex}{ a \code{integer} index of the reference SNV}
+#' \item{geno}{ a \code{character} string representing the genotype}
+#' \item{phase}{ a \code{character} representing the phase state}
+#' \item{g}{ a \code{integer} representing the genotype state}
+#' \item{p}{ a \code{integer} representing the phase state}
+#' }
+#'
+#' @examples
+#'
+#'
+#' ## Directory where demo SNP-pileup file
+#' dataDir <- system.file("extdata/example/snpPileup", package="RAIDS")
+#'
+#' ## The SNP-pileup file
+#' snpPileupFile <- file.path(dataDir, "ex1.vcf.gz")
+#'
+#' info <- RAIDS:::readGenoVCF(fileName=snpPileupFile)
+#' head(info)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom VariantAnnotation readVcf geno
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom GenomicRanges seqnames start width
+#' @encoding UTF-8
+#' @keywords internal
+readGenoVCF1 <- function(pRAIDS) {
+    vcf <- NULL
+    #suppressWarnings(vcf <- readVcf(fileName))
+    if(is.null(pRAIDS$listPos) ||
+       !"REF" %in% colnames(pRAIDS$listPos) ||
+       !"ALT" %in% colnames(pRAIDS$listPos)){
+        gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+        alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+        alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
+        pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+                                     snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
+                                     REF = alDf[1,],
+                                     ALT = alDf[2,],
+                                     stringsAsFactors = FALSE
+        )
+        closefn.gds(gdsReference)
+    }
+    pRAIDS$listPos$index <- seq_len(nrow(pRAIDS$listPos))
+
+    nbFile <- nchar(pRAIDS$profileFileGeno)
+    if(substr(pRAIDS$profileFileGeno, nbFile - 1,nbFile) == "gz"){
+        headVCF  <- read.delim(pipe(paste0("zcat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("zcat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }else{
+        headVCF  <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }
+    vcf[,1] <- gsub("chr", "", vcf[,1])
+    tmp <- as.character(seq_len(22))
+    vcf <- vcf[vcf[,1] %in% tmp,]
+    vcf[,1] <- as.integer(vcf[,1])
+    vcf$index <- seq_len(nrow(vcf))
+
+    colnames(vcf) <- c("Chromosome","Position", "ref", "alt", "FORMAT", "name", "index")
+    vcf$Position <- vcf$Position + pRAIDS$offset
+    listChr <- unique(vcf[,1])
+    listChr <- c(seq_len(22)[seq_len(22) %in% listChr])
+    res <- lapply(listChr,
+                  FUN=function(x,vcf,listPos, pRAIDS){
+                      if(pRAIDS$verbose) print(paste0("parse VCF chr ",x))
+                      vcfTmp <- vcf[vcf[,1] == x,]
+                      listPosTmp <- listPos[listPos$snp.chromosome == x,]
+                      z <- cbind(c(listPosTmp$snp.position, vcfTmp$Position,
+                                   listPosTmp$snp.position),
+                                 c(-1*seq_len(nrow(listPosTmp)), rep(0,nrow(vcfTmp)),
+                                   seq_len(nrow(listPosTmp))),
+                                 c(rep(0,nrow(listPosTmp)), seq_len(nrow(vcfTmp)),
+                                   rep(0,nrow(listPosTmp))))
+                      z <- z[order(z[,1],z[,2]),]
+                      pos <- -1*cumsum(z[,2])[cumsum(z[,2]) < 0 & z[,2] == 0]
+                      z<- z[cumsum(z[,2]) < 0 & z[,2] == 0,]
+                      if(nrow(z) > 0){
+                          tmp <- cbind(vcfTmp$ref[z[,3]], vcfTmp$alt[z[,3]],
+                                       listPosTmp$REF[pos], listPosTmp$ALT[pos])
+                          listKeep <- which(tmp[,1] == tmp[,3] & tmp[,2] == tmp[,4])
+                          if(length(listKeep)>0){
+                              tmpU <- unique()
+                              vcfTmp <- vcfTmp[z[listKeep,3],]
+                              vcfTmp$refIndex <- pos[listKeep]
+
+                              chrGeno <- lapply(seq_len(nrow(vcfTmp)),
+                                                FUN=function(x, vcfTmp){
+                                                    #if(pRAIDS$verbose) print(paste0("parse VCF chr ",x))
+                                                    fPos <- which(strsplit(vcf[x,"FORMAT"], ":")[[1]] == "GT")
+                                                    geno <- "./."
+                                                    phase <- "/"
+                                                    g <- -1
+                                                    p <- -1
+                                                    if(length(fPos) == 1){
+                                                        geno <- strsplit(":",vcf[x,"name"])[[1]][fPos]
+                                                        phase <- substr(geno,2,2)
+                                                        a <- c(substr(geno, 1,1), substr(geno, 3,3))
+
+                                                        if(a[1] %in% c("0", "1") &&
+                                                           a[2] %in% c("0", "1")){
+                                                            g <- sum(as.integer(a))
+                                                            if(phase == "|"){
+                                                                p <- as.integer(a[1])
+                                                            }
+                                                        }
+
+                                                    }
+                                                    res <- data.frame(geno=geno,
+                                                                      phase=phase,
+                                                                      g=g,
+                                                                      p=p,
+                                                                      stringsAsFactors = FALSE)
+                                                    return(res)
+                                                },
+                                                vcfTmp=vcfTmp)
+                              chrGeno <- do.call(rbind, chrGeno)
+                              vcfTmp <- cbind(vcfTmp[, c("Chromosome","Position",
+                                                         "ref", "alt",
+                                                         "index", "refIndex")],
+                                              chrGeno)
+                              tmp <- which(vcfTmp$g > -1)
+                              if(length(tmp) > 0){
+                                vcfTmp <- vcfTmp[which(vcfTmp$g > -1),]
+                              }else{
+                                  vcfTmp <- NULL
+                              }
+                          }else{
+                              vcfTmp <- NULL
+                          }
+                      }else{
+                          vcfTmp <- NULL
+                      }
+                      return(vcfTmp)
+                      },
+                      vcf=vcf,
+                      listPos=pRAIDS$listPos)
+
+    res <- do.call(rbind, res)
+
+    return(res)
+}
+
+
+#' @title Read a VCF file with the genotypes use for the ancestry call
+#'
+#' @description The function reads VCF file and returns a data frame
+#' containing the information about the read counts for the SNVs present in
+#' the file.
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return a \code{data.frame} containing at least:
+#' \describe{
+#' \item{Chromosome}{ a \code{numeric} representing the name of
+#' the chromosome}
+#' \item{Position}{ a \code{numeric} representing the position on the
+#' chromosome}
+#' \item{ref}{ a \code{character} string representing the reference nucleotide}
+#' \item{alt}{ a \code{character} string representing the alternative
+#' nucleotide}
+#' \item{index}{ a \code{integer} index of the data.frame}
+#' \item{refIndex}{ a \code{integer} index of the reference SNV}
+#' \item{geno}{ a \code{character} string representing the genotype}
+#' \item{phase}{ a \code{character} representing the phase state}
+#' \item{g}{ a \code{integer} representing the genotype state}
+#' \item{p}{ a \code{integer} representing the phase state}
+#' }
+#'
+#' @examples
+#'
+#'
+#' ## Directory where demo SNP-pileup file
+#' dataDir <- system.file("extdata/example/snpPileup", package="RAIDS")
+#'
+#' ## The SNP-pileup file
+#' snpPileupFile <- file.path(dataDir, "ex1.vcf.gz")
+#'
+#' info <- RAIDS:::readGenoVCF(fileName=snpPileupFile)
+#' head(info)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom VariantAnnotation readVcf geno
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom GenomicRanges seqnames start width
+#' @encoding UTF-8
+#' @keywords internal
+readGenoVCF2 <- function(pRAIDS) {
+    vcf <- NULL
+    #suppressWarnings(vcf <- readVcf(fileName))
+    if(is.null(pRAIDS$listPos) ||
+       !"REF" %in% colnames(pRAIDS$listPos) ||
+       !"ALT" %in% colnames(pRAIDS$listPos)){
+        gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+        alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+        alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
+        pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+                                     snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
+                                     REF = alDf[1,],
+                                     ALT = alDf[2,],
+                                     stringsAsFactors = FALSE
+        )
+        closefn.gds(gdsReference)
+    }
+    pRAIDS$listPos$index <- seq_len(nrow(pRAIDS$listPos))
+
+    nbFile <- nchar(pRAIDS$profileFileGeno)
+    if(pRAIDS$verbose) { message("readVCF start ", " ", Sys.time()) }
+
+    if(substr(pRAIDS$profileFileGeno, nbFile - 1,nbFile) == "gz"){
+        headVCF  <- read.delim(pipe(paste0("zcat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("zcat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }else{
+        headVCF  <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }
+    if(pRAIDS$verbose) { message("readVCF end ", " ", Sys.time()) }
+    vcf[,1] <- gsub("chr", "", vcf[,1])
+    tmp <- as.character(seq_len(22))
+    vcf <- vcf[vcf[,1] %in% tmp,]
+    vcf[,1] <- as.integer(vcf[,1])
+    vcf$index <- seq_len(nrow(vcf))
+
+    colnames(vcf) <- c("Chromosome","Position", "ref", "alt", "FORMAT", "name", "index")
+    vcf$Position <- vcf$Position + pRAIDS$offset
+    listChr <- unique(vcf[,1])
+    listChr <- c(seq_len(22)[seq_len(22) %in% listChr])
+    res <- lapply(listChr,
+                  FUN=function(x,vcf,listPos){
+                      if(pRAIDS$verbose) print(paste0("parse VCF chr ",x, " "))
+                      if(pRAIDS$verbose) { message("SelectPos start ", " ", Sys.time()) }
+                      vcfTmp <- vcf[vcf[,1] == x,]
+                      listPosTmp <- listPos[listPos$snp.chromosome == x,]
+                      z <- cbind(c(listPosTmp$snp.position, vcfTmp$Position,
+                                   listPosTmp$snp.position),
+                                 c(-1*seq_len(nrow(listPosTmp)), rep(0,nrow(vcfTmp)),
+                                   seq_len(nrow(listPosTmp))),
+                                 c(rep(0,nrow(listPosTmp)), seq_len(nrow(vcfTmp)),
+                                   rep(0,nrow(listPosTmp))))
+                      z <- z[order(z[,1],z[,2]),]
+                      pos <- -1*cumsum(z[,2])[cumsum(z[,2]) < 0 & z[,2] == 0]
+                      z<- z[cumsum(z[,2]) < 0 & z[,2] == 0,]
+                      if(pRAIDS$verbose) { message("SelectPos end ", " ", Sys.time()) }
+                      if(nrow(z) > 0){
+                          tmp <- cbind(vcfTmp$ref[z[,3]], vcfTmp$alt[z[,3]],
+                                       listPosTmp$REF[pos], listPosTmp$ALT[pos])
+                          listKeep <- which(tmp[,1] == tmp[,3] & tmp[,2] == tmp[,4])
+                          if(length(listKeep)>0){
+                              tmpU <- unique(pos[listKeep])
+                              vcfTmp <- vcfTmp[z[listKeep,3],]
+                              vcfTmp$refIndex <- pos[listKeep]
+
+                              chrGeno <- lapply(tmpU,
+                                                FUN=function(x, vcf, pos){
+                                                    #if(pRAIDS$verbose) print(paste0("parse VCF chr ",x))
+                                                    cur <- which(pos == x)
+                                                    res <- NULL
+                                                    if(length(cur) > 0){
+                                                        vcfCur <- vcf[cur,]
+                                                        resCur <- lapply(seq_len(nrow(vcfCur)),
+                                                         FUN=function(x, vcfCur){
+                                                             fPos <- which(strsplit(vcfCur[x,"FORMAT"], ":")[[1]] == "GT")
+                                                             gpPos <- which(strsplit(vcfCur[x,"FORMAT"],
+                                                                                     ":")[[1]] == "GP")
+                                                             geno <- "./."
+                                                             phase <- "/"
+                                                             g <- -1
+                                                             p <- -1
+                                                             gp <- -1
+                                                             if(length(fPos) == 1){
+                                                                 part <- strsplit(":",vcf[x,"name"])[[1]]
+                                                                 geno <- part[fPos]
+                                                                 phase <- substr(geno,2,2)
+                                                                 a <- c(substr(geno, 1,1), substr(geno, 3,3))
+
+                                                                 if(a[1] %in% c("0", "1") &&
+                                                                    a[2] %in% c("0", "1")){
+                                                                     g <- sum(as.integer(a))
+                                                                     if(phase == "|"){
+                                                                         p <- as.integer(a[1])
+                                                                     }
+                                                                 }
+                                                                 if(length(gpPos) == 1){
+                                                                     gp <- part[gpPos]
+                                                                 }
+
+                                                             }
+
+
+                                                             res <- data.frame(geno=geno,
+                                                                               phase=phase,
+                                                                               g=g,
+                                                                               p=p,
+                                                                               gp=gp,
+                                                                               stringsAsFactors = FALSE)
+                                                             return(res)
+                                                         },
+                                                         vcfCur=vcfCur)
+                                                        res <- do.call(rbind, resCur)
+                                                        keep <- which.max(res$gp)
+                                                        if(length(which(res$gp == res$gp[keep])) != 1){
+                                                            res <- NULL
+                                                        }else{
+                                                            res <- res[keep,,drop=FALSE]
+                                                        }
+                                                    }
+
+                                                    return(res)
+                                                },
+                                                vcf=vcfTmp,
+                                                pos=pos[listKeep])
+                              chrGeno <- do.call(rbind, chrGeno)
+                              vcfTmp <- cbind(vcfTmp[, c("Chromosome","Position",
+                                                         "ref", "alt",
+                                                         "index", "refIndex")],
+                                              chrGeno)
+                              tmp <- which(vcfTmp$g > -1)
+                              if(length(tmp) > 0){
+                                  vcfTmp <- vcfTmp[which(vcfTmp$g > -1),]
+                              }else{
+                                  vcfTmp <- NULL
+                              }
+                          }else{
+                              vcfTmp <- NULL
+                          }
+                      }else{
+                          vcfTmp <- NULL
+                      }
+                      return(vcfTmp)
+                  },
+                  vcf=vcf,
+                  listPos=pRAIDS$listPos)
+
+    res <- do.call(rbind, res)
+    if(pRAIDS$verbose) { message("EndParseVCF end ", " ", Sys.time()) }
+    return(res)
+}
+
+#' @title parse a VCF position file with the genotypes use for the ancestry call
+#'
+#' @description The function reads VCF file and returns a data frame
+#' containing the information about the read counts for the SNVs present in
+#' the file.
+#' i, vcfTmp, nbR
+#' @param i a \code{integer} the position in the vcfTmp
+#'
+#' @param vcfTmp a \code{data.frame} from the vcf file
+#'
+#' @param nbR a \code{integer} number of row in vcfTmp
+#'
+#' @return a \code{data.frame} containing at least:
+#' \describe{
+#' \item{Chromosome}{ a \code{numeric} representing the name of
+#' the chromosome}
+#' \item{Position}{ a \code{numeric} representing the position on the
+#' chromosome}
+#' \item{ref}{ a \code{character} string representing the reference nucleotide}
+#' \item{alt}{ a \code{character} string representing the alternative
+#' nucleotide}
+#' \item{index}{ a \code{integer} index of the data.frame}
+#' \item{refIndex}{ a \code{integer} index of the reference SNV}
+#' \item{geno}{ a \code{character} string representing the genotype}
+#' \item{phase}{ a \code{character} representing the phase state}
+#' \item{g}{ a \code{integer} representing the genotype state}
+#' \item{p}{ a \code{integer} representing the phase state}
+#' }
+#'
+#' @examples
+#'
+#'
+#' ## Directory where demo SNP-pileup file
+#' dataDir <- system.file("extdata/example/snpPileup", package="RAIDS")
+#'
+#' ## The SNP-pileup file
+#' snpPileupFile <- file.path(dataDir, "ex1.vcf.gz")
+#'
+#' info <- RAIDS:::readGenoVCF(fileName=snpPileupFile)
+#' head(info)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom VariantAnnotation readVcf geno
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom GenomicRanges seqnames start width
+#' @importFrom BiocParallel bplapply
+#' @encoding UTF-8
+#' @keywords internal
+parseVCFGeno <- function(i, vcfTmp, nbR){
+    chrGeno <- NULL
+    k <- i+1
+    while( k <= nbR &&
+           vcfTmp$refIndex[k] == vcfTmp$refIndex[i]){
+        k <- k+1
+    }
+    vcfCur <- vcfTmp[i:(k-1),,drop=FALSE]
+    resCur <- lapply(seq_len(nrow(vcfCur)),
+         FUN=function(x, vcfCur){
+             fPos <- which(strsplit(vcfCur[x,"FORMAT"], ":")[[1]] == "GT")
+             gpPos <- which(strsplit(vcfCur[x,"FORMAT"],
+                                     ":")[[1]] == "GP")
+             geno <- "./."
+             phase <- "/"
+             g <- -1
+             p <- -1
+             gp <- -1
+             if(length(fPos) == 1){
+                 part <- strsplit(vcfCur[x,"name"], ":")[[1]]
+                 geno <- part[fPos]
+                 phase <- substr(geno,2,2)
+                 a <- c(substr(geno, 1,1), substr(geno, 3,3))
+
+                 if(a[1] %in% c("0", "1") &&
+                    a[2] %in% c("0", "1")){
+                     g <- sum(as.integer(a))
+                     if(phase == "|"){
+                         p <- as.integer(a[1])
+                     }
+                 }
+                 if(length(gpPos) == 1){
+                     gp <- strsplit(part[gpPos], ",")[[1]][g+1]
+                     gp <- as.numeric(gp)
+                 }
+
+             }
+             res <- data.frame(geno=geno,
+                               phase=phase,
+                               g=g,
+                               p=p,
+                               gp=gp,
+                               stringsAsFactors = FALSE)
+             res <- cbind(vcfCur[1,c("Chromosome","Position",
+                                     "ref", "alt",
+                                     "index", "refIndex"),drop=FALSE], res)
+             return(res)
+         },
+         vcfCur=vcfCur)
+         resCur <- do.call(rbind, resCur)
+
+         keep <- which.max(resCur$gp)
+         if(! (length(which(resCur$gp == resCur$gp[keep] & resCur$g != resCur$g[keep])) > 0)){
+             chrGeno <- resCur[keep,,drop=FALSE]
+         }
+         return(chrGeno)
+}
+
+#' @title Read a VCF file with the genotypes use for the ancestry call
+#'
+#' @description The function reads VCF file and returns a data frame
+#' containing the information about the read counts for the SNVs present in
+#' the file.
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return a \code{data.frame} containing at least:
+#' \describe{
+#' \item{Chromosome}{ a \code{numeric} representing the name of
+#' the chromosome}
+#' \item{Position}{ a \code{numeric} representing the position on the
+#' chromosome}
+#' \item{ref}{ a \code{character} string representing the reference nucleotide}
+#' \item{alt}{ a \code{character} string representing the alternative
+#' nucleotide}
+#' \item{index}{ a \code{integer} index of the data.frame}
+#' \item{refIndex}{ a \code{integer} index of the reference SNV}
+#' \item{geno}{ a \code{character} string representing the genotype}
+#' \item{phase}{ a \code{character} representing the phase state}
+#' \item{g}{ a \code{integer} representing the genotype state}
+#' \item{p}{ a \code{integer} representing the phase state}
+#' }
+#'
+#' @examples
+#'
+#'
+#' ## Directory where demo SNP-pileup file
+#' dataDir <- system.file("extdata/example/snpPileup", package="RAIDS")
+#'
+#' ## The SNP-pileup file
+#' snpPileupFile <- file.path(dataDir, "ex1.vcf.gz")
+#'
+#' info <- RAIDS:::readGenoVCF(fileName=snpPileupFile)
+#' head(info)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom VariantAnnotation readVcf geno
+#' @importFrom MatrixGenerics rowRanges
+#' @importFrom GenomicRanges seqnames start width
+#' @importFrom BiocParallel bplapply
+#' @encoding UTF-8
+#' @keywords internal
+readGenoVCF3 <- function(pRAIDS) {
+    vcf <- NULL
+    #suppressWarnings(vcf <- readVcf(fileName))
+    if(is.null(pRAIDS$listPos) ||
+       !"REF" %in% colnames(pRAIDS$listPos) ||
+       !"ALT" %in% colnames(pRAIDS$listPos)){
+        gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+        alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+        alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
+        pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+                                     snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
+                                     REF = alDf[1,],
+                                     ALT = alDf[2,],
+                                     stringsAsFactors = FALSE
+        )
+        closefn.gds(gdsReference)
+    }
+    pRAIDS$listPos$index <- seq_len(nrow(pRAIDS$listPos))
+
+    nbFile <- nchar(pRAIDS$profileFileGeno)
+    if(pRAIDS$verbose) { message("readVCF start ", " ", Sys.time()) }
+
+    if(substr(pRAIDS$profileFileGeno, nbFile - 1,nbFile) == "gz"){
+        headVCF  <- read.delim(pipe(paste0("gzcat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("gzcat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }else{
+        headVCF  <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                           ' | head -n 10000| grep "##"')),
+                               header=FALSE)
+        vcf <- read.delim(pipe(paste0("cat ", pRAIDS$profileFileGeno,
+                                      ' | grep -v "#" |cut -d \'\t\' -f1,2,4,5,9,10')),
+                          header=FALSE)
+    }
+    if(pRAIDS$verbose) { message("readVCF end ", " ", Sys.time()) }
+    vcf[,1] <- gsub("chr", "", vcf[,1])
+    tmp <- as.character(seq_len(22))
+    vcf <- vcf[vcf[,1] %in% tmp,]
+    vcf[,1] <- as.integer(vcf[,1])
+    vcf$index <- seq_len(nrow(vcf))
+
+    colnames(vcf) <- c("Chromosome","Position", "ref", "alt", "FORMAT", "name", "index")
+    vcf$Position <- vcf$Position + pRAIDS$offset
+    listChr <- unique(vcf[,1])
+    listChr <- c(seq_len(22)[seq_len(22) %in% listChr])
+    res <- lapply(listChr,
+                  FUN=function(x,vcf, pRAIDS=pRAIDS){
+                      if(pRAIDS$verbose) print(paste0("parse VCF chr ",x, " "))
+                      if(pRAIDS$verbose) { message("SelectPos start ", " ", Sys.time()) }
+                      chrGeno <- NULL
+                      vcfTmp <- vcf[vcf[,1] == x,]
+                      listPosTmp <- pRAIDS$listPos[pRAIDS$listPos$snp.chromosome == x,]
+                      z <- cbind(c(listPosTmp$snp.position, vcfTmp$Position,
+                                   listPosTmp$snp.position),
+                                 c(-1*seq_len(nrow(listPosTmp)), rep(0,nrow(vcfTmp)),
+                                   seq_len(nrow(listPosTmp))),
+                                 c(rep(0,nrow(listPosTmp)), seq_len(nrow(vcfTmp)),
+                                   rep(0,nrow(listPosTmp))))
+                      z <- z[order(z[,1],z[,2]),]
+                      pos <- -1*cumsum(z[,2])[cumsum(z[,2]) < 0 & z[,2] == 0]
+                      z<- z[cumsum(z[,2]) < 0 & z[,2] == 0,,drop=FALSE]
+                      if(pRAIDS$verbose) { message("SelectPos end ", " ", Sys.time()) }
+
+                      if(nrow(z) > 0){
+                          tmp <- cbind(vcfTmp$ref[z[,3]], vcfTmp$alt[z[,3]],
+                                       listPosTmp$REF[pos], listPosTmp$ALT[pos])
+                          listKeep <- which(tmp[,1] == tmp[,3] & tmp[,2] == tmp[,4])
+                          if(pRAIDS$verbose) { message("SelectKeep end ", " ", Sys.time()) }
+                          if(length(listKeep)>0){
+                              # tmpU <- unique(pos[listKeep])
+                              vcfTmp <- vcfTmp[z[listKeep,3],]
+                              vcfTmp$refIndex <- listPosTmp[pos[listKeep], "index"]
+                              j <- 1
+                              i <- 1
+
+                              nbR <- nrow(vcfTmp)
+                              k<-1
+                              zU <- cbind(c(-1,
+                                        vcfTmp$Position[-nrow(vcfTmp)] -
+                                            vcfTmp$Position[-1]),
+                                        seq_len(nrow(vcfTmp)))
+                              listU <- zU[zU[,1] < 0,2]
+                              rm(zU)
+                              if(pRAIDS$verbose) { message("Nb rows ", nbR, " ", Sys.time()) }
+                              if(pRAIDS$np ==1){
+                                  chrGeno <- lapply(listU,
+                                                   FUN=parseVCFGeno,
+                                                   vcfTmp=vcfTmp,
+                                                   nbR=nbR)
+                                  chrGeno <- do.call(rbind, chrGeno)
+                              } else{
+                                  # bplapply(data_list, my_function, BPPARAM = MulticoreParam(workers = 4))
+                                  chrGeno <- bplapply(listU,
+                                                      FUN=parseVCFGeno,
+                                                     vcfTmp=vcfTmp,
+                                                     nbR=nbR,
+                                                    BPPARAM = MulticoreParam(workers = pRAIDS$np))
+                                  chrGeno <- do.call(rbind, chrGeno)
+                                  chrGeno <- chrGeno[order(chrGeno$Position),]
+                              }
+                          } # length(listKeep) > 0
+                        } # nrow(z) > 0
+
+                        if(! is.null(chrGeno)){
+                            tmp <- which(chrGeno$g > -1)
+                            if(length(tmp) > 0){
+                                chrGeno <- chrGeno[tmp,]
+                            }else{
+                                chrGeno <- NULL
+                            }
+                        }
+                        return(chrGeno)
+                  },
+                  vcf=vcf,
+                  pRAIDS=pRAIDS)
+
+    res <- do.call(rbind, res)
+    if(pRAIDS$verbose) { message("EndParseVCF end ", " ", Sys.time()) }
+    return(res)
+}
+
 
 #' @title Filtering the read counts for a specific nucleotide
 #'
