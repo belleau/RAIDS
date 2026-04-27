@@ -86,7 +86,10 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
                              pop.group=dfPedReference[, "pop.group"],
                              superPop=dfPedReference[, "superPop"],
                              project=dfPedReference[, "project"],
-                             batch=dfPedReference[, "batch"],  stringsAsFactors=FALSE)
+                             batch=dfPedReference[, "batch"],
+                             superPop.Geo=dfPedReference[, "superPop.Geo"],
+                             superPop.Alt=dfPedReference[, "superPop.Alt"],
+                             stringsAsFactors=FALSE)
 
     ## Add the data.frame to the GDS object
     add.gdsn(node=gdsReference, name="sample.annot", val=samp.annot)

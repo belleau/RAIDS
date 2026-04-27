@@ -49,7 +49,7 @@
 #' unlink(vcfFile, force=TRUE)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn
+#' @importFrom gdsfmt read.gdsn ls.gdsn
 #' @importFrom methods is
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
@@ -92,25 +92,48 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
                             INFO=paste0("AF=", snp.AF),
                             stringsAsFactors=FALSE)
     } else {
-        freqDF <- data.frame(
-                snp.AF=read.gdsn(index.gdsn(gdsReference, "snp.AF")),
-                snp.EAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.EAS_AF")),
-                snp.EUR_AF=read.gdsn(index.gdsn(gdsReference, "snp.EUR_AF")),
-                snp.AFR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AFR_AF")),
-                snp.AMR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AMR_AF")),
-                snp.SAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.SAS_AF")))
+        if( length(which(paste0("snp.",
+                                c("EAS", "EUR",
+                                  "AFR", "AMR",
+                                  "SAS"),
+                                "_AF") %in% ls.gdsn(gdsReference))) == 5){
+            freqDF <- data.frame(
+                    snp.AF=read.gdsn(index.gdsn(gdsReference, "snp.AF")),
+                    snp.EAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.EAS_AF")),
+                    snp.EUR_AF=read.gdsn(index.gdsn(gdsReference, "snp.EUR_AF")),
+                    snp.AFR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AFR_AF")),
+                    snp.AMR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AMR_AF")),
+                    snp.SAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.SAS_AF")))
 
-        listKeep <- which(rowSums(freqDF[,2:6] >= freqCutoff &
-                                        freqDF[,2:6] <= 1 - freqCutoff) > 0)
-        df <- data.frame(CHROM=snpChromosome[listKeep],
-                            POS=as.integer(snpPosition[listKeep] + offset),
-                            ID=rep(".", length(listKeep)),
-                            REF=allele[1,listKeep],
-                            ALT=allele[2,listKeep],
-                            QUAL=rep(".", length(listKeep)),
-                            FILTER=rep(".", length(listKeep)),
-                            INFO=paste0("AF=", freqDF$snp.AF[listKeep]),
-                            stringsAsFactors=FALSE)
+            listKeep <- which(rowSums(freqDF[,2:6] >= freqCutoff &
+                                            freqDF[,2:6] <= 1 - freqCutoff) > 0)
+            df <- data.frame(CHROM=snpChromosome[listKeep],
+                                POS=as.integer(snpPosition[listKeep] + offset),
+                                ID=rep(".", length(listKeep)),
+                                REF=allele[1,listKeep],
+                                ALT=allele[2,listKeep],
+                                QUAL=rep(".", length(listKeep)),
+                                FILTER=rep(".", length(listKeep)),
+                                INFO=paste0("AF=", freqDF$snp.AF[listKeep]),
+                                stringsAsFactors=FALSE)
+        }else if("AF.superPop" %in% ls.gdsn(gdsReference)){
+
+            matAF <- index.gdsn(gdsReference, "AF.superPop")
+            snpAF <- read.gdsn(matAF)
+            freqDF <- cbind(read.gdsn(index.gdsn(gdsReference, "snp.AF")),snpAF)
+            rm(snpAF)
+            listKeep <- which(rowSums(freqDF[,2:ncol(freqDF)] >= freqCutoff &
+                                          freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
+            df <- data.frame(CHROM=snpChromosome[listKeep],
+                             POS=as.integer(snpPosition[listKeep] + offset),
+                             ID=rep(".", length(listKeep)),
+                             REF=allele[1,listKeep],
+                             ALT=allele[2,listKeep],
+                             QUAL=rep(".", length(listKeep)),
+                             FILTER=rep(".", length(listKeep)),
+                             INFO=paste0("AF=", freqDF[listKeep,1]),
+                             stringsAsFactors=FALSE)
+        }
     }
 
     ## Add the header

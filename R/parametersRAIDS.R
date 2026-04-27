@@ -308,9 +308,9 @@ specificSNVKeep <- function(pRAIDS){
                          seq_len(length(snp.position)),
                          rep(0, nrow(pRAIDS$specificSNV))))
             z <- z[order(z[,1], z[,2], z[,3]),]
-            pRAIDS$specificSNV$snvKeep <- rep(-1, nrow(pRAIDS$specificSNV$snvKeep))
+            pRAIDS$specificSNV$snvKeep <- rep(-1, nrow(pRAIDS$specificSNV))
             pRAIDS$specificSNV$snvKeep[-1*cumsum(z[,3])[z[,3] == 0]] <- z[cumsum(z[,3]) < 0 & z[,3] == 0, 4]
-
+            closefn.gds(gdsReference)
         }
     }
 
