@@ -135,6 +135,8 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
                              stringsAsFactors=FALSE)
         }
     }
+    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% c("A", "C", "G", "T"),]
+    df$CHROM <- paste0("chr", df$CHROM)
 
     ## Add the header
     ##fileformat=VCFv4.3

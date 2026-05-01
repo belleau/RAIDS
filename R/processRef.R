@@ -89,6 +89,7 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
                              batch=dfPedReference[, "batch"],
                              superPop.Geo=dfPedReference[, "superPop.Geo"],
                              superPop.Alt=dfPedReference[, "superPop.Alt"],
+                             superPop.NoAdm=dfPedReference[, "superPop.NoAdm"],
                              stringsAsFactors=FALSE)
 
     ## Add the data.frame to the GDS object
