@@ -457,8 +457,12 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 
     ## Generate the synthetic dataset if not included
     if(is.null(pRAIDS$syntheticRefDF)){
-        pRAIDS$syntheticRefDF <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
-                                                          nbProfiles=30L)
+        if(pRAIDS$reference == "1KGc1.0"){
+            pRAIDS$syntheticRefDF <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
+                                                              nbProfiles=30L)
+        }else{
+            # new synthetic profile selection function for HGDP1kgV0.1
+        }
     }
 
     # pRAIDS$profileFile <- profileFile

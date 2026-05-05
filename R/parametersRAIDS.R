@@ -240,7 +240,7 @@ paramRAIDS <- function(studyDF=NULL,
     # np=1L, blockTypeID=NULL, verbose=FALSE
     pruningMethod <- arg_match(pruningMethod)
 
-    parameter <- list(reference="1KG",
+    parameter <- list(reference="1KG", # HGDP1kg
                       studyDF=studyDF,
                       studyDFSyn=studyDFSyn,
                       pedStudy=pedStudy,

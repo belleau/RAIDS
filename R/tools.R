@@ -160,6 +160,181 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
     return(0L)
 }
 
+#' @title Generate a VCF with the information from the SNPs that pass
+#' a cut-off threshold
+#'
+#' @description This function extract the SNPs that pass a frequency cut-off
+#' in at least one super population
+#' from a GDS SNP information file and save the retained SNP information into
+#' a VCF file.
+#'
+#' @param gdsReference an object of class \code{\link[gdsfmt]{gds.class}}
+#' (a GDS file), the 1KG GDS file.
+#'
+#' @param fileOut a \code{character} string representing the path and file
+#' name of the VCF file that will be created wit the retained SNP information.
+#' The file should have the ".vcf" extension.
+#'
+#' @param offset a single \code{integer} that is added to the SNP position to
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' Default: \code{0L}.
+#'
+#' @param freqCutoff a single positive \code{numeric} specifying the cut-off to
+#' keep a SNP. If \code{NULL}, all SNPs are retained. Default: \code{NULL}.
+#'
+#' @return The integer \code{0L} when successful.
+#'
+#' @examples
+#'
+#' ## Required library
+#' library(gdsfmt)
+#'
+#' ## Path to the demo pedigree file is located in this package
+#' dataDir <- system.file("extdata", package="RAIDS")
+#'
+#' ## Demo 1KG Reference GDS file
+#' fileGDS <- openfn.gds(file.path(dataDir,
+#'                     "PopulationReferenceDemo.gds"))
+#'
+#' ## Output VCF file that will be created (temporary)
+#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
+#'
+#' ## Create a VCF file with the SNV dataset present in the GDS file
+#' ## No cutoff on frequency, so all SNVs are saved
+#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
+#'                     freqCutoff=NULL)
+#'
+#' ## Close GDS file (IMPORTANT)
+#' closefn.gds(fileGDS)
+#'
+#' ## Remove temporary VCF file
+#' unlink(vcfFile, force=TRUE)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt read.gdsn ls.gdsn
+#' @importFrom methods is
+#' @importFrom S4Vectors isSingleNumber
+#' @importFrom utils write.table
+#' @encoding UTF-8
+#' @export
+snvListVCFRef <- function(pRAIDS, fileOut, freqCutoff=NULL) {
+    # gdsReference, fileOut, offset=0L, freqCutoff=NULL
+    ## Validate that gdsReference is an object of class gds.class
+    # if (!inherits(gdsReference, "gds.class")) {
+    #     stop("The \'gdsReference\' must be an object of class \'gds.class\'.")
+    # }
+    #
+    # ## Validate that offset is a single integer
+    # if (! isSingleNumber(offset)) {
+    #     stop("The \'offset\' must be a single integer.")
+    # }
+    #
+    # ## Validate that freqCutoff is a single numeric or NULL
+    # if (! isSingleNumber(freqCutoff) && ! is.null(freqCutoff)) {
+    #     stop("The \'freqCutoff\' must be a single numeric or NULL.")
+    # }
+    # if reference HGDP1kg no offset
+
+    gdsReference <- openfn.gds(pRAIDS$fileReferenceGDS)
+
+    snpChromosome <- read.gdsn(index.gdsn(gdsReference, "snp.chromosome"))
+    snpPosition <- read.gdsn(index.gdsn(gdsReference, "snp.position"))
+    snpAllele <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+    listSNPKepp <- NULL
+    allele <- matrix(unlist(strsplit(snpAllele, "\\/")), nrow=2)
+    if("snp.KeepDefault" %in% ls.gdsn(gdsReference)){
+        listSNPKepp <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+        snpChromosome <- snpChromosome[listSNPKepp]
+        snpPosition <- snpPosition[listSNPKepp]
+        allele <- allele[,listSNPKepp]
+    }
+
+    df <- NULL
+
+    if(is.null(freqCutoff)){
+        snp.AF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))
+        if(! is.null(listSNPKepp)){
+            snp.AF <- snp.AF[listSNPKepp]
+        }
+        df <- data.frame(CHROM=snpChromosome,
+                         POS=as.integer(snpPosition + pRAIDS$offset),
+                         ID=rep(".", length(snpChromosome)),
+                         REF=allele[1,],
+                         ALT=allele[2,],
+                         QUAL=rep(".", length(snpChromosome)),
+                         FILTER=rep(".", length(snpChromosome)),
+                         INFO=paste0("AF=", snp.AF),
+                         stringsAsFactors=FALSE)
+    } else {
+        if( length(which(paste0("snp.",
+                                c("EAS", "EUR",
+                                  "AFR", "AMR",
+                                  "SAS"),
+                                "_AF") %in% ls.gdsn(gdsReference))) == 5){
+            freqDF <- data.frame(
+                snp.AF=read.gdsn(index.gdsn(gdsReference, "snp.AF")),
+                snp.EAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.EAS_AF")),
+                snp.EUR_AF=read.gdsn(index.gdsn(gdsReference, "snp.EUR_AF")),
+                snp.AFR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AFR_AF")),
+                snp.AMR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AMR_AF")),
+                snp.SAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.SAS_AF")))
+
+            listKeep <- which(rowSums(freqDF[,2:6] >= freqCutoff &
+                                          freqDF[,2:6] <= 1 - freqCutoff) > 0)
+            df <- data.frame(CHROM=snpChromosome[listKeep],
+                             POS=as.integer(snpPosition[listKeep] + pRAIDS$offset),
+                             ID=rep(".", length(listKeep)),
+                             REF=allele[1,listKeep],
+                             ALT=allele[2,listKeep],
+                             QUAL=rep(".", length(listKeep)),
+                             FILTER=rep(".", length(listKeep)),
+                             INFO=paste0("AF=", freqDF$snp.AF[listKeep]),
+                             stringsAsFactors=FALSE)
+        }else if("AF.superPop" %in% ls.gdsn(gdsReference)){
+
+            matAF <- index.gdsn(gdsReference, "AF.superPop")
+            snpAF <- read.gdsn(matAF)
+            freqDF <- cbind(read.gdsn(index.gdsn(gdsReference, "snp.AF")),snpAF)
+            rm(snpAF)
+            listKeep <- which(rowSums(freqDF[,2:ncol(freqDF)] >= freqCutoff &
+                                          freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
+            df <- data.frame(CHROM=snpChromosome[listKeep],
+                             POS=as.integer(snpPosition[listKeep] + pRAIDS$offset),
+                             ID=rep(".", length(listKeep)),
+                             REF=allele[1,listKeep],
+                             ALT=allele[2,listKeep],
+                             QUAL=rep(".", length(listKeep)),
+                             FILTER=rep(".", length(listKeep)),
+                             INFO=paste0("AF=", freqDF[listKeep,1]),
+                             stringsAsFactors=FALSE)
+        }
+    }
+    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% c("A", "C", "G", "T"),]
+    df$CHROM <- paste0("chr", df$CHROM)
+
+    closefn.gds(gdsReference)
+
+    ## Add the header
+    ##fileformat=VCFv4.3
+    ##FILTER=<ID=PASS,Description="All filters passed">
+    ##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency
+    ##                            in the range (0,1)">
+    #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+
+    cat(paste0('##fileformat=VCFv4.3', "\n"), file=fileOut)
+    cat(paste0('##FILTER=<ID=PASS,Description="All filters passed">',
+               "\n"), file=fileOut, append=TRUE)
+    cat(paste0('##INFO=<ID=AF,Number=A,Type=Float,',
+               'Description="Estimated allele frequency in the range (0,1)">',
+               "\n"), file=fileOut, append=TRUE)
+    cat('#', file=fileOut, append=TRUE)
+
+    write.table(df, file=fileOut, sep="\t", append=TRUE, row.names=FALSE,
+                col.names=TRUE, quote=FALSE)
+
+    ## Successful
+    return(0L)
+}
 
 #' @title Merge the genotyping files per chromosome into one file
 #'
