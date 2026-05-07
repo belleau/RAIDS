@@ -71,21 +71,29 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 
     if( is.null(pRAIDS$listPos)){
         gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+        snpChromosome <- read.gdsn(index.gdsn(gdsReference, "snp.chromosome"))
+        keepPos <- seq_len(length(snpChromosome))
+        if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
+            keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+        }
+
         if(pRAIDS$genoSource == "bam"){
-            alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
+            alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))[keepPos]
+            alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))[keepPos]
             alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
-            pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
-                                         snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
-                                         REF = alDf[1,],
-                                         ALT = alDf[2,],
+            pRAIDS$listPos <- data.frame(snp.chromosome = snpChromosome[keepPos],
+                                         snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position"))[keepPos],
+                                         REF = alDf[1,keepPos],
+                                         ALT = alDf[2, keepPos],
                                          stringsAsFactors = FALSE
             )
 
             rm(alDf)
         } else{
-            pRAIDS$listPos <- data.frame(snp.chromosome=read.gdsn(index.gdsn(node=gdsReference, "snp.chromosome")),
-                                         snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position")))
+            pRAIDS$listPos <- data.frame(snp.chromosome=snpChromosome[keepPos],,
+                                         snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position")))[keepPos]
         }
+        rm(snpChromosome, keepPos)
         #pRAIDS$listPos <- listPos
         closefn.gds(gdsReference)
     }
