@@ -460,8 +460,10 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
         if(pRAIDS$reference == "1KGc1.0"){
             pRAIDS$syntheticRefDF <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
                                                               nbProfiles=30L)
-        }else{
+        }else if(pRAIDS$reference == "HGDP1kgV0.1"){
             # new synthetic profile selection function for HGDP1kgV0.1
+            pRAIDS$syntheticRefDF <- selectHGDP1kgPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
+                                                              nbProfiles=30L)
         }
     }
 
