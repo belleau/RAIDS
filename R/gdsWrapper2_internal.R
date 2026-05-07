@@ -90,8 +90,8 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 
             rm(alDf)
         } else{
-            pRAIDS$listPos <- data.frame(snp.chromosome=snpChromosome[keepPos],,
-                                         snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position")))[keepPos]
+            pRAIDS$listPos <- data.frame(snp.chromosome=snpChromosome[keepPos],
+                                         snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position"))[keepPos])
         }
         rm(snpChromosome, keepPos)
         #pRAIDS$listPos <- listPos

@@ -106,8 +106,11 @@ pruningProfile2 <- function(pRAIDS) {
 
     snp.id <- read.gdsn(node=index.gdsn(gdsReference, "snp.id"))
     sample.id <- read.gdsn(node=index.gdsn(gdsReference, "sample.id"))
-
-
+    keepPos <- seq_len(length(snp.id))
+    if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
+        keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+    }
+    snp.id <- snp.id[keepPos]
     ## Open the GDS Sample file
     gdsSample <- openfn.gds(filename=fileGDSSample)
 
@@ -140,7 +143,7 @@ pruningProfile2 <- function(pRAIDS) {
 
     listGeno <- which(g != 3)
     rm(g)
-
+    # This position are the position in keepPos (I suppose the position in genotype match keepPos)
     listKeepPos <- listGeno
 
     if(!is.null(pRAIDS$specificSNV)){
@@ -153,6 +156,7 @@ pruningProfile2 <- function(pRAIDS) {
         stop("In pruningSample, the sample ", pRAIDS$pedStudy$Name.ID[1],
              " doesn't have SNPs after filters\n")
     }
+    # Not snp.id match keepPos
     listKeep <- snp.id[listKeepPos]
 
     sample.ref <- read.gdsn(index.gdsn(gdsReference, "sample.ref"))

@@ -292,8 +292,14 @@ specificSNVKeep <- function(pRAIDS){
     if(!is.null(pRAIDS$specificSNV)){
         if(! "snvKeep" %in% colnames(pRAIDS$specificSNV)){
             gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+
             snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
-            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
+            keepPos <- seq_len(length(snp.chromosome))
+            if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
+                keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+            }
+            snp.chromosome <- snp.chromosome[keepPos]
+            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))[keepPos]
 
             z <- cbind(c(pRAIDS$specificSNV$snp.chromosome,
                          snp.chromosome,
