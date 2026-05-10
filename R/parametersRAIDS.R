@@ -189,7 +189,7 @@ paramRAIDS <- function(studyDF=NULL,
                        eigenCountSyn=15L,
                        kList=seq(2,15,1),
                        pcaList=seq(2,15,1),
-                       fieldPopIn1KG="superPop",
+                       fieldPopInRef="superPop",
                        fieldPopInfAnc="superPop",
                        fieldSubPop = "pop.group",
                        verbose=FALSE) {
@@ -240,7 +240,7 @@ paramRAIDS <- function(studyDF=NULL,
     # np=1L, blockTypeID=NULL, verbose=FALSE
     pruningMethod <- arg_match(pruningMethod)
 
-    parameter <- list(reference="1KG", # HGDP1kg
+    parameter <- list(reference=reference, # HGDP1kg
                       studyDF=studyDF,
                       studyDFSyn=studyDFSyn,
                       pedStudy=pedStudy,
@@ -280,7 +280,7 @@ paramRAIDS <- function(studyDF=NULL,
                       eigenCountSyn=eigenCountSyn,
                       kList=kList,
                       pcaList=pcaList,
-                      fieldPopIn1KG=fieldPopIn1KG,
+                      fieldPopInRef=fieldPopInRef,
                       fieldPopInfAnc=fieldPopInfAnc,
                       fieldSubPop=fieldSubPop,
                       verbose=verbose)

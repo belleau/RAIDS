@@ -561,12 +561,12 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 
     # get the superPop of the sample.id in the ref.
     # names(spRef) == sample.id spRef = vector of superPop
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-    gdsRefAnnot <- openfn.gds(pRAIDS$fileReferenceAnnotGDS)
+    # gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    # gdsRefAnnot <- openfn.gds(pRAIDS$fileReferenceAnnotGDS)
 
-    spRef <- getRef1KGPop(gdsReference=gdsReference, popName="superPop")
-    closefn.gds(gdsReference)
-    closefn.gds(gdsRefAnnot)
+    spRef <- getRefSuperPop(pRAIDS)
+    # closefn.gds(gdsReference)
+    # closefn.gds(gdsRefAnnot)
     # get a list of each pop.group in pRAIDS$syntheticRefDF
     sampleRM <- splitSelectByPop(pRAIDS$syntheticRefDF)
 
@@ -628,7 +628,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
     #                                         studyIDSyn=pRAIDS$studyDFSyn$study.id,
     #                                         np=pRAIDS$np,
     #                                         listCatPop=unique(spRef),
-    #                                         fieldPopIn1KG=pRAIDS$fieldPopIn1KG,
+    #                                         fieldPopInRef=pRAIDS$fieldPopInRef,
     #                                         fieldPopInfAnc=pRAIDS$fieldPopInfAnc,
     #                                         kList=pRAIDS$kList,
     #                                         pcaList=pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCount],
@@ -1201,7 +1201,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
     # studyIDSyn,
     # np=1L,
     # listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-    # fieldPopIn1KG="superPop",
+    # fieldPopInRef="superPop",
     # fieldPopInfAnc="SuperPop",
     # kList=seq(2, 15, 1),
     # pcaList=seq(2, 15, 1),
@@ -1215,7 +1215,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
     #                                          gdsProfile=gdsProfile, syntheticKNN=syntheticKNN,
     #                                          pedSyn=pedSyn,
     #                                          currentProfile=currentProfile, spRef=spRef, studyIDSyn=studyIDSyn,
-    #                                          np=np, listCatPop=listCatPop, fieldPopIn1KG=fieldPopIn1KG,
+    #                                          np=np, listCatPop=listCatPop, fieldPopInRef=fieldPopInRef,
     #                                          fieldPopInfAnc=fieldPopInfAnc, kList=kList, pcaList=pcaList,
     #                                          algorithm=algorithm, eigenCount=eigenCount, missingRate=missingRate,
     #                                          verbose=verbose)
@@ -1229,7 +1229,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
     ## Compile all the inferred ancestry results for different values of
     ## D and K to select the optimal parameters
     listParaSample <- selParaPCAUpQuartile(matKNN=syntheticKNN,
-                                           pedCall=pedSyn, refCall=pRAIDS$fieldPopIn1KG, predCall=pRAIDS$fieldPopInfAnc,
+                                           pedCall=pedSyn, refCall=pRAIDS$fieldPopInRef, predCall=pRAIDS$fieldPopInfAnc,
                                            listCall=listCatPop,kList=pRAIDS$kList,
                                            pcaList=pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCountSyn])
     listPCARef <- computePCARefRMMulti1(listRM = NULL, pRAIDS = pRAIDS)
@@ -1342,7 +1342,7 @@ prepPedSynthetic1KG2 <- function(pRAIDS) {
     # studyID=pRAIDS$studyDFSyn$study.id,
     # popName="superPop"
     studyID <- pRAIDS$studyDFSyn$study.id
-    popName <- pRAIDS$fieldPopIn1KG
+    popName <- pRAIDS$fieldPopInRef
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
                                                profile=pRAIDS$pedStudy$Name.ID[1])
     ## Open Profile GDS file

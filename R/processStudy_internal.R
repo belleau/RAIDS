@@ -762,7 +762,7 @@ validatecreateProfile <- function(pedStudy,
 #' @param listCatPop a \code{vector} of \code{character} string
 #' representing the list of possible ancestry assignations.
 #'
-#' @param fieldPopIn1KG a \code{character} string representing the name of the
+#' @param fieldPopInRef a \code{character} string representing the name of the
 #' column that contains the known ancestry for the reference profiles in
 #' the Reference GDS file.
 #'
@@ -825,7 +825,7 @@ validatecreateProfile <- function(pedStudy,
 #'     gdsProfile=gdsSample, listFiles=listFiles, currentProfile="sample01",
 #'     spRef=c("EUR", "AFR"), studyIDSyn="Synthetic", np=1L,
 #'     listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-#'     fieldPopIn1KG="superpop", fieldPopInfAnc="Superpop", kList=c(2, 3, 4),
+#'     fieldPopInRef="superpop", fieldPopInfAnc="Superpop", kList=c(2, 3, 4),
 #'     pcaList=c(3, 4, 5), algorithm="exact", eigenCount=32L, missingRate=0.2,
 #'     verbose=FALSE)
 #'
@@ -839,7 +839,7 @@ validatecreateProfile <- function(pedStudy,
 #' @keywords internal
 validateComputeAncestryFromSyntheticFile <- function(gdsReference, gdsProfile,
                 listFiles, currentProfile, spRef, studyIDSyn, np, listCatPop,
-                fieldPopIn1KG, fieldPopInfAnc, kList, pcaList,
+                fieldPopInRef, fieldPopInfAnc, kList, pcaList,
                 algorithm, eigenCount, missingRate, verbose) {
 
     ## The gdsReference and gdsProfile must be objects of class "gds.class"
@@ -860,7 +860,7 @@ validateComputeAncestryFromSyntheticFile <- function(gdsReference, gdsProfile,
     }
 
     ## The parameters are character strings (vector of 1 entry)
-    validateCharacterString(value=fieldPopIn1KG, "fieldPopIn1KG")
+    validateCharacterString(value=fieldPopInRef, "fieldPopInRef")
     validateCharacterString(value=fieldPopInfAnc, "fieldPopInfAnc")
     validateCharacterString(value=studyIDSyn, "studyIDSyn")
 
@@ -2835,7 +2835,7 @@ profileAncestry <- function(gdsReference, gdsRefAnnot, studyDF,
 #' representing the list of possible ancestry assignations. Default:
 #' \code{("EAS", "EUR", "AFR", "AMR", "SAS")}.
 #'
-#' @param fieldPopIn1KG a \code{character} string representing the name of the
+#' @param fieldPopInRef a \code{character} string representing the name of the
 #' column that contains the known ancestry for the reference profiles in
 #' the Reference GDS file.
 #'
@@ -3072,7 +3072,7 @@ computeAncestryFromSynthetic <- function(gdsReference, gdsProfile,
                                             studyIDSyn,
                                             np=1L,
                                             listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-                                            fieldPopIn1KG="superPop",
+                                            fieldPopInRef="superPop",
                                             fieldPopInfAnc="SuperPop",
                                             kList=seq(2, 15, 1),
                                             pcaList=seq(2, 15, 1),
@@ -3093,7 +3093,7 @@ computeAncestryFromSynthetic <- function(gdsReference, gdsProfile,
     #                                          gdsProfile=gdsProfile, syntheticKNN=syntheticKNN,
     #                                          pedSyn=pedSyn,
     #                                          currentProfile=currentProfile, spRef=spRef, studyIDSyn=studyIDSyn,
-    #                                          np=np, listCatPop=listCatPop, fieldPopIn1KG=fieldPopIn1KG,
+    #                                          np=np, listCatPop=listCatPop, fieldPopInRef=fieldPopInRef,
     #                                          fieldPopInfAnc=fieldPopInfAnc, kList=kList, pcaList=pcaList,
     #                                          algorithm=algorithm, eigenCount=eigenCount, missingRate=missingRate,
     #                                          verbose=verbose)
@@ -3106,7 +3106,7 @@ computeAncestryFromSynthetic <- function(gdsReference, gdsProfile,
     ## Compile all the inferred ancestry results for different values of
     ## D and K to select the optimal parameters
     listParaSample <- selParaPCAUpQuartile(matKNN=syntheticKNN,
-                                           pedCall=pedSyn, refCall=fieldPopIn1KG, predCall=fieldPopInfAnc,
+                                           pedCall=pedSyn, refCall=fieldPopInRef, predCall=fieldPopInfAnc,
                                            listCall=listCatPop)
 
     ## Project profile on the PCA created with the reference profiles

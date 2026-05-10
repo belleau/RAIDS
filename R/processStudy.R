@@ -1816,7 +1816,7 @@ computeAncestryFromSyntheticFile <- function(gdsReference, gdsProfile,
     validateComputeAncestryFromSyntheticFile(gdsReference=gdsReference,
         gdsProfile=gdsProfile, listFiles=listFiles,
         currentProfile=currentProfile, spRef=spRef, studyIDSyn=studyIDSyn,
-        np=np, listCatPop=listCatPop, fieldPopIn1KG=fieldPopIn1KG,
+        np=np, listCatPop=listCatPop, fieldPopInRef=fieldPopIn1KG,
         fieldPopInfAnc=fieldPopInfAnc, kList=kList, pcaList=pcaList,
         algorithm=algorithm, eigenCount=eigenCount, missingRate=missingRate,
         verbose=verbose)

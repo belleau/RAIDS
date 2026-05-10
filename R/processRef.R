@@ -99,4 +99,70 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
     return(dfPedReference[, "Name.ID"])
 }
 
+#' @title Extract the specified column from the 1KG GDS 'sample.ref' node
+#' for the reference profiles (real ancestry assignation)
+#'
+#' @description The function extract the specified column for the 'sample.ref'
+#' node present in the Reference GDS file. The column must be present in the
+#' \code{data.frame} saved in the 'sample.ref' node. Only the information for
+#' the reference profiles is returned. The values
+#' represent the known ancestry assignation.
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return \code{vector} of \code{character} strings representing the content
+#' of the extracted column for the 1KG GDS 'sample.ref' node. The values
+#' represent the known ancestry assignation. The profile
+#' identifiers are used as names for the \code{vector}.
+#'
+#' @examples
+#'
+#' ## Required library
+#' library(gdsfmt)
+#' ## TODO
+#' ## Path to the demo pedigree file is located in this package
+#' dataDir <- system.file("extdata", package="RAIDS")
+#'
+#' ## Open existing demo 1K GDS file with "sample.ref" node
+#' nameFileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
+#' fileGDS <- snpgdsOpen(nameFileGDS)
+#'
+#' ## Extract super population information for the 1KG profiles
+#' getRef1KGPop(gdsReference=fileGDS, popName="superPop")
+#'
+#' ## Close 1K GDS file
+#' closefn.gds(fileGDS)
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom stats rmultinom
+#' @encoding UTF-8
+#' @export
+getRefSuperPop <- function(pRAIDS=pRAIDS) {
+    ## , popName="superPop"
+    ## The gdsReference must be an object of class "gds.class"
+    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    ## validateGDSClass(gds=gdsReference, "gdsReference")
+    popName <- pRAIDS$fieldPopInRef
+    ## The popName is a character string
+    if (!is.character(popName)) {
+        stop("The \'popName\' parameter must be a single character string.")
+    }
+
+    sample.ref <- read.gdsn(index.gdsn(gdsReference, "sample.ref"))
+    dataRef <- read.gdsn(index.gdsn(gdsReference,
+                                    "sample.annot"))[which(sample.ref == TRUE),]
+
+    if(! popName %in% colnames(dataRef)) {
+        stop("The population ", popName, " is not supported ",
+             "(not found in the 1KG GDS file).")
+    }
+
+    dataRef <- dataRef[, popName]
+    names(dataRef) <- read.gdsn(index.gdsn(node=gdsReference,
+                                           "sample.id"))[which(sample.ref == TRUE)]
+    closefn.gds(gdsReference)
+    return(dataRef)
+}
 

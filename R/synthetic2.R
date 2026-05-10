@@ -222,23 +222,27 @@ syntheticGeno2 <- function(pRAIDS) {
 
     ## Find information about the 1KG reference samples used to generate
     ## the simulated profiles
-    sample.1kg <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
+    sampleRef <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
     # listPosRef <- which(sample.id %in% listSampleRef)
-    listPosRef.1kg <- which(sample.1kg %in% listSampleRef)
+    listPosRef.Index <- which(sampleRef %in% listSampleRef)
 
     superPop <- read.gdsn(index.gdsn(gdsReference,
-                                     "sample.annot/superPop"))[listPosRef.1kg]
+                                     "sample.annot/superPop"))[listPosRef.Index]
 
     # if (! all.equal(sample.id[listPosRef], sample.1kg[listPosRef.1kg])) {
     #     stop("The order between 1kg and the list of samples is not the same.\n")
     # }
 
     ## Get indexes of the SNV associated to the sample from the GDS Sample file
-    list1KG <- read.gdsn(index.gdsn(gdsProfile, "snp.index"))
-
+    listRef <- read.gdsn(index.gdsn(gdsProfile, "snp.index"))
+    listKeepProfile <- listRef
+    if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
+        keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+        listKeepProfile <- which(listRef %in% keepPos)
+    }
     ## Create a table with the coverage and low allelic fraction information
     infoSNV <- data.frame(count.tot=read.gdsn(index.gdsn(gdsProfile,
-                                                         "Total.count"))[list1KG],
+                                                         "Total.count"))[listKeepProfile],
                           lap=read.gdsn(index.gdsn(gdsProfile, "lap")))
 
     nbSNV <- nrow(infoSNV)
@@ -257,32 +261,57 @@ syntheticGeno2 <- function(pRAIDS) {
     posDF <- c(0,cumsum(df$Freq))
 
     block.Annot <- read.gdsn(index.gdsn(gdsRefAnnot, "block.annot"))
+    if(pRAIDS$reference == "1KGc1.0"){
+        posSP <- data.frame(EAS=which(block.Annot$block.id == "EAS.0.05.500k"),
+                            EUR=which(block.Annot$block.id == "EUR.0.05.500k"),
+                            AFR=which(block.Annot$block.id == "AFR.0.05.500k"),
+                            AMR=which(block.Annot$block.id == "AMR.0.05.500k"),
+                            SAS=which(block.Annot$block.id == "SAS.0.05.500k"))
 
-    posSP <- data.frame(EAS=which(block.Annot$block.id == "EAS.0.05.500k"),
-                        EUR=which(block.Annot$block.id == "EUR.0.05.500k"),
-                        AFR=which(block.Annot$block.id == "AFR.0.05.500k"),
-                        AMR=which(block.Annot$block.id == "AMR.0.05.500k"),
-                        SAS=which(block.Annot$block.id == "SAS.0.05.500k"))
+        blockDF <- data.frame(EAS=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$EAS), count = c(-1,1))[listRef],
+                              EUR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$EUR), count = c(-1,1))[listRef],
+                              AFR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$AFR), count = c(-1,1))[listRef],
+                              AMR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$AMR), count = c(-1,1))[listRef],
+                              SAS=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$SAS), count = c(-1,1))[listRef])
+    }else if(pRAIDS$reference == "HGDP1kgV0.1"){
+        posSP <- data.frame(AFRag=which(block.Annot$block.id == "AFRag.F0.05"),
+                            AMRag=which(block.Annot$block.id == "AMRag.F0.05"),
+                            EASag=which(block.Annot$block.id == "EASag.F0.05"),
+                            EURag=which(block.Annot$block.id == "EURag.F0.05"),
+                            MIDag=which(block.Annot$block.id == "MIDag.F0.05"),
+                            SASag=which(block.Annot$block.id == "SASag.F0.05"),
+                            All=which(block.Annot$block.id == "All.F0.05"))
 
-    blockDF <- data.frame(EAS=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
-                                        start=c(1,posSP$EAS), count = c(-1,1))[list1KG],
-                          EUR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
-                                        start=c(1,posSP$EUR), count = c(-1,1))[list1KG],
-                          AFR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
-                                        start=c(1,posSP$AFR), count = c(-1,1))[list1KG],
-                          AMR=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
-                                        start=c(1,posSP$AMR), count = c(-1,1))[list1KG],
-                          SAS=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
-                                        start=c(1,posSP$SAS), count = c(-1,1))[list1KG])
-
+        blockDF <- data.frame(AFRag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$AFRag), count = c(-1,1))[listRef],
+                              AMRag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$AMRag), count = c(-1,1))[listRef],
+                              EASag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$EASag), count = c(-1,1))[listRef],
+                              EURag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$EURag), count = c(-1,1))[listRef],
+                              MIDag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                              start=c(1,posSP$MIDag), count = c(-1,1))[listRef],
+                              OTHag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                              start=c(1,posSP$All), count = c(-1,1))[listRef],
+                              SASag=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$SASag), count = c(-1,1))[listRef],
+                              ADM=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
+                                            start=c(1,posSP$All), count = c(-1,1))[listRef])
+    }
     # For each reference simulate
-    for(r in seq_len(length(listPosRef.1kg))) {
+    for(r in seq_len(length(listPosRef.Index))) {
 
-        curSynt <- listPosRef.1kg[r]
+        curSynt <- listPosRef.Index[r]
         #r.1kg <- which(sample.id[listPosRef[r]] == sample.1kg)
         # get the genotype of the sample r
         g <- read.gdsn(index.gdsn(gdsReference, "genotype"),
-                       start=c(1, curSynt), count=c(-1, 1))[list1KG]
+                       start=c(1, curSynt), count=c(-1, 1))[listRef]
 
         # Order the SNV by count.tot and, lap (low allelic proportion)
         gOrder <- g[listOrderSNP]
@@ -398,7 +427,7 @@ syntheticGeno2 <- function(pRAIDS) {
         LAPparent[, seq_len(pRAIDS$nbSim)] <- lapValues
 
         phaseVal <- read.gdsn(index.gdsn(gdsRefAnnot, "phase"),
-                              start=c(1,listPosRef.1kg[r]), count=c(-1,1))[list1KG]
+                              start=c(1,listPosRef.Index[r]), count=c(-1,1))[listRef]
 
         # mat1 is lap mat2 is 1-lap
         # LAPparent if 0 lap left and 1 lap is right
@@ -440,7 +469,7 @@ syntheticGeno2 <- function(pRAIDS) {
         ## Append the profile names of to the Profile GDS file "sample.id" node
         appendGDSSampleOnly(gds=gdsProfile,
                             listSamples=paste(paste0(pRAIDS$prefix, ".", pRAIDS$pedStudy$Name.ID[1]),
-                                              paste(rep(sample.1kg[curSynt], each=pRAIDS$nbSim),
+                                              paste(rep(sampleRef[curSynt], each=pRAIDS$nbSim),
                                                     seq_len(pRAIDS$nbSim), sep="."), sep = "."))
 
         ## Append the genotype matrix to the GDS Sample file "genotype" node

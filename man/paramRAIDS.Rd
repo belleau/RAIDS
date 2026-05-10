@@ -48,7 +48,7 @@ paramRAIDS(
   eigenCountSyn = 15L,
   kList = seq(2, 15, 1),
   pcaList = seq(2, 15, 1),
-  fieldPopIn1KG = "superPop",
+  fieldPopInRef = "superPop",
   fieldPopInfAnc = "superPop",
   fieldSubPop = "pop.group",
   verbose = FALSE
