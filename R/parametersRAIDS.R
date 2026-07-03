@@ -240,7 +240,7 @@ paramRAIDS <- function(studyDF=NULL,
     # np=1L, blockTypeID=NULL, verbose=FALSE
     pruningMethod <- arg_match(pruningMethod)
 
-    parameter <- list(reference=reference, # HGDP1kg
+    parameters <- list(reference=reference, # HGDP1kg
                       studyDF=studyDF,
                       studyDFSyn=studyDFSyn,
                       pedStudy=pedStudy,
@@ -284,9 +284,12 @@ paramRAIDS <- function(studyDF=NULL,
                       fieldPopInfAnc=fieldPopInfAnc,
                       fieldSubPop=fieldSubPop,
                       verbose=verbose)
-    class(parameter) <- "parametersRAIDS"
-    return(parameter)
+    # class(parameters) <- "parametersRAIDS"
+    paramters <- structure(paramters, class = "parametersRAIDS")
+    return(parameters)
 }
+
+
 
 specificSNVKeep <- function(pRAIDS){
     if(!is.null(pRAIDS$specificSNV)){
