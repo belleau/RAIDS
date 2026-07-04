@@ -113,15 +113,16 @@ validateParamRAIDS_subpart01 <- function(parameters) {
     validateDataRefSynParameter(syntheticRefDF=parameters$syntheticRefDF)
   
     ## The fileReferenceGDS must be a character string and the file must exists
-    if (!(is.character(fileReferenceGDS) && (file.exists(fileReferenceGDS)))) {
+    if (!(is.character(parameters$fileReferenceGDS) && 
+              (file.exists(parameters$fileReferenceGDS)))) {
         stop("The \'fileReferenceGDS\' must be a character string ",
                 "representing the Reference GDS file. The file must exist.")
     }
   
     ## The fileReferenceAnnotGDS must be a character string and
     ## the file must exist
-    if (!(is.character(fileReferenceAnnotGDS) &&
-                (file.exists(fileReferenceAnnotGDS)))) {
+    if (!(is.character(parameters$fileReferenceAnnotGDS) &&
+                (file.exists(parameters$fileReferenceAnnotGDS)))) {
         stop("The \'fileReferenceAnnotGDS\' must be a character string ",
                 "representing the Reference Annotation GDS file. ",
                 "The file must exist.")
