@@ -147,7 +147,6 @@
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @export
-
 paramRAIDS <- function(studyDF=NULL,
                        studyDFSyn=NULL,
                        pedStudy=NULL,
@@ -285,7 +284,7 @@ paramRAIDS <- function(studyDF=NULL,
                       fieldSubPop=fieldSubPop,
                       verbose=verbose)
     # class(parameters) <- "parametersRAIDS"
-    paramters <- structure(paramters, class = "parametersRAIDS")
+    paramters <- structure(parameters, class = "parametersRAIDS")
     return(parameters)
 }
 
