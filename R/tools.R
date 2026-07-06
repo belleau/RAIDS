@@ -839,14 +839,14 @@ writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, indexS=1,
 #' the file name of the new fam file.
 #'
 #' @param listProfile a \code{vector} of \code{character} representing the list
-#' of profile from gdsProfile to keep
+#' of profile from gdsProfile to keep.
 #'
 #' @param listRM a TODO. Default: \code{NULL}.
 #' 
 #' @param profileOnly a \code{integer} TODO. Default: \code{FALSE}.
 #'
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
+#' parameters.
 #'
 #' @return The integer \code{0L} when successful.
 #'
@@ -880,8 +880,7 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
         snpgdsClose(gdsReference)
     }
 
-    sujetFam <- data.frame(fam=seq_len(length(sampleId) +
-                                             length(listProfile)),
+    sujetFam <- data.frame(fam=seq_len(length(sampleId) + length(listProfile)),
                            id=c(sampleId, listProfile),
                            pat=0,
                            mat=0,

@@ -18,14 +18,14 @@ writeFamProfile(
 the file name of the new fam file.}
 
 \item{listProfile}{a \code{vector} of \code{character} representing the list
-of profile from gdsProfile to keep}
+of profile from gdsProfile to keep.}
 
 \item{listRM}{a TODO. Default: \code{NULL}.}
 
 \item{profileOnly}{a \code{integer} TODO. Default: \code{FALSE}.}
 
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
-parameters}
+parameters.}
 }
 \value{
 The integer \code{0L} when successful.
