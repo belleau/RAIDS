@@ -589,7 +589,7 @@ generateProfileLoadGenoVCF <- function(pRAIDS=pRAIDS) {
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn objdesp.gdsn
+#' @importFrom gdsfmt index.gdsn read.gdsn objdesp.gdsn openfn.gds closefn.gds
 #' @encoding UTF-8
 #' @export
 addGenotypeProfile <- function(pRAIDS=pRAIDS) {
@@ -604,7 +604,7 @@ addGenotypeProfile <- function(pRAIDS=pRAIDS) {
     ## Open Profile GDS file
     gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
     if(! ("pruned.study" %in% ls.gdsn(gdsProfile))){
-        closefn(gdsProfile)
+        closefn.gds(gdsProfile)
         stop(paste0("Call addGenotypeProfileGDS without pruned.study\n"))
     }
 
