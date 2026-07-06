@@ -20,6 +20,10 @@ the file name of the new fam file.}
 \item{listProfile}{a \code{vector} of \code{character} representing the list
 of profile from gdsProfile to keep}
 
+\item{listRM}{a TODO. Default: \code{NULL}.}
+
+\item{profileOnly}{a \code{integer} TODO. Default: \code{FALSE}.}
+
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
 parameters}
 }
@@ -34,29 +38,7 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
-
-## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
-
-## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
-
-## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+## TODO
 
 }
 \author{

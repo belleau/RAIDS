@@ -841,8 +841,9 @@ writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, indexS=1,
 #' @param listProfile a \code{vector} of \code{character} representing the list
 #' of profile from gdsProfile to keep
 #'
-#' @param listProfile a \code{vector} of \code{character} representing the list
-#' of profile from gdsProfile to keep
+#' @param listRM a TODO. Default: \code{NULL}.
+#' 
+#' @param profileOnly a \code{integer} TODO. Default: \code{FALSE}.
 #'
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -851,40 +852,22 @@ writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, indexS=1,
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
 #' @importFrom genio write_bed
 #' @importFrom methods is
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
-writeFamProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE, pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+writeFamProfile <- function(fileOut, listProfile, listRM=NULL, 
+    profileOnly=FALSE, pRAIDS){
+    
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                            paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     sampleId <- NULL
     if(! profileOnly){
@@ -897,15 +880,14 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE
         snpgdsClose(gdsReference)
     }
 
-    sujetFam <- data.frame(fam = seq_len(length(sampleId) +
+    sujetFam <- data.frame(fam=seq_len(length(sampleId) +
                                              length(listProfile)),
-                           id = c(sampleId,
-                                  listProfile),
-                           pat = 0,
-                           mat = 0,
-                           sex = 1,
-                           pheno = 0,
-                           stringsAsFactors = FALSE)
+                           id=c(sampleId, listProfile),
+                           pat=0,
+                           mat=0,
+                           sex=1,
+                           pheno=0,
+                           stringsAsFactors=FALSE)
 
     write_fam(fileOut, sujetFam)
     snpgdsClose(gdsProfile)
