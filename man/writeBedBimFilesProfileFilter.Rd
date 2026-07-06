@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{writeBedBimFilesProfileFilter}
 \alias{writeBedBimFilesProfileFilter}
-\title{Generate a plink bed file}
+\title{Generate a plink bed file TODO}
 \usage{
 writeBedBimFilesProfileFilter(pathOut, fileP, listProfile, indexS = 1, pRAIDS)
 }

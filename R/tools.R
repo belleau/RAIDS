@@ -650,7 +650,7 @@ writeBimPruned <- function(fileOut, pRAIDS){
 }
 
 
-#' @title Generate a plink bed file
+#' @title Generate a plink bed file TODO
 #'
 #' @description This function extract the SNPs that pass a frequency cut-off
 #' in at least one super population
@@ -663,9 +663,9 @@ writeBimPruned <- function(fileOut, pRAIDS){
 #' @param listProfile a \code{vector} of \code{character} representing the list
 #' of profile from gdsProfile to keep
 #'
-#' @param listRM a \code{vector} of \code{character} strings containing the
-#' identifiers for the reference samples that need to be removed for the
-#' PCA analysis.
+#' @param listRM a \code{list} TODO. Default: \code{NULL}.
+#' 
+#' @param profileOnly a \code{boolean} TODO. Default: \code{FALSE}.
 #'
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -674,29 +674,7 @@ writeBimPruned <- function(fileOut, pRAIDS){
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
@@ -707,7 +685,9 @@ writeBimPruned <- function(fileOut, pRAIDS){
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
-writeBedProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE, pRAIDS){
+writeBedProfile <- function(fileOut, listProfile, listRM=NULL, 
+    profileOnly=FALSE, pRAIDS) {
+    
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
                                     paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)

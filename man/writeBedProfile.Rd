@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{writeBedProfile}
 \alias{writeBedProfile}
-\title{Generate a plink bed file}
+\title{Generate a plink bed file TODO}
 \usage{
 writeBedProfile(
   fileOut,
@@ -20,9 +20,9 @@ the file name of the new bim file.}
 \item{listProfile}{a \code{vector} of \code{character} representing the list
 of profile from gdsProfile to keep}
 
-\item{listRM}{a \code{vector} of \code{character} strings containing the
-identifiers for the reference samples that need to be removed for the
-PCA analysis.}
+\item{listRM}{a \code{list} TODO. Default: \code{NULL}.}
+
+\item{profileOnly}{a \code{boolean} TODO. Default: \code{FALSE}.}
 
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
 parameters}
@@ -38,29 +38,7 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
-
-## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
-
-## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
-
-## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+## TODO
 
 }
 \author{
