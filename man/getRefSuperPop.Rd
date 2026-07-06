@@ -55,21 +55,7 @@ getRefSuperPop(fileReferenceGDS=nameFileGDS)
 
 
 
-## Required library
-library(gdsfmt)
 ## TODO
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-## Open existing demo 1K GDS file with "sample.ref" node
-nameFileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
-fileGDS <- snpgdsOpen(nameFileGDS)
-
-## Extract super population information for the 1KG profiles
-getRef1KGPop(gdsReference=fileGDS, popName="superPop")
-
-## Close 1K GDS file
-closefn.gds(fileGDS)
 
 }
 \author{

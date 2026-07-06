@@ -118,25 +118,11 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
 #' ## TODO
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Open existing demo 1K GDS file with "sample.ref" node
-#' nameFileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
-#' fileGDS <- snpgdsOpen(nameFileGDS)
-#'
-#' ## Extract super population information for the 1KG profiles
-#' getRef1KGPop(gdsReference=fileGDS, popName="superPop")
-#'
-#' ## Close 1K GDS file
-#' closefn.gds(fileGDS)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn
-#' @importFrom stats rmultinom
+#' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
 getRefSuperPop <- function(pRAIDS=pRAIDS) {
