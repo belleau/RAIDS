@@ -702,12 +702,14 @@ writeBimPruned <- function(fileOut, pRAIDS){
 #' @importFrom gdsfmt read.gdsn
 #' @importFrom genio write_bed
 #' @importFrom methods is
+#' @importFrom SNPRelate snpgdsGetGeno snpgdsClose snpgdsOpen
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
 writeBedProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE, pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     snpId <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
     g <- NULL
@@ -718,20 +720,22 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE
                     "sample.id"))[
                         read.gdsn(index.gdsn(gdsReference, "sample.ref")) == 1]
         if(! is.null(listRM)){
-            sampleId <- sampleId[! sampleId %in% listRM ]
+            sampleId <- sampleId[! sampleId %in% listRM]
         }
-        g <- snpgdsGetGeno(gdsReference, sample.id=sampleId, snp.id=snpId, snpfirstdim=TRUE)
+        g <- snpgdsGetGeno(gdsReference, sample.id=sampleId, snp.id=snpId, 
+                                snpfirstdim=TRUE)
         snpgdsClose(gdsReference)
     }
     #studyAn <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
-    gS <- snpgdsGetGeno(gdsProfile, sample.id=listProfile, snp.id=snpId, snpfirstdim=TRUE)
+    gS <- snpgdsGetGeno(gdsProfile, sample.id=listProfile, snp.id=snpId, 
+                                snpfirstdim=TRUE)
     if( profileOnly){
         g<- gS
     }else{
         g <- cbind(g,gS)
     }
 
-    write_bed(fileOut, g, verbose = TRUE, append = FALSE)
+    write_bed(fileOut, g, verbose=TRUE, append=FALSE)
     snpgdsClose(gdsProfile)
 
     return(0)
@@ -1068,59 +1072,39 @@ getMatrixDataId <- function(matGr, pRAIDS){
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
 #' @importFrom genio write_bed
 #' @importFrom methods is
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose snpgdsGetGeno
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
 writeBedRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                            paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
 
     snpId <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
-    sampleId <- read.gdsn(index.gdsn(gdsReference,
-                                     "sample.id"))[
-                                         read.gdsn(index.gdsn(gdsReference, "sample.ref")) == 1]
+    sampleId <- read.gdsn(index.gdsn(gdsReference, "sample.id"))[
+                        read.gdsn(index.gdsn(gdsReference, "sample.ref")) == 1]
     if(subset){
         if(! is.null(listRM)){
-            sampleId <- sampleId[sampleId %in% listRM ]
+            sampleId <- sampleId[sampleId %in% listRM]
         }
     } else{
         if(! is.null(listRM)){
-            sampleId <- sampleId[! sampleId %in% listRM ]
+            sampleId <- sampleId[! sampleId %in% listRM]
         }
     }
-    g <- snpgdsGetGeno(gdsReference, sample.id=sampleId, snp.id=snpId, snpfirstdim=TRUE)
+    g <- snpgdsGetGeno(gdsReference, sample.id=sampleId, snp.id=snpId, 
+            snpfirstdim=TRUE)
 
-    write_bed(fileOut, g, verbose = TRUE, append = FALSE)
+    write_bed(fileOut, g, verbose=TRUE, append=FALSE)
     snpgdsClose(gdsProfile)
     snpgdsClose(gdsReference)
     return(0)
