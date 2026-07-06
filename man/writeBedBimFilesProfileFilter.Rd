@@ -8,18 +8,18 @@
 writeBedBimFilesProfileFilter(pathOut, fileP, listProfile, indexS = 1, pRAIDS)
 }
 \arguments{
-\item{listProfile}{a \code{vector} of \code{character} representing the list
-of profile from gdsProfile to keep}
+\item{pathOut}{TODO}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
-parameters}
-
-\item{fileOut}{a \code{character} string representing the path and
+\item{fileP}{a \code{character} string representing the path and
 the file name of the new bim file.}
 
-\item{listRM}{a \code{vector} of \code{character} strings containing the
-identifiers for the reference samples that need to be removed for the
-PCA analysis.}
+\item{listProfile}{a \code{vector} of \code{character} representing the list
+of profiles from gdsProfile to keep.}
+
+\item{indexS}{a \code{integer} TODO. Default: \code{1}.}
+
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters.}
 }
 \value{
 The integer \code{0L} when successful.
@@ -32,29 +32,7 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
-
-## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
-
-## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
-
-## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+## TODO
 
 }
 \author{

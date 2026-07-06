@@ -741,93 +741,80 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL, profileOnly=FALSE
     return(0)
 }
 
-#' @title Generate a plink bed file
+
+#' @title Generate a plink bed file TODO
 #'
 #' @description This function extract the SNPs that pass a frequency cut-off
 #' in at least one super population
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param fileOut a \code{character} string representing the path and
+#' @param pathOut TODO
+#' 
+#' @param fileP a \code{character} string representing the path and
 #' the file name of the new bim file.
 #'
 #' @param listProfile a \code{vector} of \code{character} representing the list
-#' of profile from gdsProfile to keep
+#' of profiles from gdsProfile to keep.
 #'
-#' @param listRM a \code{vector} of \code{character} strings containing the
-#' identifiers for the reference samples that need to be removed for the
-#' PCA analysis.
-#'
+#' @param indexS a \code{integer} TODO. Default: \code{1}.
+#' 
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
+#' parameters.
 #'
 #' @return The integer \code{0L} when successful.
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn
-#' @importFrom genio write_bed
+#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom genio write_bed write_bim
 #' @importFrom methods is
+#' @importFrom SNPRelate snpgdsGetGeno snpgdsOpen snpgdsClose
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
-writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, indexS=1, pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, 
+    indexS=1, pRAIDS) {
+    
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     snpId <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
     g <- NULL
 
     #studyAn <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
-    gS <- snpgdsGetGeno(gdsProfile, sample.id=listProfile, snp.id=snpId, snpfirstdim=TRUE)
+    gS <- snpgdsGetGeno(gdsProfile, sample.id=listProfile, snp.id=snpId, 
+                            snpfirstdim=TRUE)
     nbS <- ncol(gS)
     list2RM <- which(rowSums(is.na(gS))/nbS > 0.25)
     gS <- gS[-1 * list2RM,]
 
-    snpInfo <- data.frame(chr = read.gdsn(index.gdsn(gdsProfile, "snp.chromosome")),
-                          id = read.gdsn(index.gdsn(gdsProfile, "snp.id")),
-                          posg = 0,
-                          pos = read.gdsn(index.gdsn(gdsProfile, "snp.position")),
-                          alt = "A",
-                          ref = "B",
-                          stringsAsFactors = FALSE)
+    snpInfo <- data.frame(chr=read.gdsn(index.gdsn(gdsProfile,
+                                                "snp.chromosome")),
+                          id=read.gdsn(index.gdsn(gdsProfile, "snp.id")),
+                          posg=0,
+                          pos=read.gdsn(index.gdsn(gdsProfile, "snp.position")),
+                          alt="A",
+                          ref="B",
+                          stringsAsFactors=FALSE)
     snpInfo <- snpInfo[-1 * list2RM,]
-    write_bim(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", indexS,".sv.bim")), snpInfo)
-    write_bed(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", indexS,".sv.bed")), gS, verbose = TRUE, append = FALSE)
+    write_bim(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", 
+                    indexS,".sv.bim")), snpInfo)
+    write_bed(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", 
+                    indexS,".sv.bed")), gS, verbose=TRUE, append=FALSE)
 
     snpgdsClose(gdsProfile)
 
     resP <- read.delim(fileP, sep=" ", header=FALSE)
     resP <- resP[-1 * list2RM,]
     # 068ba2ae-288c-446d-8d17-72445ce4f788.syn.1.sv.5.P.in
-    write.table(resP, file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", indexS,".sv.5.P.in")),
-                col.names = FALSE,row.names = FALSE, quote = FALSE,
-                sep=" ")
+    write.table(resP, file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], 
+                                        ".syn.", indexS,".sv.5.P.in")),
+                col.names=FALSE, row.names=FALSE, quote=FALSE, sep=" ")
     return(0)
 }
 
