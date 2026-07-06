@@ -996,12 +996,11 @@ getRef1KGPop <- function(gdsReference, popName="superPop") {
 #' nameFileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
 #'
 #' ## Extract super population information for the 1KG profiles
-#' getRefSuperPop(fileReferenceGDS=nameFileGDS)
-#'
+#' ##getRefSuperPop(fileReferenceGDS=nameFileGDS)
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
-#' @importFrom stats rmultinom
+#' @importFrom gdsfmt closefn.gds
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export

@@ -51,7 +51,7 @@ dataDir <- system.file("extdata", package="RAIDS")
 nameFileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
 
 ## Extract super population information for the 1KG profiles
-getRefSuperPop(fileReferenceGDS=nameFileGDS)
+##getRefSuperPop(fileReferenceGDS=nameFileGDS)
 
 
 
