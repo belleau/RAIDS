@@ -856,7 +856,7 @@ writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, indexS=1,
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
-#' @importFrom genio write_bed
+#' @importFrom genio write_fam
 #' @importFrom methods is
 #' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @importFrom S4Vectors isSingleNumber
@@ -1150,33 +1150,11 @@ writeBedRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
-#' @importFrom genio write_bed
+#' @importFrom genio write_fam
 #' @importFrom methods is
 #' @importFrom S4Vectors isSingleNumber
 #' @importFrom utils write.table
@@ -1197,13 +1175,13 @@ writeFamRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
         }
     }
 
-    sujetFam <- data.frame(fam = seq_len(length(sampleId)),
-                           id = c(sampleId),
-                           pat = 0,
-                           mat = 0,
-                           sex = 1,
-                           pheno = 0,
-                           stringsAsFactors = FALSE)
+    sujetFam <- data.frame(fam=seq_len(length(sampleId)),
+                           id=c(sampleId),
+                           pat=0,
+                           mat=0,
+                           sex=1,
+                           pheno=0,
+                           stringsAsFactors=FALSE)
 
     write_fam(fileOut, sujetFam)
     snpgdsClose(gdsReference)
