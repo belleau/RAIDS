@@ -267,7 +267,6 @@ pathGeno <- file.path(dataDir, "example", "snpPileup")
 #################################################################
 pathProfileGDS <- file.path(tempdir(), "out.tmp")
 
-
 #################################################################
 ## A data frame containing general information about the study
 ## is also required. The data frame must have

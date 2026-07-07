@@ -8,12 +8,12 @@
 getMatrixDataId(matGr, pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
-parameters}
-
-\item{a}{\code{matrix} containing the sample identifiers and where
+\item{matGr}{a \code{matrix} containing the sample identifiers and where
 each column is the name of a subcontinental population. The number of
 row corresponds to the number of samples for each subcontinental population.}
+
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters}
 }
 \value{
 a \code{matrix} containing the data.id for synthetic data and where
@@ -28,29 +28,7 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
-
-## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
-
-## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
-
-## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+## TODO
 
 }
 \author{

@@ -949,7 +949,7 @@ getMatrixPopSynthetic <- function(pRAIDS){
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param a \code{matrix} containing the sample identifiers and where
+#' @param matGr a \code{matrix} containing the sample identifiers and where
 #' each column is the name of a subcontinental population. The number of
 #' row corresponds to the number of samples for each subcontinental population.
 #'
@@ -962,49 +962,27 @@ getMatrixPopSynthetic <- function(pRAIDS){
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
-#' @importFrom genio write_bed
-#' @importFrom methods is
-#' @importFrom S4Vectors isSingleNumber
-#' @importFrom utils write.table
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @encoding UTF-8
 #' @export
 getMatrixDataId <- function(matGr, pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                            paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
 
     profileSyn <- read.gdsn(index.gdsn(gdsProfile,"study.annot"))
-    profileSyn <- profileSyn[profileSyn$study.id == pRAIDS$studyDFSyn$study.id[1],]
+    profileSyn <- profileSyn[profileSyn$study.id == 
+                                        pRAIDS$studyDFSyn$study.id[1],]
 
 
     listGr <- lapply(seq_len(nrow(matGr)),
                      FUN=function(x,matGr, profileSyn){
-                         return(profileSyn$data.id[profileSyn$case.id %in% matGr[x,]])
+                         return(profileSyn$data.id[profileSyn$case.id %in% 
+                                                        matGr[x,]])
                      },
                      matGr=matGr,
                      profileSyn=profileSyn)
