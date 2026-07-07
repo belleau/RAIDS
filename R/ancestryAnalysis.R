@@ -810,10 +810,6 @@ computeKNNRefSyn <- function(listEigenvector,
 #' the PCA done on the 1KG reference profiles and the synthetic profiles
 #' projected onto it.
 #'
-#' @param listCatPop a \code{vector} of \code{character} string
-#' representing the list of possible ancestry assignations. Default:
-#' \code{c("EAS", "EUR", "AFR", "AMR", "SAS")}.
-#'
 #' @param dfRef \code{data.frame} TODO of \code{character}
 #' strings representing the
 #' known super population ancestry for the 1KG profiles. The 1KG profile
@@ -852,81 +848,47 @@ computeKNNRefSyn <- function(listEigenvector,
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Load the demo PCA on the synthetic profiles projected on the
-#' ## demo 1KG reference PCA
-#' data(demoPCASyntheticProfiles)
-#'
-#' ## Load the known ancestry for the demo 1KG reference profiles
-#' data(demoKnownSuperPop1KG)
-#'
-#' ## Path to the demo Profile GDS file is located in this package
-#' dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
-#'
-#' ## Open the Profile GDS file
-#' gdsProfile <- snpgdsOpen(file.path(dataDir, "ex1.gds"))
-#'
-#' # The name of the synthetic study
-#' studyID <- "MYDATA.Synthetic"
-#'
-#' ## Projects synthetic profiles on 1KG PCA
-#' results <- computeKNNRefSynthetic(gdsProfile=gdsProfile,
-#'     listEigenvector=demoPCASyntheticProfiles,
-#'     listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"), studyIDSyn=studyID,
-#'     spRef=demoKnownSuperPop1KG)
-#'
-#' ## The inferred ancestry for the synthetic profiles for different values
-#' ## of D and K
-#' head(results$matKNN)
-#'
-#' ## Close Profile GDS file (important)
-#' closefn.gds(gdsProfile)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds closefn.gds
 #' @importFrom class knn
 #' @encoding UTF-8
 #' @export
-computeKNNRefSynGeneric <- function(listEigenvector,
-                             dfRef,
-                             pRAIDS) {
+computeKNNRefSynGeneric <- function(listEigenvector, dfRef, pRAIDS) {
 
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                                paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- openfn.gds(filename=fileGDSProfile)
 
     ## Validate the input parameters
     # validateComputeKNNRefSynthetic(gdsProfile=gdsProfile,
-    #                                listEigenvector=listEigenvector,
-    #                                listCatPop=listCatPop, studyIDSyn=pRAIDS$studyDFSyn$study.id, spRef=spRef,
-    #                                fieldPopInfAnc=pRAIDS$fieldPopInfAnc, kList=pRAIDS$kList, pcaList=pRAIDS$pcaList)
+    # listEigenvector=listEigenvector,
+    # listCatPop=listCatPop, studyIDSyn=pRAIDS$studyDFSyn$study.id, spRef=spRef,
+    # fieldPopInfAnc=pRAIDS$fieldPopInfAnc, kList=pRAIDS$kList, pcaList=pRAIDS$pcaList)
 
     ## Get study information from the GDS Sample file
     studyAnnotAll <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
     closefn.gds(gdsProfile)
     studyAnnot <- studyAnnotAll[which(studyAnnotAll$study.id ==
-                                          pRAIDS$studyDFSyn$study.id & studyAnnotAll$data.id %in%
-                                          listEigenvector$sample.id), ]
+                    pRAIDS$studyDFSyn$study.id & studyAnnotAll$data.id %in%
+                    listEigenvector$sample.id), ]
     pcaList <- pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCountSyn]
 
     listMat <- lapply(pcaList,
-                      FUN=function(pcaD, listEigenvector,
-                                   dfRef, pRAIDS){
-                          resMat <- lapply(pRAIDS$kList,
-                                           FUN=function(kV, pcaD,
-                                                        listEigenvector,
-                                                        dfRef,
-                                                        pRAIDS){
-                                               return(computeKNNProfileSubSet(listEigenvector,kV, pcaD,dfRef, pRAIDS))
-                                           },
-                                           pcaD=pcaD,
-                                           listEigenvector=listEigenvector,
-                                           dfRef=dfRef,
-                                           pRAIDS=pRAIDS)
-                          resMat <- do.call(rbind, resMat)
-                          return(resMat)
+                    FUN=function(pcaD, listEigenvector, dfRef, pRAIDS){
+                        resMat <- lapply(pRAIDS$kList,
+                            FUN=function(kV, pcaD, listEigenvector,
+                                    dfRef, pRAIDS){
+                                return(computeKNNProfileSubSet(listEigenvector, 
+                                                kV, pcaD,dfRef, pRAIDS))
+                            },
+                            pcaD=pcaD,
+                            listEigenvector=listEigenvector,
+                            dfRef=dfRef,
+                            pRAIDS=pRAIDS)
+                        resMat <- do.call(rbind, resMat)
+                        return(resMat)
                       },
                       listEigenvector=listEigenvector,
                       dfRef=dfRef,
