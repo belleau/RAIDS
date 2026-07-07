@@ -712,6 +712,7 @@ addStudyGDSProfileSyn <- function(profileSyn, pRAIDS=pRAIDS) {
     return(c(profileSyn))
 }
 
+
 #' @title Add the genotype from synthetic vcf information for the list
 #' of pruned SNVs
 #' into the Profile GDS file
@@ -722,71 +723,22 @@ addStudyGDSProfileSyn <- function(profileSyn, pRAIDS=pRAIDS) {
 #' 'sample.id', 'snp.id', 'snp.chromosome', 'snp.position', 'snp.index',
 #' 'genotype' and 'lap'.
 #'
-#' @param gdsReference an object of class
-#' \link[gdsfmt]{gds.class} (a GDS file), the opened 1KG GDS file.
+#' @param synProfileRef a TODO.
 #'
-#' @param fileProfileGDS a \code{character} string representing the path and
-#' file name of the Profile GDS file. The Profile GDS file must exist.
+#' @param synVCFfile a TODO.
 #'
-#' @param currentProfile a \code{character} string corresponding to the sample
-#' identifier associated to the current list of pruned SNVs.
-#'
-#' @param studyID a \code{character} string corresponding to the study
-#' identifier associated to the current list of pruned SNVs.
+#' @param pRAIDS a TODO.
 #'
 #' @return The function returns \code{0L} when successful.
 #'
 #' @examples
 #'
-#' ## Required library for GDS
-#' library(SNPRelate)
-#'
-#' ## Path to the demo 1KG GDS file is located in this package
-#' dataDir <- system.file("extdata/tests", package="RAIDS")
-#' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
-#'
-#' ## The data.frame containing the information about the study
-#' ## The 3 mandatory columns: "studyID", "study.desc", "study.platform"
-#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
-#' studyDF <- data.frame(study.id="MYDATA",
-#'                         study.desc="Description",
-#'                         study.platform="PLATFORM",
-#'                         stringsAsFactors=FALSE)
-#'
-#' ## Temporary Profile file
-#' fileProfile <- file.path(tempdir(), "ex2.gds")
-#'
-#' ## Copy required file
-#' file.copy(file.path(dataDir, "ex1_demo_with_pruning.gds"),
-#'         fileProfile)
-#'
-#' ## Open 1KG file
-#' gds1KG <- snpgdsOpen(fileGDS)
-#'
-#' ## Compute the list of pruned SNVs for a specific profile 'ex1'
-#' ## and save it in the Profile GDS file 'ex2.gds'
-#' add1KG2SampleGDS(gdsReference=gds1KG,
-#'         fileProfileGDS=fileProfile,
-#'         currentProfile=c("ex1"),
-#'         studyID=studyDF$study.id)
-#'
-#' ## Close the 1KG GDS file (important)
-#' closefn.gds(gds1KG)
-#'
-#' ## Check content of Profile GDS file
-#' ## The 'pruned.study' entry should be present
-#' content <- openfn.gds(fileProfile)
-#' content
-#'
-#' ## Close the Profile GDS file (important)
-#' closefn.gds(content)
-#'
-#' ## Remove Profile GDS file (created for demo purpose)
-#' unlink(fileProfile, force=TRUE)
+#' ## TODO
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn objdesp.gdsn
+#' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds closefn.gds append.gdsn
+#' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
 addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
@@ -797,7 +749,7 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
     #                          studyID=studyID)
     ## Profile GDS file name
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                               profile=pRAIDS$pedStudy$Name.ID[1])
+                                        profile=pRAIDS$pedStudy$Name.ID[1])
     ## Open Profile GDS file
     gdsProfile <- openfn.gds(fileProfileGDS, readonly=TRUE)
 
@@ -805,11 +757,12 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
 
     alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
     alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
-    pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
-                                 snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
-                                 REF = alDf[1,],
-                                 ALT = alDf[2,],
-                                 stringsAsFactors = FALSE)
+    pRAIDS$listPos <- data.frame(
+        snp.chromosome=read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+        snp.position=read.gdsn(index.gdsn(gdsReference, "snp.position")),
+        REF=alDf[1,],
+        ALT=alDf[2,],
+        stringsAsFactors=FALSE)
     snp.id <- read.gdsn(index.gdsn(gdsReference, "snp.id"))
 
     ## Extract list of pruned SNVs from the GDS Sample file
@@ -821,11 +774,11 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
     pRAIDS$listPos <- pRAIDS$listPos[listSNP,]
     pRAIDS$profileFileGeno <- synVCFfile
 
-    matGeno <- readGenoVCF3(pRAIDS = pRAIDS)
+    matGeno <- readGenoVCF3(pRAIDS=pRAIDS)
 
     sampleSim <- paste(paste0(pRAIDS$prefix, ".", pRAIDS$pedStudy$Name.ID[1]),
-                       paste(rep(synProfileRef,each=pRAIDS$nbSim),
-                             seq_len(pRAIDS$nbSim), sep="."), sep = ".")
+                    paste(rep(synProfileRef,each=pRAIDS$nbSim),
+                                seq_len(pRAIDS$nbSim), sep="."), sep = ".")
 
     addStudyGDSProfileSyn(profileSyn=sampleSim, pRAIDS=pRAIDS)
 
@@ -835,22 +788,16 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
     if(! ("genotype" %in% ls.gdsn(gdsProfile))){
         add.gdsn(gdsSample, "sample.id", c(sampleSim))
         var.geno <- add.gdsn(gdsProfile, "genotype",
-                             valdim=c(length(listSNP), 1), g, storage="bit2")
-
-
+                        valdim=c(length(listSNP), 1), g, storage="bit2")
     }else {
         appendGDSSampleOnly(gds=gdsProfile, listSamples=c(sampleSim))
         var.geno <- index.gdsn(gdsProfile, "genotype")
 
         append.gdsn(var.geno, g)
-
     }
-
-
 
     ## Close the GDS Sample file
     closefn.gds(gdsProfile)
-
 
     return(0L)
 }
