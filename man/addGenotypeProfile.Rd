@@ -9,17 +9,7 @@ into the Profile GDS file}
 addGenotypeProfile(pRAIDS = pRAIDS)
 }
 \arguments{
-\item{gdsReference}{an object of class
-\link[gdsfmt]{gds.class} (a GDS file), the opened 1KG GDS file.}
-
-\item{fileProfileGDS}{a \code{character} string representing the path and
-file name of the Profile GDS file. The Profile GDS file must exist.}
-
-\item{currentProfile}{a \code{character} string corresponding to the sample
-identifier associated to the current list of pruned SNVs.}
-
-\item{studyID}{a \code{character} string corresponding to the study
-identifier associated to the current list of pruned SNVs.}
+\item{pRAIDS}{a TODO.}
 }
 \value{
 The function returns \code{0L} when successful.
@@ -33,51 +23,7 @@ the Profile GDS file. The nodes are added to the Profile GDS file:
 }
 \examples{
 
-## Required library for GDS
-library(SNPRelate)
-
-## Path to the demo 1KG GDS file is located in this package
-dataDir <- system.file("extdata/tests", package="RAIDS")
-fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
-
-## The data.frame containing the information about the study
-## The 3 mandatory columns: "studyID", "study.desc", "study.platform"
-## The entries should be strings, not factors (stringsAsFactors=FALSE)
-studyDF <- data.frame(study.id="MYDATA",
-                        study.desc="Description",
-                        study.platform="PLATFORM",
-                        stringsAsFactors=FALSE)
-
-## Temporary Profile file
-fileProfile <- file.path(tempdir(), "ex2.gds")
-
-## Copy required file
-file.copy(file.path(dataDir, "ex1_demo_with_pruning.gds"),
-        fileProfile)
-
-## Open 1KG file
-gds1KG <- snpgdsOpen(fileGDS)
-
-## Compute the list of pruned SNVs for a specific profile 'ex1'
-## and save it in the Profile GDS file 'ex2.gds'
-add1KG2SampleGDS(gdsReference=gds1KG,
-        fileProfileGDS=fileProfile,
-        currentProfile=c("ex1"),
-        studyID=studyDF$study.id)
-
-## Close the 1KG GDS file (important)
-closefn.gds(gds1KG)
-
-## Check content of Profile GDS file
-## The 'pruned.study' entry should be present
-content <- openfn.gds(fileProfile)
-content
-
-## Close the Profile GDS file (important)
-closefn.gds(content)
-
-## Remove Profile GDS file (created for demo purpose)
-unlink(fileProfile, force=TRUE)
+## TODO
 
 
 }
