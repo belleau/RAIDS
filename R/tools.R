@@ -1020,12 +1020,9 @@ getMatrixDataId <- function(matGr, pRAIDS){
 #' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn
+#' @importFrom gdsfmt read.gdsn index.gdsn
 #' @importFrom genio write_bed
-#' @importFrom methods is
 #' @importFrom SNPRelate snpgdsOpen snpgdsClose snpgdsGetGeno
-#' @importFrom S4Vectors isSingleNumber
-#' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
 writeBedRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
@@ -1082,11 +1079,9 @@ writeBedRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
 #' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn
+#' @importFrom gdsfmt read.gdsn index.gdsn
 #' @importFrom genio write_fam
-#' @importFrom methods is
-#' @importFrom S4Vectors isSingleNumber
-#' @importFrom utils write.table
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @encoding UTF-8
 #' @export
 writeFamRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
