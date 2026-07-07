@@ -1042,7 +1042,7 @@ parseVCFGeno <- function(i, vcfTmp, nbR){
 #' @importFrom VariantAnnotation readVcf geno
 #' @importFrom MatrixGenerics rowRanges
 #' @importFrom GenomicRanges seqnames start width
-#' @importFrom BiocParallel bplapply
+#' @importFrom BiocParallel bplapply MulticoreParam
 #' @encoding UTF-8
 #' @keywords internal
 readGenoVCF3 <- function(pRAIDS) {
