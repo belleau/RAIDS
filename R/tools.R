@@ -168,17 +168,12 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param gdsReference an object of class \code{\link[gdsfmt]{gds.class}}
-#' (a GDS file), the 1KG GDS file.
+#' @param pRAIDS a TODO.
 #'
 #' @param fileOut a \code{character} string representing the path and file
 #' name of the VCF file that will be created wit the retained SNP information.
 #' The file should have the ".vcf" extension.
-#'
-#' @param offset a single \code{integer} that is added to the SNP position to
-#' switch from 0-based to 1-based coordinate when needed (or reverse).
-#' Default: \code{0L}.
-#'
+#' 
 #' @param freqCutoff a single positive \code{numeric} specifying the cut-off to
 #' keep a SNP. If \code{NULL}, all SNPs are retained. Default: \code{NULL}.
 #'
@@ -186,34 +181,10 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
-#'
-#' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-#'
-#' ## Create a VCF file with the SNV dataset present in the GDS file
-#' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
-#'
-#' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
-#'
-#' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn ls.gdsn
-#' @importFrom methods is
-#' @importFrom S4Vectors isSingleNumber
+#' @importFrom gdsfmt read.gdsn ls.gdsn openfn.gds closefn.gds
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
