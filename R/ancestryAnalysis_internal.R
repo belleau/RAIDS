@@ -455,42 +455,16 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' @description The function runs k-nearest neighbors analysis on a
 #' subset of the synthetic data set. The function uses the 'knn' package.
 #'
-#' @param gdsProfile an object of class
-#' \code{\link[SNPRelate:SNPGDSFileClass]{SNPRelate::SNPGDSFileClass}}, the
-#' opened Profile GDS file.
-#'
 #' @param listEigenvector a \code{list} with 3 entries:
 #' 'sample.id', 'eigenvector.ref' and 'eigenvector'. The \code{list} represents
 #' the PCA done on the 1KG reference profiles and the synthetic profiles
 #' projected onto it.
 #'
-#' @param listCatPop a \code{vector} of \code{character} string
-#' representing the list of possible ancestry assignations. Default:
-#' \code{c("EAS", "EUR", "AFR", "AMR", "SAS")}.
+#' @param K a TODO.
+#' 
+#' @param D a TODO.
 #'
-#' @param studyIDSyn a \code{character} string corresponding to the study
-#' identifier.
-#' The study identifier must be present in the Profile GDS file.
-#'
-#' @param spRef \code{vector} of \code{character} strings representing the
-#' known super population ancestry for the 1KG profiles. The 1KG profile
-#' identifiers are used as names for the \code{vector}.
-#'
-#' @param fieldPopInfAnc a \code{character} string representing the name of
-#' the column that will contain the inferred ancestry for the specified
-#' data set. Default: \code{"SuperPop"}.
-#'
-#' @param kList  a \code{vector} of \code{integer} representing  the list of
-#' values tested for the  K parameter. The K parameter represents the
-#' number of neighbors used in the K-nearest neighbors analysis. If
-#' \code{NULL}, the value \code{seq(2, 15, 1)} is assigned.
-#' Default: \code{seq(2, 15, 1)}.
-#'
-#' @param pcaList a \code{vector} of \code{integer} representing  the list of
-#' values tested for the  D parameter. The D parameter represents the
-#' number of dimensions used in the PCA analysis.  If \code{NULL},
-#' the value \code{seq(2, 15, 1)} is assigned.
-#' Default: \code{seq(2, 15, 1)}.
+#' @param pRAIDS a TODO
 #'
 #' @return a \code{list} containing 4 entries:
 #' \describe{
@@ -522,44 +496,15 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## Load the demo PCA on the synthetic profiles projected on the
-#' ## demo 1KG reference PCA
-#' data(demoPCASyntheticProfiles)
-#'
-#' ## Load the known ancestry for the demo 1KG reference profiles
-#' data(demoKnownSuperPop1KG)
-#'
-#' ## Path to the demo Profile GDS file is located in this package
-#' dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
-#'
-#' ## Open the Profile GDS file
-#' gdsProfile <- snpgdsOpen(file.path(dataDir, "ex1.gds"))
-#'
-#' # The name of the synthetic study
-#' studyID <- "MYDATA.Synthetic"
-#'
-#' ## Projects synthetic profiles on 1KG PCA
-#' results <- computeKNNRefSynthetic(gdsProfile=gdsProfile,
-#'     listEigenvector=demoPCASyntheticProfiles,
-#'     listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"), studyIDSyn=studyID,
-#'     spRef=demoKnownSuperPop1KG)
-#'
-#' ## The inferred ancestry for the synthetic profiles for different values
-#' ## of D and K
-#' head(results$matKNN)
-#'
-#' ## Close Profile GDS file (important)
-#' closefn.gds(gdsProfile)
+#' ## TODO
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom gdsfmt read.gdsn index.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen
 #' @importFrom class knn
 #' @encoding UTF-8
 #' @export
-computeKNNProfile <- function(listEigenvector,K, D, pRAIDS) {
+computeKNNProfile <- function(listEigenvector, K, D, pRAIDS) {
 
     # gdsProfile, listEigenvector,
     # listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
