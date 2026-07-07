@@ -31,12 +31,8 @@ identifiers are used as names for the \code{vector}.}
 representing the list of possible ancestry assignations. Default:
 \code{("EAS", "EUR", "AFR", "AMR", "SAS")}.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
-parameters}
-
-\item{gdsProfile}{an object of class
-\code{\link[SNPRelate:SNPGDSFileClass]{SNPRelate::SNPGDSFileClass}}, the
-opened Profile GDS file.}
+\item{pRAIDS}{a \code{parametersRAIDS} an object containing all RAIDS
+parameters.}
 }
 \value{
 a \code{list} containing the following entries:
@@ -67,44 +63,7 @@ analysis using a range of K and D values is done.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Load the known ancestry for the demo 1KG reference profiles
-data(demoKnownSuperPop1KG)
-
-
-# The name of the synthetic study
-studyID <- "MYDATA.Synthetic"
-
-samplesRM <- c("HG00246", "HG00325", "HG00611", "HG01173", "HG02165",
-    "HG01112", "HG01615", "HG01968", "HG02658", "HG01850", "HG02013",
-    "HG02465", "HG02974", "HG03814", "HG03445", "HG03689", "HG03789",
-    "NA12751", "NA19107", "NA18548", "NA19075", "NA19475", "NA19712",
-    "NA19731", "NA20528", "NA20908")
-names(samplesRM) <- c("GBR", "FIN", "CHS","PUR", "CDX", "CLM", "IBS",
-    "PEL", "PJL", "KHV", "ACB", "GWD", "ESN", "BEB", "MSL", "STU", "ITU",
-    "CEU", "YRI", "CHB", "JPT", "LWK", "ASW", "MXL", "TSI", "GIH")
-
-## Path to the demo Profile GDS file is located in this package
-dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
-
-## Open the Profile GDS file
-gdsProfile <- snpgdsOpen(file.path(dataDir, "ex1.gds"))
-
-## Run a PCA analysis and a K-nearest neighbors analysis on a small set
-## of synthetic data
-results <- computePoolSyntheticAncestryGr(gdsProfile=gdsProfile,
-    sampleRM=samplesRM, studyIDSyn=studyID, np=1L,
-    spRef=demoKnownSuperPop1KG,
-    kList=seq(10,15,1), pcaList=seq(10,15,1), eigenCount=15L)
-
-## The ancestry inference for the synthetic data using
-## different K and D values
-head(results$matKNN)
-
-## Close Profile GDS file (important)
-closefn.gds(gdsProfile)
+## TODO
 
 }
 \references{
