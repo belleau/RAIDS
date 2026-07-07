@@ -26,7 +26,7 @@
 #'
 #' @param genoSource a TODO. Default: \code{NULL}.
 #' 
-#' @param blockTypeID a \code{character} string corresponding to the block
+#' @param blockTypeId a \code{character} string corresponding to the block
 #' type used to extract the block identifiers. The block type must be
 #' present in the GDS Reference Annotation file. 
 #' Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.

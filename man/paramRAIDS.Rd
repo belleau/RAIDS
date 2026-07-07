@@ -78,6 +78,11 @@ way the estimation of the allelic fraction is done. Default: \code{"LD"}.}
 
 \item{genoSource}{a TODO. Default: \code{NULL}.}
 
+\item{blockTypeId}{a \code{character} string corresponding to the block
+type used to extract the block identifiers. The block type must be
+present in the GDS Reference Annotation file.
+Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
+
 \item{reference}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
 Default: \code{"1KGc1.0"}.}
@@ -204,11 +209,6 @@ used in the pruning step. Default: \code{NULL}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
-
-\item{blockTypeID}{a \code{character} string corresponding to the block
-type used to extract the block identifiers. The block type must be
-present in the GDS Reference Annotation file.
-Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 }
 \value{
 The integer \code{0L} when successful.
