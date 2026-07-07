@@ -741,7 +741,7 @@ addStudyGDSProfileSyn <- function(profileSyn, pRAIDS=pRAIDS) {
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
-addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
+addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS) {
 
     ## Validate inputs
     # validateAdd1KG2SampleGDS(gdsReference=gdsReference,
@@ -786,6 +786,7 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS=pRAIDS) {
     g[matGeno$refIndex] <- matGeno$g
     gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
     if(! ("genotype" %in% ls.gdsn(gdsProfile))){
+        ## TODO PASCAL: where gdsSample comes from?
         add.gdsn(gdsSample, "sample.id", c(sampleSim))
         var.geno <- add.gdsn(gdsProfile, "genotype",
                         valdim=c(length(listSNP), 1), g, storage="bit2")

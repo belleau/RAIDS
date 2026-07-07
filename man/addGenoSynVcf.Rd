@@ -7,7 +7,7 @@
 of pruned SNVs
 into the Profile GDS file}
 \usage{
-addGenoSynVcf(synProfileRef, synVCFfile, pRAIDS = pRAIDS)
+addGenoSynVcf(synProfileRef, synVCFfile, pRAIDS)
 }
 \arguments{
 \item{synProfileRef}{a TODO.}
