@@ -618,7 +618,6 @@ addGenotypeProfile <- function(pRAIDS=pRAIDS) {
 
     listSNP <- which(snp.id %in% pruned)
 
-
     snp.chromosome <- read.gdsn(index.gdsn(gdsReference,
                                            "snp.chromosome"))[listSNP]
     snp.position <-  read.gdsn(index.gdsn(gdsReference,

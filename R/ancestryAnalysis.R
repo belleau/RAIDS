@@ -564,7 +564,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
     # gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
     # gdsRefAnnot <- openfn.gds(pRAIDS$fileReferenceAnnotGDS)
 
-    spRef <- getRefSuperPop(pRAIDS)
+    spRef <- getRefSuperPop2(pRAIDS)
     # closefn.gds(gdsReference)
     # closefn.gds(gdsRefAnnot)
     # get a list of each pop.group in pRAIDS$syntheticRefDF

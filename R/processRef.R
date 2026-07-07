@@ -125,7 +125,7 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
-getRefSuperPop <- function(pRAIDS=pRAIDS) {
+getRefSuperPop2 <- function(pRAIDS=pRAIDS) {
     ## , popName="superPop"
     ## The gdsReference must be an object of class "gds.class"
     gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
@@ -147,7 +147,7 @@ getRefSuperPop <- function(pRAIDS=pRAIDS) {
 
     dataRef <- dataRef[, popName]
     names(dataRef) <- read.gdsn(index.gdsn(node=gdsReference,
-                                           "sample.id"))[which(sample.ref == TRUE)]
+                                    "sample.id"))[which(sample.ref == TRUE)]
     closefn.gds(gdsReference)
     return(dataRef)
 }
