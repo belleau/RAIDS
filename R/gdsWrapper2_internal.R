@@ -310,7 +310,7 @@ generateProfileGenoCall <- function(pRAIDS=pRAIDS) {
     # Initialize the genotype array at -1
 
     # Select the position where the coverage of the 2 alleles is enough
-    listCov <- which(rowSums(z[, 1:2]) >= pRAIDS$minCov)
+    listCov <- which(rowSums(z[, seq_len(2)]) >= pRAIDS$minCov)
 
     zC <- z[listCov,]
 

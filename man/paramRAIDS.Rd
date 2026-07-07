@@ -58,55 +58,72 @@ paramRAIDS(
 \item{studyDF}{a \code{data.frame} containing the information about the
 study associated to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor).}
+must be in \code{character} strings (no factor). Default: \code{NULL}.}
 
 \item{studyDFSyn}{a \code{data.frame} containing the information about the
 synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor).}
+must be in \code{character} strings (no factor). Default: \code{NULL}.}
 
 \item{pedStudy}{a \code{data.frame} with those mandatory columns: "Name.ID",
 "Case.ID", "Sample.Type", "Diagnosis", "Source". All columns must be in
 \code{character} strings (no factor). The \code{data.frame}
 must contain the information for all the samples passed in the
 \code{listSamples} parameter. Only \code{filePedRDS} or \code{pedStudy}
-can be defined.}
+can be defined. Default: \code{NULL}.}
 
 \item{studyType}{a \code{character} string representing the type of study.
 The possible choices are: "LD" and "GeneAware". The type of study affects the
 way the estimation of the allelic fraction is done. Default: \code{"LD"}.}
 
+\item{genoSource}{a TODO. Default: \code{NULL}.}
+
 \item{reference}{a \code{character} string with two possible values:
-'1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference}
+'1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
+Default: \code{"1KGc1.0"}.}
 
 \item{genome}{a \code{character} string with one possible value:
-'HG38'. It specifies the genme uses.}
+'HG38'. It specifies the genome used. Default: \code{"HG38"}.}
 
 \item{chrInfo}{a \code{vector} of positive \code{integer} values
-representing the length of the chromosomes. See 'details' section.}
+representing the length of the chromosomes. See 'details' section.
+Default: \code{NULL}.}
 
-\item{paramAncestry}{a \code{list} parameters ...}
+\item{paramAncestry}{a \code{list} parameters ...TODO. Default: \code{NULL}.}
 
 \item{profileFile}{a \code{character} string representing the path and the
 file name of the genotype file or the bam if genoSource is snp-pileup the
-fine extension must be .txt.gz, if VCF the extension must be .vcf.gz}
+fine extension must be .txt.gz, if VCF the extension must be .vcf.gz.
+Default: \code{NULL}.}
+
+\item{profileFileGeno}{a \code{character} string TODO.
+Default: \code{NULL}.}
 
 \item{pathProfileGDS}{a \code{character} string representing the path to
 the directory where the GDS Profile files will be created.
 Default: \code{NULL}.}
 
 \item{fileReferenceGDS}{a \code{character} string representing the file
-name of the Population Reference GDS file. The file must exist.}
+name of the Population Reference GDS file. The file must exist.
+Default: \code{NULL}.}
 
 \item{fileReferenceAnnotGDS}{a \code{character} string representing the
 file name of the Population Reference GDS Annotation file. The file
-must exist.}
+must exist. Default: \code{NULL}.}
 
 \item{inferenceType}{a \code{character} string with two possible values:
-'PCAnn', 'haploAdmixture'. It specifies the genotype ancestry inference}
+'PCAnn', 'haploAdmixture'. It specifies the genotype ancestry inference.
+Default: \code{"PCAnn"}.}
 
 \item{batch}{a single positive \code{integer} representing the current
-identifier for the batch. Beware, this field is not stored anymore.}
+identifier for the batch. Beware, this field is not stored anymore.
+Default: \code{1}.}
+
+\item{prefix}{a TODO. Default: \code{"1"}.}
+
+\item{nbSim}{a TODO. Default: \code{1}.}
+
+\item{offset}{a TODO. Default: \code{-1}.}
 
 \item{minCov}{a single positive \code{integer} representing the minimum
 required coverage. Default: \code{10L}.}
@@ -122,13 +139,15 @@ representing the probability of sequencing error. Default: \code{0.001}.}
 representing the probability of sequencing error for synthetic.
 Default: \code{0.001}.}
 
+\item{pRecomb}{a TODO. Default: \code{0.01}.}
+
 \item{np}{a single positive \code{integer} specifying the number of
 threads to be used. Default: \code{1L}.}
 
 \item{listPos}{a \code{data.frame} containing 2 columns. The first column,
 called "snp.chromosome" contains the name of the chromosome where the
 SNV is located. The second column, called "snp.position" contains the
-position of the SNV on the chromosome.}
+position of the SNV on the chromosome. Default: \code{NULL}.}
 
 \item{syntheticRefDF}{a \code{data.frame} containing a subset of
 reference profiles for each sub-population present in the Reference GDS
@@ -140,26 +159,56 @@ identifier. }
 subcontinental population assigned to the sample. }
 \item{superPop}{ a \code{character} string representing the
 super-population assigned to the sample. }
-}}
+}
+Default: \code{NULL}.}
 
 \item{pruningMethod}{a \code{character} string that represents the method that will
 be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.}
 
+\item{slideWindowMaxBP}{a TODO. Default: \code{500000L}.}
+
+\item{thresholdLD}{a TODO. Default: \code{sqrt(0.1)}.}
+
 \item{specificSNV}{a \code{data.frame} containing 2 columns. The first column,
 called "snp.chromosome" contains the name of the chromosome where the
 SNV is located. The second column, called "snp.position" contains the
 position of the SNV on the chromosome. Optionel the column snvKeep add by
 contains index in the reference or -1  if not in the reference. It is using
-be at pruning step.}
+used in the pruning step. Default: \code{NULL}.}
+
+\item{genoType}{a TODO. Default: \code{"geno.ref"}.}
+
+\item{phaseType}{a TODO. Default: \code{"phase.ref"}.}
+
+\item{phase}{a \code{logical} TODO. Default: \code{FALSE}.}
+
+\item{PCAmissingRate}{a TODO. Default: \code{0.025}.}
+
+\item{PCAalgorithm}{a TODO. Default: \code{"exact"}.}
+
+\item{eigenCount}{a TODO. Default: \code{32L}.}
+
+\item{eigenCountSyn}{a TODO. Default: \code{15L}.}
+
+\item{kList}{a TODO. Default: \code{seq(2,15,1)}.}
+
+\item{pcaList}{a TODO. Default: \code{seq(2,15,1)}.}
+
+\item{fieldPopInRef}{a TODO. Default: \code{"superPop"}.}
+
+\item{fieldPopInfAnc}{a TODO. Default: \code{"superPop"}.}
+
+\item{fieldSubPop}{a TODO. Default: \code{"pop.group"}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
 
 \item{blockTypeID}{a \code{character} string corresponding to the block
 type used to extract the block identifiers. The block type must be
-present in the GDS Reference Annotation file.}
+present in the GDS Reference Annotation file.
+Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 }
 \value{
 The integer \code{0L} when successful.
@@ -173,26 +222,7 @@ parameters class for RAIDS
 ## demo 1KG reference PCA
 data(demoPCASyntheticProfiles)
 
-## Load the known ancestry for the demo 1KG reference profiles
-data(demoKnownSuperPop1KG)
-
-## Path to the demo GDS file is located in this package
-dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
-fileProfileGDS <- file.path(dataDir, "ex1.gds")
-
-## Open GDS files
-gdsProfile <- openfn.gds(fileProfileGDS)
-
-## The function returns 0L when all parameters are valid
-RAIDS:::validateComputeKNNRefSynthetic(gdsProfile=gdsProfile,
-    listEigenvector=demoPCASyntheticProfiles,
-    listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-    studyIDSyn="MyStudy", spRef=demoKnownSuperPop1KG,
-    fieldPopInfAnc="Superpop", kList=c(10, 11, 12),
-    pcaList=c(13, 14, 15))
-
-## Close GDS file (it is important to always close the GDS files)
-closefn.gds(gdsProfile)
+ ## TODO
 
 
 }
