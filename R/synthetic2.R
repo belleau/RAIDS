@@ -84,26 +84,23 @@ selectHGDP1kgForSynthetic <- function(pRAIDS, nbProfiles=30L) {
                 g5 <- c("AMRag", "MIDag", "OTHag"),
                 g6 <- c("ADM"))
 
-
-
-
     ## For each subcontinental population, randomly select a fixed number of
     ## samples
     dfAll <- lapply(seq_len(length(grAna)),
                     FUN=function(i, grAna) {
         listGroup <- which(sample.annot$superPop %in% grAna[[i]])
         if(5 * nbProfiles > length(listGroup)){
+            ## TODO PASCAL: exit to break loop or stop to stop program? exit is not a function
             exit("nbProfiles for synthetic is too big\n")
         }
         tmp <- sample(listGroup, 5 * nbProfiles)
         return(data.frame(sample.id=sample.id[tmp],
-                          popGr = rep(paste(grAna[[i]], collapse = "."), 5 * nbProfiles),
-                          superPop=sample.annot$superPop[tmp],
-                          stringsAsFactors=FALSE)) },
+                popGr = rep(paste(grAna[[i]], collapse = "."), 5 * nbProfiles),
+                superPop=sample.annot$superPop[tmp],
+                stringsAsFactors=FALSE)) },
         grAna=grAna)
 
     df <- do.call(rbind, dfAll)
-
 
     closefn.gds(gdsReference)
 

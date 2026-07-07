@@ -1338,20 +1338,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' generate each synthetic profile would be added
 #' as an extra column to the final 'data.frame'.
 #'
-#' @param gdsReference an object of class
-#' \code{\link[gdsfmt:gds.class]{gdsfmt::gds.class}}, the opened 1 KG GDS file.
-#'
-#' @param gdsSample an object of class
-#' \code{\link[gdsfmt:gds.class]{gdsfmt::gds.class}}, the opened Profile GDS
-#' file.
-#'
-#' @param studyID a \code{character} string representing the name of the
-#' study that will be extracted from the GDS Sample 'study.annot' node.
-#'
-#' @param popName a \code{character} string representing the name of the
-#' column from the \code{data.frame} stored in the 'sample.annot' node of the
-#' 1KG GDS file. The column must be present in the \code{data.frame}.
-#'
+#' @param pRAIDS an object of class TODO.
 #'
 #' @return \code{data.frame} containing the columns extracted from the
 #' GDS Sample 'study.annot' node with a extra column named as the 'popName'
@@ -1375,29 +1362,12 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' ## Required library
 #' library(gdsfmt)
 #'
-#' ## The open 1KG GDS file is required (this is a demo file)
-#' dataDir <- system.file("extdata", package="RAIDS")
-#' gds_1KG_file <- file.path(dataDir, "PopulationReferenceDemo.gds")
-#' gds1KG <- openfn.gds(gds_1KG_file)
-#'
-#' fileSampleGDS <- file.path(dataDir, "GDS_Sample_with_study_demo.gds")
-#' gdsSample <- openfn.gds(fileSampleGDS)
-#'
-#' ## Extract the study information for "TCGA.Synthetic" study present in the
-#' ## Profile GDS file and merge column "superPop" from 1KG GDS to the
-#' ## returned data.frame
-#' ## This function enables to extract the super-population associated to the
-#' ## 1KG samples that has been used to create the synthetic profiles
-#' RAIDS:::prepPedSynthetic1KG(gdsReference=gds1KG, gdsSample=gdsSample,
-#'     studyID="TCGA.Synthetic", popName="superPop")
-#'
-#' ## The GDS files must be closed
-#' gdsfmt::closefn.gds(gds1KG)
-#' gdsfmt::closefn.gds(gdsSample)
+#' ## TODO
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @keywords internal
 prepPedSyntheticRef <- function(pRAIDS) {
@@ -1408,7 +1378,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
     studyID <- pRAIDS$studyDFSyn$study.id
     popName <- pRAIDS$fieldPopInRef
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                               profile=pRAIDS$pedStudy$Name.ID[1])
+                                    profile=pRAIDS$pedStudy$Name.ID[1])
     ## Open Profile GDS file
     gdsProfile <- snpgdsOpen(fileProfileGDS, readonly=TRUE)
 
@@ -1437,7 +1407,10 @@ prepPedSyntheticRef <- function(pRAIDS) {
 
     studyCur[[popName]] <- dataRef[studyCur$case.id, popName]
     rownames(studyCur) <- studyCur$data.id
+    
+    ## Important to close the files
     closefn.gds(gdsProfile)
     closefn.gds(gdsReference)
+    
     return(studyCur)
 }
