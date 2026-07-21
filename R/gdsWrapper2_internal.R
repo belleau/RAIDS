@@ -165,7 +165,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
         if(!dir.exists(pRAIDS$pathProfileGDS)) { dir.create(pRAIDS$pathProfileGDS) }
     }
     fileGDSSample <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-
+    gdsSample <- NULL
     if(file.exists(fileGDSSample)) {
         gdsSample <- openfn.gds(fileGDSSample, readonly=FALSE)
     } else{
@@ -190,7 +190,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
     }
 
     listSampleGDS <- addStudyGDSSample(gdsSample, pedProfile=pRAIDS$pedStudy,
-                                       batch=batch, listSamples=c(pRAIDS$pedStudy$Name.ID[1]), studyDF=pRAIDS$studyDF,
+                                       batch=pRAIDS$batch, listSamples=c(pRAIDS$pedStudy$Name.ID[1]), studyDF=pRAIDS$studyDF,
                                        verbose=pRAIDS$verbose)
 
 
