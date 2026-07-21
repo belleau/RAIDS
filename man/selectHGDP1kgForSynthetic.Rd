@@ -39,7 +39,7 @@ subcontinental population has less samples than the fixed number, all
 samples from the subcontinental population are selected.
 }
 \examples{
-
+## TODO change the example
 ## Required library
 library(gdsfmt)
 

@@ -53,7 +53,6 @@
 #'     pathProfileGDS=pathProfileGDS,
 #'     fileReferenceGDS=fileGDS
 #'     )
-
 #' ## Copy the Profile GDS file demo that has not been pruned yet
 #' file.copy(file.path(dataDir, "ex1_demo.gds"), profileFile)
 #'
@@ -62,7 +61,6 @@
 #' ## and save it in the Profile GDS file 'ex1.gds'
 #' pruningProfile2(pRAIDS)
 #'
-
 #'
 #' ## Check content of Profile GDS file
 #' ## The 'pruned.study' entry should be present
@@ -466,7 +464,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                                                               nbProfiles=30L)
         }else if(pRAIDS$reference == "HGDP1kgV0.1"){
             # new synthetic profile selection function for HGDP1kgV0.1
-            pRAIDS$syntheticRefDF <- selectHGDP1kgPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
+            pRAIDS$syntheticRefDF <- selectHGDP1kgForSynthetic(pRAIDS = pRAIDS,
                                                               nbProfiles=30L)
         }
     }

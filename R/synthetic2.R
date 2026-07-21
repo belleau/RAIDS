@@ -29,7 +29,7 @@
 #' }
 #'
 #' @examples
-#'
+#' ## TODO change the example
 #' ## Required library
 #' library(gdsfmt)
 #'
