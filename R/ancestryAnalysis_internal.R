@@ -328,6 +328,7 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
     return(listRes)
 }
 
+
 #' @title Run a k-nearest neighbors analysis on a subset of the
 #' synthetic dataset
 #'
@@ -339,115 +340,21 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' the PCA done on the 1KG reference profiles and the synthetic profiles
 #' projected onto it.
 #'
-#' @param K a TODO.
+#' @param K  a \code{integer} representing value tested for the  K parameter.
+#' The K parameter represents the
+#' number of neighbors used in the K-nearest neighbors analysis.
+#'
+#' @param D a \code{integer} representing  
+#' value tested for the  D parameter. The D parameter represents the
+#' number of dimensions used in the PCA analysis.
 #' 
-#' @param D a TODO.
-#'
-#' @param pRAIDS a TODO
-#'
-#' @return a \code{list} containing 4 entries:
-#' \describe{
-#' \item{\code{sample.id}}{ a \code{vector} of \code{character} strings
-#' representing the identifiers of the synthetic profiles analysed.}
-#' \item{\code{sample1Kg}}{ a \code{vector} of \code{character} strings
-#' representing the identifiers of the 1KG reference profiles used to
-#' generate the synthetic profiles.}
-#' \item{\code{sp}}{ a \code{vector} of \code{character} strings representing
-#' the known super population ancestry of the 1KG reference profiles used
-#' to generate the synthetic profiles.}
-#' \item{\code{matKNN}}{ a \code{data.frame} containing the super population
-#' inference for each synthetic profiles for different values of PCA
-#' dimensions \code{D} and k-neighbors values \code{K}. The fourth column title
-#' corresponds to the \code{fieldPopInfAnc} parameter.
-#' The \code{data.frame} contains 4 columns:
-#' \describe{
-#' \item{\code{sample.id}}{ a \code{character} string representing
-#' the identifier of the synthetic profile analysed.}
-#' \item{\code{D}}{ a \code{numeric} strings representing
-#' the value of the PCA dimension used to infer the super population.}
-#' \item{\code{K}}{ a \code{numeric} strings representing
-#' the value of the k-neighbors used to infer the super population.}
-#' \item{\code{fieldPopInfAnc} value}{ a \code{character} string representing
-#' the inferred ancestry.}
-#' }
-#' }
-#' }
-#'
-#' @examples
-#'
-#' ## TODO
-#'
-#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn index.gdsn closefn.gds
-#' @importFrom SNPRelate snpgdsOpen
-#' @importFrom class knn
-#' @encoding UTF-8
-#' @export
-computeKNNProfile <- function(listEigenvector, K, D, pRAIDS) {
-
-    # gdsProfile, listEigenvector,
-    # listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-    # studyIDSyn, spRef, fieldPopInfAnc="SuperPop",
-    # kList=seq(2, 15, 1), pcaList=seq(2, 15, 1)
-    ## Assign default value if kList is NULL
-
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-
-    spRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot/superPop"))
-    names(spRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
-    listCatPop <- unique(spRef)
-    closefn.gds(gdsReference)
-
-    resMat <- lapply(seq_len(length(listEigenvector$sample.id)),
-                     FUN=function(i, listEigenvector, D, K){
-            eigenvect <- rbind(listEigenvector$eigenvector.ref,
-                               listEigenvector$eigenvector[i,,drop=FALSE])
-
-            pcaND <- eigenvect[ ,seq_len(D)]
-            yPred <-
-                knn(train=pcaND[rownames(eigenvect)[-1*nrow(eigenvect)],],
-                    test=pcaND[rownames(eigenvect)[nrow(eigenvect)],,
-                               drop=FALSE],
-                    cl=factor(spRef[rownames(eigenvect)[-1*nrow(eigenvect)]],
-                              levels=listCatPop, labels=listCatPop),
-                    k=K,
-                    prob=FALSE)
-
-
-            df <- data.frame(sample.id = listEigenvector$sample.id[i],
-                             D=D,
-                             K=K,
-                             stringsAsFactors = FALSE)
-            df[[pRAIDS$fieldPopInfAnc]] <- listCatPop[as.integer(yPred)]
-            return(df)
-        },
-    listEigenvector=listEigenvector,
-    D=D,
-    K=K
-    )
-    resMat <- do.call(rbind, resMat)
-    return(resMat)
-}
-
-
-#' @title Run a k-nearest neighbors analysis on a subset of the
-#' synthetic dataset
-#'
-#' @description The function runs k-nearest neighbors analysis on a
-#' subset of the synthetic data set. The function uses the 'knn' package.
-#'
-#' @param listEigenvector a \code{list} with 3 entries:
-#' 'sample.id', 'eigenvector.ref' and 'eigenvector'. The \code{list} represents
-#' the PCA done on the 1KG reference profiles and the synthetic profiles
-#' projected onto it.
-#'
-#' @param K a TODO.
-#'
-#' @param D a TODO.
-#'
-#' @param dfRef a TODO.
-#'
-#' @param pRAIDS a TODO.
+#' @param dfRef \code{data.frame} TODO of \code{character}
+#' strings representing the
+#' known super population ancestry for the 1KG profiles. The 1KG profile
+#' identifiers are used as names for the \code{vector}.
+#' 
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
 #'
 #' @return a \code{list} containing 4 entries:
 #' \describe{
@@ -493,10 +400,11 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
     # kList=seq(2, 15, 1), pcaList=seq(2, 15, 1)
     ## Assign default value if kList is NULL
 
-    # gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    # 
 
     # spRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot/superPop"))
     # names(spRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
+    
     listCatPop <- unique(dfRef$superPop)
     # closefn.gds(gdsReference)
     listEigenvector$eigenvector.ref <- listEigenvector$eigenvector.ref[row.names(listEigenvector$eigenvector.ref) %in% row.names(dfRef),]

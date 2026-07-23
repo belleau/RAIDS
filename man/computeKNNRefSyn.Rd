@@ -6,26 +6,13 @@
 \title{Run a k-nearest neighbors analysis on a subset of the
 synthetic dataset}
 \usage{
-computeKNNRefSyn(
-  listEigenvector,
-  spRef,
-  listCatPop = c("EAS", "EUR", "AFR", "AMR", "SAS"),
-  pRAIDS
-)
+computeKNNRefSyn(listEigenvector, pRAIDS)
 }
 \arguments{
 \item{listEigenvector}{a \code{list} with 3 entries:
 'sample.id', 'eigenvector.ref' and 'eigenvector'. The \code{list} represents
 the PCA done on the 1KG reference profiles and the synthetic profiles
 projected onto it.}
-
-\item{spRef}{\code{vector} of \code{character} strings representing the
-known super population ancestry for the 1KG profiles. The 1KG profile
-identifiers are used as names for the \code{vector}.}
-
-\item{listCatPop}{a \code{vector} of \code{character} string
-representing the list of possible ancestry assignations. Default:
-\code{c("EAS", "EUR", "AFR", "AMR", "SAS")}.}
 
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
 parameters}
@@ -65,37 +52,7 @@ subset of the synthetic data set. The function uses the 'knn' package.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
-## Load the demo PCA on the synthetic profiles projected on the
-## demo 1KG reference PCA
-data(demoPCASyntheticProfiles)
-
-## Load the known ancestry for the demo 1KG reference profiles
-data(demoKnownSuperPop1KG)
-
-## Path to the demo Profile GDS file is located in this package
-dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
-
-## Open the Profile GDS file
-gdsProfile <- snpgdsOpen(file.path(dataDir, "ex1.gds"))
-
-# The name of the synthetic study
-studyID <- "MYDATA.Synthetic"
-
-## Projects synthetic profiles on 1KG PCA
-results <- computeKNNRefSynthetic(gdsProfile=gdsProfile,
-    listEigenvector=demoPCASyntheticProfiles,
-    listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"), studyIDSyn=studyID,
-    spRef=demoKnownSuperPop1KG)
-
-## The inferred ancestry for the synthetic profiles for different values
-## of D and K
-head(results$matKNN)
-
-## Close Profile GDS file (important)
-closefn.gds(gdsProfile)
+## TODO
 
 }
 \author{

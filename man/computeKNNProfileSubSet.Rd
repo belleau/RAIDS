@@ -14,13 +14,21 @@ computeKNNProfileSubSet(listEigenvector, K, D, dfRef, pRAIDS)
 the PCA done on the 1KG reference profiles and the synthetic profiles
 projected onto it.}
 
-\item{K}{a TODO.}
+\item{K}{a \code{integer} representing value tested for the  K parameter.
+The K parameter represents the
+number of neighbors used in the K-nearest neighbors analysis.}
 
-\item{D}{a TODO.}
+\item{D}{a \code{integer} representing
+value tested for the  D parameter. The D parameter represents the
+number of dimensions used in the PCA analysis.}
 
-\item{dfRef}{a TODO.}
+\item{dfRef}{\code{data.frame} TODO of \code{character}
+strings representing the
+known super population ancestry for the 1KG profiles. The 1KG profile
+identifiers are used as names for the \code{vector}.}
 
-\item{pRAIDS}{a TODO.}
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters}
 }
 \value{
 a \code{list} containing 4 entries:

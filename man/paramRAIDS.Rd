@@ -121,8 +121,8 @@ must exist. Default: \code{NULL}.}
 'PCAknn', 'haploAdmixture'. It specifies the genotype ancestry inference.
 Default: \code{"PCAknn"}.}
 
-\item{sampleRef}{a \code{array} is a subset of sample.id
-of the gdsReference. If it NULL mean all the sample.id.
+\item{sampleRef}{a \code{array} of \code{character} is a subset
+of sample.id from the gdsReference. If it is NULL, it means all the sample.id.
 Only the sample in sampleRef will be used for the ancestry inference.
 Example: remove the admix samples from the reference.
 Default: \code{NULL}.}
@@ -216,6 +216,11 @@ used in the pruning step. Default: \code{NULL}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
+
+\item{dfRef}{\code{data.frame} TODO of \code{character}
+strings representing the
+known super population ancestry for the 1KG profiles. The 1KG profile
+identifiers are used as names for the \code{vector}.}
 }
 \value{
 The integer \code{0L} when successful.
