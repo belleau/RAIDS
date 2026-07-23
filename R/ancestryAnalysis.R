@@ -75,7 +75,8 @@
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds ls.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @importFrom rlang arg_match
 #' @encoding UTF-8
 #' @export
@@ -170,16 +171,16 @@ pruningProfile2 <- function(pRAIDS) {
     gdsProfile <- openfn.gds(filename=fileGDSSample, readonly=FALSE)
     addGDSStudyPruning(gdsProfile=gdsProfile, pruned=pruned)
     closefn.gds(gdsfile=gdsProfile)
-    closefn.gds(gdsReference)
+    snpgdsClose(gdsReference)
 
     return(pRAIDS)
 }
 
-#' @title Run most steps leading to the ancestry inference call on a specific
-#' RNA profile
+#' @title Run most steps leading to the ancestry inference call based on PCA
+#' and KNN on a specific profile
 #'
 #' @description This function runs most steps leading to the ancestry inference
-#' call on a specific RNA profile. First, the function creates the
+#' call on a specific profile. First, the function creates the
 #' Profile GDS file for the specific profile using the information from a
 #' RDS Sample description file and the Population Reference GDS file.
 #'
@@ -410,6 +411,8 @@ pruningProfile2 <- function(pRAIDS) {
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom utils write.csv
+#' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds ls.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @importFrom rlang arg_match
 #' @encoding UTF-8
 #' @export
@@ -523,8 +526,8 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                             currentProfile=pRAIDS$pedStudy$Name.ID[1], studyID=pRAIDS$studyDF$study.id,
                             chrInfo=pRAIDS$chrInfo, studyType=studyTypeLeg, gdsRefAnnot=gdsRefAnnot,
                             blockID=pRAIDS$blockTypeId, verbose=pRAIDS$verbose)
-    closefn.gds(gdsProfile)
-    closefn.gds(gdsReference)
+    snpgdsClose(gdsProfile)
+    snpgdsClose(gdsReference)
     closefn.gds(gdsRefAnnot)
 
     ##########################
@@ -601,8 +604,8 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                         studyID=pRAIDS$studyDFSyn$study.id,
                         popName="superPop")
     ## Close Profile GDS file (important)
-    closefn.gds(gdsProfile)
-    closefn.gds(gdsReference)
+    snpgdsClose(gdsProfile)
+    snpgdsClose(gdsReference)
 
     # bla <- list(resSyn=resSyn,
     #             pedSyn=pedSyn,
@@ -740,7 +743,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #' closefn.gds(gdsProfile)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds ls.gdsn closefn.gds
 #' @importFrom class knn
 #' @encoding UTF-8
 #' @export
