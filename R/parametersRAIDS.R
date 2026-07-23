@@ -65,9 +65,15 @@
 #' must exist. Default: \code{NULL}.
 #'
 #' @param inferenceType a \code{character} string with two possible values:
-#' 'PCAnn', 'haploAdmixture'. It specifies the genotype ancestry inference. 
-#' Default: \code{"PCAnn"}.
+#' 'PCAknn', 'haploAdmixture'. It specifies the genotype ancestry inference. 
+#' Default: \code{"PCAknn"}.
 #'
+#' @param sampleRef a \code{array} is a subset of sample.id
+#' of the gdsReference. If it NULL mean all the sample.id.
+#' Only the sample in sampleRef will be used for the ancestry inference.
+#' Example: remove the admix samples from the reference.
+#' Default: \code{NULL}.
+#' 
 #' @param batch a single positive \code{integer} representing the current
 #' identifier for the batch. Beware, this field is not stored anymore. 
 #' Default: \code{1}.
@@ -190,7 +196,8 @@ paramRAIDS <- function(studyDF=NULL,
                         pathProfileGDS=NULL,
                         fileReferenceGDS=NULL,
                         fileReferenceAnnotGDS=NULL,
-                        inferenceType="PCAnn",
+                        inferenceType="PCAknn",
+                        sampleRef=NULL,
                         batch=1,
                         prefix="1",
                         nbSim=1,
@@ -282,6 +289,7 @@ paramRAIDS <- function(studyDF=NULL,
                         fileReferenceGDS=fileReferenceGDS,
                         fileReferenceAnnotGDS=fileReferenceAnnotGDS,
                         inferenceType=inferenceType,
+                        sampleRef=sampleRef,
                         batch=batch,
                         prefix=prefix,
                         nbSim=nbSim,

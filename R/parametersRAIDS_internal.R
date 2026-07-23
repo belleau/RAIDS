@@ -32,6 +32,7 @@ validateParamRAIDS <- function(parameters) {
                                 "fileReferenceGDS", ## DONE AD
                                 "fileReferenceAnnotGDS", ## DONE AD
                                 "inferenceType",
+                                "sampleRef",
                                 "batch",
                                 "prefix",
                                 "nbSim",

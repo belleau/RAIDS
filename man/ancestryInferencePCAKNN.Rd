@@ -3,8 +3,8 @@
 \encoding{UTF-8}
 \name{ancestryInferencePCAKNN}
 \alias{ancestryInferencePCAKNN}
-\title{Run most steps leading to the ancestry inference call on a specific
-RNA profile}
+\title{Run most steps leading to the ancestry inference call based on PCA
+and KNN on a specific profile}
 \usage{
 ancestryInferencePCAKNN(pRAIDS = paramRAIDS())
 }
@@ -149,7 +149,7 @@ ancestry.}
 }
 \description{
 This function runs most steps leading to the ancestry inference
-call on a specific RNA profile. First, the function creates the
+call on a specific profile. First, the function creates the
 Profile GDS file for the specific profile using the information from a
 RDS Sample description file and the Population Reference GDS file.
 }
