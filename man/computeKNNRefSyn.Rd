@@ -52,7 +52,49 @@ subset of the synthetic data set. The function uses the 'knn' package.
 }
 \examples{
 
-## TODO
+## Required library
+library(gdsfmt)
+
+## Load the demo PCA on the synthetic profiles projected on the
+## demo 1KG reference PCA
+data(demoPCASyntheticProfiles)
+
+## Load the known ancestry for the demo 1KG reference profiles
+data(demoKnownSuperPop1KG)
+
+## Path to the demo Profile GDS file is located in this package
+dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
+
+
+# The name of the synthetic study
+studyID <- "MYDATA.Synthetic"
+
+studyDF <- data.frame(study.id=studyID,
+                             study.desc=studyID,
+                             study.platform="NotDef",
+                             stringsAsFactors=FALSE)
+pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+pedStudy <- data.frame(Name.ID=c("ex1"),
+                             Case.ID=c("ex1"),
+                             Sample.Type=c("type"),
+                             Diagnosis="NotDef",
+                             Source=c("NotDef"),
+                             stringsAsFactors=FALSE)
+     row.names(pedStudy) <- pedStudy$Name.ID
+
+pRAIDS <- paramRAIDS(studyDF=studyDF,
+                      pedStudy=pedStudy,
+                      pathProfileGDS=pathProfileGDS,
+                      fileReferenceGDS=fileReferenceGDS)
+## Projects synthetic profiles on 1KG PCA
+results <- computeKNNRefSyn(listEigenvector=demoPCASyntheticProfiles,
+    pRAIDS=pRAIDS)
+
+## The inferred ancestry for the synthetic profiles for different values
+## of D and K
+head(results$matKNN)
+
 
 }
 \author{
