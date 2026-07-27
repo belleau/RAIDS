@@ -573,7 +573,6 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                                   pRAIDS, spRef) {
                          synthKNN <- computePoolSyntheticAncestryGr2(sampleRM=sampleRM[x,],
                                                                      spRef=spRef,
-                                                                     listCatPop=unique(spRef),
                                                                      pRAIDS = pRAIDS)
                          return(synthKNN$matKNN)
                      }, sampleRM=sampleRM, pRAIDS=pRAIDS,
@@ -826,10 +825,6 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #' known super population ancestry for the 1KG profiles. The 1KG profile
 #' identifiers are used as names for the \code{vector}.
 #'
-#' @param listCatPop a \code{vector} of \code{character} string
-#' representing the list of possible ancestry assignations. Default:
-#' \code{("EAS", "EUR", "AFR", "AMR", "SAS")}.
-#'
 #' @param pRAIDS a \code{parametersRAIDS} an object containing all RAIDS
 #' parameters.
 #'
@@ -860,14 +855,59 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #' @examples
 #'
 #' ## TODO
+#' ## Load the known ancestry for the demo 1KG reference profiles
+#' data(demoKnownSuperPop1KG)
+#' 
+#' # The name of the synthetic study
+#' studyID <- "MYDATA.Synthetic"
+#' 
+#' samplesRM <- c("HG00246", "HG00325", "HG00611", "HG01173", "HG02165",
+#'     "HG01112", "HG01615", "HG01968", "HG02658", "HG01850", "HG02013",
+#'     "HG02465", "HG02974", "HG03814", "HG03445", "HG03689", "HG03789",
+#'     "NA12751", "NA19107", "NA18548", "NA19075", "NA19475", "NA19712",
+#'     "NA19731", "NA20528", "NA20908")
 #'
+#' ## Path to the demo Profile GDS file is located in this package
+#' dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
+#'
+#'
+#' # The name of the synthetic study
+#' studyID <- "MYDATA"
+#' 
+#' studyDF <- data.frame(study.id=studyID,
+#'                              study.desc=studyID,
+#'                              study.platform="NotDef",
+#'                              stringsAsFactors=FALSE)
+#' pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+#' fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+#' pedStudy <- data.frame(Name.ID=c("ex1"),
+#'                              Case.ID=c("ex1"),
+#'                              Sample.Type=c("type"),
+#'                              Diagnosis="NotDef",
+#'                              Source=c("NotDef"),
+#'                              stringsAsFactors=FALSE)
+#'      row.names(pedStudy) <- pedStudy$Name.ID
+#' 
+#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'                       pedStudy=pedStudy,
+#'                       pathProfileGDS=pathProfileGDS,
+#'                       fileReferenceGDS=fileReferenceGDS)
+#' 
+#' result <- computePoolSyntheticAncestryGr2(sampleRM=samplesRM,
+#'                              spRef=demoKnownSuperPop1KG,
+#'                              pRAIDS=pRAIDS)
+#' ## The ancestry inference for the synthetic data using
+#' ## different K and D values
+#' head(result$matKNN)
+#' 
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom rlang arg_match
 #' @importFrom gdsfmt openfn.gds closefn.gds
 #' @encoding UTF-8
 #' @export
 computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
-    listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"), pRAIDS) {
+    pRAIDS) {
 
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
                                 paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
@@ -877,7 +917,7 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
         sampleRM=sampleRM, spRef=spRef,
         studyIDSyn=pRAIDS$studyDFSyn$study.id,
         np=pRAIDS$np,
-        listCatPop=listCatPop,
+        listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
         pcaList=pRAIDS$pcaList,
         fieldPopInfAnc=pRAIDS$fieldPopInfAnc,
         kList=pRAIDS$kList,

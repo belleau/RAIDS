@@ -7,12 +7,7 @@
 of synthetic data using all 1KG profiles except the ones used to generate
 the synthetic profiles}
 \usage{
-computePoolSyntheticAncestryGr2(
-  sampleRM,
-  spRef,
-  listCatPop = c("EAS", "EUR", "AFR", "AMR", "SAS"),
-  pRAIDS
-)
+computePoolSyntheticAncestryGr2(sampleRM, spRef, pRAIDS)
 }
 \arguments{
 \item{sampleRM}{a \code{vector} of \code{character} strings representing
@@ -26,10 +21,6 @@ identifiers are used as names for the \code{vector}.}
 \item{spRef}{\code{vector} of \code{character} strings representing the
 known super population ancestry for the 1KG profiles. The 1KG profile
 identifiers are used as names for the \code{vector}.}
-
-\item{listCatPop}{a \code{vector} of \code{character} string
-representing the list of possible ancestry assignations. Default:
-\code{("EAS", "EUR", "AFR", "AMR", "SAS")}.}
 
 \item{pRAIDS}{a \code{parametersRAIDS} an object containing all RAIDS
 parameters.}
@@ -64,6 +55,51 @@ analysis using a range of K and D values is done.
 \examples{
 
 ## TODO
+## Load the known ancestry for the demo 1KG reference profiles
+data(demoKnownSuperPop1KG)
+
+# The name of the synthetic study
+studyID <- "MYDATA.Synthetic"
+
+samplesRM <- c("HG00246", "HG00325", "HG00611", "HG01173", "HG02165",
+    "HG01112", "HG01615", "HG01968", "HG02658", "HG01850", "HG02013",
+    "HG02465", "HG02974", "HG03814", "HG03445", "HG03689", "HG03789",
+    "NA12751", "NA19107", "NA18548", "NA19075", "NA19475", "NA19712",
+    "NA19731", "NA20528", "NA20908")
+
+## Path to the demo Profile GDS file is located in this package
+dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
+
+
+# The name of the synthetic study
+studyID <- "MYDATA"
+
+studyDF <- data.frame(study.id=studyID,
+                             study.desc=studyID,
+                             study.platform="NotDef",
+                             stringsAsFactors=FALSE)
+pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+pedStudy <- data.frame(Name.ID=c("ex1"),
+                             Case.ID=c("ex1"),
+                             Sample.Type=c("type"),
+                             Diagnosis="NotDef",
+                             Source=c("NotDef"),
+                             stringsAsFactors=FALSE)
+     row.names(pedStudy) <- pedStudy$Name.ID
+
+pRAIDS <- paramRAIDS(studyDF=studyDF,
+                      pedStudy=pedStudy,
+                      pathProfileGDS=pathProfileGDS,
+                      fileReferenceGDS=fileReferenceGDS)
+
+result <- computePoolSyntheticAncestryGr2(sampleRM=samplesRM,
+                             spRef=demoKnownSuperPop1KG,
+                             pRAIDS=pRAIDS)
+## The ancestry inference for the synthetic data using
+## different K and D values
+head(result$matKNN)
+
 
 }
 \references{

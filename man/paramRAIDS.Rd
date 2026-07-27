@@ -216,11 +216,6 @@ used in the pruning step. Default: \code{NULL}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
-
-\item{dfRef}{\code{data.frame} TODO of \code{character}
-strings representing the
-known super population ancestry for the 1KG profiles. The 1KG profile
-identifiers are used as names for the \code{vector}.}
 }
 \value{
 The integer \code{0L} when successful.

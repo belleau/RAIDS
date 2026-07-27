@@ -74,11 +74,6 @@
 #' Example: remove the admix samples from the reference.
 #' Default: \code{NULL}.
 #' 
-#' @param dfRef \code{data.frame} TODO of \code{character}
-#' strings representing the
-#' known super population ancestry for the 1KG profiles. The 1KG profile
-#' identifiers are used as names for the \code{vector}.
-#' 
 #' @param batch a single positive \code{integer} representing the current
 #' identifier for the batch. Beware, this field is not stored anymore. 
 #' Default: \code{1}.
