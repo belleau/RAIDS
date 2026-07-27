@@ -171,7 +171,7 @@ also created.
 \examples{
 
 ## Required library for GDS
-library(SNPRelate)
+## library(SNPRelate)
 
 ## Path to the demo 1KG GDS file is located in this package
 dataDir <- system.file("extdata", package="RAIDS")
@@ -205,33 +205,21 @@ pathProfileGDS <- file.path(tempdir(), "out.tmp")
 ####################################################################
 set.seed(3043)
 
-gds1KG <- snpgdsOpen(fileReferenceGDS)
-dataRef <- select1KGPop(gds1KG, nbProfiles=2L)
-closefn.gds(gds1KG)
+pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
+    genoSource="snp-pileup",
+    pathProfileGDS=pathProfileGDS,
+    fileReferenceGDS=fileReferenceGDS,
+    fileReferenceAnnotGDS=fileAnnotGDS
+    )
 
-## Required library for this example to run correctly
-if (requireNamespace("Seqinfo", quietly=TRUE) &&
-     requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) {
+# gds1KG <- snpgdsOpen(fileReferenceGDS)
+# dataRef <- select1KGPop(gds1KG, nbProfiles=2L)
+# closefn.gds(gds1KG)
 
-    ## Chromosome length information
-    ## chr23 is chrX, chr24 is chrY and chrM is 25
-    chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
 
-    \donttest{
+res <- ancestryInferencePCAKNN(pRAIDS=pRAIDS)
 
-        res <- inferAncestryGeneAware(profileFile=demoProfileEx1,
-            pathProfileGDS=pathProfileGDS,
-            fileReferenceGDS=fileReferenceGDS,
-            fileReferenceAnnotGDS=fileAnnotGDS,
-            chrInfo=chrInfo,
-            syntheticRefDF=dataRef,
-            blockTypeID="GeneS.Ensembl.Hsapiens.v86",
-            genoSource="snp-pileup")
-
-        unlink(pathProfileGDS, recursive=TRUE, force=TRUE)
-
-    }
-}
+unlink(file.path(pathProfileGDS, paste0(res$pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
 
 }
 \references{

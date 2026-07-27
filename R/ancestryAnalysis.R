@@ -347,7 +347,7 @@ pruningProfile2 <- function(pRAIDS) {
 #' @examples
 #'
 #' ## Required library for GDS
-#' library(SNPRelate)
+#' ## library(SNPRelate)
 #'
 #' ## Path to the demo 1KG GDS file is located in this package
 #' dataDir <- system.file("extdata", package="RAIDS")
@@ -381,34 +381,22 @@ pruningProfile2 <- function(pRAIDS) {
 #' ####################################################################
 #' set.seed(3043)
 #'
-#' gds1KG <- snpgdsOpen(fileReferenceGDS)
-#' dataRef <- select1KGPop(gds1KG, nbProfiles=2L)
-#' closefn.gds(gds1KG)
+#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
+#'     genoSource="snp-pileup",
+#'     pathProfileGDS=pathProfileGDS,
+#'     fileReferenceGDS=fileReferenceGDS,
+#'     fileReferenceAnnotGDS=fileAnnotGDS
+#'     )
+#' 
+#' # gds1KG <- snpgdsOpen(fileReferenceGDS)
+#' # dataRef <- select1KGPop(gds1KG, nbProfiles=2L)
+#' # closefn.gds(gds1KG)
+#' 
+#' 
+#' res <- ancestryInferencePCAKNN(pRAIDS=pRAIDS)
 #'
-#' ## Required library for this example to run correctly
-#' if (requireNamespace("Seqinfo", quietly=TRUE) &&
-#'      requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) {
-#'
-#'     ## Chromosome length information
-#'     ## chr23 is chrX, chr24 is chrY and chrM is 25
-#'     chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
-#'
-#'     \donttest{
-#'
-#'         res <- inferAncestryGeneAware(profileFile=demoProfileEx1,
-#'             pathProfileGDS=pathProfileGDS,
-#'             fileReferenceGDS=fileReferenceGDS,
-#'             fileReferenceAnnotGDS=fileAnnotGDS,
-#'             chrInfo=chrInfo,
-#'             syntheticRefDF=dataRef,
-#'             blockTypeID="GeneS.Ensembl.Hsapiens.v86",
-#'             genoSource="snp-pileup")
-#'
-#'         unlink(pathProfileGDS, recursive=TRUE, force=TRUE)
-#'
-#'     }
-#' }
-#'
+#' unlink(file.path(pathProfileGDS, paste0(res$pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom utils write.csv
 #' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds ls.gdsn closefn.gds
@@ -653,7 +641,8 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                 paraSample=resCall$paraSample, # Result of the parameter selection
                 KNNSample=resCall$KNNSample$matKNN, # KNN for the profile
                 KNNSynthetic=resSyn, # KNN results for synthetic data
-                Ancestry=resCall$Ancestry) # the ancestry call fo the profile
+                Ancestry=resCall$Ancestry,
+                pRAIDS=pRAIDS) # the ancestry call fo the profile
     ## Successful
     return(res)
 }
@@ -748,6 +737,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds closefn.gds
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
 #' @importFrom class knn
 #' @encoding UTF-8
 #' @export
@@ -755,14 +745,14 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
                                     paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-    gdsProfile <- openfn.gds(filename=fileGDSProfile)
+    gdsProfile <- snpgdsOpen(filename=fileGDSProfile)
 
     ## Validate the input parameters
     # validateComputeKNNRefSynthetic(gdsProfile=gdsProfile,
     # listEigenvector=listEigenvector,
     # listCatPop=listCatPop, studyIDSyn=pRAIDS$studyDFSyn$study.id, spRef=spRef,
     # fieldPopInfAnc=pRAIDS$fieldPopInfAnc, kList=pRAIDS$kList, pcaList=pRAIDS$pcaList)
-    gdsReference <- openfn.gds(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
     dfRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))
     row.names(dfRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
     if(! is.null(pRAIDS$sampleRef)){
@@ -770,11 +760,11 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
     }
     
     # listCatPop <- unique(spRef)
-    closefn.gds(gdsReference)
+    snpgdsClose(gdsReference)
 
     ## Get study information from the GDS Sample file
     studyAnnotAll <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
-    closefn.gds(gdsProfile)
+    snpgdsClose(gdsProfile)
     studyAnnot <- studyAnnotAll[which(studyAnnotAll$study.id ==
                     pRAIDS$studyDFSyn$study.id & studyAnnotAll$data.id %in%
                     listEigenvector$sample.id), ]
@@ -930,8 +920,6 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
         message("computePoolSyntheticAncestryGr2 p4 ", Sys.time())
     }
     synthKNN <- computeKNNRefSyn(listEigenvector=resPCA,
-                                 spRef=spRef,
-                                 listCatPop=listCatPop,
                                  pRAIDS=pRAIDS)
     if(pRAIDS$verbose){
         message("computePoolSyntheticAncestryGr2 end ", Sys.time())
