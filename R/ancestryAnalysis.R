@@ -319,6 +319,8 @@ pruningProfile2 <- function(pRAIDS) {
 #' ancestry.}
 #' }
 #' }
+#' \item{\code{pRAIDS}}{ a \code{list} of class \code{parametersRAIDS} a list of 
+#' the parameters.} 
 #' }
 #'
 #' @details

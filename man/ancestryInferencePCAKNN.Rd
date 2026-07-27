@@ -145,6 +145,8 @@ number of neighbors) used to infer the ancestry.}
 ancestry.}
 }
 }
+\item{\code{pRAIDS}}{ a \code{list} of class \code{parametersRAIDS} a list of
+the parameters.}
 }
 }
 \description{
