@@ -854,7 +854,6 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #'
 #' @examples
 #'
-#' ## TODO
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
 #' 
@@ -1131,57 +1130,48 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 #'
 #' @examples
 #'
-#'
-#' ## Required library
-#' library(gdsfmt)
-#'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#'
+#' 
 #' ## The Reference GDS file
 #' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
-#' ## Open the Reference GDS file
-#' gdsRef <- snpgdsOpen(file.path(path1KG, "ex1_good_small_1KG.gds"))
-#'
-#' ## Path to the demo synthetic results files
-#' ## List of the KNN result files from PCA run on synthetic data
-#' dataDirRes <- system.file("extdata/demoAncestryCall/ex1", package="RAIDS")
-#' listFilesName <- dir(file.path(dataDirRes), ".rds")
-#' listFiles <- file.path(file.path(dataDirRes) , listFilesName)
-#' syntheticKNN <- lapply(listFiles, FUN=function(x){return(readRDS(x))})
-#' syntheticKNN <- do.call(rbind, syntheticKNN)
-#'
-#' # The name of the synthetic study
-#' studyID <- "MYDATA.Synthetic"
-#'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#'
-#' ## Open the Profile GDS file
-#' gdsProfile <- snpgdsOpen(file.path(dataDir, "ex1.gds"))
-#' \dontrun{
-#'     pedSyn <- RAIDS:::prepPedSynthetic1KG(gdsReference=gdsRef,
-#'               gdsSample=gdsProfile, studyID=studyID, popName="superPop")
-#'
-#'     ## Run the ancestry inference on one profile called 'ex1'
-#'     ## The values of K and D used for the inference are selected using the
-#'     ## synthetic results listFiles=listFiles,
-#'     resCall <- RAIDS:::computeAncestryFromSynthetic(gdsReference=gdsRef,
-#'                                 gdsProfile=gdsProfile,
-#'                                 syntheticKNN = syntheticKNN,
-#'                                 pedSyn = pedSyn,
-#'                                 currentProfile=c("ex1"),
-#'                                 spRef=demoKnownSuperPop1KG,
-#'                                 studyIDSyn=studyID, np=1L)
-#'
-#'     ## The ancestry called with the optimal D and K values
-#'     resCall$Ancestry
-#' }
-#' ## Close the GDS files (important)
-#' closefn.gds(gdsProfile)
-#' closefn.gds(gdsRef)
-#'
+#' 
+#' # The name of the synthetic study
+#' studyID <- "MYDATA"
+#' 
+#' studyDF <- data.frame(study.id=studyID,
+#'                              study.desc=studyID,
+#'                              study.platform="NotDef",
+#'                              stringsAsFactors=FALSE)
+#' pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+#' fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+#' pedStudy <- data.frame(Name.ID=c("ex1"),
+#'                              Case.ID=c("ex1"),
+#'                              Sample.Type=c("type"),
+#'                              Diagnosis="NotDef",
+#'                              Source=c("NotDef"),
+#'                              stringsAsFactors=FALSE)
+#'      row.names(pedStudy) <- pedStudy$Name.ID
+#' 
+#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'                       pedStudy=pedStudy,
+#'                       pathProfileGDS=pathProfileGDS,
+#'                       fileReferenceGDS=fileReferenceGDS,
+#'                       fieldPopInfAnc="SuperPop")
+#' 
+#' pedSyn <- RAIDS:::prepPedSyntheticRef(pRAIDS)
+#' spRef <- getRefSuperPop2(pRAIDS)
+#' syntheticKNN <- readRDS(file.path(dataDir, "ex1", "KNN.synt.ex1.2.rds"))
+#' resCall <- computeAncestryFromSynthetic2(syntheticKNN=syntheticKNN,
+#'                       pedSyn=pedSyn,
+#'                       spRef=spRef,
+#'                       listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
+#'                       pRAIDS=pRAIDS)
+#' 
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom rlang arg_match

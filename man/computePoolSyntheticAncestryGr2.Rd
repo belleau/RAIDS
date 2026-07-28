@@ -54,7 +54,6 @@ analysis using a range of K and D values is done.
 }
 \examples{
 
-## TODO
 ## Load the known ancestry for the demo 1KG reference profiles
 data(demoKnownSuperPop1KG)
 

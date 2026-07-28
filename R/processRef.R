@@ -142,7 +142,7 @@ getRefSuperPop2 <- function(pRAIDS=pRAIDS) {
 
     if(! popName %in% colnames(dataRef)) {
         stop("The population ", popName, " is not supported ",
-             "(not found in the 1KG GDS file).")
+             "(not found in the reference GDS file).")
     }
 
     dataRef <- dataRef[, popName]
