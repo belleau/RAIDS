@@ -1329,7 +1329,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
-#' @keywords internal
+#' @keywords @export
 prepPedSyntheticRef <- function(pRAIDS) {
     # gdsReference=gdsReference,
     # gdsSample=gdsProfile,
