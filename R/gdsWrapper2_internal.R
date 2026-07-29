@@ -786,8 +786,7 @@ addGenoSynVcf <- function(synProfileRef, synVCFfile, pRAIDS) {
     g[matGeno$refIndex] <- matGeno$g
     gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
     if(! ("genotype" %in% ls.gdsn(gdsProfile))){
-        ## TODO PASCAL: where gdsSample comes from?
-        add.gdsn(gdsSample, "sample.id", c(sampleSim))
+        add.gdsn(gdsProfile, "sample.id", c(sampleSim))
         var.geno <- add.gdsn(gdsProfile, "genotype",
                         valdim=c(length(listSNP), 1), g, storage="bit2")
     }else {
