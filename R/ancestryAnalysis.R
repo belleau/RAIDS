@@ -942,7 +942,7 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
     if(pRAIDS$verbose){
         message("computePoolSyntheticAncestryGr2 p2 ", Sys.time())
     }
-    pcaRef <- computePCARefRMMulti1(listRM=sampleRM, pRAIDS=pRAIDS)
+    pcaRef <- computePCARefRMMulti2(listRM=sampleRM, pRAIDS=pRAIDS)
 
     ## Calculate PCA on the synthetic profiles using 1KG PCA results
 
@@ -1222,7 +1222,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
                                            pedCall=pedSyn, refCall=pRAIDS$fieldPopInRef, predCall=pRAIDS$fieldPopInfAnc,
                                            listCall=listCatPop,kList=pRAIDS$kList,
                                            pcaList=pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCountSyn])
-    listPCARef <- computePCARefRMMulti1(listRM = NULL, pRAIDS = pRAIDS)
+    listPCARef <- computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
     listPCAProfile <- computePCAProfile(listPCA=listPCARef, profileId=pRAIDS$pedStudy$Name.ID[1], pRAIDS=pRAIDS)
     ## Project profile on the PCA created with the reference profiles
     # listPCAProfile <- computePCARefSample(gdsProfile=gdsProfile,

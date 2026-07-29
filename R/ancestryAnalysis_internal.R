@@ -191,7 +191,7 @@ createProfile2 <- function(pRAIDS) {
 #' @importFrom SNPRelate snpgdsPCA snpgdsPCASNPLoading
 #' @encoding UTF-8
 #' @keywords internal
-computePCARefRMMulti1 <- function(listRM, pRAIDS) {
+computePCARefRMMulti2 <- function(listRM, pRAIDS) {
     # gdsProfile, refProfileIDs, listRM, np=1L,
     # algorithm="exact", eigenCount=32L,
     # missingRate=0.025, verbose
