@@ -264,46 +264,6 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
     return(listPCA)
 }
 
-
-# computePCAMulti <- function(pRAIDS) {
-#     # gdsProfile, listPCA,
-#     # sampleRef, studyIDSyn, verbose=FALSE
-#     ## Validate the input parameters
-#     validateComputePCAMultiSynthetic(gdsProfile=gdsProfile,
-#                                      listPCA=listPCA, sampleRef=sampleRef, studyIDSyn=studyIDSyn,
-#                                      verbose=verbose)
-#
-#     ## Identify profiles from synthetic data set
-#     study.annot <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
-#     study.annot <- study.annot[which(study.annot$study.id == studyIDSyn &
-#                                          study.annot$case.id %in% sampleRef),]
-#
-#     ## SNP loading in principal component analysis
-#     listPCA[["snp.load"]] <- snpgdsPCASNPLoading(listPCA[["pca.unrel"]],
-#                                                  gdsobj=gdsProfile, num.thread=1,
-#                                                  verbose=verbose)
-#
-#     ## Project synthetic profiles onto existing principal component axes
-#     listPCA[["samp.load"]] <- snpgdsPCASampLoading(listPCA[["snp.load"]],
-#                                                    gdsobj=gdsProfile,
-#                                                    sample.id=study.annot$data.id,
-#                                                    num.thread=1L, verbose=verbose)
-#
-#     rownames(listPCA[["pca.unrel"]]$eigenvect) <-
-#         listPCA[["pca.unrel"]]$sample.id
-#
-#     rownames(listPCA[["samp.load"]]$eigenvect) <-
-#         listPCA[["samp.load"]]$sample.id
-#
-#     ## Return the eigenvectors for the 1KG reference profiles
-#     ## and the eigenvectors for the synthetic data set projected on the 1KG PCA
-#     listRes <- list(sample.id=listPCA[["samp.load"]]$sample.id,
-#                     eigenvector.ref=listPCA[["pca.unrel"]]$eigenvect,
-#                     eigenvector=listPCA[["samp.load"]]$eigenvect)
-#
-#     return(listRes)
-# }
-
 #' @title Calculate Principal Component Analysis (PCA) on SNV genotype data set
 #'
 #' @description The functions calculates the principal component analysis (PCA)

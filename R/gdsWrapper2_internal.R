@@ -195,7 +195,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 
 
 
-    if (pRAIDS$verbose) { message("End Raw ", profileName, " ",  Sys.time()) }
+    if (pRAIDS$verbose) { message("End Raw ", pRAIDS$pedStudy$Name.ID[1], " ",  Sys.time()) }
     closefn.gds(gdsfile=gdsSample)
     ## Success
     return(pRAIDS)
@@ -355,7 +355,7 @@ generateProfileGenoCall <- function(pRAIDS=pRAIDS) {
     rm(g)
     closefn.gds(gdsfile=gdsProfile)
 
-    if (pRAIDS$verbose) { message("End ", profileName, " ",  Sys.time()) }
+    if (pRAIDS$verbose) { message("End ", pRAIDS$pedStudy$Name.ID[1], " ",  Sys.time()) }
 
     ## Success
     return(0L)
@@ -510,7 +510,7 @@ generateProfileLoadGenoVCF <- function(pRAIDS=pRAIDS) {
     rm(g)
     closefn.gds(gdsfile=gdsProfile)
 
-    if (pRAIDS$verbose) { message("End ", profileName, " ",  Sys.time()) }
+    if (pRAIDS$verbose) { message("End ", pRAIDS$pedStudy$Name.ID[1], " ",  Sys.time()) }
 
     ## Success
     return(pRAIDS)
