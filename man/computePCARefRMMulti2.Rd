@@ -12,7 +12,8 @@ computePCARefRMMulti2(listRM, pRAIDS)
 identifiers for the reference samples that need to be removed for the
 PCA analysis.}
 
-\item{pRAIDS}{a TODO.}
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters}
 }
 \value{
 a \code{list} containing 2 entries:

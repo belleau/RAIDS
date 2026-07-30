@@ -41,9 +41,6 @@ as an extra column to the final 'data.frame'. In that situation, the
 }
 \examples{
 
-## Required library
-library(gdsfmt)
-
 
 ## Load the known ancestry for the demo 1KG reference profiles
 data(demoKnownSuperPop1KG)

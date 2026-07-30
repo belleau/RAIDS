@@ -1285,9 +1285,6 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
-#'
 #'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)

@@ -8,11 +8,14 @@
 computePCAProfile(listPCA, profileId, pRAIDS)
 }
 \arguments{
-\item{listPCA}{a TODO.}
+\item{listPCA}{a \code{list} containing the PCA \code{object} generated
+with the 1KG reference profiles.}
 
-\item{profileId}{a TODO.}
+\item{profileId}{a \code{character} string representing the profile
+identifier.}
 
-\item{pRAIDS}{a TODO.}
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters}
 }
 \value{
 a \code{list} containing 2 entries:
@@ -30,7 +33,42 @@ for a list of pruned SNVs present in a Profile GDS file. The
 }
 \examples{
 
-## TODO
+## Load the known ancestry for the demo 1KG reference profiles
+data(demoKnownSuperPop1KG)
+
+## The Reference GDS file
+path1KG <- system.file("extdata/tests", package="RAIDS")
+
+## Path to the demo Profile GDS file is located in this package
+dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
+
+# The name of the synthetic study
+studyID <- "MYDATA"
+
+studyDF <- data.frame(study.id=studyID,
+                             study.desc=studyID,
+                             study.platform="NotDef",
+                             stringsAsFactors=FALSE)
+pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+pedStudy <- data.frame(Name.ID=c("ex1"),
+                             Case.ID=c("ex1"),
+                             Sample.Type=c("type"),
+                             Diagnosis="NotDef",
+                             Source=c("NotDef"),
+                             stringsAsFactors=FALSE)
+     row.names(pedStudy) <- pedStudy$Name.ID
+
+pRAIDS <- paramRAIDS(studyDF=studyDF,
+                      pedStudy=pedStudy,
+                      pathProfileGDS=pathProfileGDS,
+                      fileReferenceGDS=fileReferenceGDS,
+                      fieldPopInfAnc="SuperPop")
+
+listPCARef <- RAIDS:::computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
+listPCAProfile <- RAIDS:::computePCAProfile(listPCA=listPCARef, 
+                      profileId=pRAIDS$pedStudy$Name.ID[1], 
+                      pRAIDS=pRAIDS)
 
 }
 \references{

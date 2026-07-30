@@ -165,7 +165,8 @@ createProfile2 <- function(pRAIDS) {
 #' identifiers for the reference samples that need to be removed for the
 #' PCA analysis.
 #'
-#' @param pRAIDS a TODO.
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
 #'
 #' @return a \code{list} containing 2 entries:
 #' \describe{
@@ -269,12 +270,15 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
 #' @description The functions calculates the principal component analysis (PCA)
 #' for a list of pruned SNVs present in a Profile GDS file. The
 #' \link[SNPRelate]{snpgdsPCA} function is used to do the calculation.
+#' 
+#' @param listPCA a \code{list} containing the PCA \code{object} generated
+#' with the 1KG reference profiles.
 #'
-#' @param listPCA a TODO.
+#' @param profileId a \code{character} string representing the profile
+#' identifier.
 #'
-#' @param profileId a TODO.
-#'
-#' @param pRAIDS a TODO.
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
 #'
 #' @return a \code{list} containing 2 entries:
 #' \describe{
@@ -293,7 +297,42 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
 #'
 #' @examples
 #'
-#' ## TODO
+#' ## Load the known ancestry for the demo 1KG reference profiles
+#' data(demoKnownSuperPop1KG)
+#' 
+#' ## The Reference GDS file
+#' path1KG <- system.file("extdata/tests", package="RAIDS")
+#'
+#' ## Path to the demo Profile GDS file is located in this package
+#' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
+#' 
+#' # The name of the synthetic study
+#' studyID <- "MYDATA"
+#' 
+#' studyDF <- data.frame(study.id=studyID,
+#'                              study.desc=studyID,
+#'                              study.platform="NotDef",
+#'                              stringsAsFactors=FALSE)
+#' pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+#' fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+#' pedStudy <- data.frame(Name.ID=c("ex1"),
+#'                              Case.ID=c("ex1"),
+#'                              Sample.Type=c("type"),
+#'                              Diagnosis="NotDef",
+#'                              Source=c("NotDef"),
+#'                              stringsAsFactors=FALSE)
+#'      row.names(pedStudy) <- pedStudy$Name.ID
+#' 
+#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'                       pedStudy=pedStudy,
+#'                       pathProfileGDS=pathProfileGDS,
+#'                       fileReferenceGDS=fileReferenceGDS,
+#'                       fieldPopInfAnc="SuperPop")
+#' 
+#' listPCARef <- RAIDS:::computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
+#' listPCAProfile <- RAIDS:::computePCAProfile(listPCA=listPCARef, 
+#'                       profileId=pRAIDS$pedStudy$Name.ID[1], 
+#'                       pRAIDS=pRAIDS)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds closefn.gds
