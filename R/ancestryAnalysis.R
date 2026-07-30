@@ -1264,7 +1264,8 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' generate each synthetic profile would be added
 #' as an extra column to the final 'data.frame'.
 #'
-#' @param pRAIDS an object of class TODO.
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
 #'
 #' @return \code{data.frame} containing the columns extracted from the
 #' GDS Sample 'study.annot' node with a extra column named as the 'popName'

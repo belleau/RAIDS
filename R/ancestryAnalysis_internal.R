@@ -381,10 +381,12 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' value tested for the  D parameter. The D parameter represents the
 #' number of dimensions used in the PCA analysis.
 #' 
-#' @param dfRef \code{data.frame} TODO of \code{character}
-#' strings representing the
-#' known super population ancestry for the 1KG profiles. The 1KG profile
-#' identifiers are used as names for the \code{vector}.
+#' @param dfRef \code{data.frame} of \code{character}
+#' a subset of \code{sample.annot} of the reference \code{GDS} 
+#' the strings representing the known super population ancestry 
+#' for a subset of the reference profiles. The 1KG profile  
+#' identifiers are used as names for the \code{vector}. It must
+#' be indexed by the sample.id.
 #' 
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters

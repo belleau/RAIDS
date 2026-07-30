@@ -9,7 +9,8 @@ of profiles associated to a specific study in the Profile GDS file}
 prepPedSyntheticRef(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{an object of class TODO.}
+\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+parameters}
 }
 \value{
 \code{data.frame} containing the columns extracted from the
