@@ -43,7 +43,42 @@ the file.
 }
 \examples{
 
-## TODO
+## Current directory
+dataDir <- file.path(tempdir())
+
+fileGDS <- file.path(system.file("extdata/tests", package="RAIDS"), "ex1_good_small_1KG.gds")
+
+## Copy required file into current directory
+file.copy(from=file.path(system.file("extdata/tests", package="RAIDS"),
+                    "ex1.txt.gz"), to=dataDir)
+
+## The data.frame containing the information about the study
+## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
+## The entries should be strings, not factors (stringsAsFactors=FALSE)
+studyDF <- data.frame(study.id = "MYDATA",
+                        study.desc = "Description",
+                        study.platform = "PLATFORM",
+                        stringsAsFactors = FALSE)
+
+## The data.frame containing the information about the samples
+## The entries should be strings, not factors (stringsAsFactors=FALSE)
+samplePED <- data.frame(Name.ID=c("ex1", "ex2"),
+                    Case.ID=c("Patient_h11", "Patient_h12"),
+                    Diagnosis=rep("Cancer", 2),
+                    Sample.Type=rep("Primary Tumor", 2),
+                    Source=rep("Databank B", 2), stringsAsFactors=FALSE)
+rownames(samplePED) <- samplePED$Name.ID
+
+pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+    studyDF=studyDF,
+    genoSource="snp-pileup",
+    pedStudy=samplePED,
+    pathProfileGDS=dataDir,
+    fileReferenceGDS=fileGDS
+    )
+infoCov <- RAIDS:::dispatchParseReadCov(pRAIDS)
+names(infoCov)
+
 
 }
 \author{

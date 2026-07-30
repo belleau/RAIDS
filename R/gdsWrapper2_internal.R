@@ -110,25 +110,8 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
     pRAIDS <- infoCov$pRAIDS
 
     rm(infoCov)
-    
-    # if(pRAIDS$genoSource == "snp-pileup") {
-    #     matSample <- readSNVPileupFile(pRAIDS$profileFile, pRAIDS$offset)
-    # } else if(pRAIDS$genoSource == "generic") {
-    #     matSample <- readSNVFileGeneric(pRAIDS$profileFile, pRAIDS$offset)
-    # } else if(pRAIDS$genoSource == "VCF") {
-    #     # tmpProfile <- gsub(".vcf.gz", "",listMat[pos])
-    #     matSample <- readSNVVCF(pRAIDS$profileFile,
-    #                             profileName=pRAIDS$pedStudy$Name.ID[1], pRAIDS$offset)
-    # } else if(pRAIDS$genoSource == "bam"){
-    #     colnames(pRAIDS$listPos)[seq_len(2)] <- c("chr", "start")
-    #     matSample <- readSNVBAM(fileName=pRAIDS$profileFile,
-    #                             varSelected=pRAIDS$listPos, paramSNVBAM=pRAIDS$paramProfileGDS,
-    #                             pRAIDS$offset,
-    #                             verbose=pRAIDS$verbose)
-    #     # listPos <- do.call(rbind, listPos)
-    #     colnames(pRAIDS$listPos)[seq_len(2)] <- c("snp.chromosome", "snp.position")
 
-    # }
+    
     # matAll <- merge(matSample[,c( "Chromosome", "Position",
     #                               "File1R",  "File1A",
     #                               "count" )],
