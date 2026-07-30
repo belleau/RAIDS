@@ -81,7 +81,7 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
     df <- NULL
 
     if(is.null(freqCutoff)){
-        snp.AF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))
+        snpAF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))
         df <- data.frame(CHROM=snpChromosome,
                             POS=as.integer(snpPosition + offset),
                             ID=rep(".", length(snpChromosome)),
@@ -89,7 +89,7 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
                             ALT=allele[2,],
                             QUAL=rep(".", length(snpChromosome)),
                             FILTER=rep(".", length(snpChromosome)),
-                            INFO=paste0("AF=", snp.AF),
+                            INFO=paste0("AF=", snpAF),
                             stringsAsFactors=FALSE)
     } else {
         if( length(which(paste0("snp.",
@@ -223,9 +223,9 @@ snvListVCFRef <- function(pRAIDS, fileOut, freqCutoff=NULL) {
     df <- NULL
 
     if(is.null(freqCutoff)){
-        snp.AF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))
+        snpAF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))
         if(! is.null(listSNPKepp)){
-            snp.AF <- snp.AF[listSNPKepp]
+            snpAF <- snpAF[listSNPKepp]
         }
         df <- data.frame(CHROM=snpChromosome,
                          POS=as.integer(snpPosition + pRAIDS$offset),
@@ -234,7 +234,7 @@ snvListVCFRef <- function(pRAIDS, fileOut, freqCutoff=NULL) {
                          ALT=allele[2,],
                          QUAL=rep(".", length(snpChromosome)),
                          FILTER=rep(".", length(snpChromosome)),
-                         INFO=paste0("AF=", snp.AF),
+                         INFO=paste0("AF=", snpAF),
                          stringsAsFactors=FALSE)
     } else {
         if( length(which(paste0("snp.",
@@ -492,7 +492,7 @@ generateVCF <- function(freqCutoff=NULL, chr=NULL , fileOut, pRAIDS) {
     }
     if(! is.null(freqCutoff)){
         snpAF <- read.gdsn(index.gdsn(gdsReference, "snp.AF"))[listSNP]
-        listSNP <- listSNP[snpAF > freqCutoff &  snp.AF < 1-freqCutoff]
+        listSNP <- listSNP[snpAF > freqCutoff &  snpAF < 1-freqCutoff]
     }
     closefn.gds(gdsReference)
     snpVCF <- data.frame(CHROM=snpChromosome[listSNP],
