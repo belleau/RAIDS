@@ -59,7 +59,7 @@
 #'
 #' ## Compute the list of pruned SNVs for a specific profile 'ex1'
 #' ## and save it in the Profile GDS file 'ex1.gds'
-#' pruningProfile2(pRAIDS)
+#' pRAIDS <- pruningProfile2(pRAIDS)
 #'
 #'
 #' ## Check content of Profile GDS file
