@@ -40,22 +40,8 @@ samples from the subcontinental population are selected.
 }
 \examples{
 ## TODO change the example
-## Required library
-library(gdsfmt)
 
-## The number of samples needed by subcontinental population
-## The number is small for demonstration purpose
-nbProfiles <- 5L
-## TODO
-## 1KG GDS Demo file
-## This file only one superpopulation (for demonstration purpose)
-dataDir <- system.file("extdata", package="RAIDS")
-fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
 
-## Extract a selected number of random samples
-## for each subcontinental population
-## In the 1KG GDS Demo file, there is one subcontinental population
-dataR <- select1KGPopForSynthetic(fileReferenceGDS=fileGDS, nbProfiles=nbProfiles)
 
 
 }

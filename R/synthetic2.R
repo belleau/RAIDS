@@ -1,4 +1,182 @@
 #' @title Random selection of a specific number of reference profiles in each
+#' subcontinental population present in the refrence GDS file.
+#' ( call select1KGPopForSynthetic or selectHGDP1kgForSynthetic)
+#'
+#' @description The function randomly selects a fixed number of reference
+#' for each subcontinental population present in the 1KG GDS file. When a
+#' subcontinental population has less samples than the fixed number, all
+#' samples from the subcontinental population are selected.
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @param nbProfiles a single positive \code{integer} representing the number
+#' of samples that will be selected for each subcontinental population present
+#' in the 1KG GDS file. If the number of samples in a specific subcontinental
+#' population is smaller than the \code{nbProfiles}, the number of samples
+#' selected in this
+#' subcontinental population will correspond to the size of this population.
+#'
+#' @return a \code{data.frame} containing those columns:
+#' \describe{
+#' \item{sample.id}{ a \code{character} string representing the sample
+#' identifier. }
+#' \item{pop.group}{ a \code{character} string representing the
+#' subcontinental population assigned to the sample. }
+#' \item{superPop}{ a \code{character} string representing the
+#' super-population assigned to the sample. }
+#' }
+#'
+#' @examples
+#' ## Path to the demo 1KG GDS file is located in this package
+#' dataDir <- system.file("extdata", package="RAIDS")
+#'
+#'
+#' #################################################################
+#' ## The 1KG GDS file and the 1KG SNV Annotation GDS file
+#' ## need to be located in the same directory
+#' ## Note that the 1KG GDS file used for this example is a
+#' ## simplified version and CANNOT be used for any real analysis
+#' #################################################################
+#' path1KG <- file.path(dataDir, "tests")
+#'
+#' fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
+#' fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
+#'
+#' #################################################################
+#' ## The Sample SNP pileup files (one per sample) need
+#' ## to be located in the same directory.
+#' #################################################################
+#' demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
+#'
+#' #################################################################
+#' ## The path where the Profile GDS Files (one per sample)
+#' ## will be created need to be specified.
+#' #################################################################
+#' pathProfileGDS <- file.path(tempdir(), "out.tmp")
+#'
+#' ####################################################################
+#' ## Fix seed to ensure reproducible results
+#' ####################################################################
+#' set.seed(3043)
+#'
+#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
+#'     genoSource="snp-pileup",
+#'     pathProfileGDS=pathProfileGDS,
+#'     fileReferenceGDS=fileReferenceGDS,
+#'     fileReferenceAnnotGDS=fileAnnotGDS
+#'     )
+#'
+#' ## The number of samples needed by subcontinental population
+#' ## The number is small for demonstration purpose
+#' nbProfiles <- 5L
+#' 
+#' fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
+#'
+#' ## Extract a selected number of random samples
+#' ## for each subcontinental population
+#' ## In the 1KG GDS Demo file, there is one subcontinental population
+#' dataR <- selectForSynthetic(pRAIDS=pRAIDS, nbProfiles=nbProfiles)
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom S4Vectors isSingleNumber
+#' @importFrom SNPRelate snpgdsOpen
+#' @encoding UTF-8
+#' @export
+selectForSynthetic <- function(pRAIDS, nbProfiles=30L) {
+    df <- pRAIDS$syntheticRefDF
+    if(is.null(pRAIDS$syntheticRefDF)){
+        if(pRAIDS$reference == "1KGc1.0"){
+            df <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
+                                                              nbProfiles=nbProfiles)
+        }else if(pRAIDS$reference == "HGDP1kgV0.1"){
+            # new synthetic profile selection function for HGDP1kgV0.1
+            df <- selectHGDP1kgForSynthetic(pRAIDS = pRAIDS,
+                                                              nbProfiles=nbProfiles)
+        }
+    }
+    return(df)
+}
+
+
+#' @title Random selection of a specific number of reference profiles in each
+#' subcontinental population present in the 1KG GDS file ( same as select1KGPop
+#' but the function doesn't need gds object as parameters but the file name
+#' of the referenceGDS )
+#'
+#' @description The function randomly selects a fixed number of reference
+#' for each subcontinental population present in the 1KG GDS file. When a
+#' subcontinental population has less samples than the fixed number, all
+#' samples from the subcontinental population are selected.
+#'
+#' @param fileReferenceGDS  a \code{character} string representing the file
+#' name of the Reference GDS file. The file must exist.
+#'
+#' @param nbProfiles a single positive \code{integer} representing the number
+#' of samples that will be selected for each subcontinental population present
+#' in the 1KG GDS file. If the number of samples in a specific subcontinental
+#' population is smaller than the \code{nbProfiles}, the number of samples
+#' selected in this
+#' subcontinental population will correspond to the size of this population.
+#'
+#' @return a \code{data.frame} containing those columns:
+#' \describe{
+#' \item{sample.id}{ a \code{character} string representing the sample
+#' identifier. }
+#' \item{pop.group}{ a \code{character} string representing the
+#' subcontinental population assigned to the sample. }
+#' \item{superPop}{ a \code{character} string representing the
+#' super-population assigned to the sample. }
+#' }
+#'
+#' @examples
+#'
+#' ## Required library
+#' library(gdsfmt)
+#'
+#' ## The number of samples needed by subcontinental population
+#' ## The number is small for demonstration purpose
+#' nbProfiles <- 5L
+#'
+#' ## 1KG GDS Demo file
+#' ## This file only one superpopulation (for demonstration purpose)
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
+#'
+#' ## Extract a selected number of random samples
+#' ## for each subcontinental population
+#' ## In the 1KG GDS Demo file, there is one subcontinental population
+#' dataR <- select1KGPopForSynthetic(fileReferenceGDS=fileGDS, nbProfiles=nbProfiles)
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom S4Vectors isSingleNumber
+#' @importFrom SNPRelate snpgdsOpen
+#' @encoding UTF-8
+#' @export
+select1KGPopForSynthetic <- function(fileReferenceGDS, nbProfiles) {
+
+    ## The fileReferenceGDS must be a character string and the file must exists
+    if (!(is.character(fileReferenceGDS) && (file.exists(fileReferenceGDS)))) {
+        stop("The \'fileReferenceGDS\' must be a character string ",
+             "representing the Reference GDS file. The file must exist.")
+    }
+    ## Validate that nbProfiles parameter is a single positive numeric
+    if(! (isSingleNumber(nbProfiles) && nbProfiles > 0)) {
+        stop("The \'nbProfiles\' parameter must be a single positive integer.")
+    }
+
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS)
+    df <- select1KGPop(gdsReference, nbProfiles)
+    closefn.gds(gdsReference)
+
+    return(df)
+}
+
+#' @title Random selection of a specific number of reference profiles in each
 #' subcontinental population present in the 1KG GDS file ( same as select1KGPop
 #' but the function doesn't need gds object as parameters but the file name
 #' of the referenceGDS )
@@ -30,22 +208,8 @@
 #'
 #' @examples
 #' ## TODO change the example
-#' ## Required library
-#' library(gdsfmt)
-#'
-#' ## The number of samples needed by subcontinental population
-#' ## The number is small for demonstration purpose
-#' nbProfiles <- 5L
-#' ## TODO
-#' ## 1KG GDS Demo file
-#' ## This file only one superpopulation (for demonstration purpose)
-#' dataDir <- system.file("extdata", package="RAIDS")
-#' fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
-#'
-#' ## Extract a selected number of random samples
-#' ## for each subcontinental population
-#' ## In the 1KG GDS Demo file, there is one subcontinental population
-#' dataR <- select1KGPopForSynthetic(fileReferenceGDS=fileGDS, nbProfiles=nbProfiles)
+#' 
+#' 
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
