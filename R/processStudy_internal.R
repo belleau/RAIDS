@@ -186,11 +186,11 @@ validatePruningSample <- function(gdsReference, method, currentProfile, studyID,
 #' the column that will contain the inferred ancestry for the specified
 #' dataset.
 #'
-#' @param kList a \code{vector} of \code{integer} representing  the list of
+#' @param kList a \code{vector} of \code{integer} representing the list of
 #' values tested for the  _K_ parameter. The _K_ parameter represents the
 #' number of neighbors used in the K-nearest neighbor analysis.
 #'
-#' @param pcaList a \code{vector} of \code{integer} representing  the list of
+#' @param pcaList a \code{vector} of \code{integer} representing the list of
 #' values tested for the  _D_ parameter. The _D_ parameter represents the
 #' number of dimensions used in the PCA analysis.
 #'
