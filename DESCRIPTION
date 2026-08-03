@@ -54,6 +54,7 @@ Suggests: testthat,
     BiocStyle,
     withr,
     Seqinfo,
+    GenomeInfoDb,
     BSgenome.Hsapiens.UCSC.hg38,
     EnsDb.Hsapiens.v86
 BugReports: https://github.com/KrasnitzLab/RAIDS/issues
