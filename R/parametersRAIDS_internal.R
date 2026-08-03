@@ -1,10 +1,10 @@
-#' @title Validate the parameters
+#' @title Validate that the parametersRAIDS object is valid
 #'
-#' @description This function validates the parameters present in the 
+#' @description This function validates all the parameters present in the 
 #' \code{parametersRAIDS} object.
 #'
-#' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
+#' @param parameters a \code{parametersRAIDS} an object with all the 
+#' parameters used by the RAIDS workflow.
 #'
 #' @return \code{TRUE} when all the parameters in the object are valid; 
 #' otherwise \code{FALSE}
@@ -59,16 +59,17 @@ validateParamRAIDS <- function(parameters) {
                                 "kList",
                                 "pcaList",
                                 "fieldPopInRef",
-                                "fieldPopInfAnc",
-                                "fieldSubPop",
+                                "fieldPopInfAnc", ## DONE AD
+                                "fieldSubPop", ## DONE AD
                                 "verbose") ## DONE AD
     
     ## All parameters must have an entry
-    if (!all(names(parameters) %in% pRAIDSNames)){ 
+    if (!all(names(parameters) %in% pRAIDSNames)) { 
         stop("All parameters must be present: ", 
                 paste0(pRAIDSNames, collapse=", "))
     }
-  
+    
+    ## Validated parameters: 
     validateParamRAIDS_subpart01(parameters=parameters)
   
     validateParamRAIDS_subpart02(parameters=parameters)
@@ -76,10 +77,12 @@ validateParamRAIDS <- function(parameters) {
     invisible(TRUE)
 }
 
-#' @title Validate the first subsection fo the input parameters
+#' @title Validate the first subsection of the parametersRAIDS object
 #'
 #' @description This function validates a subsection of the parameters 
-#' present in the \code{parametersRAIDS} object.
+#' present in the \code{parametersRAIDS} object. The validated parameters are:
+#' "studyDF", "pedStudy", "genoSource", "chrInfo", "syntheticRefDF", 
+#' "fileReferenceGDS", and "fileReferenceAnnotGDS".
 #'
 #' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -133,10 +136,11 @@ validateParamRAIDS_subpart01 <- function(parameters) {
 }
 
 
-#' @title Validate the second subsection fo the input parameters
+#' @title Validate the second subsection of the parametersRAIDS object
 #'
 #' @description This function validates a subsection of the parameters 
-#' present in the \code{parametersRAIDS} object.
+#' present in the \code{parametersRAIDS} object. The validated parameters are:
+#' "fieldSubPop", and "verbose".
 #'
 #' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -153,6 +157,21 @@ validateParamRAIDS_subpart01 <- function(parameters) {
 #' @keywords internal
 validateParamRAIDS_subpart02 <- function(parameters) {
 
+    ## The fieldPopInfAnc parameter should be a character string
+    if (!is.character(parameters$fieldPopInfAnc)) {
+        stop("The \'fieldPopInfAnc\' parameter must be a character string ", 
+            "representing an existing column in the data frame containing the ", 
+            "inferred super-population ancestry results.")
+    }
+
+    ## The fieldSubPop parameter should be a character string
+    if (!is.character(parameters$fieldSubPop)) {
+        stop("The \'fieldSubPop\' parameter must be a character string ", 
+            "representing an existing column in the Population Reference ", 
+            "GDS file.")
+    }
+
+    ## The verbose parameter should be a logical
     validateLogical(parameters$verbose, "verbose")
 
     invisible(TRUE)

@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{validateParamRAIDS_subpart01}
 \alias{validateParamRAIDS_subpart01}
-\title{Validate the first subsection fo the input parameters}
+\title{Validate the first subsection of the parametersRAIDS object}
 \usage{
 validateParamRAIDS_subpart01(parameters)
 }
@@ -17,7 +17,9 @@ otherwise \code{FALSE}
 }
 \description{
 This function validates a subsection of the parameters
-present in the \code{parametersRAIDS} object.
+present in the \code{parametersRAIDS} object. The validated parameters are:
+"studyDF", "pedStudy", "genoSource", "chrInfo", "syntheticRefDF",
+"fileReferenceGDS", and "fileReferenceAnnotGDS".
 }
 \examples{
 ##TODO

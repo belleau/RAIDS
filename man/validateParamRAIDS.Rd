@@ -3,20 +3,20 @@
 \encoding{UTF-8}
 \name{validateParamRAIDS}
 \alias{validateParamRAIDS}
-\title{Validate the parameters}
+\title{Validate that the parametersRAIDS object is valid}
 \usage{
 validateParamRAIDS(parameters)
 }
 \arguments{
-\item{parameters}{a \code{parametersRAIDS} an object with all the RAIDS
-parameters}
+\item{parameters}{a \code{parametersRAIDS} an object with all the
+parameters used by the RAIDS workflow.}
 }
 \value{
 \code{TRUE} when all the parameters in the object are valid;
 otherwise \code{FALSE}
 }
 \description{
-This function validates the parameters present in the
+This function validates all the parameters present in the
 \code{parametersRAIDS} object.
 }
 \examples{
