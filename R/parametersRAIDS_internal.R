@@ -56,14 +56,19 @@ validateParamRAIDS <- function(parameters) {
                                 "PCAalgorithm",
                                 "eigenCount",
                                 "eigenCountSyn",
-                                "kList",
-                                "pcaList",
-                                "fieldPopInRef",
+                                "kList", ## DONE AD
+                                "pcaList", ## DONE AD
+                                "fieldPopInRef", ## DONE AD
                                 "fieldPopInfAnc", ## DONE AD
                                 "fieldSubPop", ## DONE AD
                                 "verbose") ## DONE AD
     
-    ## All parameters must have an entry
+    ## The parameters object must be of class parametersRAIDS
+    if (!inherits(my_data, "parametersRAIDS")) {
+        stop("The parameters must be of class \'parametersRAIDS\'.")
+    }
+    
+    ## All entries must be present in the parameters object
     if (!all(names(parameters) %in% pRAIDSNames)) { 
         stop("All parameters must be present: ", 
                 paste0(pRAIDSNames, collapse=", "))
@@ -140,7 +145,7 @@ validateParamRAIDS_subpart01 <- function(parameters) {
 #'
 #' @description This function validates a subsection of the parameters 
 #' present in the \code{parametersRAIDS} object. The validated parameters are:
-#' "fieldSubPop", and "verbose".
+#' "pcaList", "fieldPopInRef", "fieldPopInfAnc", "fieldSubPop", and "verbose".
 #'
 #' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -156,6 +161,20 @@ validateParamRAIDS_subpart01 <- function(parameters) {
 #' @encoding UTF-8
 #' @keywords internal
 validateParamRAIDS_subpart02 <- function(parameters) {
+   
+    ## The kList must be a vector of positive integers
+    validatePositiveIntegerVector(parameters$kList, "kList")
+
+    ## The pcaList must be a vector of positive integers
+    validatePositiveIntegerVector(parameters$pcaList, "pcaList")
+
+    ## The fieldPopInRef parameter should be a character string
+    if (!is.character(parameters$fieldPopInRef)) {
+        stop("The \'fieldPopInRef\' parameter must be a character string ", 
+            "representing an existing column that contains the known ancestry", 
+            " for the reference profiles in the Population Reference ", 
+            "GDS file.")
+    }
 
     ## The fieldPopInfAnc parameter should be a character string
     if (!is.character(parameters$fieldPopInfAnc)) {

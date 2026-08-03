@@ -18,7 +18,7 @@ otherwise \code{FALSE}
 \description{
 This function validates a subsection of the parameters
 present in the \code{parametersRAIDS} object. The validated parameters are:
-"fieldSubPop", and "verbose".
+"pcaList", "fieldPopInRef", "fieldPopInfAnc", "fieldSubPop", and "verbose".
 }
 \examples{
 ##TODO
