@@ -93,17 +93,15 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
                             stringsAsFactors=FALSE)
     } else {
         if( length(which(paste0("snp.",
-                                c("EAS", "EUR",
-                                  "AFR", "AMR",
-                                  "SAS"),
+                        c("EAS", "EUR", "AFR", "AMR", "SAS"),
                                 "_AF") %in% ls.gdsn(gdsReference))) == 5){
             freqDF <- data.frame(
-                    snp.AF=read.gdsn(index.gdsn(gdsReference, "snp.AF")),
-                    snp.EAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.EAS_AF")),
-                    snp.EUR_AF=read.gdsn(index.gdsn(gdsReference, "snp.EUR_AF")),
-                    snp.AFR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AFR_AF")),
-                    snp.AMR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AMR_AF")),
-                    snp.SAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.SAS_AF")))
+                snp.AF=read.gdsn(index.gdsn(gdsReference, "snp.AF")),
+                snp.EAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.EAS_AF")),
+                snp.EUR_AF=read.gdsn(index.gdsn(gdsReference, "snp.EUR_AF")),
+                snp.AFR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AFR_AF")),
+                snp.AMR_AF=read.gdsn(index.gdsn(gdsReference, "snp.AMR_AF")),
+                snp.SAS_AF=read.gdsn(index.gdsn(gdsReference, "snp.SAS_AF")))
 
             listKeep <- which(rowSums(freqDF[,2:6] >= freqCutoff &
                                             freqDF[,2:6] <= 1 - freqCutoff) > 0)
@@ -116,26 +114,28 @@ snvListVCF <- function(gdsReference, fileOut, offset=0L, freqCutoff=NULL) {
                                 FILTER=rep(".", length(listKeep)),
                                 INFO=paste0("AF=", freqDF$snp.AF[listKeep]),
                                 stringsAsFactors=FALSE)
-        }else if("AF.superPop" %in% ls.gdsn(gdsReference)){
+        } else if("AF.superPop" %in% ls.gdsn(gdsReference)) {
 
             matAF <- index.gdsn(gdsReference, "AF.superPop")
             snpAF <- read.gdsn(matAF)
             freqDF <- cbind(read.gdsn(index.gdsn(gdsReference, "snp.AF")),snpAF)
             rm(snpAF)
             listKeep <- which(rowSums(freqDF[,2:ncol(freqDF)] >= freqCutoff &
-                                          freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
+                            freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
             df <- data.frame(CHROM=snpChromosome[listKeep],
-                             POS=as.integer(snpPosition[listKeep] + offset),
-                             ID=rep(".", length(listKeep)),
-                             REF=allele[1,listKeep],
-                             ALT=allele[2,listKeep],
-                             QUAL=rep(".", length(listKeep)),
-                             FILTER=rep(".", length(listKeep)),
-                             INFO=paste0("AF=", freqDF[listKeep,1]),
-                             stringsAsFactors=FALSE)
+                                POS=as.integer(snpPosition[listKeep] + offset),
+                                ID=rep(".", length(listKeep)),
+                                REF=allele[1,listKeep],
+                                ALT=allele[2,listKeep],
+                                QUAL=rep(".", length(listKeep)),
+                                FILTER=rep(".", length(listKeep)),
+                                INFO=paste0("AF=", freqDF[listKeep,1]),
+                                stringsAsFactors=FALSE)
         }
     }
-    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% c("A", "C", "G", "T"),]
+    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% 
+                    c("A", "C", "G", "T"),]
+    
     df$CHROM <- paste0("chr", df$CHROM)
 
     ## Add the header
@@ -228,14 +228,14 @@ snvListVCFRef <- function(pRAIDS, fileOut, freqCutoff=NULL) {
             snpAF <- snpAF[listSNPKepp]
         }
         df <- data.frame(CHROM=snpChromosome,
-                         POS=as.integer(snpPosition + pRAIDS$offset),
-                         ID=rep(".", length(snpChromosome)),
-                         REF=allele[1,],
-                         ALT=allele[2,],
-                         QUAL=rep(".", length(snpChromosome)),
-                         FILTER=rep(".", length(snpChromosome)),
-                         INFO=paste0("AF=", snpAF),
-                         stringsAsFactors=FALSE)
+                            POS=as.integer(snpPosition + pRAIDS$offset),
+                            ID=rep(".", length(snpChromosome)),
+                            REF=allele[1,],
+                            ALT=allele[2,],
+                            QUAL=rep(".", length(snpChromosome)),
+                            FILTER=rep(".", length(snpChromosome)),
+                            INFO=paste0("AF=", snpAF),
+                            stringsAsFactors=FALSE)
     } else {
         if( length(which(paste0("snp.",
                                 c("EAS", "EUR",
@@ -268,19 +268,20 @@ snvListVCFRef <- function(pRAIDS, fileOut, freqCutoff=NULL) {
             freqDF <- cbind(read.gdsn(index.gdsn(gdsReference, "snp.AF")),snpAF)
             rm(snpAF)
             listKeep <- which(rowSums(freqDF[,2:ncol(freqDF)] >= freqCutoff &
-                                          freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
+                                freqDF[,2:ncol(freqDF)] <= 1 - freqCutoff) > 0)
             df <- data.frame(CHROM=snpChromosome[listKeep],
-                             POS=as.integer(snpPosition[listKeep] + pRAIDS$offset),
-                             ID=rep(".", length(listKeep)),
-                             REF=allele[1,listKeep],
-                             ALT=allele[2,listKeep],
-                             QUAL=rep(".", length(listKeep)),
-                             FILTER=rep(".", length(listKeep)),
-                             INFO=paste0("AF=", freqDF[listKeep,1]),
-                             stringsAsFactors=FALSE)
+                        POS=as.integer(snpPosition[listKeep] + pRAIDS$offset),
+                        ID=rep(".", length(listKeep)),
+                        REF=allele[1,listKeep],
+                        ALT=allele[2,listKeep],
+                        QUAL=rep(".", length(listKeep)),
+                        FILTER=rep(".", length(listKeep)),
+                        INFO=paste0("AF=", freqDF[listKeep,1]),
+                        stringsAsFactors=FALSE)
         }
     }
-    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% c("A", "C", "G", "T"),]
+    df <- df[df$REF %in% c("A", "C", "G", "T") & df$ALT %in% 
+                                c("A", "C", "G", "T"),]
     df$CHROM <- paste0("chr", df$CHROM)
 
     closefn.gds(gdsReference)
@@ -384,7 +385,6 @@ groupChr1KGSNV <- function(pathGenoChr, pathOut) {
     listFiles <- dir(file.path(pathGenoChr, "chr1"), ".+\\.chr1\\.vcf\\.bz2")
     listSamples <- gsub("\\.chr1\\.vcf\\.bz2", "", listFiles)
 
-
     ## Merge files associated to each samples into one csv file
     results <- lapply(X=listSamples, FUN=function(sampleId, pathOut) {
 
@@ -465,10 +465,8 @@ groupChr1KGSNV <- function(pathGenoChr, pathOut) {
 #' @encoding UTF-8
 #' @export
 generateVCF <- function(freqCutoff=NULL, chr=NULL , fileOut, pRAIDS) {
-    # gdsReference, fileOut, offset=0L,
+    # Open GDS Reference file
     gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-
-
 
     ## Validate that freqCutoff is a single numeric or NULL
     if (! isSingleNumber(freqCutoff) && ! is.null(freqCutoff)) {
@@ -897,14 +895,14 @@ getMatrixPopSynthetic <- function(pRAIDS) {
     sampleAnnot <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))[tmp,]
     # studySyn <- read.gdsn(index.gdsn(gdsProfile,""))
     # pRAIDS$studyDFSyn$study.id[1]
-    profileSyn <- read.gdsn(index.gdsn(gdsProfile,"study.annot"))
+    profileSyn <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
     profileSyn <- profileSyn[profileSyn$study.id == 
                                         pRAIDS$studyDFSyn$study.id[1],]
 
     tmp <- which(sampleId %in% profileSyn$case.id)
     listPop <- unique(sampleAnnot[tmp, pRAIDS$fieldSubPop])
     listGr <- lapply(listPop,
-                    FUN=function(x,sampleSyn, sampleAnnotSyn,fieldSubPop){
+                    FUN=function(x,sampleSyn, sampleAnnotSyn, fieldSubPop){
                         return(sampleSyn[sampleAnnotSyn[,fieldSubPop] == x])
                 },
                 sampleSyn=sampleId[tmp],
