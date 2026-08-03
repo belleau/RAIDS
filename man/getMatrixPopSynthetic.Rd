@@ -8,7 +8,7 @@
 getMatrixPopSynthetic(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{parametersRAIDS} object with all the RAIDS
 parameters}
 }
 \value{
@@ -27,26 +27,28 @@ a VCF file.
 ## Required library
 library(gdsfmt)
 
+## TODO example
+
 ## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
+## <- system.file("extdata", package="RAIDS")
 
 ## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
+##fileGDS <- openfn.gds(file.path(dataDir,
+##                    "PopulationReferenceDemo.gds"))
 
 ## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
+##vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
 
 ## Create a VCF file with the SNV dataset present in the GDS file
 ## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
+##snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
+##                    freqCutoff=NULL)
 
 ## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
+##closefn.gds(fileGDS)
 
 ## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+##unlink(vcfFile, force=TRUE)
 
 }
 \author{

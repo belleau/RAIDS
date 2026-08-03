@@ -843,7 +843,7 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{parametersRAIDS} object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{matrix} containing the sample identifiers and where
@@ -855,26 +855,28 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
 #' ## Required library
 #' library(gdsfmt)
 #'
+#' ## TODO example
+#' 
 #' ## Path to the demo pedigree file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
+#' ## <- system.file("extdata", package="RAIDS")
 #'
 #' ## Demo 1KG Reference GDS file
-#' fileGDS <- openfn.gds(file.path(dataDir,
-#'                     "PopulationReferenceDemo.gds"))
+#' ##fileGDS <- openfn.gds(file.path(dataDir,
+#' ##                    "PopulationReferenceDemo.gds"))
 #'
 #' ## Output VCF file that will be created (temporary)
-#' vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
+#' ##vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
 #'
 #' ## Create a VCF file with the SNV dataset present in the GDS file
 #' ## No cutoff on frequency, so all SNVs are saved
-#' snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-#'                     freqCutoff=NULL)
+#' ##snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
+#' ##                    freqCutoff=NULL)
 #'
 #' ## Close GDS file (IMPORTANT)
-#' closefn.gds(fileGDS)
+#' ##closefn.gds(fileGDS)
 #'
 #' ## Remove temporary VCF file
-#' unlink(vcfFile, force=TRUE)
+#' ##unlink(vcfFile, force=TRUE)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn
@@ -884,8 +886,9 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
-getMatrixPopSynthetic <- function(pRAIDS){
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+getMatrixPopSynthetic <- function(pRAIDS) {
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
+                                paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
     tmp <- which(read.gdsn(index.gdsn(gdsReference, "sample.ref")) == 1)
@@ -895,17 +898,18 @@ getMatrixPopSynthetic <- function(pRAIDS){
     # studySyn <- read.gdsn(index.gdsn(gdsProfile,""))
     # pRAIDS$studyDFSyn$study.id[1]
     profileSyn <- read.gdsn(index.gdsn(gdsProfile,"study.annot"))
-    profileSyn <- profileSyn[profileSyn$study.id == pRAIDS$studyDFSyn$study.id[1],]
+    profileSyn <- profileSyn[profileSyn$study.id == 
+                                        pRAIDS$studyDFSyn$study.id[1],]
 
-    tmp <- which(sampleId %in% profileSyn$case.id )
+    tmp <- which(sampleId %in% profileSyn$case.id)
     listPop <- unique(sampleAnnot[tmp, pRAIDS$fieldSubPop])
     listGr <- lapply(listPop,
-                     FUN=function(x,sampleSyn, sampleAnnotSyn,fieldSubPop){
-                         return(sampleSyn[sampleAnnotSyn[,fieldSubPop] == x])
-                     },
-                     sampleSyn=sampleId[tmp],
-                     sampleAnnotSyn=sampleAnnot[tmp,],
-                     fieldSubPop=pRAIDS$fieldSubPop)
+                    FUN=function(x,sampleSyn, sampleAnnotSyn,fieldSubPop){
+                        return(sampleSyn[sampleAnnotSyn[,fieldSubPop] == x])
+                },
+                sampleSyn=sampleId[tmp],
+                sampleAnnotSyn=sampleAnnot[tmp,],
+                fieldSubPop=pRAIDS$fieldSubPop)
     matGr <- do.call(cbind, listGr)
     snpgdsClose(gdsProfile)
     snpgdsClose(gdsReference)
