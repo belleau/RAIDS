@@ -1,7 +1,8 @@
-#' @title parameters class for RAIDS
-#' function
+#' @title Create a parametersRAIDS object 
 #'
-#' @description parameters class for RAIDS
+#' @description The function uses all parameters to create a 
+#' \code{parametersRAIDS} class object that contains all the paramters used 
+#' in the RAIDS workflow.
 #'
 #' @param studyDF a \code{data.frame} containing the information about the
 #' study associated to the analysed sample(s). The \code{data.frame} must have
@@ -42,7 +43,11 @@
 #' representing the length of the chromosomes. See 'details' section. 
 #' Default: \code{NULL}.
 #'
-#' @param paramAncestry a \code{list} parameters ...TODO. Default: \code{NULL}.
+#' @param paramAncestry a \code{list} of parameters related to ancestry. 
+#' The \code{list} should contain those three entries: \code{ScanBamParam}, 
+#' \code{PileupParam}, and \code{yieldSize}. If \code{NULL}, the default value 
+#' \code{list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000000)} will 
+#' be assigned to the parameter. Default: \code{NULL}.
 #'
 #' @param profileFile a \code{character} string representing the path and the
 #' file name of the genotype file or the bam if genoSource is snp-pileup the
@@ -108,8 +113,6 @@
 #' SNV is located. The second column, called "snp.position" contains the
 #' position of the SNV on the chromosome. Default: \code{NULL}.
 #'
-#' 
-#'
 #' @param syntheticRefDF a \code{data.frame} containing a subset of
 #' reference profiles for each sub-population present in the Reference GDS
 #' file. The \code{data.frame} must have those columns:
@@ -123,10 +126,10 @@
 #' }
 #' Default: \code{NULL}.
 #'
-#' @param pruningMethod a \code{character} string that represents the method that will
-#' be used to calculate the linkage disequilibrium in the
+#' @param pruningMethod a \code{character} string representing the method that 
+#' will be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
-#' are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.
+#' are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.
 #'
 #' @param slideWindowMaxBP a TODO. Default: \code{500000L}.
 #' 
@@ -149,25 +152,44 @@
 #' 
 #' @param PCAalgorithm a TODO. Default: \code{"exact"}.
 #' 
-#' @param eigenCount a TODO. Default: \code{32L}.
+#' @param eigenCount a single \code{integer} indicating the number of
+#' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+#' function; if 'eigenCount' <= 0, then all eigenvectors are returned. 
+#' Default: \code{32L}.
 #' 
 #' @param eigenCountSyn a TODO. Default: \code{15L}.
 #' 
-#' @param kList a TODO. Default: \code{seq(2,15,1)}.
+#' @param kList a \code{vector} of \code{integer} representing the list of
+#' values tested for the  _K_ parameter. The _K_ parameter represents the
+#' number of neighbors used in the K-nearest neighbor analysis. 
+#' Default: \code{seq(2,15,1)}.
 #' 
-#' @param pcaList a TODO. Default: \code{seq(2,15,1)}.
+#' @param pcaList a \code{vector} of \code{integer} representing the list of
+#' values tested for the  _D_ parameter. The _D_ parameter represents the
+#' number of dimensions used in the PCA analysis. Default: \code{seq(2,15,1)}.
 #' 
-#' @param fieldPopInRef a TODO. Default: \code{"superPop"}.
+#' @param fieldPopInRef a \code{character} string representing the name of the
+#' column that contains the known ancestry for the reference profiles in
+#' the Population Reference GDS file (corresponding to the 
+#' \code{fileReferenceGDS} parameter). Default: \code{"superPop"}.
 #' 
-#' @param fieldPopInfAnc a TODO. Default: \code{"superPop"}.
+#' @param fieldPopInfAnc a \code{character} string representing the name of 
+#' the column in the data frame that contains the inferred 
+#' super-population ancestry for the samples. The column should be 
+#' present in the data frame. Default: \code{"superPop"}.
 #' 
-#' @param fieldSubPop a TODO. Default: \code{"pop.group"}.
+#' @param fieldSubPop a \code{character} string representing the name of 
+#' the column in the Population Reference GDS file (corresponding to the 
+#' \code{fileReferenceGDS} parameter) that contains the sub-population 
+#' information for the samples. The column should be present in the Population 
+#' Reference GDS file. Default: \code{"pop.group"}.
 #' 
 #' @param verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
 #'
-#' @return The integer \code{0L} when successful.
-#'
+#' @return an object of class \code{parametersRAIDS} that contains all the 
+#' required parameters needed by the RAIDS workflow.
+#' 
 #' @examples
 #'
 #' ## Load the demo PCA on the synthetic profiles projected on the
@@ -225,7 +247,7 @@ paramRAIDS <- function(studyDF=NULL,
                         pcaList=seq(2,15,1),
                         fieldPopInRef="superPop",
                         fieldPopInfAnc="superPop",
-                        fieldSubPop = "pop.group",
+                        fieldSubPop="pop.group",
                         verbose=FALSE) {
 
     # listSNP=NULL, # not yet implemented
@@ -234,7 +256,7 @@ paramRAIDS <- function(studyDF=NULL,
     # pathProfileGDS=NULL,
     # keepFile=FALSE,
     # pathPrunedGDS=".", outPrefix="pruned"
-    if(is.null(studyDF)){
+    if (is.null(studyDF)) {
         studyDF <- data.frame(study.id="NotDef",
                                 study.desc="NotDef",
                                 study.platform="NotDef",
@@ -262,10 +284,11 @@ paramRAIDS <- function(studyDF=NULL,
     }else if(is.null(chrInfo)){
         stop("If your genome is't HG38 you need to specify chrInfo\n")
     }
-    if(is.null(paramAncestry)){
-        paramAncestry=list(ScanBamParam=NULL,
-                            PileupParam=NULL,
-                            yieldSize=10000000)
+  
+    ## Assign default ancestry parameters when not assigned by user
+    if (is.null(paramAncestry)) {
+        paramAncestry <- list(ScanBamParam=NULL, PileupParam=NULL,
+                                yieldSize=10000000)
     }
 
     # studyDF,
@@ -319,8 +342,9 @@ paramRAIDS <- function(studyDF=NULL,
                         fieldPopInfAnc=fieldPopInfAnc,
                         fieldSubPop=fieldSubPop,
                         verbose=verbose)
-    # class(parameters) <- "parametersRAIDS"
-    paramters <- structure(parameters, class = "parametersRAIDS")
+  
+    # Assign "parametersRAIDS" class to the list
+    paramters <- structure(parameters, class="parametersRAIDS")
     return(parameters)
 }
 

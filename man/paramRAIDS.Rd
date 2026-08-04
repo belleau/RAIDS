@@ -3,8 +3,7 @@
 \encoding{UTF-8}
 \name{paramRAIDS}
 \alias{paramRAIDS}
-\title{parameters class for RAIDS
-function}
+\title{Create a parametersRAIDS object}
 \usage{
 paramRAIDS(
   studyDF = NULL,
@@ -95,7 +94,11 @@ Default: \code{"1KGc1.0"}.}
 representing the length of the chromosomes. See 'details' section.
 Default: \code{NULL}.}
 
-\item{paramAncestry}{a \code{list} parameters ...TODO. Default: \code{NULL}.}
+\item{paramAncestry}{a \code{list} of parameters related to ancestry.
+The \code{list} should contain those three entries: \code{ScanBamParam},
+\code{PileupParam}, and \code{yieldSize}. If \code{NULL}, the default value
+\code{list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000000)} will
+be assigned to the parameter. Default: \code{NULL}.}
 
 \item{profileFile}{a \code{character} string representing the path and the
 file name of the genotype file or the bam if genoSource is snp-pileup the
@@ -174,10 +177,10 @@ super-population assigned to the sample. }
 }
 Default: \code{NULL}.}
 
-\item{pruningMethod}{a \code{character} string that represents the method that will
-be used to calculate the linkage disequilibrium in the
+\item{pruningMethod}{a \code{character} string representing the method that
+will be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
-are: "corr", "r", "dprime" and "composite". Default: \code{"corr"}.}
+are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
 \item{slideWindowMaxBP}{a TODO. Default: \code{500000L}.}
 
@@ -200,28 +203,49 @@ used in the pruning step. Default: \code{NULL}.}
 
 \item{PCAalgorithm}{a TODO. Default: \code{"exact"}.}
 
-\item{eigenCount}{a TODO. Default: \code{32L}.}
+\item{eigenCount}{a single \code{integer} indicating the number of
+eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+function; if 'eigenCount' <= 0, then all eigenvectors are returned.
+Default: \code{32L}.}
 
 \item{eigenCountSyn}{a TODO. Default: \code{15L}.}
 
-\item{kList}{a TODO. Default: \code{seq(2,15,1)}.}
+\item{kList}{a \code{vector} of \code{integer} representing the list of
+values tested for the  \emph{K} parameter. The \emph{K} parameter represents the
+number of neighbors used in the K-nearest neighbor analysis.
+Default: \code{seq(2,15,1)}.}
 
-\item{pcaList}{a TODO. Default: \code{seq(2,15,1)}.}
+\item{pcaList}{a \code{vector} of \code{integer} representing the list of
+values tested for the  \emph{D} parameter. The \emph{D} parameter represents the
+number of dimensions used in the PCA analysis. Default: \code{seq(2,15,1)}.}
 
-\item{fieldPopInRef}{a TODO. Default: \code{"superPop"}.}
+\item{fieldPopInRef}{a \code{character} string representing the name of the
+column that contains the known ancestry for the reference profiles in
+the Population Reference GDS file (corresponding to the
+\code{fileReferenceGDS} parameter). Default: \code{"superPop"}.}
 
-\item{fieldPopInfAnc}{a TODO. Default: \code{"superPop"}.}
+\item{fieldPopInfAnc}{a \code{character} string representing the name of
+the column in the data frame that contains the inferred
+super-population ancestry for the samples. The column should be
+present in the data frame. Default: \code{"superPop"}.}
 
-\item{fieldSubPop}{a TODO. Default: \code{"pop.group"}.}
+\item{fieldSubPop}{a \code{character} string representing the name of
+the column in the Population Reference GDS file (corresponding to the
+\code{fileReferenceGDS} parameter) that contains the sub-population
+information for the samples. The column should be present in the Population
+Reference GDS file. Default: \code{"pop.group"}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
 }
 \value{
-The integer \code{0L} when successful.
+an object of class \code{parametersRAIDS} that contains all the
+required parameters needed by the RAIDS workflow.
 }
 \description{
-parameters class for RAIDS
+The function uses all parameters to create a
+\code{parametersRAIDS} class object that contains all the paramters used
+in the RAIDS workflow.
 }
 \examples{
 
