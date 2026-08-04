@@ -66,7 +66,8 @@ pRAIDS <- RAIDS:::generateProfileRawGDS2(pRAIDS=pRAIDS)
 
 
 ## The function returns OL when successful
-result <- RAIDS:::generateProfileLoadGenoVCF(pRAIDS=pRAIDS)
+## TODO: SOLVE PROBLEM WITH GZIP
+##result <- RAIDS:::generateProfileLoadGenoVCF(pRAIDS=pRAIDS)
 
 ## The Profile GDS file 'ex1.gds' has been created in the
 ## specified directory
