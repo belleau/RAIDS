@@ -22,7 +22,43 @@ present in the \code{parametersRAIDS} object. The validated parameters are:
 "fileReferenceGDS", and "fileReferenceAnnotGDS".
 }
 \examples{
-##TODO
+
+## Path where demo files are located in this package
+dataDir <- system.file("extdata", package="RAIDS")
+path1KG <- file.path(dataDir, "tests")
+
+## Path to existing demo Population Reference GDS file
+fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
+## Path to existing demo Population Reference GDS annotation file
+fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
+
+## PED Study
+ped <- data.frame(Name.ID=c("Sample_01", "Sample_02"),
+            Case.ID=c("TCGA-H01", "TCGA-H02"),
+            Sample.Type=c("DNA", "DNA"),
+            Diagnosis=c("Cancer", "Cancer"), Source=c("TCGA", "TCGA"))
+
+## The data frame containing the information about the study
+## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
+## The entries should be strings, not factors (stringsAsFactors=FALSE)
+studyInfo <- data.frame(study.id="Pancreatic.WES",
+                study.desc="Pancreatic study",
+                study.platform="WES",
+                stringsAsFactors=FALSE)
+
+## Profiles used for synthetic data set
+syntheticRefDF <- data.frame(sample.id=c("HG00150", "HG00138", "HG00330",
+        "HG00275"), pop.group=c("GBR", "GBR","FIN", "FIN"),
+        superPop=c("EUR", "EUR", "EUR", "EUR"), stringsAsFactors=FALSE)
+
+## Create an object of class 'parametersRAIDS' with most parameters filled
+## default values
+parameterAll <- paramRAIDS(studyDF=studyInfo, pedStudy=ped, 
+    genoSource='generic', syntheticRefDF=syntheticRefDF, 
+    fileReferenceGDS=fileReferenceGDS, fileReferenceAnnotGDS=fileAnnotGDS)
+
+## Return TRUE when all tested parameters are valid
+RAIDS:::validateParamRAIDS_subpart01(parameters=parameterAll)
 
 
 }

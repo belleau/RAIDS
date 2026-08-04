@@ -54,7 +54,7 @@ validateParamRAIDS <- function(parameters) {
                                 "phase",
                                 "PCAmissingRate",
                                 "PCAalgorithm",
-                                "eigenCount",
+                                "eigenCount", ## DONE AD
                                 "eigenCountSyn",
                                 "kList", ## DONE AD
                                 "pcaList", ## DONE AD
@@ -64,7 +64,7 @@ validateParamRAIDS <- function(parameters) {
                                 "verbose") ## DONE AD
     
     ## The parameters object must be of class parametersRAIDS
-    if (!inherits(my_data, "parametersRAIDS")) {
+    if (!inherits(parameters, "parametersRAIDS")) {
         stop("The parameters must be of class \'parametersRAIDS\'.")
     }
     
@@ -78,6 +78,8 @@ validateParamRAIDS <- function(parameters) {
     validateParamRAIDS_subpart01(parameters=parameters)
   
     validateParamRAIDS_subpart02(parameters=parameters)
+
+    validateParamRAIDS_subpart03(parameters=parameters)
     
     invisible(TRUE)
 }
@@ -96,9 +98,45 @@ validateParamRAIDS <- function(parameters) {
 #' otherwise \code{FALSE}
 #'
 #' @examples
-#' ##TODO
+#' 
+#' ## Path where demo files are located in this package
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' path1KG <- file.path(dataDir, "tests")
 #'
+#' ## Path to existing demo Population Reference GDS file
+#' fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
+#' ## Path to existing demo Population Reference GDS annotation file
+#' fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
+#' 
+#' ## PED Study
+#' ped <- data.frame(Name.ID=c("Sample_01", "Sample_02"),
+#'             Case.ID=c("TCGA-H01", "TCGA-H02"),
+#'             Sample.Type=c("DNA", "DNA"),
+#'             Diagnosis=c("Cancer", "Cancer"), Source=c("TCGA", "TCGA"))
+#' 
+#' ## The data frame containing the information about the study
+#' ## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
+#' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
+#' studyInfo <- data.frame(study.id="Pancreatic.WES",
+#'                 study.desc="Pancreatic study",
+#'                 study.platform="WES",
+#'                 stringsAsFactors=FALSE)
+#' 
+#' ## Profiles used for synthetic data set
+#' syntheticRefDF <- data.frame(sample.id=c("HG00150", "HG00138", "HG00330",
+#'         "HG00275"), pop.group=c("GBR", "GBR","FIN", "FIN"),
+#'         superPop=c("EUR", "EUR", "EUR", "EUR"), stringsAsFactors=FALSE)
+#' 
+#' ## Create an object of class 'parametersRAIDS' with most parameters filled
+#' ## default values
+#' parameterAll <- paramRAIDS(studyDF=studyInfo, pedStudy=ped, 
+#'     genoSource='generic', syntheticRefDF=syntheticRefDF, 
+#'     fileReferenceGDS=fileReferenceGDS, fileReferenceAnnotGDS=fileAnnotGDS)
 #'
+#' ## Return TRUE when all tested parameters are valid
+#' RAIDS:::validateParamRAIDS_subpart01(parameters=parameterAll)
+#' 
+#' 
 #' @author Pascal Belleau and Astrid Deschênes
 #' @encoding UTF-8
 #' @keywords internal
@@ -121,7 +159,7 @@ validateParamRAIDS_subpart01 <- function(parameters) {
     ## The syntheticRefDF must have the mandatory columns
     validateDataRefSynParameter(syntheticRefDF=parameters$syntheticRefDF)
   
-    ## The fileReferenceGDS must be a character string and the file must exists
+    ## The fileReferenceGDS must be a character string and the file must exist
     if (!(is.character(parameters$fileReferenceGDS) && 
               (file.exists(parameters$fileReferenceGDS)))) {
         stop("The \'fileReferenceGDS\' must be a character string ",
@@ -140,12 +178,11 @@ validateParamRAIDS_subpart01 <- function(parameters) {
     invisible(TRUE)
 }
 
-
 #' @title Validate the second subsection of the parametersRAIDS object
 #'
 #' @description This function validates a subsection of the parameters 
 #' present in the \code{parametersRAIDS} object. The validated parameters are:
-#' "pcaList", "fieldPopInRef", "fieldPopInfAnc", "fieldSubPop", and "verbose".
+#' "phase", TODO.
 #'
 #' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -154,14 +191,59 @@ validateParamRAIDS_subpart01 <- function(parameters) {
 #' otherwise \code{FALSE}
 #'
 #' @examples
-#' ##TODO
+#' 
+#' ## Create an object of class 'parametersRAIDS' with most parameters filled
+#' ## default values
+#' parameterAll <- paramRAIDS(genoSource='generic', verbose=TRUE)
 #'
+#' ## Return TRUE when the tested parameters are valid
+#' RAIDS:::validateParamRAIDS_subpart02(parameters=parameterAll)
 #'
 #' @author Pascal Belleau and Astrid Deschênes
 #' @encoding UTF-8
 #' @keywords internal
 validateParamRAIDS_subpart02 <- function(parameters) {
    
+    ## The phase parameter should be a logical
+    validateLogical(parameters$phase, "verbose")
+
+    invisible(TRUE)
+}
+
+
+#' @title Validate the third subsection of the parametersRAIDS object
+#'
+#' @description This function validates a subsection of the parameters 
+#' present in the \code{parametersRAIDS} object. The validated parameters are:
+#' "eigenCount", "kList", "pcaList", "fieldPopInRef", "fieldPopInfAnc", 
+#' "fieldSubPop", and "verbose".
+#'
+#' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return \code{TRUE} when all the parameters tested in the object are valid; 
+#' otherwise \code{FALSE}
+#'
+#' @examples
+#' 
+#' ## Create an object of class 'parametersRAIDS' with most parameters filled
+#' ## default values
+#' parameterAll <- paramRAIDS(genoSource='generic', verbose=TRUE)
+#'
+#' ## Return TRUE when the tested parameters are valid
+#' RAIDS:::validateParamRAIDS_subpart03(parameters=parameterAll)
+#'
+#' @author Pascal Belleau and Astrid Deschênes
+#' @encoding UTF-8
+#' @importFrom S4Vectors isSingleNumber
+#' @keywords internal
+validateParamRAIDS_subpart03 <- function(parameters) {
+   
+    ## The eigenCount must be a single integer
+    if(!(isSingleNumber(parameters$eigenCount))) {
+        stop("The \'eigenCount\' parameter must be a single integer.")
+    }
+
     ## The kList must be a vector of positive integers
     validatePositiveIntegerVector(parameters$kList, "kList")
 
