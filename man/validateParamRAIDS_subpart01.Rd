@@ -19,7 +19,7 @@ otherwise \code{FALSE}
 This function validates a subsection of the parameters
 present in the \code{parametersRAIDS} object. The validated parameters are:
 "studyDF", "pedStudy", "genoSource", "chrInfo", "syntheticRefDF",
-"fileReferenceGDS", and "fileReferenceAnnotGDS".
+"pruningMethod", "fileReferenceGDS", and "fileReferenceAnnotGDS".
 }
 \examples{
 

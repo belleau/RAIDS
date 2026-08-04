@@ -18,13 +18,18 @@ otherwise \code{FALSE}
 \description{
 This function validates a subsection of the parameters
 present in the \code{parametersRAIDS} object. The validated parameters are:
-"phase", TODO.
+"specificSNV", "phase", "PCAalgorithm", "PCAmissingRate" TODO.
 }
 \examples{
 
+## A data frame with the retained SNVs
+specificSNV <-  data.frame("snp.chromosome"=c("chr1", "chr1"),
+                            "snp.position"=c(12012, 14222))
+
 ## Create an object of class 'parametersRAIDS' with most parameters filled
 ## default values
-parameterAll <- paramRAIDS(genoSource='generic', verbose=TRUE)
+parameterAll <- paramRAIDS(genoSource='generic', specificSNV=specificSNV,
+        verbose=TRUE)
 
 ## Return TRUE when the tested parameters are valid
 RAIDS:::validateParamRAIDS_subpart02(parameters=parameterAll)
