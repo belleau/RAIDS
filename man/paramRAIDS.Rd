@@ -186,12 +186,12 @@ are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
 \item{thresholdLD}{a TODO. Default: \code{sqrt(0.1)}.}
 
-\item{specificSNV}{a \code{data.frame} containing 2 columns. The first column,
-called "snp.chromosome" contains the name of the chromosome where the
-SNV is located. The second column, called "snp.position" contains the
-position of the SNV on the chromosome. Optionel the column snvKeep add by
-contains index in the reference or -1  if not in the reference. It is using
-used in the pruning step. Default: \code{NULL}.}
+\item{specificSNV}{a \code{data.frame} containing 2 columns. The first
+column, called "snp.chromosome" contains the name of the chromosome where
+the SNV is located. The second column, called "snp.position", contains the
+position of the SNV on the chromosome. Optionally, the column "snvKeep"
+contains the SNV index in the reference or -1 if not in the reference. It
+is used during the pruning step. Default: \code{NULL}.}
 
 \item{genoType}{a TODO. Default: \code{"geno.ref"}.}
 
@@ -199,9 +199,15 @@ used in the pruning step. Default: \code{NULL}.}
 
 \item{phase}{a \code{logical} TODO. Default: \code{FALSE}.}
 
-\item{PCAmissingRate}{a TODO. Default: \code{0.025}.}
+\item{PCAmissingRate}{a positive \code{numeric} representing the maximum
+missing rate retained accepted to use SNPs in the PCA analysis done
+with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
+missing threshold. Default: \code{0.025}.}
 
-\item{PCAalgorithm}{a TODO. Default: \code{"exact"}.}
+\item{PCAalgorithm}{a \code{character} string representing the algorithm
+to use with the \link[SNPRelate]{snpgdsPCA} function. The algorithm must
+be implemented and available to the \link[SNPRelate]{snpgdsPCA} function.
+Default: \code{"exact"}.}
 
 \item{eigenCount}{a single \code{integer} indicating the number of
 eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
