@@ -1197,7 +1197,7 @@ validateRunExomeOrRNAAncestry <- function(pedStudy, studyDF, pathProfileGDS,
                 " the path where the output files will be generated.")
     }
 
-    ## The fileReferenceGDS must be a character string and the file must exists
+    ## The fileReferenceGDS must be a character string and the file must exist
     if (!(is.character(fileReferenceGDS) && (file.exists(fileReferenceGDS)))) {
         stop("The \'fileReferenceGDS\' must be a character string ",
                 "representing the Reference GDS file. The file must exist.")
