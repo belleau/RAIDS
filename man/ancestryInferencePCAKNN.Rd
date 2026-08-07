@@ -172,9 +172,6 @@ also created.
 }
 \examples{
 
-## Required library for GDS
-## library(SNPRelate)
-
 ## Path to the demo 1KG GDS file is located in this package
 dataDir <- system.file("extdata", package="RAIDS")
 
@@ -214,9 +211,6 @@ pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
     fileReferenceAnnotGDS=fileAnnotGDS
     )
 
-# gds1KG <- snpgdsOpen(fileReferenceGDS)
-# dataRef <- select1KGPop(gds1KG, nbProfiles=2L)
-# closefn.gds(gds1KG)
 
 
 res <- ancestryInferencePCAKNN(pRAIDS=pRAIDS)
