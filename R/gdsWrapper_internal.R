@@ -1178,6 +1178,7 @@ runIBDKING <- function(gds, profileID=NULL, snpID=NULL, maf=0.05, verbose) {
 #'
 #' @importFrom SNPRelate snpgdsOpen snpgdsLDpruning
 #' @importFrom gdsfmt closefn.gds
+#' @importFrom BiocParallel bplapply
 #' @encoding UTF-8
 #' @keywords internal
 runLDPruning <- function(gds, method="corr",
