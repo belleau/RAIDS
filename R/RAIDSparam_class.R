@@ -1,8 +1,48 @@
+#' @title Class Union for data.frame or NULL
+#' 
+#' @description A virtual class that groups data.frame and \code{NULL} 
+#' together.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @name DataFrameOrNULL-class
+#' @rdname DataFrameOrNULL-class
+#' @exportClass DataFrameOrNULL
+setClassUnion("DataFrameOrNULL", members = c("data.frame", "NULL"))
+
+
+#' @title Class Union for character or NULL
+#' 
+#' @description A virtual class that groups character and \code{NULL} 
+#' together.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @name CharacterOrNULL-class
+#' @rdname CharacterOrNULL-class
+#' @exportClass CharacterOrNULL
+setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
+
+
 #' An S4 class to represent the RAIDS parameters
 #'
-#' @slot studyDF TODO
-#' @slot studyDFSyn TODO
-#' @slot studyType TODO
+#' @slot studyDF a \code{data.frame} containing the information about the
+#' study associated to the analysed sample(s). The \code{data.frame} must have
+#' those 3 columns: "study.id", "study.desc", "study.platform". All columns
+#' must be in \code{character} strings (no factor). Default: \code{NULL}.
+#' 
+#' @slot studyDFSyn a \code{data.frame} containing the information about the
+#' synthetic data to the analysed sample(s). The \code{data.frame} must have
+#' those 3 columns: "study.id", "study.desc", "study.platform". All columns
+#' must be in \code{character} strings (no factor). Default: \code{NULL}.
+#' 
+#' @slot studyType a \code{character} string representing the type of study.
+#' The possible choices are: "LD" and "GeneAware". The type of study affects 
+#' the way the estimation of the allelic fraction is done. 
+#' Default: \code{"LD"}.
+#' 
 #' @slot genoSource TODO
 #' @slot blockTypeId TODO
 #' @slot reference a \code{character} string with two possible values:
@@ -25,7 +65,11 @@
 #' 
 #' @slot prefix TODO
 #' @slot nbSim TODO
-#' @slot offset TODO
+#' 
+#' @slot offset a single \code{integer} that is added to the SNP position to
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' Default: \code{-1L}.
+#' 
 #' @slot minCov TODO
 #' @slot minProb TODO
 #' @slot seqError TODO
@@ -60,12 +104,14 @@
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @import methods
+#' @name RAIDSparams-class
+#' @rdname RAIDSparam-class
 #' @exportClass RAIDSparam
 setClass("RAIDSparam",
   slots = c(
-    studyDF = "character",
-    studyDFSyn = "numeric",
-    studyType="character",
+    studyDF = "DataFrameOrNULL",
+    studyDFSyn = "DataFrameOrNULL",
+    studyType="CharacterOrNULL",
     genoSource="character",
     blockTypeId="character",
     reference="character",
@@ -109,9 +155,9 @@ setClass("RAIDSparam",
     verbose="logical"
   ),
   prototype = list(
-    studyDF = NULL,
-    studyDFSyn = NULL,
-    studyType = NA_character_,
+    studyDF=NULL,
+    studyDFSyn=NULL,
+    studyType=NULL,
     genoSource=NULL,
     blockTypeId="GeneS.Ensembl.Hsapiens.v86",
     reference="1KGc1.0",
@@ -159,6 +205,36 @@ setClass("RAIDSparam",
 setValidity("RAIDSparam",
     function(object)
     {
+        ## Validate the studyDF parameter
+        if (!is.null(object@studyDF) &&  
+            !(is.data.frame(object@studyDF) && 
+                all(c("study.id", "study.desc", "study.platform") %in% 
+                    colnames(object@studyDF)))) {
+            return(paste0("'studyDF' slot must be NULL or a data.frame with ", 
+                "those 3 columns: \"study.id\", \"study.desc\", ", 
+                "\"study.platform\"."))
+        }
+      
+        ## Validate the studyDFSyn parameter
+        if (!is.null(object@studyDFSyn) && 
+            !(is.data.frame(object@studyDFSyn) && 
+                all(c("study.id", "study.desc", "study.platform") %in% 
+                    colnames(object@studyDFSyn)))) {
+            return(paste0("'studyDFSyn' slot must be NULL or a data.frame ", 
+                "with those 3 columns: \"study.id\", \"study.desc\", ", 
+                "\"study.platform\"."))
+        }
+      
+        ## Validate the studyType parameter
+        if (!is.null(object@studyType) && !(is.character(object@studyType) && 
+                length(object@studyType) != 1 || 
+                !object@studyType %in% c("LD", "GeneAware"))) {
+            return(paste0("'studyType' slot must be NULL or a one character", 
+                " string within those 2 choices: \"LD\" and \"GeneAware\"."))
+        }
+      
+        ## Validate the genoSource parameter TODO
+      
         ## Validate the reference parameter
         if (length(object@reference) != 1 || 
             !object@reference %in% c("1KGv1.0", "1k_hgdpV0.1")) {
@@ -169,6 +245,11 @@ setValidity("RAIDSparam",
         ## Validate the batch parameter
         if (length(object@batch != 1) || object@batch < 1) {
             return("'batch' slot must have one positive integer.")
+        }
+      
+        ## Validate the offset parameter
+        if (length(object@offset != 1)) {
+            return("'offset' slot must have one integer.")
         }
       
         ## Validate the pruningMethod parameter

@@ -2,8 +2,8 @@
 % Please edit documentation in R/RAIDSparam_class.R
 \docType{class}
 \encoding{UTF-8}
-\name{RAIDSparam-class}
-\alias{RAIDSparam-class}
+\name{RAIDSparams-class}
+\alias{RAIDSparams-class}
 \title{An S4 class to represent the RAIDS parameters}
 \description{
 An S4 class to represent the RAIDS parameters
@@ -11,11 +11,20 @@ An S4 class to represent the RAIDS parameters
 \section{Slots}{
 
 \describe{
-\item{\code{studyDF}}{TODO}
+\item{\code{studyDF}}{a \code{data.frame} containing the information about the
+study associated to the analysed sample(s). The \code{data.frame} must have
+those 3 columns: "study.id", "study.desc", "study.platform". All columns
+must be in \code{character} strings (no factor). Default: \code{NULL}.}
 
-\item{\code{studyDFSyn}}{TODO}
+\item{\code{studyDFSyn}}{a \code{data.frame} containing the information about the
+synthetic data to the analysed sample(s). The \code{data.frame} must have
+those 3 columns: "study.id", "study.desc", "study.platform". All columns
+must be in \code{character} strings (no factor). Default: \code{NULL}.}
 
-\item{\code{studyType}}{TODO}
+\item{\code{studyType}}{a \code{character} string representing the type of study.
+The possible choices are: "LD" and "GeneAware". The type of study affects
+the way the estimation of the allelic fraction is done.
+Default: \code{"LD"}.}
 
 \item{\code{genoSource}}{TODO}
 
@@ -51,7 +60,9 @@ Default: \code{1L}.}
 
 \item{\code{nbSim}}{TODO}
 
-\item{\code{offset}}{TODO}
+\item{\code{offset}}{a single \code{integer} that is added to the SNP position to
+switch from 0-based to 1-based coordinate when needed (or reverse).
+Default: \code{-1L}.}
 
 \item{\code{minCov}}{TODO}
 
