@@ -87,7 +87,9 @@
 #' 
 #' @param nbSim a TODO. Default: \code{1}.
 #' 
-#' @param offset a TODO. Default: \code{-1}.
+#' @param offset a single \code{integer} that is added to the SNP position to
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' Default: \code{-1L}.
 #' 
 #' @param minCov a single positive \code{integer} representing the minimum
 #' required coverage. Default: \code{10L}.
@@ -229,7 +231,7 @@ paramRAIDS <- function(studyDF=NULL,
                         batch=1,
                         prefix="1",
                         nbSim=1,
-                        offset=-1,
+                        offset=-1L,
                         minCov=10,
                         minProb=0.999,
                         seqError=0.001,

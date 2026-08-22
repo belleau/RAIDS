@@ -36,9 +36,9 @@ validateParamRAIDS <- function(parameters) {
                                 "batch",
                                 "prefix",
                                 "nbSim",
-                                "offset",
-                                "minCov",
-                                "minProb",
+                                "offset",  ## DONE AD
+                                "minCov",  ## DONE AD
+                                "minProb",  ## DONE AD
                                 "seqError",
                                 "seqErrorSyn",
                                 "pRecomb",
@@ -81,6 +81,8 @@ validateParamRAIDS <- function(parameters) {
 
     validateParamRAIDS_subpart03(parameters=parameters)
     
+    validateParamRAIDS_subpart04(parameters=parameters)
+
     invisible(TRUE)
 }
 
@@ -313,3 +315,46 @@ validateParamRAIDS_subpart03 <- function(parameters) {
     invisible(TRUE)
 }
 
+
+#' @title Validate the fourth subsection of the parametersRAIDS object
+#'
+#' @description This function validates a subsection of the parameters 
+#' present in the \code{parametersRAIDS} object. The validated parameters are:
+#' "offset", "minCov", "minProb", ...
+#'
+#' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return \code{TRUE} when all the parameters tested in the object are valid; 
+#' otherwise \code{FALSE}
+#'
+#' @examples
+#' 
+#' ## Create an object of class 'parametersRAIDS' with most parameters filled
+#' ## default values
+#' parameterAll <- paramRAIDS(minCov=20L, minProb=0.20, offset=-1L)
+#'
+#' ## Return TRUE when the tested parameters are valid
+#' RAIDS:::validateParamRAIDS_subpart04(parameters=parameterAll)
+#'
+#' @author Pascal Belleau and Astrid Deschênes
+#' @encoding UTF-8
+#' @importFrom S4Vectors isSingleNumber
+#' @keywords internal
+validateParamRAIDS_subpart04 <- function(parameters) {
+
+    ## Validate that offset is a single integer
+    if (! isSingleNumber(parameters$offset)) {
+        stop("The \'offset\' must be a single integer.")
+    }
+
+    ## The minCov parameter must be a single positive integer
+    if (!(isSingleNumber(parameters$minCov) && (parameters$minCov >= 0.0))) {
+        stop("The \'minCov\' must be a single numeric positive value")
+    }
+
+    ## The minProb and eProb must be single positive numeric between 0 and 1
+    validateSingleRatio(parameters$minProb, "minProb")
+
+    invisible(TRUE)
+}
