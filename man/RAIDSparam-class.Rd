@@ -14,12 +14,23 @@ An S4 class to represent the RAIDS parameters
 \item{\code{studyDF}}{a \code{data.frame} containing the information about the
 study associated to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor). Default: \code{NULL}.}
+must be in \code{character} strings (no factor). Default:
+\code{data.frame(study.id="NotDef", study.desc="NotDef", 
+study.platform="NotDef", stringsAsFactors=FALSE)}.}
 
 \item{\code{studyDFSyn}}{a \code{data.frame} containing the information about the
 synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
 must be in \code{character} strings (no factor). Default: \code{NULL}.}
+
+\item{\code{pedStudy}}{a \code{data.frame} containing the information TODO
+with those mandatory columns: "Name.ID",
+"Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
+\code{character} strings (no factor). All row names should correspond to the
+values in the "Name.ID" column.
+Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"), 
+Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
+stringsAsFactors=FALSE, row.names = c("ProfileId"))}.}
 
 \item{\code{studyType}}{a \code{character} string representing the type of study.
 The possible choices are: "LD" and "GeneAware". The type of study affects
@@ -33,6 +44,9 @@ Default: \code{"LD"}.}
 \item{\code{reference}}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
 Default: \code{"1KGc1.0"}.}
+
+\item{\code{genome}}{a \code{character} string with one possible value:
+'HG38'. It specifies the genome used. Default: \code{"HG38"}.}
 
 \item{\code{chrInfo}}{TODO}
 
@@ -56,21 +70,30 @@ Default: \code{"1KGc1.0"}.}
 identifier for the batch. Beware, this field is not stored anymore.
 Default: \code{1L}.}
 
-\item{\code{prefix}}{TODO}
+\item{\code{prefix}}{a single \code{character} string representing TODO.
+Default: \code{"1"}.}
 
-\item{\code{nbSim}}{TODO}
+\item{\code{nbSim}}{a positive \code{integer} representing TODO.
+Default: \code{1L}.}
 
 \item{\code{offset}}{a single \code{integer} that is added to the SNP position to
 switch from 0-based to 1-based coordinate when needed (or reverse).
 Default: \code{-1L}.}
 
-\item{\code{minCov}}{TODO}
+\item{\code{minCov}}{a single positive \code{integer} representing the minimum
+required coverage. Default: \code{10L}.}
 
-\item{\code{minProb}}{TODO}
+\item{\code{minProb}}{a single \code{numeric} between \code{0} and \code{1}
+representing the probability that the calculated genotype call is correct.
+Default: \code{0.999}.}
 
-\item{\code{seqError}}{TODO}
+\item{\code{seqError}}{a single \code{numeric} between \code{0} and \code{1}
+representing the probability of sequencing error.
+Default: \code{0.001}.}
 
-\item{\code{seqErrorSyn}}{TODO}
+\item{\code{seqErrorSyn}}{a single \code{numeric} between \code{0} and \code{1}
+representing the probability of sequencing error for synthetic.
+Default: \code{0.001}.}
 
 \item{\code{pRecomb}}{TODO}
 
@@ -95,7 +118,7 @@ are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
 \item{\code{phaseType}}{TODO}
 
-\item{\code{phase}}{TODO}
+\item{\code{phase}}{a \code{logical} indicating TODO. Default: \code{FALSE}.}
 
 \item{\code{PCAmissingRate}}{TODO}
 
@@ -105,17 +128,34 @@ are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
 \item{\code{eigenCountSyn}}{TODO}
 
-\item{\code{kList}}{TODO}
+\item{\code{kList}}{a \code{vector} of positive \code{integer} representing the
+values tested for the  \emph{K} parameter. The \emph{K} parameter represents the
+number of neighbors used in the K-nearest neighbor analysis.
+Default: \code{seq(2L, 15L, 1L)}.}
 
-\item{\code{pcaList}}{TODO}
+\item{\code{pcaList}}{a \code{vector} of positive \code{integer} representing
+the values tested for the  \emph{D} parameter. The \emph{D} parameter represents the
+number of dimensions used in the PCA analysis.
+Default: \code{seq(2L, 15L, 1L)}.}
 
-\item{\code{fieldPopInRef}}{TODO}
+\item{\code{fieldPopInRef}}{a \code{character} string representing the name of the
+column that contains the known ancestry for the reference profiles in
+the Population Reference GDS file (corresponding to the
+\code{fileReferenceGDS} parameter). Default: \code{"superPop"}.}
 
-\item{\code{fieldPopInfAnc}}{TODO}
+\item{\code{fieldPopInfAnc}}{a \code{character} string representing the name of
+the column in the data frame that contains the inferred
+super-population ancestry for the samples. The column should be
+present in the data frame. Default: \code{"superPop"}.}
 
-\item{\code{fieldSubPop}}{TODO}
+\item{\code{fieldSubPop}}{a \code{character} string representing the name of
+the column in the Population Reference GDS file (corresponding to the
+\code{fileReferenceGDS} parameter) that contains the sub-population
+information for the samples. The column should be present in the Population
+Reference GDS file. Default: \code{"pop.group"}.}
 
-\item{\code{verbose}}{TODO}
+\item{\code{verbose}}{a \code{logical} indicating if message information should be
+printed. Default: \code{FALSE}.}
 }}
 
 \author{
