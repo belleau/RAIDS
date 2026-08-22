@@ -68,17 +68,20 @@ Default: \code{NULL}.}
 synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
 must be in \code{character} strings (no factor). If \code{NULL}, the
-following will be assigned: TODO.
+following will be assigned: \code{data.frame(study.id="NotDef.Synthetic", 
+study.desc="NotDef synthetic data", study.platform="Synthetic", 
+stringsAsFactors=FALSE)}.
 Default: \code{NULL}.}
 
 \item{pedStudy}{a \code{data.frame} containing the information TODO
 with those mandatory columns: "Name.ID",
 "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
 \code{character} strings (no factor). All row names should correspond to the
-values in the "Name.ID" column.
-Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"), 
-Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
-stringsAsFactors=FALSE, row.names = c("ProfileId"))}.}
+values in the "Name.ID" column. If \code{NULL}, the
+following will be assigned:  \code{data.frame(Name.ID=c("ProfileId"), 
+Case.ID=c("ProfileId"), Sample.Type=c("type"), Diagnosis="NotDef", 
+Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
+Default: \code{NULL}.}
 
 \item{studyType}{a \code{character} string representing the type of study.
 The possible choices are: "LD" and "GeneAware". The type of study affects

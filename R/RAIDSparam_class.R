@@ -471,17 +471,20 @@ setValidity("RAIDSparam",
 #' synthetic data to the analysed sample(s). The \code{data.frame} must have
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
 #' must be in \code{character} strings (no factor). If \code{NULL}, the 
-#' following will be assigned: TODO.
+#' following will be assigned: \code{data.frame(study.id="NotDef.Synthetic", 
+#' study.desc="NotDef synthetic data", study.platform="Synthetic", 
+#' stringsAsFactors=FALSE)}.
 #' Default: \code{NULL}.
 #' 
 #' @param pedStudy a \code{data.frame} containing the information TODO 
 #' with those mandatory columns: "Name.ID",
 #' "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
 #' \code{character} strings (no factor). All row names should correspond to the
-#' values in the "Name.ID" column.
-#' Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"), 
-#' Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
-#' stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
+#' values in the "Name.ID" column. If \code{NULL}, the 
+#' following will be assigned:  \code{data.frame(Name.ID=c("ProfileId"), 
+#' Case.ID=c("ProfileId"), Sample.Type=c("type"), Diagnosis="NotDef", 
+#' Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
+#' Default: \code{NULL}.
 #' 
 #' @param studyType a \code{character} string representing the type of study.
 #' The possible choices are: "LD" and "GeneAware". The type of study affects 
@@ -604,8 +607,7 @@ setValidity("RAIDSparam",
 RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL, 
     studyType=c("LD", "GeneAware"), genoSource=NULL, 
     blockTypeId="GeneS.Ensembl.Hsapiens.v86", reference="1KGc1.0", 
-    genome="HG38",
-    chrInfo=NULL, paramAncestry=NULL, profileFile=NULL,
+    genome="HG38", chrInfo=NULL, paramAncestry=NULL, profileFile=NULL,
     profileFileGeno=NULL, pathProfileGDS=NULL, fileReferenceGDS=NULL,
     fileReferenceAnnotGDS=NULL, inferenceType="PCAknn", sampleRef=NULL,
     batch=1L, prefix="1", nbSim=1L, offset=-1L, minCov=10L, minProb=0.999,
