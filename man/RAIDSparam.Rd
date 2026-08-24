@@ -90,7 +90,10 @@ Default: \code{"LD"}.}
 
 \item{genoSource}{TODO}
 
-\item{blockTypeId}{TODO}
+\item{blockTypeId}{a single \code{character} string corresponding to
+the block type used to extract the block identifiers. The block type must
+be present in the GDS Reference Annotation file.
+Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
 \item{reference}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.

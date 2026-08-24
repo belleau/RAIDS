@@ -26,7 +26,7 @@ setClassUnion("DataFrameOrNULL", members = c("data.frame", "NULL"))
 setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 
 
-#' An S4 class to represent the RAIDS parameters
+#' @title An S4 class to represent the RAIDS parameters
 #'
 #' @slot studyDF a \code{data.frame} containing the information about the
 #' study associated to the analysed sample(s). The \code{data.frame} must have
@@ -55,7 +55,11 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' Default: \code{"LD"}.
 #' 
 #' @slot genoSource TODO
-#' @slot blockTypeId TODO
+#' 
+#' @slot blockTypeId  a single \code{character} string corresponding to 
+#' the block type used to extract the block identifiers. The block type must 
+#' be present in the GDS Reference Annotation file. 
+#' Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.
 #' 
 #' @slot reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
@@ -157,10 +161,13 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' @import methods
-#' @name RAIDSparams-class
+#' @aliases RAIDSparam-class
+#' @name RAIDSparam-class
 #' @rdname RAIDSparam-class
+#' 
+#' @keywords classes
 #' @exportClass RAIDSparam
+#' @export
 setClass("RAIDSparam",
   slots = c(
     studyDF = "data.frame",
@@ -307,7 +314,7 @@ setValidity("RAIDSparam",
         if (!(is.character(object@studyType) && 
                 length(object@studyType) != 1 || 
                 !object@studyType %in% c("LD", "GeneAware"))) {
-            return(paste0("'studyType' slot must be one character", 
+            return(paste0("'studyType' slot must have one character", 
                 " string within those 2 choices: \"LD\" and \"GeneAware\"."))
         }
       
@@ -315,7 +322,7 @@ setValidity("RAIDSparam",
       
         ## Validate thte blockTypeId parameter
         if (length(object@blockTypeId != 1)) {
-            return("'blockTypeId' slot must have one positive integer.")
+            return("'blockTypeId' slot must have one character string.")
         }
 
         ## Validate the reference parameter
@@ -492,7 +499,11 @@ setValidity("RAIDSparam",
 #' Default: \code{"LD"}.
 #' 
 #' @param genoSource TODO
-#' @param blockTypeId TODO
+#' 
+#' @param blockTypeId a single \code{character} string corresponding to 
+#' the block type used to extract the block identifiers. The block type must 
+#' be present in the GDS Reference Annotation file. 
+#' Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.
 #' 
 #' @param reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
@@ -603,6 +614,7 @@ setValidity("RAIDSparam",
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @importFrom rlang arg_match
+#' @importFrom methods new
 #' @export
 RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL, 
     studyType=c("LD", "GeneAware"), genoSource=NULL, 

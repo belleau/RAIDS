@@ -2,8 +2,8 @@
 % Please edit documentation in R/RAIDSparam_class.R
 \docType{class}
 \encoding{UTF-8}
-\name{RAIDSparams-class}
-\alias{RAIDSparams-class}
+\name{RAIDSparam-class}
+\alias{RAIDSparam-class}
 \title{An S4 class to represent the RAIDS parameters}
 \description{
 An S4 class to represent the RAIDS parameters
@@ -39,7 +39,10 @@ Default: \code{"LD"}.}
 
 \item{\code{genoSource}}{TODO}
 
-\item{\code{blockTypeId}}{TODO}
+\item{\code{blockTypeId}}{a single \code{character} string corresponding to
+the block type used to extract the block identifiers. The block type must
+be present in the GDS Reference Annotation file.
+Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
 \item{\code{reference}}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
@@ -161,3 +164,4 @@ printed. Default: \code{FALSE}.}
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }
+\keyword{classes}
