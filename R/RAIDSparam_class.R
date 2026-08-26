@@ -68,8 +68,16 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot genome a \code{character} string with one possible value:
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
 #' 
-#' @slot chrInfo TODO
-#' @slot paramAncestry TODO
+#' @slot chrInfo a \code{vector} of positive \code{integer} values
+#' representing the length of the chromosomes. See 'details' section. 
+#' Default: \code{seqlengths(Hsapiens)[seq_len(25)]}.
+#' 
+#' @slot paramAncestry a \code{list} of parameters related to ancestry. 
+#' The \code{list} should contain those three entries: \code{ScanBamParam}, 
+#' \code{PileupParam}, and \code{yieldSize}.  
+#' Default: \code{list(ScanBamParam=NULL, PileupParam=NULL, 
+#' yieldSize=10000000)}.
+#' 
 #' @slot profileFile TODO
 #' @slot profileFileGeno TODO
 #' @slot pathProfileGDS TODO
@@ -159,6 +167,24 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
 #' 
+#' 
+#' @details
+#'
+#' The `chrInfo` slot contains the length of the chromosomes. The
+#' length of the chromosomes can be obtain through the
+#' \code{\link[Seqinfo]{seqlengths}} library.
+#'
+#' As example, for hg38 genome:
+#'
+#' ```
+#'
+#' if (requireNamespace("Seqinfo", quietly=TRUE) &&
+#'      requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) {
+#'      chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
+#' }
+#'
+#' ```
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @aliases RAIDSparam-class
@@ -167,6 +193,8 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' 
 #' @keywords classes
 #' @exportClass RAIDSparam
+#' @importFrom Seqinfo seqlengths
+#' @importFrom BSgenome.Hsapiens.UCSC.hg38 Hsapiens
 #' @export
 setClass("RAIDSparam",
   slots = c(
@@ -237,8 +265,9 @@ setClass("RAIDSparam",
     blockTypeId="GeneS.Ensembl.Hsapiens.v86",
     reference="1KGc1.0",
     genome="HG38",
-    chrInfo=NULL,
-    paramAncestry=NULL,
+    chrInfo=seqlengths(Hsapiens)[seq_len(25)],
+    paramAncestry=list(ScanBamParam=NULL, PileupParam=NULL,
+                                yieldSize=10000000),
     profileFile=NULL,
     profileFileGeno=NULL,
     pathProfileGDS=NULL,
@@ -338,7 +367,16 @@ setValidity("RAIDSparam",
         }
 
         ## Validate the chrInfo parameter TODO
-        ## Validate the paramAncestry parameter TODO
+
+        ## Validate the paramAncestry parameter 
+        if (length(object@paramAncestry) != 3 || 
+                    !all(c("ScanBamParam", "PileupParam", "yieldSize") %in% 
+                      object@paramAncestry)) {
+            return("'paramAncestry' slot must be a list with those three ", 
+                        "entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\".")
+        }
+      
         ## Validate the profileFile parameter TODO
         ## Validate the profileFileGeno parameter TODO
         ## Validate the pathProfileGDS parameter TODO
@@ -498,7 +536,8 @@ setValidity("RAIDSparam",
 #' the way the estimation of the allelic fraction is done. 
 #' Default: \code{"LD"}.
 #' 
-#' @param genoSource TODO
+#' @param genoSource TODO. The valid options are: "VCF", "generic", 
+#' "snp-pileup", and "bam". Default: \code{NULL}.
 #' 
 #' @param blockTypeId a single \code{character} string corresponding to 
 #' the block type used to extract the block identifiers. The block type must 
@@ -513,8 +552,21 @@ setValidity("RAIDSparam",
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
 #' 
 #' @param chrInfo TODO
-#' @param paramAncestry TODO
-#' @param profileFile TODO
+#' 
+#' @param paramAncestry a \code{list} of parameters related to ancestry. 
+#' The \code{list} should contain those three entries: \code{ScanBamParam}, 
+#' \code{PileupParam}, and \code{yieldSize}. If \code{NULL}, the default value 
+#' \code{list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000000)} will 
+#' be assigned to the parameter. Default: \code{NULL}.
+#' 
+#' @param profileFile a \code{character} string representing the path to the
+#' file with genotype and the allele information of the profile. The format 
+#' of the accepted file is determined by the value in the 'genoSource' slot.
+#' A profile would have a file with extension "*vcf.gz" when 'genoSource' slot 
+#' is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "*.txt.gz". 
+#' If 'genoSource' is "bam", then "*.bam" (the file need to be indexed with a
+#' existing corresponding "*.bai" file). Default: \code{NULL}.
+#' 
 #' @param profileFileGeno TODO
 #' @param pathProfileGDS TODO
 #' @param fileReferenceGDS TODO
@@ -669,6 +721,12 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
                                 Source=c("NotDef"),
                                 stringsAsFactors=FALSE,
                                 row.names=c("ProfileId"))
+    }
+  
+    ## Assign default ancestry parameters when not assigned by user
+    if(is.null(paramAncestry)) {
+      paramAncestry <- list(ScanBamParam=NULL, PileupParam=NULL, 
+                                yieldSize=10000000)
     }
 
     new("RAIDSparam", studyDF=studyDF, studyDFSyn=studyDFSyn,

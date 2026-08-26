@@ -26,6 +26,16 @@ test_that("create a RAIDSparam class with all default parameters should return a
                         Source=c("NotDef"), stringsAsFactors=FALSE, 
                         row.names=c("ProfileId"))
 
+    exp_chrInfo <- c(248956422L, 242193529L, 198295559L, 190214555L, 181538259L,
+        170805979L, 159345973L, 145138636L, 138394717L, 133797422L, 135086622L, 
+        133275309L, 114364328L, 107043718L, 101991189L,  90338345L,  83257441L, 
+        80373285L,  58617616L,  64444167L,  46709983L,  50818468L, 156040895L,
+        57227415L, 16569L)
+    names(exp_chrInfo) <- c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
+    
+    exp_paramAncestry <- list(ScanBamParam=NULL, PileupParam=NULL,
+                                yieldSize=10000000)
+    
     ## New RAIDSparam with all default values
     paramTest <- new("RAIDSparam")
 
@@ -47,6 +57,8 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test studyType
     expect_true(paramTest@studyType == "LD")
 
+    ## Test genoSource TODO
+
     ## Test blockTypeId
     expect_true(paramTest@blockTypeId == "GeneS.Ensembl.Hsapiens.v86")
 
@@ -55,4 +67,11 @@ test_that("create a RAIDSparam class with all default parameters should return a
 
     ## Test genome
     expect_true(paramTest@genome == "HG38")
+
+    ## Test chrInfo
+    expect_true(all(paramTest@chrInfo == exp_chrInfo))
+
+    ## Test paramAncestry
+    expect_identical(paramTest@paramAncestry, exp_paramAncestry)
+
 })

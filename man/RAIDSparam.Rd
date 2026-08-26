@@ -88,7 +88,8 @@ The possible choices are: "LD" and "GeneAware". The type of study affects
 the way the estimation of the allelic fraction is done.
 Default: \code{"LD"}.}
 
-\item{genoSource}{TODO}
+\item{genoSource}{TODO. The valid options are: "VCF", "generic",
+"snp-pileup", and "bam". Default: \code{NULL}.}
 
 \item{blockTypeId}{a single \code{character} string corresponding to
 the block type used to extract the block identifiers. The block type must
@@ -104,9 +105,19 @@ Default: \code{"1KGc1.0"}.}
 
 \item{chrInfo}{TODO}
 
-\item{paramAncestry}{TODO}
+\item{paramAncestry}{a \code{list} of parameters related to ancestry.
+The \code{list} should contain those three entries: \code{ScanBamParam},
+\code{PileupParam}, and \code{yieldSize}. If \code{NULL}, the default value
+\code{list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000000)} will
+be assigned to the parameter. Default: \code{NULL}.}
 
-\item{profileFile}{TODO}
+\item{profileFile}{a \code{character} string representing the path to the
+file with genotype and the allele information of the profile. The format
+of the accepted file is determined by the value in the 'genoSource' slot.
+A profile would have a file with extension "\emph{vcf.gz" when 'genoSource' slot
+is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "}.txt.gz".
+If 'genoSource' is "bam", then "\emph{.bam" (the file need to be indexed with a
+existing corresponding "}.bai" file). Default: \code{NULL}.}
 
 \item{profileFileGeno}{TODO}
 

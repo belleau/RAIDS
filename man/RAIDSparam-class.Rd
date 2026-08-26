@@ -8,6 +8,21 @@
 \description{
 An S4 class to represent the RAIDS parameters
 }
+\details{
+The \code{chrInfo} slot contains the length of the chromosomes. The
+length of the chromosomes can be obtain through the
+\code{\link[Seqinfo]{seqlengths}} library.
+
+As example, for hg38 genome:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+if (requireNamespace("Seqinfo", quietly=TRUE) &&
+     requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) \{
+     chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
+\}
+
+}\if{html}{\out{</div>}}
+}
 \section{Slots}{
 
 \describe{
@@ -51,9 +66,15 @@ Default: \code{"1KGc1.0"}.}
 \item{\code{genome}}{a \code{character} string with one possible value:
 'HG38'. It specifies the genome used. Default: \code{"HG38"}.}
 
-\item{\code{chrInfo}}{TODO}
+\item{\code{chrInfo}}{a \code{vector} of positive \code{integer} values
+representing the length of the chromosomes. See 'details' section.
+Default: \code{seqlengths(Hsapiens)[seq_len(25)]}.}
 
-\item{\code{paramAncestry}}{TODO}
+\item{\code{paramAncestry}}{a \code{list} of parameters related to ancestry.
+The \code{list} should contain those three entries: \code{ScanBamParam},
+\code{PileupParam}, and \code{yieldSize}.
+Default: \code{list(ScanBamParam=NULL, PileupParam=NULL, 
+yieldSize=10000000)}.}
 
 \item{\code{profileFile}}{TODO}
 
