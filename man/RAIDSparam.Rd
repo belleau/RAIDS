@@ -236,7 +236,7 @@ eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
 function; if 'eigenCount' <= 0, then all eigenvectors are returned.
 Default: \code{32L}.}
 
-\item{eigenCountSyn}{TODO}
+\item{eigenCountSyn}{a TODO. Default: \code{15L}.}
 
 \item{kList}{a \code{vector} of positive \code{integer} representing the
 values tested for the  \emph{K} parameter. The \emph{K} parameter represents the

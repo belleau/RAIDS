@@ -49,12 +49,21 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
 #' stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
 #' 
-#' @slot studyType a \code{character} string representing the type of study.
-#' The possible choices are: "LD" and "GeneAware". The type of study affects 
-#' the way the estimation of the allelic fraction is done. 
+#' @slot studyType a single \code{character} string representing the type of 
+#' study. The possible choices are: "LD" and "GeneAware". The type of study 
+#' affects the way the estimation of the allelic fraction is done. 
 #' Default: \code{"LD"}.
 #' 
-#' @slot genoSource TODO
+#' @slot genoSource a single \code{character} string corresponding to the type 
+#' of file with the genotype and the allele information of the profile that 
+#' will be provided in the 'profileFile' slot. The valid options are: "VCF", 
+#' "generic", "snp-pileup", and "bam". The "generic" format CSV file
+#' must have at least these columns: 'Chromosome', 'Position', 'Ref', 'Alt', 
+#' 'Count', 'File1R', and 'File1A'. The 'Count' is the depth at the 
+#' specified position; 'FileR' is the depth of the reference allele, and
+#' 'File1A' is the depth of the specific alternative allele.
+#' Finally, in the case of a "VCF" file, the file must have at least those 
+#' genotype fields: GT, AD, and DP. Default: \code{NULL}.
 #' 
 #' @slot blockTypeId  a single \code{character} string corresponding to 
 #' the block type used to extract the block identifiers. The block type must 
@@ -63,7 +72,7 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' 
 #' @slot reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
-#' Default: \code{"1KGc1.0"}.
+#' Default: \code{"1KGv1.0"}.
 #' 
 #' @slot genome a \code{character} string with one possible value:
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
@@ -115,28 +124,77 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' representing the probability of sequencing error for synthetic.
 #' Default: \code{0.001}.
 #' 
-#' @slot pRecomb TODO
-#' @slot np TODO
-#' @slot listPos TODO
-#' @slot syntheticRefDF TODO
+#' @slot pRecomb a single positive \code{numeric} between \code{0} and 
+#' \code{1} that represents the frequency of phase switching in the 
+#' synthetic profiles. Default: \code{0.01}.
+#' 
+#' @slot np a single positive \code{integer} specifying the number of
+#' threads to be used. Default: \code{1L}.
+#' 
+#' @slot listPos a \code{data.frame} containing 2 columns named: 
+#' "snp.chromosome" and "snp.position". The first column,
+#' called "snp.chromosome", contains the name of the chromosome where the
+#' SNV is located. The second column, called "snp.position", contains the
+#' position of the SNV on the chromosome. Default: \code{NULL}.
+#' 
+#' @slot syntheticRefDF a \code{data.frame} containing a subset of
+#' reference profiles for each sub-population present in the Reference GDS
+#' file. The \code{data.frame} must have those columns:
+#' \describe{
+#' \item{sample.id}{ a \code{character} string representing the sample
+#' identifier. }
+#' \item{pop.group}{ a \code{character} string representing the
+#' subcontinental population assigned to the sample. }
+#' \item{superPop}{ a \code{character} string representing the
+#' super-population assigned to the sample. }
+#' }
+#' Default: \code{NULL}.
 #' 
 #' @slot pruningMethod a \code{character} string representing the method that 
 #' will be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 #' are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.
 #' 
-#' @slot slideWindowMaxBP TODO
-#' @slot thresholdLD TODO
-#' @slot specificSNV TODO
-#' @slot genoType TODO
-#' @slot phaseType TODO
+#' @slot slideWindowMaxBP a single positive \code{integer} that represents
+#' the maximum basepairs (bp) in the sliding window. This parameter is used
+#' for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. Default: \code{500000L}.
+#' 
+#' @slot thresholdLD a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. Default: \code{sqrt(0.1)}.
+#' 
+#' @slot specificSNV a \code{data.frame} containing 2 columns. The first 
+#' column, called "snp.chromosome" contains the name of the chromosome where 
+#' the SNV is located. The second column, called "snp.position", contains the
+#' position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference. It 
+#' is used during the pruning step. Default: \code{NULL}.
+#' 
+#' @slot genoType a TODO. Default: \code{"geno.ref"}.
+#' 
+#' @slot phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
 #' @slot phase a \code{logical} indicating TODO. Default: \code{FALSE}.
 #' 
-#' @slot PCAmissingRate TODO
-#' @slot PCAalgorithm TODO
-#' @slot eigenCount TODO
-#' @slot eigenCountSyn TODO
+#' @slot PCAmissingRate a positive \code{numeric} representing the maximum 
+#' missing rate retained accepted to use SNPs in the PCA analysis done 
+#' with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
+#' missing threshold. Default: \code{0.025}.
+#' 
+#' @slot PCAalgorithm a single \code{character} string representing the 
+#' algorithm to use with the \link[SNPRelate]{snpgdsPCA} function. The 
+#' algorithm must be implemented and available to the 
+#' \link[SNPRelate]{snpgdsPCA} function. The current options are:
+#' 'exact' or 'randomized'.
+#' Default: \code{"exact"}.
+#' 
+#' @slot eigenCount a single \code{integer} indicating the number of
+#' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+#' function; if 'eigenCount' <= 0, then all eigenvectors are returned. 
+#' Default: \code{32L}.
+#' 
+#' @slot eigenCountSyn a TODO. Default: \code{15L}.
 #' 
 #' @slot kList a \code{vector} of positive \code{integer} representing the 
 #' values tested for the  _K_ parameter. The _K_ parameter represents the
@@ -202,19 +260,19 @@ setClass("RAIDSparam",
     studyDFSyn = "data.frame",
     pedStudy="data.frame",
     studyType="character",
-    genoSource="character",
+    genoSource="CharacterOrNULL",
     blockTypeId="character",
     reference="character",
     genome="character",
     chrInfo="integer",
     paramAncestry="list",
-    profileFile="character",
-    profileFileGeno="character",
-    pathProfileGDS="character",
-    fileReferenceGDS="character",
-    fileReferenceAnnotGDS="character",
+    profileFile="CharacterOrNULL",
+    profileFileGeno="CharacterOrNULL",
+    pathProfileGDS="CharacterOrNULL",
+    fileReferenceGDS="CharacterOrNULL",
+    fileReferenceAnnotGDS="CharacterOrNULL",
     inferenceType="character",
-    sampleRef="character",
+    sampleRef="CharacterOrNULL",
     batch="integer",
     prefix="character",
     nbSim="integer",
@@ -225,12 +283,12 @@ setClass("RAIDSparam",
     seqErrorSyn="numeric",
     pRecomb="numeric",
     np="integer",
-    listPos="integer",
-    syntheticRefDF="data.frame",
+    listPos="DataFrameOrNULL",
+    syntheticRefDF="DataFrameOrNULL",
     pruningMethod="character",
     slideWindowMaxBP="integer",
     thresholdLD="numeric",
-    specificSNV="data.frame",
+    specificSNV="DataFrameOrNULL",
     genoType="character",
     phaseType="character",
     phase="logical",
@@ -263,7 +321,7 @@ setClass("RAIDSparam",
     studyType="LD",
     genoSource=NULL,
     blockTypeId="GeneS.Ensembl.Hsapiens.v86",
-    reference="1KGc1.0",
+    reference="1KGv1.0",
     genome="HG38",
     chrInfo=seqlengths(Hsapiens)[seq_len(25)],
     paramAncestry=list(ScanBamParam=NULL, PileupParam=NULL,
@@ -340,17 +398,22 @@ setValidity("RAIDSparam",
         }
       
         ## Validate the studyType parameter
-        if (!(is.character(object@studyType) && 
-                length(object@studyType) != 1 || 
-                !object@studyType %in% c("LD", "GeneAware"))) {
+        if (length(object@studyType) != 1 || 
+                !object@studyType %in% c("LD", "GeneAware")) {
             return(paste0("'studyType' slot must have one character", 
                 " string within those 2 choices: \"LD\" and \"GeneAware\"."))
         }
       
-        ## Validate the genoSource parameter TODO
+        ## Validate the genoSource parameter 
+        if (!is.null(object@genoSource) && !(length(ojbect@genoSource) == 1 && 
+            object@genSource %in% c("VCF", "bam", "generic", "snp-pileup"))) {
+            return(paste0("'genoSource' slot must have one character ", 
+                "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
+                "\"generic\", or \"snp-pileup\"."))
+        }
       
         ## Validate thte blockTypeId parameter
-        if (length(object@blockTypeId != 1)) {
+        if (length(object@blockTypeId) != 1) {
             return("'blockTypeId' slot must have one character string.")
         }
 
@@ -362,7 +425,7 @@ setValidity("RAIDSparam",
         }
 
         ## Validate the genome parameter
-        if (length(object@genome != 1) || object@genome != "HG38") {
+        if (length(object@genome) != 1 || object@genome != "HG38") {
             return("'genome' slot must be the character string \"HG38\".")
         }
 
@@ -371,10 +434,10 @@ setValidity("RAIDSparam",
         ## Validate the paramAncestry parameter 
         if (length(object@paramAncestry) != 3 || 
                     !all(c("ScanBamParam", "PileupParam", "yieldSize") %in% 
-                      object@paramAncestry)) {
-            return("'paramAncestry' slot must be a list with those three ", 
-                        "entries: \"ScanBamParam\", \"PileupParam\", ", 
-                        "and \"yieldSize\".")
+                        names(object@paramAncestry))) {
+            return(paste0("'paramAncestry' slot must be a list with those ", 
+                        "three entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\"."))
         }
       
         ## Validate the profileFile parameter TODO
@@ -386,55 +449,81 @@ setValidity("RAIDSparam",
         ## Validate the sampleRef parameter TODO
 
         ## Validate the batch parameter
-        if (length(object@batch != 1) || object@batch < 1) {
+        if (length(object@batch) != 1 || object@batch < 1) {
             return("'batch' slot must have one positive integer.")
         }
 
         ## Validate the prefix parameter
-        if (length(object@prefix != 1)) {
+        if (length(object@prefix) != 1) {
             return("'prefix' slot must have one character string.")
         }
 
         ## Validate the nbSim parameter
-        if (length(object@nbSim != 1) || object@nbSim < 1L) {
-            return("'offset' slot must have one positive integer.")
+        if (length(object@nbSim) != 1 || object@nbSim < 1L) {
+            return("'nbSim' slot must have one positive integer.")
         }
 
         ## Validate the offset parameter
-        if (length(object@offset != 1)) {
+        if (length(object@offset) != 1) {
             return("'offset' slot must have one integer.")
         }
         
         ## Validate the minCov parameter
-        if (length(object@minCov != 1) || object@minCov < 1L) {
+        if (length(object@minCov) != 1 || object@minCov < 1L) {
             return("'minCov' slot must have one positive integer.")
         }
 
         ## Validate the minProb parameter
-        if (length(object@minProb != 1) || 
+        if (length(object@minProb) != 1 || 
                 !(object@minProb > 0 && object@minProb < 1)) {
             return(paste0("'minProb' slot must have one positive numeric", 
                         " between 0 and 1."))
         }
 
         ## Validate the seqError parameter
-        if (length(object@seqError != 1) || 
+        if (length(object@seqError) != 1 || 
                 !(object@seqError > 0 && object@seqError < 1)) {
             return(paste0("'seqError' slot must have one positive numeric", 
                         " between 0 and 1."))
         }
 
         ## Validate the seqErrorSyn parameter
-        if (length(object@seqErrorSyn != 1) || 
+        if (length(object@seqErrorSyn) != 1 || 
                 !(object@seqErrorSyn > 0 && object@seqErrorSyn < 1)) {
             return(paste0("'seqErrorSyn' slot must have one positive numeric", 
                         " between 0 and 1."))
         }
 
-        ## Validate the pRecomb parameter TODO
-        ## Validate the np parameter TODO
-        ## Validate the listPos parameter TODO
-        ## Validate the syntheticRefDF parameter TODO
+        ## Validate the pRecomb parameter
+        if (length(object@pRecomb) != 1 || 
+                !(object@pRecomb > 0 && object@pRecomb < 1)) {
+            return(paste0("'pRecomb' slot must have one positive numeric", 
+                        " between 0 and 1."))
+        }
+      
+        ## Validate the np parameter
+        if (length(object@np) != 1 || 
+                !(object@np > 0)) {
+            return("'np' slot must have one positive integer.")
+        }
+
+        ## Validate the listPos parameter
+        if (!(is.null(object@listPos) || (ncol(object@listPos) == 2 && 
+                all(colnames(object@listPos) %in% c("snp.chromosome", 
+                "snp.position"))))) {
+            return(paste0("'listPos' slot must be NULL or a data.frame with ", 
+                "2 columns named \"snp.chromosome\" and \"snp.position\"."))
+        }
+
+        ## Validate the syntheticRefDF parameter
+        if (!(is.null(object@syntheticRefDF) || 
+                (ncol(object@syntheticRefDF) >= 3 && 
+                    all(c("sample.id", "pop.group", "superPop") %in% 
+                            colnames(object@listPos) )))) {
+            return(paste0("'syntheticRefDF' slot must be NULL or a ", 
+                "data.frame with 3 columns named \"sample.id\", ", 
+                "\"pop.group\", and \"superPop\"."))
+        }
 
         ## Validate the pruningMethod parameter
         if (length(object@pruningMethod) != 1 || 
@@ -446,20 +535,60 @@ setValidity("RAIDSparam",
         }
 
         ## Validate the slideWindowMaxBP parameter TODO
-        ## Validate the thresholdLD parameter TODO
-        ## Validate the specificSNV parameter TODO
+        if (length(object@slideWindowMaxBP) != 1 || 
+                            object@slideWindowMaxBP < 0) {
+          return(paste0("'slideWindowMaxBP' slot must have one positive ", 
+                "integer value."))
+        }
+      
+        ## Validate the thresholdLD parameter
+        if (length(object@thresholdLD) != 1 || object@thresholdLD < 0) {
+          return("'thresholdLD' slot must have one positive numeric value.")
+        }
+      
+        ## Validate the specificSNV parameter
+        if (!(is.null(object@specificSNV) || 
+                (ncol(object@specificSNV) >= 2 && 
+                    all(c("snp.chromosome", "snp.position") %in% 
+                            colnames(object@specificSNV) )))) {
+            return(paste0("'specificSNV' slot must be NULL or a ", 
+                "data.frame with 2 columns named \"snp.chromosome\"", 
+                " and \"snp.position\"."))
+        }
+
         ## Validate the genoType parameter TODO
-        ## Validate the phaseType parameter TODO
+
+        ## Validate the phaseType parameter
+        if (length(object@phaseType) != 1) {
+            return("'phaseType' slot must be one character string.")
+        }
         
         ## Validate the phase parameter
         if (length(object@phase) != 1) {
           return("'verbose' slot must have one logical value.")
         }
 
-        ## Validate the PCAmissingRate parameter TODO
-        ## Validate the PCAalgorithm parameter TODO
-        ## Validate the eigenCount parameter TODO
-        ## Validate the eigenCountSyn parameter TODO
+        ## Validate the PCAmissingRate parameter
+        if (length(object@PCAmissingRate) != 1 || object@PCAmissingRate < 0) {
+          return("'PCAmissingRate' slot must have one positive numeric value.")
+        }
+      
+        ## Validate the PCAalgorithm parameter
+        if (length(object@PCAalgorithm) != 1 || 
+                !object@PCAalgorithm %in% c("exact", "randomized")) {
+          return("'PCAalgorithm' slot must have one character string. ", 
+                "The valid options are: \"exact\" or \"randomized\".")
+        }
+      
+        ## Validate the eigenCount parameter
+        if (length(object@eigenCount) != 1) {
+          return("'eigenCount' slot must have one integer value.")
+        }
+      
+        ## Validate the eigenCountSyn parameter 
+        if (length(object@eigenCountSyn) != 1) {
+          return("'eigenCountSyn' slot must have one integer value.")
+        }
 
         ## Validate the kList parameter
         if (!all(object@kList > 0)) {
@@ -531,13 +660,21 @@ setValidity("RAIDSparam",
 #' Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
 #' Default: \code{NULL}.
 #' 
-#' @param studyType a \code{character} string representing the type of study.
-#' The possible choices are: "LD" and "GeneAware". The type of study affects 
-#' the way the estimation of the allelic fraction is done. 
+#' @param studyType a single \code{character} string representing the type 
+#' of study. The possible choices are: "LD" and "GeneAware". The type of 
+#' study affects the way the estimation of the allelic fraction is done. 
 #' Default: \code{"LD"}.
 #' 
-#' @param genoSource TODO. The valid options are: "VCF", "generic", 
-#' "snp-pileup", and "bam". Default: \code{NULL}.
+#' @param genoSource a single \code{character} string corresponding to the type 
+#' of file with the genotype and the allele information of the profile that 
+#' will be provided in the 'profileFile' slot. The valid options are: "VCF", 
+#' "generic", "snp-pileup", and "bam". The "generic" format CSV file
+#' must have at least these columns: 'Chromosome', 'Position', 'Ref', 'Alt', 
+#' 'Count', 'File1R', and 'File1A'. The 'Count' is the depth at the 
+#' specified position; 'FileR' is the depth of the reference allele, and
+#' 'File1A' is the depth of the specific alternative allele.
+#' Finally, in the case of a "VCF" file, the file must have at least those 
+#' genotype fields: GT, AD, and DP. Default: \code{NULL}.
 #' 
 #' @param blockTypeId a single \code{character} string corresponding to 
 #' the block type used to extract the block identifiers. The block type must 
@@ -546,12 +683,15 @@ setValidity("RAIDSparam",
 #' 
 #' @param reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
-#' Default: \code{"1KGc1.0"}.
+#' Default: \code{"1KGv1.0"}.
 #' 
 #' @param genome a \code{character} string with one possible value:
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
 #' 
-#' @param chrInfo TODO
+#' @param chrInfo a \code{vector} of positive \code{integer} values
+#' representing the length of the chromosomes. See 'details' section. 
+#' If \code{NULL}, the following value is 
+#' assigned: \code{seqlengths(Hsapiens)[seq_len(25)]}. Default: \code{NULL}.
 #' 
 #' @param paramAncestry a \code{list} of parameters related to ancestry. 
 #' The \code{list} should contain those three entries: \code{ScanBamParam}, 
@@ -603,28 +743,72 @@ setValidity("RAIDSparam",
 #' representing the probability of sequencing error for synthetic.
 #' Default: \code{0.001}.
 #' 
-#' @param pRecomb TODO
-#' @param np TODO
-#' @param listPos TODO
-#' @param syntheticRefDF TODO
+#' @param pRecomb a single positive \code{numeric} between \code{0} and 
+#' \code{1} that represents the frequency of phase switching in the 
+#' synthetic profiles. Default: \code{0.01}.
+#' 
+#' @param np a single positive \code{integer} specifying the number of
+#' threads to be used. Default: \code{1L}.
+#' 
+#' @param listPos a \code{data.frame} containing 2 columns named: 
+#' "snp.chromosome" and "snp.position". The first column,
+#' called "snp.chromosome", contains the name of the chromosome where the
+#' SNV is located. The second column, called "snp.position", contains the
+#' position of the SNV on the chromosome. Default: \code{NULL}.
+#' 
+#' @param syntheticRefDF a \code{data.frame} containing a subset of
+#' reference profiles for each sub-population present in the Reference GDS
+#' file. The \code{data.frame} must have those columns:
+#' \describe{
+#' \item{sample.id}{ a \code{character} string representing the sample
+#' identifier. }
+#' \item{pop.group}{ a \code{character} string representing the
+#' subcontinental population assigned to the sample. }
+#' \item{superPop}{ a \code{character} string representing the
+#' super-population assigned to the sample. }
+#' }
+#' Default: \code{NULL}.
 #' 
 #' @param pruningMethod a \code{character} string representing the method that 
 #' will be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 #' are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.
 #' 
-#' @param slideWindowMaxBP TODO
-#' @param thresholdLD TODO
-#' @param specificSNV TODO
+#' @param slideWindowMaxBP a single positive \code{integer} that represents
+#' the maximum basepairs (bp) in the sliding window. This parameter is used
+#' for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. Default: \code{500000L}.
+#' 
+#' @param thresholdLD a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. Default: \code{sqrt(0.1)}.
+#' 
+#' @param specificSNV a \code{data.frame} containing 2 columns. The first 
+#' column, called "snp.chromosome" contains the name of the chromosome where 
+#' the SNV is located. The second column, called "snp.position", contains the
+#' position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference. It 
+#' is used during the pruning step. Default: \code{NULL}.
+#' 
 #' @param genoType TODO
-#' @param phaseType TODO
+#' 
+#' @param phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
 #' @param phase a \code{logical} indicating TODO. Default: \code{FALSE}.
 #' 
-#' @param PCAmissingRate TODO
+#' @param PCAmissingRate a positive \code{numeric} representing the maximum 
+#' missing rate retained accepted to use SNPs in the PCA analysis done 
+#' with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
+#' missing threshold. Default: \code{0.025}.
+#' 
 #' @param PCAalgorithm TODO
-#' @param eigenCount TODO
-#' @param eigenCountSyn TODO
+#' 
+#' @param eigenCount a single \code{integer} indicating the number of
+#' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+#' function; if 'eigenCount' <= 0, then all eigenvectors are returned. 
+#' Default: \code{32L}.
+#' 
+#' @param eigenCountSyn a TODO. Default: \code{15L}.
 #' 
 #' @param kList a \code{vector} of positive \code{integer} representing the 
 #' values tested for the  _K_ parameter. The _K_ parameter represents the
@@ -658,31 +842,51 @@ setValidity("RAIDSparam",
 #' @return an object of class \code{RAIDSparam} that contains all the 
 #' required parameters needed by the RAIDS workflow.
 #' 
+#' @details
+#'
+#' The `chrInfo` parameter contains the length of the chromosomes. The
+#' length of the chromosomes can be obtain through the
+#' \code{\link[Seqinfo]{seqlengths}} library.
+#'
+#' As example, for hg38 genome:
+#'
+#' ```
+#'
+#' if (requireNamespace("Seqinfo", quietly=TRUE) &&
+#'      requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) {
+#'      chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
+#' }
+#'
+#' ```
+#' 
 #' @examples
 #'
-#'
-#'  ## TODO
+#' ## New object of class "RAIDSparam" with default parameters
+#' newParam <- RAIDSparam()
+#' 
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @importFrom rlang arg_match
 #' @importFrom methods new
+#' @importFrom BSgenome.Hsapiens.UCSC.hg38 Hsapiens
+#' @importFrom Seqinfo seqlengths
 #' @export
 RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL, 
     studyType=c("LD", "GeneAware"), genoSource=NULL, 
-    blockTypeId="GeneS.Ensembl.Hsapiens.v86", reference="1KGc1.0", 
+    blockTypeId="GeneS.Ensembl.Hsapiens.v86", reference="1KGv1.0", 
     genome="HG38", chrInfo=NULL, paramAncestry=NULL, profileFile=NULL,
     profileFileGeno=NULL, pathProfileGDS=NULL, fileReferenceGDS=NULL,
     fileReferenceAnnotGDS=NULL, inferenceType="PCAknn", sampleRef=NULL,
     batch=1L, prefix="1", nbSim=1L, offset=-1L, minCov=10L, minProb=0.999,
     seqError=0.001, seqErrorSyn=0.001, pRecomb=0.01, np=1L, listPos=NULL, 
     syntheticRefDF=NULL, pruningMethod=c("corr", "r", "dprime", "composite"), 
-    slideWindowMaxBP=500000L, thresholdLD=sqrt(0.1), 
-    specificSNV=NULL, genoType="geno.ref",
-    phaseType="phase.ref", phase=FALSE, PCAmissingRate=0.025, 
-    PCAalgorithm="exact", eigenCount=32L, eigenCountSyn=15L, 
-    kList=seq(2L, 15L, 1L), pcaList=seq(2L, 15L, 1L), fieldPopInRef="superPop",
-    fieldPopInfAnc="superPop", fieldSubPop="pop.group", verbose=FALSE) {
+    slideWindowMaxBP=500000L, thresholdLD=sqrt(0.1), specificSNV=NULL, 
+    genoType="geno.ref", phaseType="phase.ref", phase=FALSE, 
+    PCAmissingRate=0.025, PCAalgorithm="exact", eigenCount=32L, 
+    eigenCountSyn=15L, kList=seq(2L, 15L, 1L), pcaList=seq(2L, 15L, 1L), 
+    fieldPopInRef="superPop", fieldPopInfAnc="superPop", 
+    fieldSubPop="pop.group", verbose=FALSE) {
     
     batch <- as.integer(batch)
     nbSim <- as.integer(nbSim)
@@ -729,10 +933,16 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
                                 yieldSize=10000000)
     }
 
+    ## Assigne default chromosome information whe not assigned by user
+    if (is.null(chrInfo)) {
+        chrInfo <- seqlengths(Hsapiens)[seq_len(25)]
+    }
+
     new("RAIDSparam", studyDF=studyDF, studyDFSyn=studyDFSyn,
     studyType=studyType, genoSource=genoSource, blockTypeId=blockTypeId,
-    reference=reference, chrInfo=chrInfo, paramAncestry=paramAncestry,
-    profileFile=profileFile, profileFileGeno=profileFileGeno,
+    reference=reference, genome=genome, chrInfo=chrInfo, 
+    paramAncestry=paramAncestry, profileFile=profileFile, 
+    profileFileGeno=profileFileGeno,
     pathProfileGDS=pathProfileGDS, fileReferenceGDS=fileReferenceGDS,
     fileReferenceAnnotGDS=fileReferenceAnnotGDS,
     inferenceType=inferenceType, sampleRef=sampleRef, batch=batch, 

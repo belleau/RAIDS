@@ -47,12 +47,21 @@ Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"),
 Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
 stringsAsFactors=FALSE, row.names = c("ProfileId"))}.}
 
-\item{\code{studyType}}{a \code{character} string representing the type of study.
-The possible choices are: "LD" and "GeneAware". The type of study affects
-the way the estimation of the allelic fraction is done.
+\item{\code{studyType}}{a single \code{character} string representing the type of
+study. The possible choices are: "LD" and "GeneAware". The type of study
+affects the way the estimation of the allelic fraction is done.
 Default: \code{"LD"}.}
 
-\item{\code{genoSource}}{TODO}
+\item{\code{genoSource}}{a single \code{character} string corresponding to the type
+of file with the genotype and the allele information of the profile that
+will be provided in the 'profileFile' slot. The valid options are: "VCF",
+"generic", "snp-pileup", and "bam". The "generic" format CSV file
+must have at least these columns: 'Chromosome', 'Position', 'Ref', 'Alt',
+'Count', 'File1R', and 'File1A'. The 'Count' is the depth at the
+specified position; 'FileR' is the depth of the reference allele, and
+'File1A' is the depth of the specific alternative allele.
+Finally, in the case of a "VCF" file, the file must have at least those
+genotype fields: GT, AD, and DP. Default: \code{NULL}.}
 
 \item{\code{blockTypeId}}{a single \code{character} string corresponding to
 the block type used to extract the block identifiers. The block type must
@@ -61,7 +70,7 @@ Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
 \item{\code{reference}}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
-Default: \code{"1KGc1.0"}.}
+Default: \code{"1KGv1.0"}.}
 
 \item{\code{genome}}{a \code{character} string with one possible value:
 'HG38'. It specifies the genome used. Default: \code{"HG38"}.}
@@ -119,38 +128,77 @@ Default: \code{0.001}.}
 representing the probability of sequencing error for synthetic.
 Default: \code{0.001}.}
 
-\item{\code{pRecomb}}{TODO}
+\item{\code{pRecomb}}{a single positive \code{numeric} between \code{0} and
+\code{1} that represents the frequency of phase switching in the
+synthetic profiles. Default: \code{0.01}.}
 
-\item{\code{np}}{TODO}
+\item{\code{np}}{a single positive \code{integer} specifying the number of
+threads to be used. Default: \code{1L}.}
 
-\item{\code{listPos}}{TODO}
+\item{\code{listPos}}{a \code{data.frame} containing 2 columns named:
+"snp.chromosome" and "snp.position". The first column,
+called "snp.chromosome", contains the name of the chromosome where the
+SNV is located. The second column, called "snp.position", contains the
+position of the SNV on the chromosome. Default: \code{NULL}.}
 
-\item{\code{syntheticRefDF}}{TODO}
+\item{\code{syntheticRefDF}}{a \code{data.frame} containing a subset of
+reference profiles for each sub-population present in the Reference GDS
+file. The \code{data.frame} must have those columns:
+\describe{
+\item{sample.id}{ a \code{character} string representing the sample
+identifier. }
+\item{pop.group}{ a \code{character} string representing the
+subcontinental population assigned to the sample. }
+\item{superPop}{ a \code{character} string representing the
+super-population assigned to the sample. }
+}
+Default: \code{NULL}.}
 
 \item{\code{pruningMethod}}{a \code{character} string representing the method that
 will be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
-\item{\code{slideWindowMaxBP}}{TODO}
+\item{\code{slideWindowMaxBP}}{a single positive \code{integer} that represents
+the maximum basepairs (bp) in the sliding window. This parameter is used
+for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}}
+function. Default: \code{500000L}.}
 
-\item{\code{thresholdLD}}{TODO}
+\item{\code{thresholdLD}}{a single positive \code{numeric} value that represents
+the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}}
+function. Default: \code{sqrt(0.1)}.}
 
-\item{\code{specificSNV}}{TODO}
+\item{\code{specificSNV}}{a \code{data.frame} containing 2 columns. The first
+column, called "snp.chromosome" contains the name of the chromosome where
+the SNV is located. The second column, called "snp.position", contains the
+position of the SNV on the chromosome. Optionally, the column "snvKeep"
+contains the SNV index in the reference or -1 if not in the reference. It
+is used during the pruning step. Default: \code{NULL}.}
 
-\item{\code{genoType}}{TODO}
+\item{\code{genoType}}{a TODO. Default: \code{"geno.ref"}.}
 
-\item{\code{phaseType}}{TODO}
+\item{\code{phaseType}}{a TODO. Default: \code{"phase.ref"}.}
 
 \item{\code{phase}}{a \code{logical} indicating TODO. Default: \code{FALSE}.}
 
-\item{\code{PCAmissingRate}}{TODO}
+\item{\code{PCAmissingRate}}{a positive \code{numeric} representing the maximum
+missing rate retained accepted to use SNPs in the PCA analysis done
+with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
+missing threshold. Default: \code{0.025}.}
 
-\item{\code{PCAalgorithm}}{TODO}
+\item{\code{PCAalgorithm}}{a single \code{character} string representing the
+algorithm to use with the \link[SNPRelate]{snpgdsPCA} function. The
+algorithm must be implemented and available to the
+\link[SNPRelate]{snpgdsPCA} function. The current options are:
+'exact' or 'randomized'.
+Default: \code{"exact"}.}
 
-\item{\code{eigenCount}}{TODO}
+\item{\code{eigenCount}}{a single \code{integer} indicating the number of
+eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+function; if 'eigenCount' <= 0, then all eigenvectors are returned.
+Default: \code{32L}.}
 
-\item{\code{eigenCountSyn}}{TODO}
+\item{\code{eigenCountSyn}}{a TODO. Default: \code{15L}.}
 
 \item{\code{kList}}{a \code{vector} of positive \code{integer} representing the
 values tested for the  \emph{K} parameter. The \emph{K} parameter represents the

@@ -20,7 +20,6 @@ test_that("create a RAIDSparam class with all default parameters should return a
                             study.desc="NotDef synthetic data",
                             study.platform="Synthetic", stringsAsFactors=FALSE)
 
-
     exp_pedStudy <- data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"),
                         Sample.Type=c("type"), Diagnosis="NotDef",
                         Source=c("NotDef"), stringsAsFactors=FALSE, 
@@ -57,13 +56,14 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test studyType
     expect_true(paramTest@studyType == "LD")
 
-    ## Test genoSource TODO
+    ## Test genoSource 
+    expect_null(paramTest@genoSource)
 
     ## Test blockTypeId
     expect_true(paramTest@blockTypeId == "GeneS.Ensembl.Hsapiens.v86")
 
     ## Test reference
-    expect_true(paramTest@reference == "1KGc1.0")
+    expect_true(paramTest@reference == "1KGv1.0")
 
     ## Test genome
     expect_true(paramTest@genome == "HG38")
@@ -74,4 +74,98 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test paramAncestry
     expect_identical(paramTest@paramAncestry, exp_paramAncestry)
 
+        ## Validate the profileFile parameter TODO
+        ## Validate the profileFileGeno parameter TODO
+        ## Validate the pathProfileGDS parameter TODO
+        ## Validate the fileReferenceGDS parameter TODO
+        ## Validate the fileReferenceAnnotGDS parameter TODO
+        ## Validate the inferenceType parameter TODO
+        ## Validate the sampleRef parameter TODO
+
+    ## Test batch
+    expect_true(paramTest@batch == 1L)
+
+    ## Test prefix
+    expect_equal(paramTest@prefix, "1")
+
+    ## Test nbSim
+    expect_true(paramTest@nbSim == 1L)
+
+    ## Test offset
+    expect_true(paramTest@offset == -1L)
+
+    ## Test minCov
+    expect_true(paramTest@minCov == 10L)
+
+    ## Test minProb
+    expect_true(paramTest@minProb == 0.999)
+
+    ## Test seqError
+    expect_true(paramTest@seqError == 0.001)
+
+    ## Test seqErrorSyn
+    expect_true(paramTest@seqErrorSyn == 0.001)
+
+    ## Test pRecomb
+    expect_true(paramTest@pRecomb == 0.01)
+
+    ## Test np
+    expect_true(paramTest@np == 1L)
+  
+    ## Test listPos
+    expect_null(paramTest@listPos)
+
+    ## Test syntheticRefDF
+    expect_null(paramTest@syntheticRefDF)
+    
+    ## Test pruningMethod
+    expect_equal(paramTest@pruningMethod, "corr")
+
+    ## Test slideWindowMaxBP 
+    expect_equal(paramTest@slideWindowMaxBP, 500000L)
+
+    ## Test thresholdLD 
+    expect_equal(paramTest@thresholdLD, sqrt(0.1))
+
+    ## Test specificSNV
+    expect_null(paramTest@specificSNV)
+
+    ## Test genoType
+    expect_equal(paramTest@genoType, "geno.ref")
+  
+    ## Test phaseType 
+    expect_equal(paramTest@phaseType, "phase.ref")
+    
+    ## Test phase
+    expect_false(paramTest@phase)
+    
+    ## Test PCAmissingRate 
+    expect_equal(paramTest@PCAmissingRate, 0.025)
+    
+    ## Test PCAalgorithm
+    expect_equal(paramTest@PCAalgorithm, "exact")
+
+    ## Test eigenCount
+    expect_equal(paramTest@eigenCount, 32L)
+    
+    ## Test eigenCountSyn 
+    expect_equal(paramTest@eigenCountSyn, 15L)
+    
+    ## Test kList
+    expect_equal(paramTest@kList, seq(2L, 15L, 1L))
+
+    ## Test pcaList
+    expect_equal(paramTest@pcaList, seq(2L, 15L, 1L))
+
+    ## Test fieldPopInRef
+    expect_equal(paramTest@fieldPopInRef, "superPop")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldPopInfAnc, "superPop")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldSubPop, "pop.group")
+
+    ## Test verbose
+    expect_false(paramTest@verbose)
 })
