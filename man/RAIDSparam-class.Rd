@@ -85,7 +85,13 @@ The \code{list} should contain those three entries: \code{ScanBamParam},
 Default: \code{list(ScanBamParam=NULL, PileupParam=NULL, 
 yieldSize=10000000)}.}
 
-\item{\code{profileFile}}{TODO}
+\item{\code{profileFile}}{a \code{character} string representing the path to the
+file with genotype and the allele information of the profile. The format
+of the accepted file is determined by the value in the 'genoSource' slot.
+A profile would have a file with extension "\emph{vcf.gz" when 'genoSource' slot
+is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "}.txt.gz".
+If 'genoSource' is "bam", then "\emph{.bam" (the file needs to be indexed with a
+existing corresponding "}.bai" file). Default: \code{NULL}.}
 
 \item{\code{profileFileGeno}}{TODO}
 
@@ -95,7 +101,9 @@ yieldSize=10000000)}.}
 
 \item{\code{fileReferenceAnnotGDS}}{TODO}
 
-\item{\code{inferenceType}}{TODO}
+\item{\code{inferenceType}}{a single \code{character} string representing the
+genotype ancestry inference method. The two possible values:
+'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.}
 
 \item{\code{sampleRef}}{TODO}
 

@@ -74,12 +74,17 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test paramAncestry
     expect_identical(paramTest@paramAncestry, exp_paramAncestry)
 
-        ## Validate the profileFile parameter TODO
+    ## Test profileFile
+    expect_null(paramTest@profileFile)
+
         ## Validate the profileFileGeno parameter TODO
         ## Validate the pathProfileGDS parameter TODO
         ## Validate the fileReferenceGDS parameter TODO
         ## Validate the fileReferenceAnnotGDS parameter TODO
-        ## Validate the inferenceType parameter TODO
+    
+    ## Test inferenceType
+    expect_identical(paramTest@inferenceType, "PCAknn")
+
         ## Validate the sampleRef parameter TODO
 
     ## Test batch

@@ -87,12 +87,23 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' Default: \code{list(ScanBamParam=NULL, PileupParam=NULL, 
 #' yieldSize=10000000)}.
 #' 
-#' @slot profileFile TODO
+#' @slot profileFile a \code{character} string representing the path to the
+#' file with genotype and the allele information of the profile. The format 
+#' of the accepted file is determined by the value in the 'genoSource' slot.
+#' A profile would have a file with extension "*vcf.gz" when 'genoSource' slot 
+#' is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "*.txt.gz". 
+#' If 'genoSource' is "bam", then "*.bam" (the file needs to be indexed with a
+#' existing corresponding "*.bai" file). Default: \code{NULL}.
+#' 
 #' @slot profileFileGeno TODO
 #' @slot pathProfileGDS TODO
 #' @slot fileReferenceGDS TODO
 #' @slot fileReferenceAnnotGDS TODO
-#' @slot inferenceType TODO
+#' 
+#' @slot inferenceType a single \code{character} string representing the 
+#' genotype ancestry inference method. The two possible values:
+#' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
+#' 
 #' @slot sampleRef TODO
 #' 
 #' @slot batch a single positive \code{integer} representing the current
@@ -253,6 +264,7 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @exportClass RAIDSparam
 #' @importFrom Seqinfo seqlengths
 #' @importFrom BSgenome.Hsapiens.UCSC.hg38 Hsapiens
+#' @importFrom stringr str_detect
 #' @export
 setClass("RAIDSparam",
   slots = c(
@@ -440,12 +452,51 @@ setValidity("RAIDSparam",
                         "and \"yieldSize\"."))
         }
       
-        ## Validate the profileFile parameter TODO
+        ## Validate the profileFile parameter
+        if (!is.null(object@profileFile) && length(object@profileFile) != 1) {
+            return("'profileFile' slot must have one character string.")
+        } 
+      
+        ## Validate the profileFile parameter using genoSource information
+        if (!is.null(object@profileFile) && length(object@profileFile) == 1) {
+            genoSource <- object@genoSource
+            if (genoSource == "bam" && 
+                    !stringr::str_detect(object@profileFile, ".bam$")) {
+                return(paste0("'profileFile' slot must have one character ", 
+                    "string representing a file with extension '.bam' ", 
+                    "according to 'genoSource' slot."))
+            } else if (genoSource == "VCF" && 
+                    !stringr::str_detect(object@profileFile, ".vcf.gz$")) {
+                return(paste0("'profileFile' slot must have one character ", 
+                    "string representing a file with extension '.vcf.gz' ", 
+                    "according to 'genoSource' slot."))
+            } else if (genoSource %in% c("snp-pileup", "generic") && 
+                    !stringr::str_detect(object@profileFile, ".txt.gz$")) {
+                return(paste0("'profileFile' slot must have one character ", 
+                    "string representing a file with extension '.txt.gz' ", 
+                    "according to 'genoSource' slot."))
+            } 
+        } 
+        
+        ## Validate the profileFile file exists when not null
+        if (!is.null(object@profileFile) && !dir.exists(object@profileFile)) {
+            return(paste0("'profileFile' slot must have one character ", 
+                    "string representing an existing file."))
+        }
+      
         ## Validate the profileFileGeno parameter TODO
         ## Validate the pathProfileGDS parameter TODO
         ## Validate the fileReferenceGDS parameter TODO
         ## Validate the fileReferenceAnnotGDS parameter TODO
-        ## Validate the inferenceType parameter TODO
+
+        ## Validate the inferenceType parameter 
+        if (length(object@inferenceType) != 1 || 
+                !object@inferenceType %in% c("PCAknn", "haploAdmixture")) {
+            return(paste0("'inferenceType' slot must be a single character" , 
+                " string. The valid options are: 'PCAknn' and ", 
+                "'haploAdmixture'."))
+        }
+
         ## Validate the sampleRef parameter TODO
 
         ## Validate the batch parameter
@@ -711,7 +762,11 @@ setValidity("RAIDSparam",
 #' @param pathProfileGDS TODO
 #' @param fileReferenceGDS TODO
 #' @param fileReferenceAnnotGDS TODO
-#' @param inferenceType TODO
+#' 
+#' @param inferenceType a single \code{character} string representing the 
+#' genotype ancestry inference method. The two possible values:
+#' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
+#' 
 #' @param sampleRef TODO
 #' 
 #' @param batch a single positive \code{integer} representing the current

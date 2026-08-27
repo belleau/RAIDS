@@ -138,7 +138,9 @@ existing corresponding "}.bai" file). Default: \code{NULL}.}
 
 \item{fileReferenceAnnotGDS}{TODO}
 
-\item{inferenceType}{TODO}
+\item{inferenceType}{a single \code{character} string representing the
+genotype ancestry inference method. The two possible values:
+'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.}
 
 \item{sampleRef}{TODO}
 
