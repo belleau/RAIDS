@@ -12,7 +12,7 @@ RAIDSparam(
   studyType = c("LD", "GeneAware"),
   genoSource = NULL,
   blockTypeId = "GeneS.Ensembl.Hsapiens.v86",
-  reference = "1KGc1.0",
+  reference = "1KGv1.0",
   genome = "HG38",
   chrInfo = NULL,
   paramAncestry = NULL,
@@ -83,13 +83,21 @@ Case.ID=c("ProfileId"), Sample.Type=c("type"), Diagnosis="NotDef",
 Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
 Default: \code{NULL}.}
 
-\item{studyType}{a \code{character} string representing the type of study.
-The possible choices are: "LD" and "GeneAware". The type of study affects
-the way the estimation of the allelic fraction is done.
+\item{studyType}{a single \code{character} string representing the type
+of study. The possible choices are: "LD" and "GeneAware". The type of
+study affects the way the estimation of the allelic fraction is done.
 Default: \code{"LD"}.}
 
-\item{genoSource}{TODO. The valid options are: "VCF", "generic",
-"snp-pileup", and "bam". Default: \code{NULL}.}
+\item{genoSource}{a single \code{character} string corresponding to the type
+of file with the genotype and the allele information of the profile that
+will be provided in the 'profileFile' slot. The valid options are: "VCF",
+"generic", "snp-pileup", and "bam". The "generic" format CSV file
+must have at least these columns: 'Chromosome', 'Position', 'Ref', 'Alt',
+'Count', 'File1R', and 'File1A'. The 'Count' is the depth at the
+specified position; 'FileR' is the depth of the reference allele, and
+'File1A' is the depth of the specific alternative allele.
+Finally, in the case of a "VCF" file, the file must have at least those
+genotype fields: GT, AD, and DP. Default: \code{NULL}.}
 
 \item{blockTypeId}{a single \code{character} string corresponding to
 the block type used to extract the block identifiers. The block type must
@@ -98,12 +106,15 @@ Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
 \item{reference}{a \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
-Default: \code{"1KGc1.0"}.}
+Default: \code{"1KGv1.0"}.}
 
 \item{genome}{a \code{character} string with one possible value:
 'HG38'. It specifies the genome used. Default: \code{"HG38"}.}
 
-\item{chrInfo}{TODO}
+\item{chrInfo}{a \code{vector} of positive \code{integer} values
+representing the length of the chromosomes. See 'details' section.
+If \code{NULL}, the following value is
+assigned: \code{seqlengths(Hsapiens)[seq_len(25)]}. Default: \code{NULL}.}
 
 \item{paramAncestry}{a \code{list} of parameters related to ancestry.
 The \code{list} should contain those three entries: \code{ScanBamParam},
@@ -160,36 +171,70 @@ Default: \code{0.001}.}
 representing the probability of sequencing error for synthetic.
 Default: \code{0.001}.}
 
-\item{pRecomb}{TODO}
+\item{pRecomb}{a single positive \code{numeric} between \code{0} and
+\code{1} that represents the frequency of phase switching in the
+synthetic profiles. Default: \code{0.01}.}
 
-\item{np}{TODO}
+\item{np}{a single positive \code{integer} specifying the number of
+threads to be used. Default: \code{1L}.}
 
-\item{listPos}{TODO}
+\item{listPos}{a \code{data.frame} containing 2 columns named:
+"snp.chromosome" and "snp.position". The first column,
+called "snp.chromosome", contains the name of the chromosome where the
+SNV is located. The second column, called "snp.position", contains the
+position of the SNV on the chromosome. Default: \code{NULL}.}
 
-\item{syntheticRefDF}{TODO}
+\item{syntheticRefDF}{a \code{data.frame} containing a subset of
+reference profiles for each sub-population present in the Reference GDS
+file. The \code{data.frame} must have those columns:
+\describe{
+\item{sample.id}{ a \code{character} string representing the sample
+identifier. }
+\item{pop.group}{ a \code{character} string representing the
+subcontinental population assigned to the sample. }
+\item{superPop}{ a \code{character} string representing the
+super-population assigned to the sample. }
+}
+Default: \code{NULL}.}
 
 \item{pruningMethod}{a \code{character} string representing the method that
 will be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
-\item{slideWindowMaxBP}{TODO}
+\item{slideWindowMaxBP}{a single positive \code{integer} that represents
+the maximum basepairs (bp) in the sliding window. This parameter is used
+for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}}
+function. Default: \code{500000L}.}
 
-\item{thresholdLD}{TODO}
+\item{thresholdLD}{a single positive \code{numeric} value that represents
+the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}}
+function. Default: \code{sqrt(0.1)}.}
 
-\item{specificSNV}{TODO}
+\item{specificSNV}{a \code{data.frame} containing 2 columns. The first
+column, called "snp.chromosome" contains the name of the chromosome where
+the SNV is located. The second column, called "snp.position", contains the
+position of the SNV on the chromosome. Optionally, the column "snvKeep"
+contains the SNV index in the reference or -1 if not in the reference. It
+is used during the pruning step. Default: \code{NULL}.}
 
 \item{genoType}{TODO}
 
-\item{phaseType}{TODO}
+\item{phaseType}{a TODO. Default: \code{"phase.ref"}.}
 
 \item{phase}{a \code{logical} indicating TODO. Default: \code{FALSE}.}
 
-\item{PCAmissingRate}{TODO}
+\item{PCAmissingRate}{a positive \code{numeric} representing the maximum
+missing rate retained accepted to use SNPs in the PCA analysis done
+with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
+missing threshold. Default: \code{0.025}.}
 
 \item{PCAalgorithm}{TODO}
 
-\item{eigenCount}{TODO}
+\item{eigenCount}{a single \code{integer} indicating the number of
+eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}
+function; if 'eigenCount' <= 0, then all eigenvectors are returned.
+Default: \code{32L}.}
 
 \item{eigenCountSyn}{TODO}
 
@@ -231,10 +276,26 @@ The function uses all parameters to create a
 \code{RAIDSparam} class object that contains all the parameters used
 in the RAIDS workflow.
 }
+\details{
+The \code{chrInfo} parameter contains the length of the chromosomes. The
+length of the chromosomes can be obtain through the
+\code{\link[Seqinfo]{seqlengths}} library.
+
+As example, for hg38 genome:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{
+if (requireNamespace("Seqinfo", quietly=TRUE) &&
+     requireNamespace("BSgenome.Hsapiens.UCSC.hg38", quietly=TRUE)) \{
+     chrInfo <- Seqinfo::seqlengths(BSgenome.Hsapiens.UCSC.hg38::Hsapiens)[1:25]
+\}
+
+}\if{html}{\out{</div>}}
+}
 \examples{
 
+## New object of class "RAIDSparam" with default parameters
+newParam <- RAIDSparam()
 
- ## TODO
 
 }
 \author{

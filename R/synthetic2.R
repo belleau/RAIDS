@@ -88,7 +88,7 @@
 selectForSynthetic <- function(pRAIDS, nbProfiles=30L) {
     df <- pRAIDS$syntheticRefDF
     if(is.null(pRAIDS$syntheticRefDF)){
-        if(pRAIDS$reference == "1KGc1.0"){
+        if(pRAIDS$reference == "1KGv1.0"){
             df <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
                                                               nbProfiles=nbProfiles)
         }else if(pRAIDS$reference == "HGDP1kgV0.1"){
@@ -421,7 +421,7 @@ syntheticGeno2 <- function(pRAIDS) {
     posDF <- c(0,cumsum(df$Freq))
 
     block.Annot <- read.gdsn(index.gdsn(gdsRefAnnot, "block.annot"))
-    if(pRAIDS$reference == "1KGc1.0"){
+    if(pRAIDS$reference == "1KGv1.0"){
         posSP <- data.frame(EAS=which(block.Annot$block.id == "EAS.0.05.500k"),
                             EUR=which(block.Annot$block.id == "EUR.0.05.500k"),
                             AFR=which(block.Annot$block.id == "AFR.0.05.500k"),

@@ -34,7 +34,7 @@
 #'
 #' @param reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
-#' Default: \code{"1KGc1.0"}.
+#' Default: \code{"1KGv1.0"}.
 #'
 #' @param genome a \code{character} string with one possible value:
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
@@ -217,7 +217,7 @@ paramRAIDS <- function(studyDF=NULL,
                         studyType="LD",
                         genoSource=NULL,
                         blockTypeId="GeneS.Ensembl.Hsapiens.v86",
-                        reference="1KGc1.0",
+                        reference="1KGv1.0",
                         genome="HG38",
                         chrInfo=NULL,
                         paramAncestry=NULL,
