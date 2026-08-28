@@ -96,7 +96,12 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' existing corresponding "*.bai" file). Default: \code{NULL}.
 #' 
 #' @slot profileFileGeno TODO
-#' @slot pathProfileGDS TODO
+#' 
+#' @slot pathProfileGDS a single \code{character} string representing the 
+#' path to the directory where the GDS Profile files will be created. If 
+#' specified, the directory must exist. 
+#' Default: \code{NULL}.
+#' 
 #' @slot fileReferenceGDS TODO
 #' @slot fileReferenceAnnotGDS TODO
 #' 
@@ -485,7 +490,16 @@ setValidity("RAIDSparam",
         }
       
         ## Validate the profileFileGeno parameter TODO
-        ## Validate the pathProfileGDS parameter TODO
+      
+        ## Validate the pathProfileGDS parameter
+        if ((!is.null(object@pathProfileGDS) && 
+                    length(object@pathProfileGDS) != 1) || 
+            (!is.null(object@pathProfileGDS) && 
+                    !dir.exists(object@pathProfileGDS))) {
+            return(paste0("'pathProfileGDS' slot must have one character ", 
+                    "string representing an existing directory."))
+        }
+      
         ## Validate the fileReferenceGDS parameter TODO
         ## Validate the fileReferenceAnnotGDS parameter TODO
 
@@ -759,7 +773,12 @@ setValidity("RAIDSparam",
 #' existing corresponding "*.bai" file). Default: \code{NULL}.
 #' 
 #' @param profileFileGeno TODO
-#' @param pathProfileGDS TODO
+#' 
+#' @param pathProfileGDS  a single \code{character} string 
+#' representing the path to the directory where the GDS Profile files will 
+#' be created. If specified, the directory must exist. 
+#' Default: \code{NULL}.
+#' 
 #' @param fileReferenceGDS TODO
 #' @param fileReferenceAnnotGDS TODO
 #' 

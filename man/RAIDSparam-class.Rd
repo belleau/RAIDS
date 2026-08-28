@@ -95,7 +95,10 @@ existing corresponding "}.bai" file). Default: \code{NULL}.}
 
 \item{\code{profileFileGeno}}{TODO}
 
-\item{\code{pathProfileGDS}}{TODO}
+\item{\code{pathProfileGDS}}{a single \code{character} string representing the
+path to the directory where the GDS Profile files will be created. If
+specified, the directory must exist.
+Default: \code{NULL}.}
 
 \item{\code{fileReferenceGDS}}{TODO}
 

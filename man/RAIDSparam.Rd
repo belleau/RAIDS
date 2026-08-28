@@ -132,7 +132,10 @@ existing corresponding "}.bai" file). Default: \code{NULL}.}
 
 \item{profileFileGeno}{TODO}
 
-\item{pathProfileGDS}{TODO}
+\item{pathProfileGDS}{a single \code{character} string
+representing the path to the directory where the GDS Profile files will
+be created. If specified, the directory must exist.
+Default: \code{NULL}.}
 
 \item{fileReferenceGDS}{TODO}
 
