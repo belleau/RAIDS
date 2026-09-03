@@ -106,6 +106,9 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
 
     #
     infoCov <- dispatchParseReadCov(pRAIDS=pRAIDS)
+    # MatSample data.frame() with the "Chromosome", "Position",
+    #                               "File1R",  "File1A",
+    #                               "count"
     matSample <- infoCov$matProfile
     pRAIDS <- infoCov$pRAIDS
 
@@ -122,6 +125,7 @@ generateProfileRawGDS2 <- function(pRAIDS=pRAIDS) {
     #                 all.x = FALSE)
     #
     # below same as the merge above but faster
+    # See if we can do better with data.table
 
     if(pRAIDS$verbose) { message("End read ", Sys.time()) }
 
