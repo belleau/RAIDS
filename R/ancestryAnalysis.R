@@ -580,6 +580,8 @@ profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
 
     ## parse the read.count if the pRAIDS$listPos is not
     ## it define it and return an update pRAIDS
+    ## Creaste if note exists profileGDS
+    ## add in the profile gds the "Ref.count", "Alt.count", and "Total.count"
     pRAIDS <- generateProfileRawGDS2(pRAIDS)
 
     ## Call the genotype from Ref.count and Alt.count

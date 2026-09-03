@@ -950,17 +950,18 @@ getMatrixDataId <- function(matGr, pRAIDS){
     profileSyn <- read.gdsn(index.gdsn(gdsProfile,"study.annot"))
     profileSyn <- profileSyn[profileSyn$study.id == 
                                         pRAIDS$studyDFSyn$study.id[1],]
-
+    sampleId <- read.gdsn(index.gdsn(gdsProfile,"sample.id"))
 
     listGr <- lapply(seq_len(nrow(matGr)),
-                     FUN=function(x,matGr, profileSyn){
-                         return(profileSyn$data.id[profileSyn$case.id %in% 
-                                                        matGr[x,]])
+                     FUN=function(x,matGr, profileSyn, sampleId){
+                         return(sampleId[ sampleId %in% profileSyn$data.id[profileSyn$case.id %in% 
+                                                        matGr[x,]]])
                      },
                      matGr=matGr,
-                     profileSyn=profileSyn)
+                     profileSyn=profileSyn,
+                     sampleId=sampleId)
     matGrDataId <- do.call(rbind, listGr)
-
+    
     snpgdsClose(gdsProfile)
 
     return(matGrDataId)
