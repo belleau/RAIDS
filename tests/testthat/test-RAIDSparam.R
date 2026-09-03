@@ -280,3 +280,87 @@ test_that("create a RAIDSparam class with data.frame with missing first column f
         "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
         row.names=c("1", "2"))), message)
 })
+
+test_that("create a RAIDSparam class with data.frame with missing second column for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\".")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
+        "Case"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
+        "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
+        row.names=c("1", "2"))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing third column for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\".")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
+        "Case.ID"=c(1,2), "Type"=c("cancer", "cancer"), 
+        "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
+        row.names=c("1", "2"))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing fourth column for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\".")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
+        "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
+        "Diagnos"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
+        row.names=c("1", "2"))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing fifth column for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\".")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
+        "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
+        "Diagnosis"=c("cancer", "cancer"), "source"=c("CSHL", "MIT"), 
+        row.names=c("1", "2"))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with wrong row names for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\". All row names should correspond to the ", 
+        "Name.ID values.")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
+        "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
+        "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
+        row.names=c("11", "2"))), message)
+})
+
+test_that("create a RAIDSparam class with wrong name for studyType parameter should generate an error", {
+
+    message <- paste0("'studyType' slot must have one character string ", 
+        "within those 2 choices: \"LD\" and \"GeneAware\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", studyType="CANADA"), message)
+})
+
+test_that("create a RAIDSparam class with vector of names for studyType parameter should generate an error", {
+
+    message <- paste0("'studyType' slot must have one character string ", 
+        "within those 2 choices: \"LD\" and \"GeneAware\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", studyType=c("LD", "GeneAware")), message)
+})
