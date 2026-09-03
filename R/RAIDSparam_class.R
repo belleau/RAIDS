@@ -114,11 +114,12 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' genotype ancestry inference method. The two possible values:
 #' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
 #' 
-#' @slot sampleRef a \code{vector} of \code{character} strings representing
-#' the identifiers of the 1KG reference profiles that have been used to
-#' generate the synthetic profiles that are going to be analyzed.  
-#' The sub-continental identifiers are used as names for the \code{vector}.
-#' Default: \code{NULL}. TODO VALIDATE WITH PASCAL
+#' @slot sampleRef a \code{vector} of \code{character} strings that represent 
+#' a subset of sample identifiers from the GDS Reference File. Those samples 
+#' will be used for the ancestry inference. If \code{NULL}, 
+#' all the samples are retained. This is usefull if you want to removed some 
+#' specific samples (ex: samples with admixed ancestry).
+#' Default: \code{NULL}.
 #' 
 #' @slot batch a single positive \code{integer} representing the current
 #' identifier for the batch. Beware, this field is not stored anymore. 
@@ -418,7 +419,7 @@ setValidity("RAIDSparam",
                         "Source") %in% colnames(object@pedStudy)) && 
                 all(rownames(object@pedStudy) == object@pedStudy$Name.ID))) {
             return(paste0("'pedStudy' slot must be a data.frame ", 
-                "with those 3 columns: \"Name.ID\", \"Case.ID\", ", 
+                "with those 5 columns: \"Name.ID\", \"Case.ID\", ", 
                 "\"Sample.Type\", \"Diagnosis\", and \"Source\". All row ", 
                 "names should correspond to the Name.ID values."))
         }
@@ -535,13 +536,7 @@ setValidity("RAIDSparam",
                 "'haploAdmixture'."))
         }
 
-        ## Validate the sampleRef parameter
-        if (!is.null(object@sampleRef) && length(object@sampleRef) > 0 &&  
-                is.null(names(object@sampleRef))) {
-            return(paste0("'sampleRef' slot must be a vector of identifiers ", 
-                "for selected 1KG reference profiles. The sub-continental ", 
-                "identifiers have to be used as names for the vector."))
-        }
+        ## Validate the sampleRef parameter (NOTHING TO DO HERE)
       
         ## Validate the batch parameter
         if (length(object@batch) != 1 || object@batch < 1) {
@@ -821,10 +816,11 @@ setValidity("RAIDSparam",
 #' genotype ancestry inference method. The two possible values:
 #' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
 #' 
-#' @param sampleRef a \code{vector} of \code{character} strings representing
-#' the identifiers of the 1KG reference profiles that have been used to
-#' generate the synthetic profiles that are going to be analyzed.  
-#' The sub-continental identifiers are used as names for the \code{vector}.
+#' @param sampleRef a \code{vector} of \code{character} strings that represent 
+#' a subset of sample identifiers from the GDS Reference File. Those samples 
+#' will be used for the ancestry inference. If \code{NULL}, 
+#' all the samples are retained. This is usefull if you want to removed some 
+#' specific samples (ex: samples with admixed ancestry).
 #' Default: \code{NULL}.
 #' 
 #' @param batch a single positive \code{integer} representing the current

@@ -149,10 +149,11 @@ the file must exist. Default: \code{NULL}.}
 genotype ancestry inference method. The two possible values:
 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.}
 
-\item{sampleRef}{a \code{vector} of \code{character} strings representing
-the identifiers of the 1KG reference profiles that have been used to
-generate the synthetic profiles that are going to be analyzed.
-The sub-continental identifiers are used as names for the \code{vector}.
+\item{sampleRef}{a \code{vector} of \code{character} strings that represent
+a subset of sample identifiers from the GDS Reference File. Those samples
+will be used for the ancestry inference. If \code{NULL},
+all the samples are retained. This is usefull if you want to removed some
+specific samples (ex: samples with admixed ancestry).
 Default: \code{NULL}.}
 
 \item{batch}{a single positive \code{integer} representing the current

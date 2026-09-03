@@ -257,3 +257,26 @@ test_that("create a RAIDSparam class with data.frame with missing third column f
     expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.id"=c(1,2), 
         "study.desc"=c(1,2))), message)
 })
+
+test_that("create a RAIDSparam class with integer for pedStudy parameter should generate an error", {
+
+    message <- paste0("object: invalid object for slot \"pedStudy\" in class", 
+        " \"RAIDSparam\": got class \"numeric\", should be or extend ", 
+        "class \"data.frame\"")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=44), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing first column for pedStudy parameter should generate an error", {
+
+    message <- paste0("'pedStudy' slot must be a data.frame with those 5 ", 
+        "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
+        "and \"Source\".")
+    
+    ## New RAIDSparam with wrong pedStudy parameter
+    expect_error(new("RAIDSparam", pedStudy=data.frame("Name"=c("1", "2"), 
+        "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
+        "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
+        row.names=c("1", "2"))), message)
+})
