@@ -384,3 +384,82 @@ test_that("create a RAIDSparam class with vector of strings for genoSource param
     ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", genoSource=c("generic", "bam")), message)
 })
+
+test_that("create a RAIDSparam class with vector of strings for blockTypeId parameter should generate an error", {
+
+    message <- paste0("'blockTypeId' slot must have one character ", 
+            "string.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", blockTypeId=c("22", "44")), message)
+})
+
+test_that("create a RAIDSparam class with vector of strings for reference parameter should generate an error", {
+
+    message <- paste0("'reference' slot must have one character string", 
+                " within those 2 choices: \"1KGv1.0\", \"1k_hgdpV0.1\"")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", reference=c("1KGv1.0", "1KGv1.0")), message)
+})
+
+test_that("create a RAIDSparam class with wrong string for reference parameter should generate an error", {
+
+    message <- paste0("'reference' slot must have one character string", 
+                " within those 2 choices: \"1KGv1.0\", \"1k_hgdpV0.1\"")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", reference="1KGv13.0"), message)
+})
+
+test_that("create a RAIDSparam class with wrong string for genome parameter should generate an error", {
+
+    message <- paste0("'genome' slot must be the character string \"HG38\"")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genome="1KG"), message)
+})
+
+test_that("create a RAIDSparam class with list with missing first entry for paramAncestry parameter should generate an error", {
+
+    message <- paste0("'paramAncestry' slot must be a list with those ", 
+                        "three entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", paramAncestry=list(PileupParam=NULL, 
+            yieldSize=10000000)), message)
+})
+
+test_that("create a RAIDSparam class with list with missing second entry for paramAncestry parameter should generate an error", {
+
+    message <- paste0("'paramAncestry' slot must be a list with those ", 
+                        "three entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
+            yieldSize=10000000)), message)
+})
+
+test_that("create a RAIDSparam class with list with missing second entry for paramAncestry parameter should generate an error", {
+
+    message <- paste0("'paramAncestry' slot must be a list with those ", 
+                        "three entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
+            yieldSize=10000000)), message)
+})
+
+test_that("create a RAIDSparam class with list with missing third entry for paramAncestry parameter should generate an error", {
+
+    message <- paste0("'paramAncestry' slot must be a list with those ", 
+                        "three entries: \"ScanBamParam\", \"PileupParam\", ", 
+                        "and \"yieldSize\".")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
+            PileupParam=NULL)), message)
+})
