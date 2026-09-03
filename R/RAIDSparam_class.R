@@ -102,7 +102,10 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' specified, the directory must exist. 
 #' Default: \code{NULL}.
 #' 
-#' @slot fileReferenceGDS TODO
+#' @slot fileReferenceGDS a single \code{character} string representing 
+#' the file name of the Reference GDS file. If specified, the directory 
+#' must exist. Default: \code{NULL}.
+#' 
 #' @slot fileReferenceAnnotGDS TODO
 #' 
 #' @slot inferenceType a single \code{character} string representing the 
@@ -500,7 +503,15 @@ setValidity("RAIDSparam",
                     "string representing an existing directory."))
         }
       
-        ## Validate the fileReferenceGDS parameter TODO
+        ## Validate the fileReferenceGDS parameter 
+        if ((!is.null(object@fileReferenceGDS) && 
+                    length(object@fileReferenceGDS) != 1) || 
+            (!is.null(object@fileReferenceGDS) && 
+                    !dir.exists(object@fileReferenceGDS))) {
+            return(paste0("'fileReferenceGDS' slot must have one character ", 
+                    "string representing an existing file."))
+        }
+      
         ## Validate the fileReferenceAnnotGDS parameter TODO
 
         ## Validate the inferenceType parameter 
@@ -779,7 +790,10 @@ setValidity("RAIDSparam",
 #' be created. If specified, the directory must exist. 
 #' Default: \code{NULL}.
 #' 
-#' @param fileReferenceGDS TODO
+#' @param fileReferenceGDS a single \code{character} string representing 
+#' the file name of the Reference GDS file. If specified, the directory 
+#' must exist. Default: \code{NULL}.
+#' 
 #' @param fileReferenceAnnotGDS TODO
 #' 
 #' @param inferenceType a single \code{character} string representing the 

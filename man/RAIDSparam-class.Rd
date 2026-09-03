@@ -100,7 +100,9 @@ path to the directory where the GDS Profile files will be created. If
 specified, the directory must exist.
 Default: \code{NULL}.}
 
-\item{\code{fileReferenceGDS}}{TODO}
+\item{\code{fileReferenceGDS}}{a single \code{character} string representing
+the file name of the Reference GDS file. If specified, the directory
+must exist. Default: \code{NULL}.}
 
 \item{\code{fileReferenceAnnotGDS}}{TODO}
 

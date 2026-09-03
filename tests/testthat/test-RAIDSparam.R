@@ -82,7 +82,9 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test pathProfileGDS 
     expect_null(paramTest@pathProfileGDS)
     
-        ## Validate the fileReferenceGDS parameter TODO
+    ## Test fileReferenceGDS 
+    expect_null(paramTest@fileReferenceGDS)
+
         ## Validate the fileReferenceAnnotGDS parameter TODO
     
     ## Test inferenceType
