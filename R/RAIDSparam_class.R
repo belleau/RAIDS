@@ -103,10 +103,12 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' Default: \code{NULL}.
 #' 
 #' @slot fileReferenceGDS a single \code{character} string representing 
-#' the file name of the Reference GDS file. If specified, the directory 
+#' the file name of the Reference GDS file. If specified, the file  
 #' must exist. Default: \code{NULL}.
 #' 
-#' @slot fileReferenceAnnotGDS TODO
+#' @slot fileReferenceAnnotGDS a \code{character} string representing the
+#' file name of the Population Reference GDS Annotation file. If specified,
+#' the file must exist. Default: \code{NULL}.
 #' 
 #' @slot inferenceType a single \code{character} string representing the 
 #' genotype ancestry inference method. The two possible values:
@@ -507,13 +509,20 @@ setValidity("RAIDSparam",
         if ((!is.null(object@fileReferenceGDS) && 
                     length(object@fileReferenceGDS) != 1) || 
             (!is.null(object@fileReferenceGDS) && 
-                    !dir.exists(object@fileReferenceGDS))) {
+                    !file.exists(object@fileReferenceGDS))) {
             return(paste0("'fileReferenceGDS' slot must have one character ", 
                     "string representing an existing file."))
         }
       
-        ## Validate the fileReferenceAnnotGDS parameter TODO
-
+        ## Validate the fileReferenceAnnotGDS parameter
+        if ((!is.null(object@fileReferenceAnnotGDS) && 
+                    length(object@fileReferenceAnnotGDS) != 1) || 
+            (!is.null(object@fileReferenceAnnotGDS) && 
+                    !file.exists(object@fileReferenceAnnotGDS))) {
+            return(paste0("'fileReferenceAnnotGDS' slot must have one ", 
+                    "character string representing an existing file."))
+        }
+      
         ## Validate the inferenceType parameter 
         if (length(object@inferenceType) != 1 || 
                 !object@inferenceType %in% c("PCAknn", "haploAdmixture")) {
@@ -791,10 +800,12 @@ setValidity("RAIDSparam",
 #' Default: \code{NULL}.
 #' 
 #' @param fileReferenceGDS a single \code{character} string representing 
-#' the file name of the Reference GDS file. If specified, the directory 
+#' the file name of the Reference GDS file. If specified, the file  
 #' must exist. Default: \code{NULL}.
 #' 
-#' @param fileReferenceAnnotGDS TODO
+#' @param fileReferenceAnnotGDS a \code{character} string representing the
+#' file name of the Population Reference GDS Annotation file. If specified,
+#' the file must exist. Default: \code{NULL}.
 #' 
 #' @param inferenceType a single \code{character} string representing the 
 #' genotype ancestry inference method. The two possible values:
@@ -889,7 +900,10 @@ setValidity("RAIDSparam",
 #' with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
 #' missing threshold. Default: \code{0.025}.
 #' 
-#' @param PCAalgorithm TODO
+#' @param PCAalgorithm a \code{character} string representing the algorithm 
+#' to use with the \link[SNPRelate]{snpgdsPCA} function. The algorithm must 
+#' be implemented and available to the \link[SNPRelate]{snpgdsPCA} function.
+#' Default: \code{"exact"}.
 #' 
 #' @param eigenCount a single \code{integer} indicating the number of
 #' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}

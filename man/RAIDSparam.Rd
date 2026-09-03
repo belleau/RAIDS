@@ -138,10 +138,12 @@ be created. If specified, the directory must exist.
 Default: \code{NULL}.}
 
 \item{fileReferenceGDS}{a single \code{character} string representing
-the file name of the Reference GDS file. If specified, the directory
+the file name of the Reference GDS file. If specified, the file
 must exist. Default: \code{NULL}.}
 
-\item{fileReferenceAnnotGDS}{TODO}
+\item{fileReferenceAnnotGDS}{a \code{character} string representing the
+file name of the Population Reference GDS Annotation file. If specified,
+the file must exist. Default: \code{NULL}.}
 
 \item{inferenceType}{a single \code{character} string representing the
 genotype ancestry inference method. The two possible values:
@@ -236,7 +238,10 @@ missing rate retained accepted to use SNPs in the PCA analysis done
 with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
 missing threshold. Default: \code{0.025}.}
 
-\item{PCAalgorithm}{TODO}
+\item{PCAalgorithm}{a \code{character} string representing the algorithm
+to use with the \link[SNPRelate]{snpgdsPCA} function. The algorithm must
+be implemented and available to the \link[SNPRelate]{snpgdsPCA} function.
+Default: \code{"exact"}.}
 
 \item{eigenCount}{a single \code{integer} indicating the number of
 eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA}

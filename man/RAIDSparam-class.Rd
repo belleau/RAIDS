@@ -101,10 +101,12 @@ specified, the directory must exist.
 Default: \code{NULL}.}
 
 \item{\code{fileReferenceGDS}}{a single \code{character} string representing
-the file name of the Reference GDS file. If specified, the directory
+the file name of the Reference GDS file. If specified, the file
 must exist. Default: \code{NULL}.}
 
-\item{\code{fileReferenceAnnotGDS}}{TODO}
+\item{\code{fileReferenceAnnotGDS}}{a \code{character} string representing the
+file name of the Population Reference GDS Annotation file. If specified,
+the file must exist. Default: \code{NULL}.}
 
 \item{\code{inferenceType}}{a single \code{character} string representing the
 genotype ancestry inference method. The two possible values:
