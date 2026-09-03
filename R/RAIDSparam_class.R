@@ -432,8 +432,8 @@ setValidity("RAIDSparam",
         }
       
         ## Validate the genoSource parameter 
-        if (!is.null(object@genoSource) && !(length(ojbect@genoSource) == 1 && 
-            object@genSource %in% c("VCF", "bam", "generic", "snp-pileup"))) {
+        if (!is.null(object@genoSource) && !(length(object@genoSource) == 1 && 
+            object@genoSource %in% c("VCF", "bam", "generic", "snp-pileup"))) {
             return(paste0("'genoSource' slot must have one character ", 
                 "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
                 "\"generic\", or \"snp-pileup\"."))

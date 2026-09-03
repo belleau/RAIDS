@@ -364,3 +364,23 @@ test_that("create a RAIDSparam class with vector of names for studyType paramete
     ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", studyType=c("LD", "GeneAware")), message)
 })
+
+test_that("create a RAIDSparam class with wrong name for genoSource parameter should generate an error", {
+
+    message <- paste0("'genoSource' slot must have one character ", 
+                "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
+                "\"generic\", or \"snp-pileup\"")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genoSource="CANADA"), message)
+})
+
+test_that("create a RAIDSparam class with vector of strings for genoSource parameter should generate an error", {
+
+    message <- paste0("'genoSource' slot must have one character ", 
+                "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
+                "\"generic\", or \"snp-pileup\"")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genoSource=c("generic", "bam")), message)
+})
