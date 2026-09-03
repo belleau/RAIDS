@@ -85,12 +85,14 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test fileReferenceGDS 
     expect_null(paramTest@fileReferenceGDS)
 
-        ## Validate the fileReferenceAnnotGDS parameter TODO
-    
+    ## Test fileReferenceAnnotGDS
+    expect_null(paramTest@fileReferenceAnnotGDS)
+
     ## Test inferenceType
     expect_identical(paramTest@inferenceType, "PCAknn")
 
-        ## Validate the sampleRef parameter TODO
+    ## Test sampleRef
+    expect_null(paramTest@sampleRef)
 
     ## Test batch
     expect_true(paramTest@batch == 1L)
@@ -178,4 +180,80 @@ test_that("create a RAIDSparam class with all default parameters should return a
 
     ## Test verbose
     expect_false(paramTest@verbose)
+})
+
+test_that("create a RAIDSparam class with integer for studyDF parameter should generate an error", {
+
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDF=33), 
+        "got class \"numeric\", should be or extend class \"data.frame\"")
+})
+
+test_that("create a RAIDSparam class with data.frame with missing third column for studyDF parameter should generate an error", {
+
+    message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDF=data.frame("study.id"=c(1,2), 
+        "study.desc"=c(1,2))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing first column for studyDF parameter should generate an error", {
+
+    message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDF=data.frame("study.desc"=c(1,2), 
+        "study.platform"=c(1,2))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing second column for studyDF parameter should generate an error", {
+
+    message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDF=data.frame("study.id"=c(1,2), 
+        "study.platform"=c(1,2))), message)
+})
+
+test_that("create a RAIDSparam class with character for studyDFSyn parameter should generate an error", {
+
+    message <- paste0("got class \"character\", should be or ", 
+        "extend class \"data.frame\"")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDFSyn="CANADA"), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing first column for studyDFSyn parameter should generate an error", {
+
+    message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.desc"=c(1,2), 
+        "study.platform"=c(1,2))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing second column for studyDFSyn parameter should generate an error", {
+
+    message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.id"=c(1,2), 
+        "study.platform"=c(1,2))), message)
+})
+
+test_that("create a RAIDSparam class with data.frame with missing third column for studyDFSyn parameter should generate an error", {
+
+    message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
+        "columns: \"study.id\", \"study.desc\", \"study.platform\".")
+    
+    ## New RAIDSparam with wrong studyDF parameter
+    expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.id"=c(1,2), 
+        "study.desc"=c(1,2))), message)
 })

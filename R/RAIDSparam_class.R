@@ -114,7 +114,11 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' genotype ancestry inference method. The two possible values:
 #' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
 #' 
-#' @slot sampleRef TODO
+#' @slot sampleRef a \code{vector} of \code{character} strings representing
+#' the identifiers of the 1KG reference profiles that have been used to
+#' generate the synthetic profiles that are going to be analyzed.  
+#' The sub-continental identifiers are used as names for the \code{vector}.
+#' Default: \code{NULL}. TODO VALIDATE WITH PASCAL
 #' 
 #' @slot batch a single positive \code{integer} representing the current
 #' identifier for the batch. Beware, this field is not stored anymore. 
@@ -531,8 +535,14 @@ setValidity("RAIDSparam",
                 "'haploAdmixture'."))
         }
 
-        ## Validate the sampleRef parameter TODO
-
+        ## Validate the sampleRef parameter
+        if (!is.null(object@sampleRef) && length(object@sampleRef) > 0 &&  
+                is.null(names(object@sampleRef))) {
+            return(paste0("'sampleRef' slot must be a vector of identifiers ", 
+                "for selected 1KG reference profiles. The sub-continental ", 
+                "identifiers have to be used as names for the vector."))
+        }
+      
         ## Validate the batch parameter
         if (length(object@batch) != 1 || object@batch < 1) {
             return("'batch' slot must have one positive integer.")
@@ -811,7 +821,11 @@ setValidity("RAIDSparam",
 #' genotype ancestry inference method. The two possible values:
 #' 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.
 #' 
-#' @param sampleRef TODO
+#' @param sampleRef a \code{vector} of \code{character} strings representing
+#' the identifiers of the 1KG reference profiles that have been used to
+#' generate the synthetic profiles that are going to be analyzed.  
+#' The sub-continental identifiers are used as names for the \code{vector}.
+#' Default: \code{NULL}.
 #' 
 #' @param batch a single positive \code{integer} representing the current
 #' identifier for the batch. Beware, this field is not stored anymore. 

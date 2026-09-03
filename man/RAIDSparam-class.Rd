@@ -112,7 +112,11 @@ the file must exist. Default: \code{NULL}.}
 genotype ancestry inference method. The two possible values:
 'PCAknn' and 'haploAdmixture'. Default: \code{"PCAknn"}.}
 
-\item{\code{sampleRef}}{TODO}
+\item{\code{sampleRef}}{a \code{vector} of \code{character} strings representing
+the identifiers of the 1KG reference profiles that have been used to
+generate the synthetic profiles that are going to be analyzed.
+The sub-continental identifiers are used as names for the \code{vector}.
+Default: \code{NULL}. TODO VALIDATE WITH PASCAL}
 
 \item{\code{batch}}{a single positive \code{integer} representing the current
 identifier for the batch. Beware, this field is not stored anymore.
