@@ -34,7 +34,7 @@
 #'
 #' @param reference a \code{character} string with two possible values:
 #' '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference. 
-#' Default: \code{"1KGc1.0"}.
+#' Default: \code{"1KGv1.0"}.
 #'
 #' @param genome a \code{character} string with one possible value:
 #' 'HG38'. It specifies the genome used. Default: \code{"HG38"}.
@@ -87,7 +87,9 @@
 #' 
 #' @param nbSim a TODO. Default: \code{1}.
 #' 
-#' @param offset a TODO. Default: \code{-1}.
+#' @param offset a single \code{integer} that is added to the SNP position to
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' Default: \code{-1L}.
 #' 
 #' @param minCov a single positive \code{integer} representing the minimum
 #' required coverage. Default: \code{10L}.
@@ -215,7 +217,7 @@ paramRAIDS <- function(studyDF=NULL,
                         studyType="LD",
                         genoSource=NULL,
                         blockTypeId="GeneS.Ensembl.Hsapiens.v86",
-                        reference="1KGc1.0",
+                        reference="1KGv1.0",
                         genome="HG38",
                         chrInfo=NULL,
                         paramAncestry=NULL,
@@ -229,7 +231,7 @@ paramRAIDS <- function(studyDF=NULL,
                         batch=1,
                         prefix="1",
                         nbSim=1,
-                        offset=-1,
+                        offset=-1L,
                         minCov=10,
                         minProb=0.999,
                         seqError=0.001,

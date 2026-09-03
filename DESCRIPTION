@@ -40,6 +40,8 @@ Imports: S4Vectors,
     AnnotationDbi,
     methods,
     class,
+    BSgenome.Hsapiens.UCSC.hg38,
+    Seqinfo,
     pROC,
     IRanges,
     AnnotationFilter,
@@ -53,10 +55,8 @@ Suggests: testthat,
     rmarkdown,
     BiocStyle,
     withr,
-    Seqinfo,
-    GenomeInfoDb,
-    BSgenome.Hsapiens.UCSC.hg38,
-    EnsDb.Hsapiens.v86
+    EnsDb.Hsapiens.v86,
+    GenomeInfoDb
 BugReports: https://github.com/KrasnitzLab/RAIDS/issues
 URL: https://krasnitzlab.github.io/RAIDS/
 biocViews: Genetics, Software, Sequencing, WholeGenome, PrincipalComponent, 
