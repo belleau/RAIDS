@@ -576,3 +576,27 @@ test_that("create a RAIDSparam class with multiple integers for minCov parameter
     expect_error(new("RAIDSparam", minCov=c(1L, 22L)), 
         "'minCov' slot must have one positive integer.")
 })
+
+test_that("create a RAIDSparam class with zero for minCov parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minCov=0L), 
+        "'minCov' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with negative value for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=-0.001), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=1.001), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=c(0.001, 0.1)), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
