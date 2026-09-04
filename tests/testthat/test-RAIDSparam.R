@@ -463,3 +463,41 @@ test_that("create a RAIDSparam class with list with missing third entry for para
     expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
             PileupParam=NULL)), message)
 })
+
+test_that("create a RAIDSparam class with multiple strings for profileFile parameter should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", profileFile=c("aa", "bb")), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting bam should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.bam' according to ",
+            "'genoSource' slot.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genoSource="bam", profileFile="test.csv"), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting VCF should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.vcf.gz' according to ",
+            "'genoSource' slot.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genoSource="VCF", profileFile="test.csv"), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting generic should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.txt.gz' according to ",
+            "'genoSource' slot.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", genoSource="generic", profileFile="test.csv"), message)
+})
