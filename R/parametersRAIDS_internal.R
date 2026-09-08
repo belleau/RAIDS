@@ -76,8 +76,6 @@ validateParamRAIDS <- function(parameters) {
     
     ## Validated parameters: 
     validateParamRAIDS_subpart01(parameters=parameters)
-  
-    validateParamRAIDS_subpart02(parameters=parameters)
 
     invisible(TRUE)
 }
@@ -177,67 +175,6 @@ validateParamRAIDS_subpart01 <- function(parameters) {
         !parameters$pruningMethod %in% c("corr", "r", "dprime", "composite")) {
             stop("The \'pruningMethod\' must be one of those values: ",
                     "\'corr\', \'r\', \'dprime\', or \'composite\'.")
-    }
-
-    invisible(TRUE)
-}
-
-#' @title Validate the second subsection of the parametersRAIDS object
-#'
-#' @description This function validates a subsection of the parameters 
-#' present in the \code{parametersRAIDS} object. The validated parameters are:
-#' "specificSNV", "phase", "PCAalgorithm", "PCAmissingRate" TODO.
-#'
-#' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
-#'
-#' @return \code{TRUE} when all the parameters tested in the object are valid; 
-#' otherwise \code{FALSE}
-#'
-#' @examples
-#'
-#' ## A data frame with the retained SNVs
-#' specificSNV <-  data.frame("snp.chromosome"=c("chr1", "chr1"),
-#'                             "snp.position"=c(12012, 14222))
-#' 
-#' ## Create an object of class 'parametersRAIDS' with most parameters filled
-#' ## default values
-#' parameterAll <- paramRAIDS(genoSource='generic', specificSNV=specificSNV,
-#'         verbose=TRUE)
-#'
-#' ## Return TRUE when the tested parameters are valid
-#' RAIDS:::validateParamRAIDS_subpart02(parameters=parameterAll)
-#'
-#' @author Pascal Belleau and Astrid Deschênes
-#' @encoding UTF-8
-#' @keywords internal
-validateParamRAIDS_subpart02 <- function(parameters) {
-   
-    ## The specificSNV parameter should be a data frame with 2 columns minimum
-    if (!(is.data.frame(parameters$specificSNV)) || 
-                (!all(c("snp.chromosome", "snp.position") %in% 
-                                    colnames(parameters$specificSNV)))) {
-        stop("The \'specificSNV\' parameter must be a data frame ", 
-            "with at least the two columns \'snp.chromosome\' and", 
-            " \'snp.position\'.")
-    }
-
-    ## The phase parameter should be a logical
-    validateLogical(parameters$phase, "verbose")
-    
-    ## The PCAmissingRate parameter should be a positive numeric or NaN
-    if (!(is.numeric(parameters$PCAmissingRate) && 
-                (parameters$PCAmissingRate > 0.0)) && 
-                        !(is.nan(parameters$PCAmissingRate))) {
-        stop("The \'PCAmissingRate\' parameter must be a positive numeric ", 
-            "representing the SNPs missing rate cut-off or \'NaN\'.")
-    }
-
-    ## The PCAalgorithm parameter should be a character string
-    if (!is.character(parameters$PCAalgorithm)) {
-        stop("The \'PCAalgorithm\' parameter must be a character string ", 
-            "representing the algorithm used to run the PCA analysis with ", 
-            "the snpgdsPCA() function.")
     }
 
     invisible(TRUE)
