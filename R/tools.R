@@ -834,6 +834,156 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
     return(0)
 }
 
+#' @title Generate the row for the ADMIXTURE P-matrax
+#'
+#' @description This function write with P-matrix
+#'
+#' @param anchor a \code{vector} of \code{character} representing the
+#' ancestral group for each profile from the reference 
+#' where sample.ref == 1. If the admixture proportion is higher than 
+#' the threshold for one ancestral group, the value is the name 
+#' of the ancestral group; else "-".
+#'
+#' @param snpId a \code{vector} of \code{character} representing the list
+#' of snp.id from gdsReference to keep.
+#' 
+#' @param matGr a \code{matrix} containing the sample identifiers and where
+#' each column is the name of a subcontinental population. The number of
+#' row corresponds to the number of samples for each subcontinental population.
+#' 
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters.
+#'
+#' @return a \code{list} TODO.
+#'
+#' @examples
+#'
+#' ## TODO
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom genio write_bed write_bim
+#' @importFrom methods is
+#' @importFrom SNPRelate snpgdsGetGeno snpgdsOpen snpgdsClose
+#' @importFrom S4Vectors isSingleNumber
+#' @importFrom utils write.table
+#' @encoding UTF-8
+#' @export
+prepPMatrix <- function( anchor, 
+        snpId, matGr, pRAIDS) {
+    # c("EURag", "EASag", "AMRag", "AFRag", "SASag")
+    tmpTime <- system.time({ag <- unique(anchor)
+    ag <- ag[ag != "-"]
+    gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
+    profileRef <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
+    profileRef <- profileRef[which(read.gdsn(index.gdsn(gdsReference, "sample.ref"))==1)]
+    rowF <- lapply( ag,
+        FUN=function(x,gdsReference,profileRef, 
+                    pruned, anchor, matGr){
+            keepProfiles <- profileRef[which(anchor == x)]
+            matGeno <- snpgdsGetGeno(gdsReference, 
+                    sample.id=keepProfiles, 
+                    snp.id=pruned, snpfirstdim=FALSE)
+            f <- list()
+            f[[1]]  <- colSums(matGeno)/ (2*dim(matGeno)[1])
+            k<-1
+            matchinF <- integer(nrow(matGr))
+            for(i in seq_len(nrow(matGr))){
+                matchinF[i] <- 1
+                tmp <- which(keepProfiles %in% matGr[i,])
+                if(length(tmp) > 0){ 
+                    # remove some anchors for the freq
+                    k <- k + 1
+                    f[[k]]  <- colSums(matGeno[-1 * tmp, ]) / 
+                        (2*dim(matGeno[ -1 * tmp, ])[1])
+                    matchinF[i] <- k
+                }
+            }
+            # f <- colSums(matGeno)/ (2*dim(matGeno)[1])
+            return(list(f = f, index = matchinF))
+        },
+        gdsReference=gdsReference,
+        profileRef=profileRef,
+        pruned=snpId,
+        anchor = anchor,
+        matGr = matGr)})
+    print(tmpTime)
+    names(rowF) <- ag
+    snpgdsClose(gdsReference)
+    return(rowF)
+}
+
+#' @title Generate the row for the ADMIXTURE P-matrax
+#'
+#' @description This function write with P-matrix
+#'
+#' @param pathOut a \code{character} representing the output
+#' path
+#' 
+#' @param rowF a \code{list} containing allele frequencies for each 
+#' population and and for a subset if intersect quasi-no admix subset
+#' intersect the synthetic
+#' 
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters.
+#'
+#' @return a \code{array} of the frequency matrix.
+#'
+#' @examples
+#'
+#' ## TODO
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom genio write_bed write_bim
+#' @importFrom methods is
+#' @importFrom SNPRelate snpgdsGetGeno snpgdsOpen snpgdsClose
+#' @importFrom S4Vectors isSingleNumber
+#' @importFrom utils write.table
+#' @encoding UTF-8
+#' @export
+writePMatrix <- function( pathOut,rowF, pRAIDS) {
+    # c("EURag", "EASag", "AMRag", "AFRag", "SASag")
+    nb <- length(rowF[[1]]$index)
+    
+    k <- 0
+    matPIndex <- integer(nb)
+    matP <- lapply(seq_len(length(rowF)),
+        FUN=function(x, rowF){
+            return(rowF[[x]]$f[[1]])
+        },
+        rowF=rowF
+        )
+    matP <- t(do.call(rbind, matP))
+    write.table(matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+    
+    for(i in seq_len(nb)){
+        flag <- FALSE
+        matI <- integer(length(rowF))
+        for(j in seq_len(length(rowF))){
+            matI[j] <- rowF[[j]]$index[j]
+            if(rowF[[j]]$index[j] != 1){
+                flag <- TRUE
+            }
+        }
+        if(flag){
+            matP <- lapply(seq_len(length(rowF)),
+                FUN=function(x, rowF, matI){
+                    return(rowF[[x]]$f[[matI[x]]])
+                },
+                rowF=rowF,
+                matI = matI
+            )
+            matP <- t(do.call(rbind, matP))
+            k<-k+1
+            write.table(matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1],".syn.", k, ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+        }
+        matPIndex[i] <- ifelse(! flag,1, k)
+        
+    }
+    return(matPIndex)
+}
+
 #' @title Generate a matrix of synthetic group per pop
 #'
 #' @description This function extract the SNPs that pass a frequency cut-off
