@@ -686,3 +686,81 @@ test_that("create a RAIDSparam class with snp.chromosome column missing for list
         paste0("'listPos' slot must be NULL or a data.frame with 2 columns", 
             " named \"snp.chromosome\" and \"snp.position\""))
 })
+
+test_that("create a RAIDSparam class with sample.id column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "pop.group"=c("AFR", "EUR"), "superPop"=c("YRI", "CEU"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with pop.group column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "sample.id"=c("S1", "S2"), "superPop"=c("AFR", "EUR"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with superPop column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "sample.id"=c("S1", "S2"), "pop.group"=c("YRI", "CEU"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with array of strings for pruningMethod parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pruningMethod=c("r", "corr")), 
+        paste0("'pruningMethod' slot must have one character string within ", 
+        "those 4 choices: \"corr\", \"r\", \"dprime\", \"composite\"."))
+})
+
+test_that("create a RAIDSparam class with wrong string for pruningMethod parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pruningMethod="E"), 
+        paste0("'pruningMethod' slot must have one character string within ", 
+        "those 4 choices: \"corr\", \"r\", \"dprime\", \"composite\"."))
+})
+
+test_that("create a RAIDSparam class with negative integer for slideWindowMaxBP parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", slideWindowMaxBP=-1L), 
+        "'slideWindowMaxBP' slot must have one positive integer value.")
+})
+
+test_that("create a RAIDSparam class with multiple integers for slideWindowMaxBP parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", slideWindowMaxBP=c(1L, 2L)), 
+        "'slideWindowMaxBP' slot must have one positive integer value.")
+})
+
+test_that("create a RAIDSparam class with negative numeric for thresholdLD parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", thresholdLD=-1), 
+        "'thresholdLD' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple numerics for thresholdLD parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", thresholdLD=c(1, 2)), 
+        "'thresholdLD' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with snp.position column missing for specificSNV parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", specificSNV=data.frame("snp.chromosome"=c(1, 2))), 
+        paste0("'specificSNV' slot must be NULL or a ", 
+                "data.frame with 2 columns named \"snp.chromosome\"", 
+                " and \"snp.position\"."))
+})
+
+test_that("create a RAIDSparam class with snp.chromosome column missing for specificSNV parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", specificSNV=data.frame("snp.position"=c(1, 2))), 
+        paste0("'specificSNV' slot must be NULL or a ", 
+                "data.frame with 2 columns named \"snp.chromosome\"", 
+                " and \"snp.position\"."))
+})

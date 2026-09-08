@@ -624,7 +624,7 @@ setValidity("RAIDSparam",
               "\"composite\"."))
         }
 
-        ## Validate the slideWindowMaxBP parameter TODO
+        ## Validate the slideWindowMaxBP parameter
         if (length(object@slideWindowMaxBP) != 1 || 
                             object@slideWindowMaxBP < 0) {
           return(paste0("'slideWindowMaxBP' slot must have one positive ", 
