@@ -600,3 +600,89 @@ test_that("create a RAIDSparam class with multiple values for minProb parameter 
     expect_error(new("RAIDSparam", minProb=c(0.001, 0.1)), 
         "'minProb' slot must have one positive numeric between 0 and 1.")
 })
+
+test_that("create a RAIDSparam class with multiple values for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=c(0.001, 0.1)), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=1.001), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=-0.001), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=c(0.001, 0.1)), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=1.001), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=-0.001), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=-0.001), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=c(0.001, 0.1)), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=-0.001), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for np parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", np=c(2L, 3L)), 
+        "'np' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for np parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", np=-1L), 
+        "'np' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with integer for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=-1L), 
+        "got class \"integer\", should be or extend class \"DataFrameOrNULL\"")
+})
+
+test_that("create a RAIDSparam class with snp.position column missing for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=data.frame("snp.chromosome"=c("1", "2"))), 
+        paste0("'listPos' slot must be NULL or a data.frame with 2 columns", 
+            " named \"snp.chromosome\" and \"snp.position\""))
+})
+
+test_that("create a RAIDSparam class with snp.chromosome column missing for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=data.frame("snp.position"=c("1", "2"))), 
+        paste0("'listPos' slot must be NULL or a data.frame with 2 columns", 
+            " named \"snp.chromosome\" and \"snp.position\""))
+})
