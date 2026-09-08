@@ -311,8 +311,12 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
 \examples{
 
 ## New object of class "RAIDSparam" with default parameters
-newParam <- RAIDSparam()
+newParam1 <- RAIDSparam()
 
+## New object of class "RAIDSparam" with non-default parameters
+newParam2 <- RAIDSparam(studyDF=data.frame(study.id="Test1",
+    study.desc="Test Desc", study.platform="Test", stringsAsFactors=FALSE),
+    nbSim=12L, minCov=8L)
 
 }
 \author{

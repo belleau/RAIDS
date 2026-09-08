@@ -1033,8 +1033,203 @@ test_that("create a RAIDSparam function with all default parameters should retur
     expect_false(paramTest@verbose)
 })
 
-test_that("create a RAIDSparam function with multiple logicals for verbose parameter should generate an error", {
 
-    expect_error(RAIDSparam(verbose=c(FALSE, FALSE)), 
-        paste0("'verbose' slot must have one logical value."))
+test_that("create a RAIDSparam function with all non-default parameters should return an object", {
+
+    exp_studyDF <- data.frame(study.id="Test1",
+                                study.desc="Test Desc",
+                                study.platform="Test",
+                                stringsAsFactors=FALSE)
+    
+    exp_studyDFSyn <- data.frame(study.id="Test 02",
+                            study.desc="Synthetic data",
+                            study.platform="Demo", stringsAsFactors=FALSE)
+
+    exp_pedStudy <- data.frame(Name.ID=c("SampleE"), Case.ID=c("Profile11"),
+                        Sample.Type=c("test"), Diagnosis="Cancer",
+                        Source=c("CSHL"), stringsAsFactors=FALSE, 
+                        row.names=c("SampleE"))
+
+    exp_chrInfo <- c(2486422L, 24293529L, 198559L)
+    names(exp_chrInfo) <- c(paste0("chr", 1:3))
+    
+    exp_listPos <- data.frame("snp.chromosome"=c("1", "1"), 
+            "snp.position"=c(1,3))
+    
+    exp_syntheticRefDF <- data.frame(sample.id=c("Sample1", "Sample1"), 
+        pop.group=c("EUR", "AFR"), superPop=c("EUR", "AFR"))
+    
+    exp_paramAncestry <- list(ScanBamParam=NULL, PileupParam=NULL,
+                                yieldSize=10000000)
+    
+    dataDir <- test_path("fixtures")
+
+    fileGDS <- test_path("fixtures",  "1KG_Test.gds")
+
+    ## New RAIDSparam with all default values
+    paramTest <- RAIDSparam(studyDF=data.frame(study.id="Test1",
+        study.desc="Test Desc", study.platform="Test", stringsAsFactors=FALSE),
+        studyDFSyn=data.frame(study.id="Test 02", study.desc="Synthetic data",
+        study.platform="Demo", stringsAsFactors=FALSE), 
+        pedStudy=data.frame(Name.ID=c("SampleE"), Case.ID=c("Profile11"),
+        Sample.Type=c("test"), Diagnosis="Cancer", Source=c("CSHL"), 
+        stringsAsFactors=FALSE, row.names=c("SampleE")), chrInfo=exp_chrInfo,
+        studyType="GeneAware", genoSource="bam", blockTypeId="E", 
+        reference="1k_hgdpV0.1", inferenceType="haploAdmixture", batch=12L,
+        prefix="3", nbSim=11L, offset=0L, minProb=0.889, minCov=20L,
+        pruningMethod="dprime", np=2L, pRecomb=0.21, seqError=0.12, 
+        seqErrorSyn=0.02, pathProfileGDS=dataDir, fileReferenceGDS=fileGDS,
+        listPos=data.frame("snp.chromosome"=c("1", "1"), "snp.position"=c(1,3)),
+        syntheticRefDF=data.frame(sample.id=c("Sample1", "Sample1"), 
+        pop.group=c("EUR", "AFR"), superPop=c("EUR", "AFR")), 
+        slideWindowMaxBP=2000L, thresholdLD=0.2, genoType="geno.REF", 
+        phaseType="phase.REF", phase=TRUE, PCAmissingRate=0.015, 
+        PCAalgorithm="randomized", eigenCount=20L, eigenCountSyn=21L,
+        kList=c(3L, 5L), pcaList=c(5L, 9L), fieldPopInRef="superPOP", 
+        fieldPopInfAnc="supERPop", fieldSubPop="POP_GROUP", verbose=TRUE
+    )
+
+    expect_true(inherits(paramTest, "RAIDSparam"))
+    ## TODO ADD test for slots
+
+    ## Test studyDF
+    expect_true(is.data.frame(paramTest@studyDF))
+    expect_identical(paramTest@studyDF, exp_studyDF)
+
+    ## Test studyDFSyn
+    expect_true(is.data.frame(paramTest@studyDFSyn))
+    expect_identical(paramTest@studyDFSyn, exp_studyDFSyn)
+
+    ## Test pedStudy
+    expect_true(is.data.frame(paramTest@pedStudy))
+    expect_identical(paramTest@pedStudy, exp_pedStudy)
+
+    ## Test studyType
+    expect_true(paramTest@studyType == "GeneAware")
+
+    ## Test genoSource 
+    expect_true(paramTest@genoSource == "bam")
+
+    ## Test blockTypeId
+    expect_true(paramTest@blockTypeId == "E")
+
+    ## Test reference
+    expect_true(paramTest@reference == "1k_hgdpV0.1")
+
+    ## Test genome
+    expect_true(paramTest@genome == "HG38")
+
+    ## Test chrInfo
+    expect_true(all(paramTest@chrInfo == exp_chrInfo))
+
+    ## Test paramAncestry
+    expect_identical(paramTest@paramAncestry, exp_paramAncestry)
+
+    ## Test profileFile
+    expect_null(paramTest@profileFile)
+
+        ## Validate the profileFileGeno parameter TODO
+    
+    ## Test pathProfileGDS 
+    expect_equal(paramTest@pathProfileGDS, dataDir)
+    
+    ## Test fileReferenceGDS 
+    expect_equal(paramTest@fileReferenceGDS, fileGDS)
+
+    ## Test fileReferenceAnnotGDS
+    expect_null(paramTest@fileReferenceAnnotGDS)
+
+    ## Test inferenceType
+    expect_identical(paramTest@inferenceType, "haploAdmixture")
+
+    ## Test sampleRef
+    expect_null(paramTest@sampleRef)
+
+    ## Test batch
+    expect_true(paramTest@batch == 12L)
+
+    ## Test prefix
+    expect_equal(paramTest@prefix, "3")
+
+    ## Test nbSim
+    expect_true(paramTest@nbSim == 11L)
+
+    ## Test offset
+    expect_true(paramTest@offset == 0L)
+
+    ## Test minCov
+    expect_true(paramTest@minCov == 20L)
+
+    ## Test minProb
+    expect_true(paramTest@minProb == 0.889)
+
+    ## Test seqError
+    expect_true(paramTest@seqError == 0.12)
+
+    ## Test seqErrorSyn
+    expect_true(paramTest@seqErrorSyn == 0.02)
+
+    ## Test pRecomb
+    expect_true(paramTest@pRecomb == 0.21)
+
+    ## Test np
+    expect_true(paramTest@np == 2L)
+  
+    ## Test listPos
+    expect_equal(paramTest@listPos, exp_listPos)
+
+    ## Test syntheticRefDF
+    expect_equal(paramTest@syntheticRefDF, exp_syntheticRefDF)
+    
+    ## Test pruningMethod
+    expect_equal(paramTest@pruningMethod, "dprime")
+
+    ## Test slideWindowMaxBP 
+    expect_equal(paramTest@slideWindowMaxBP, 2000L)
+
+    ## Test thresholdLD 
+    expect_equal(paramTest@thresholdLD, 0.2)
+
+    ## Test specificSNV
+    expect_null(paramTest@specificSNV)
+
+    ## Test genoType
+    expect_equal(paramTest@genoType, "geno.REF")
+  
+    ## Test phaseType 
+    expect_equal(paramTest@phaseType, "phase.REF")
+    
+    ## Test phase
+    expect_true(paramTest@phase)
+    
+    ## Test PCAmissingRate 
+    expect_equal(paramTest@PCAmissingRate, 0.015)
+    
+    ## Test PCAalgorithm
+    expect_equal(paramTest@PCAalgorithm, "randomized")
+
+    ## Test eigenCount
+    expect_equal(paramTest@eigenCount, 20L)
+    
+    ## Test eigenCountSyn 
+    expect_equal(paramTest@eigenCountSyn, 21L)
+    
+    ## Test kList
+    expect_equal(paramTest@kList, c(3L, 5L))
+
+    ## Test pcaList
+    expect_equal(paramTest@pcaList, c(5L, 9L))
+
+    ## Test fieldPopInRef
+    expect_equal(paramTest@fieldPopInRef, "superPOP")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldPopInfAnc, "supERPop")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldSubPop, "POP_GROUP")
+
+    ## Test verbose
+    expect_true(paramTest@verbose)
 })
+

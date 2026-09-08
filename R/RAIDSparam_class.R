@@ -607,9 +607,9 @@ setValidity("RAIDSparam",
 
         ## Validate the syntheticRefDF parameter
         if (!(is.null(object@syntheticRefDF) || 
-                (ncol(object@syntheticRefDF) >= 3 && 
+                ncol(object@syntheticRefDF) >= 3 && 
                     all(c("sample.id", "pop.group", "superPop") %in% 
-                            colnames(object@listPos) )))) {
+                            colnames(object@syntheticRefDF)))) {
             return(paste0("'syntheticRefDF' slot must be NULL or a ", 
                 "data.frame with 3 columns named \"sample.id\", ", 
                 "\"pop.group\", and \"superPop\"."))
@@ -974,8 +974,12 @@ setValidity("RAIDSparam",
 #' @examples
 #'
 #' ## New object of class "RAIDSparam" with default parameters
-#' newParam <- RAIDSparam()
+#' newParam1 <- RAIDSparam()
 #' 
+#' ## New object of class "RAIDSparam" with non-default parameters
+#' newParam2 <- RAIDSparam(studyDF=data.frame(study.id="Test1",
+#'     study.desc="Test Desc", study.platform="Test", stringsAsFactors=FALSE),
+#'     nbSim=12L, minCov=8L)
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
@@ -1029,7 +1033,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
             study.platform="Synthetic", stringsAsFactors=FALSE)
     }
 
-    if(is.null(pedStudy)){
+    if (is.null(pedStudy)) {
         pedStudy <- data.frame(Name.ID=c("ProfileId"),
                                 Case.ID=c("ProfileId"),
                                 Sample.Type=c("type"),
@@ -1050,7 +1054,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
         chrInfo <- seqlengths(Hsapiens)[seq_len(25)]
     }
 
-    new("RAIDSparam", studyDF=studyDF, studyDFSyn=studyDFSyn,
+    new("RAIDSparam", studyDF=studyDF, studyDFSyn=studyDFSyn, pedStudy=pedStudy, 
     studyType=studyType, genoSource=genoSource, blockTypeId=blockTypeId,
     reference=reference, genome=genome, chrInfo=chrInfo, 
     paramAncestry=paramAncestry, profileFile=profileFile, 
