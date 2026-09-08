@@ -184,7 +184,6 @@ test_that("create a RAIDSparam class with all default parameters should return a
 
 test_that("create a RAIDSparam class with integer for studyDF parameter should generate an error", {
 
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDF=33), 
         "got class \"numeric\", should be or extend class \"data.frame\"")
 })
@@ -194,7 +193,6 @@ test_that("create a RAIDSparam class with data.frame with missing third column f
     message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDF=data.frame("study.id"=c(1,2), 
         "study.desc"=c(1,2))), message)
 })
@@ -204,7 +202,6 @@ test_that("create a RAIDSparam class with data.frame with missing first column f
     message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDF=data.frame("study.desc"=c(1,2), 
         "study.platform"=c(1,2))), message)
 })
@@ -214,7 +211,6 @@ test_that("create a RAIDSparam class with data.frame with missing second column 
     message <- paste0("'studyDF' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDF=data.frame("study.id"=c(1,2), 
         "study.platform"=c(1,2))), message)
 })
@@ -224,7 +220,6 @@ test_that("create a RAIDSparam class with character for studyDFSyn parameter sho
     message <- paste0("got class \"character\", should be or ", 
         "extend class \"data.frame\"")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDFSyn="CANADA"), message)
 })
 
@@ -233,7 +228,6 @@ test_that("create a RAIDSparam class with data.frame with missing first column f
     message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.desc"=c(1,2), 
         "study.platform"=c(1,2))), message)
 })
@@ -243,7 +237,6 @@ test_that("create a RAIDSparam class with data.frame with missing second column 
     message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.id"=c(1,2), 
         "study.platform"=c(1,2))), message)
 })
@@ -253,7 +246,6 @@ test_that("create a RAIDSparam class with data.frame with missing third column f
     message <- paste0("'studyDFSyn' slot must be a data.frame with those 3 ", 
         "columns: \"study.id\", \"study.desc\", \"study.platform\".")
     
-    ## New RAIDSparam with wrong studyDF parameter
     expect_error(new("RAIDSparam", studyDFSyn=data.frame("study.id"=c(1,2), 
         "study.desc"=c(1,2))), message)
 })
@@ -264,7 +256,6 @@ test_that("create a RAIDSparam class with integer for pedStudy parameter should 
         " \"RAIDSparam\": got class \"numeric\", should be or extend ", 
         "class \"data.frame\"")
     
-    ## New RAIDSparam with wrong pedStudy parameter
     expect_error(new("RAIDSparam", pedStudy=44), message)
 })
 
@@ -274,7 +265,6 @@ test_that("create a RAIDSparam class with data.frame with missing first column f
         "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
         "and \"Source\".")
     
-    ## New RAIDSparam with wrong pedStudy parameter
     expect_error(new("RAIDSparam", pedStudy=data.frame("Name"=c("1", "2"), 
         "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
         "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
@@ -287,7 +277,6 @@ test_that("create a RAIDSparam class with data.frame with missing second column 
         "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
         "and \"Source\".")
     
-    ## New RAIDSparam with wrong pedStudy parameter
     expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
         "Case"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
         "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
@@ -300,7 +289,6 @@ test_that("create a RAIDSparam class with data.frame with missing third column f
         "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
         "and \"Source\".")
     
-    ## New RAIDSparam with wrong pedStudy parameter
     expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
         "Case.ID"=c(1,2), "Type"=c("cancer", "cancer"), 
         "Diagnosis"=c("cancer", "cancer"), "Source"=c("CSHL", "MIT"), 
@@ -326,7 +314,6 @@ test_that("create a RAIDSparam class with data.frame with missing fifth column f
         "columns: \"Name.ID\", \"Case.ID\", \"Sample.Type\", \"Diagnosis\", ", 
         "and \"Source\".")
     
-    ## New RAIDSparam with wrong pedStudy parameter
     expect_error(new("RAIDSparam", pedStudy=data.frame("Name.ID"=c("1", "2"), 
         "Case.ID"=c(1,2), "Sample.Type"=c("cancer", "cancer"), 
         "Diagnosis"=c("cancer", "cancer"), "source"=c("CSHL", "MIT"), 
@@ -352,7 +339,6 @@ test_that("create a RAIDSparam class with wrong name for studyType parameter sho
     message <- paste0("'studyType' slot must have one character string ", 
         "within those 2 choices: \"LD\" and \"GeneAware\".")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", studyType="CANADA"), message)
 })
 
@@ -371,7 +357,6 @@ test_that("create a RAIDSparam class with wrong name for genoSource parameter sh
                 "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
                 "\"generic\", or \"snp-pileup\"")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", genoSource="CANADA"), message)
 })
 
@@ -381,7 +366,6 @@ test_that("create a RAIDSparam class with vector of strings for genoSource param
                 "string or NULL. The valid options are: \"VCF\", \"bam\", ", 
                 "\"generic\", or \"snp-pileup\"")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", genoSource=c("generic", "bam")), message)
 })
 
@@ -390,7 +374,6 @@ test_that("create a RAIDSparam class with vector of strings for blockTypeId para
     message <- paste0("'blockTypeId' slot must have one character ", 
             "string.")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", blockTypeId=c("22", "44")), message)
 })
 
@@ -408,7 +391,6 @@ test_that("create a RAIDSparam class with wrong string for reference parameter s
     message <- paste0("'reference' slot must have one character string", 
                 " within those 2 choices: \"1KGv1.0\", \"1k_hgdpV0.1\"")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", reference="1KGv13.0"), message)
 })
 
@@ -416,7 +398,6 @@ test_that("create a RAIDSparam class with wrong string for genome parameter shou
 
     message <- paste0("'genome' slot must be the character string \"HG38\"")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", genome="1KG"), message)
 })
 
@@ -426,7 +407,6 @@ test_that("create a RAIDSparam class with list with missing first entry for para
                         "three entries: \"ScanBamParam\", \"PileupParam\", ", 
                         "and \"yieldSize\".")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", paramAncestry=list(PileupParam=NULL, 
             yieldSize=10000000)), message)
 })
@@ -448,7 +428,6 @@ test_that("create a RAIDSparam class with list with missing second entry for par
                         "three entries: \"ScanBamParam\", \"PileupParam\", ", 
                         "and \"yieldSize\".")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
             yieldSize=10000000)), message)
 })
@@ -459,7 +438,603 @@ test_that("create a RAIDSparam class with list with missing third entry for para
                         "three entries: \"ScanBamParam\", \"PileupParam\", ", 
                         "and \"yieldSize\".")
     
-    ## New RAIDSparam with wrong studyType parameter
     expect_error(new("RAIDSparam", paramAncestry=list(ScanBamParam=NULL, 
             PileupParam=NULL)), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for profileFile parameter should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string.")
+    
+    ## New RAIDSparam with wrong studyType parameter
+    expect_error(new("RAIDSparam", profileFile=c("aa", "bb")), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting bam should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.bam' according to ",
+            "'genoSource' slot.")
+    
+    expect_error(new("RAIDSparam", genoSource="bam", profileFile="test.csv"), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting VCF should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.vcf.gz' according to ",
+            "'genoSource' slot.")
+    
+    expect_error(new("RAIDSparam", genoSource="VCF", profileFile="test.csv"), message)
+})
+
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when expecting generic should generate an error", {
+
+    message <- paste0("'profileFile' slot must have one character string ", 
+            "representing a file with extension '.txt.gz' according to ",
+            "'genoSource' slot.")
+    
+    expect_error(new("RAIDSparam", genoSource="generic", profileFile="test.csv"), message)
+})
+
+test_that("create a RAIDSparam class with not existing dir for pathProfileGDS parameter should generate an error", {
+
+    message <- paste0("'pathProfileGDS' slot must have one character string ", 
+        "representing an existing directory.")
+    
+    expect_error(new("RAIDSparam", pathProfileGDS="./generic"), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for pathProfileGDS parameter should generate an error", {
+
+    message <- paste0("'pathProfileGDS' slot must have one character string ", 
+        "representing an existing directory.")
+    
+    expect_error(new("RAIDSparam", pathProfileGDS=c("./generic", "./testCanada")), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for fileReferenceGDS parameter should generate an error", {
+
+    message <- paste0("'fileReferenceGDS' slot must have one character string", 
+        " representing an existing file.")
+    
+    expect_error(new("RAIDSparam", fileReferenceGDS=c("generic.gds", "test.gds")), message)
+})
+
+test_that("create a RAIDSparam class with not existing file for fileReferenceGDS parameter should generate an error", {
+
+    message <- paste0("'fileReferenceGDS' slot must have one character string", 
+        " representing an existing file.")
+    
+    expect_error(new("RAIDSparam", fileReferenceGDS="./generic.gds"), message)
+})
+
+test_that("create a RAIDSparam class with not existing file for fileReferenceAnnotGDS parameter should generate an error", {
+
+    message <- paste0("'fileReferenceAnnotGDS' slot must have one character ", 
+        "string representing an existing file.")
+    
+    expect_error(new("RAIDSparam", fileReferenceAnnotGDS="./generic.gds"), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for fileReferenceAnnotGDS parameter should generate an error", {
+
+    message <- paste0("'fileReferenceAnnotGDS' slot must have one character ", 
+        "string representing an existing file.")
+    
+    expect_error(new("RAIDSparam", fileReferenceAnnotGDS=c("generic.gds", "test.gds")), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for inferenceType parameter should generate an error", {
+
+    message <- paste0("'inferenceType' slot must be a single character ", 
+        "string. The valid options are: 'PCAknn' and 'haploAdmixture'.")
+    
+    expect_error(new("RAIDSparam", inferenceType=c("PCAknn", "PCAknn")), message)
+})
+
+test_that("create a RAIDSparam class with wrong string for inferenceType parameter should generate an error", {
+
+    message <- paste0("'inferenceType' slot must be a single character ", 
+        "string. The valid options are: 'PCAknn' and 'haploAdmixture'.")
+    
+    expect_error(new("RAIDSparam", inferenceType="PCAknnT"), message)
+})
+
+test_that("create a RAIDSparam class with negative number for batch parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", batch=-1L), 
+        "'batch' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with multiple numbers for batch parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", batch=c(1L, 22L)), 
+        "'batch' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with multiple strings for prefix parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", prefix=c("a", "b")), 
+        "'prefix' slot must have one character string.")
+})
+
+test_that("create a RAIDSparam class with multiple numbers for nbSim parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", nbSim=c(1L, 22L)), 
+        "'nbSim' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with multiple integers for offset parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", offset=c(0L, 1L)), 
+        "'offset' slot must have one integer.")
+})
+
+test_that("create a RAIDSparam class with multiple integers for minCov parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minCov=c(1L, 22L)), 
+        "'minCov' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with zero for minCov parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minCov=0L), 
+        "'minCov' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with negative value for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=-0.001), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=1.001), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for minProb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", minProb=c(0.001, 0.1)), 
+        "'minProb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=c(0.001, 0.1)), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=1.001), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for seqError parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqError=-0.001), 
+        "'seqError' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=c(0.001, 0.1)), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=1.001), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for seqErrorSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seqErrorSyn=-0.001), 
+        "'seqErrorSyn' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=-0.001), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=c(0.001, 0.1)), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with negative value for pRecomb parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pRecomb=-0.001), 
+        "'pRecomb' slot must have one positive numeric between 0 and 1.")
+})
+
+test_that("create a RAIDSparam class with multiple values for np parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", np=c(2L, 3L)), 
+        "'np' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with value superior to 1 for np parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", np=-1L), 
+        "'np' slot must have one positive integer.")
+})
+
+test_that("create a RAIDSparam class with integer for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=-1L), 
+        "got class \"integer\", should be or extend class \"DataFrameOrNULL\"")
+})
+
+test_that("create a RAIDSparam class with snp.position column missing for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=data.frame("snp.chromosome"=c("1", "2"))), 
+        paste0("'listPos' slot must be NULL or a data.frame with 2 columns", 
+            " named \"snp.chromosome\" and \"snp.position\""))
+})
+
+test_that("create a RAIDSparam class with snp.chromosome column missing for listPos parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", listPos=data.frame("snp.position"=c("1", "2"))), 
+        paste0("'listPos' slot must be NULL or a data.frame with 2 columns", 
+            " named \"snp.chromosome\" and \"snp.position\""))
+})
+
+test_that("create a RAIDSparam class with sample.id column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "pop.group"=c("AFR", "EUR"), "superPop"=c("YRI", "CEU"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with pop.group column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "sample.id"=c("S1", "S2"), "superPop"=c("AFR", "EUR"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with superPop column missing for syntheticRefDF parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", syntheticRefDF=data.frame(
+        "sample.id"=c("S1", "S2"), "pop.group"=c("YRI", "CEU"))), 
+        paste0("'syntheticRefDF' slot must be NULL or a data.frame with 3 ", 
+            "columns named \"sample.id\", \"pop.group\", and \"superPop\"."))
+})
+
+test_that("create a RAIDSparam class with array of strings for pruningMethod parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pruningMethod=c("r", "corr")), 
+        paste0("'pruningMethod' slot must have one character string within ", 
+        "those 4 choices: \"corr\", \"r\", \"dprime\", \"composite\"."))
+})
+
+test_that("create a RAIDSparam class with wrong string for pruningMethod parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pruningMethod="E"), 
+        paste0("'pruningMethod' slot must have one character string within ", 
+        "those 4 choices: \"corr\", \"r\", \"dprime\", \"composite\"."))
+})
+
+test_that("create a RAIDSparam class with negative integer for slideWindowMaxBP parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", slideWindowMaxBP=-1L), 
+        "'slideWindowMaxBP' slot must have one positive integer value.")
+})
+
+test_that("create a RAIDSparam class with multiple integers for slideWindowMaxBP parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", slideWindowMaxBP=c(1L, 2L)), 
+        "'slideWindowMaxBP' slot must have one positive integer value.")
+})
+
+test_that("create a RAIDSparam class with negative numeric for thresholdLD parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", thresholdLD=-1), 
+        "'thresholdLD' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple numerics for thresholdLD parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", thresholdLD=c(1, 2)), 
+        "'thresholdLD' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with snp.position column missing for specificSNV parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", specificSNV=data.frame("snp.chromosome"=c(1, 2))), 
+        paste0("'specificSNV' slot must be NULL or a ", 
+                "data.frame with 2 columns named \"snp.chromosome\"", 
+                " and \"snp.position\"."))
+})
+
+test_that("create a RAIDSparam class with snp.chromosome column missing for specificSNV parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", specificSNV=data.frame("snp.position"=c(1, 2))), 
+        paste0("'specificSNV' slot must be NULL or a ", 
+                "data.frame with 2 columns named \"snp.chromosome\"", 
+                " and \"snp.position\"."))
+})
+
+## Validate the genoType parameter TODO
+
+
+test_that("create a RAIDSparam class with multiple strings for phaseType parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", phaseType=c("phase.ref", "phase.ref")), 
+        "'phaseType' slot must be one character string.")
+})
+
+test_that("create a RAIDSparam class with multiple logical for phase parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", phase=c(TRUE, FALSE)), 
+        "'verbose' slot must have one logical value.")
+})
+
+test_that("create a RAIDSparam class with negative numeric for PCAmissingRate parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAmissingRate=-0.011), 
+        "'PCAmissingRate' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple numerics for PCAmissingRate parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAmissingRate=c(0.01, 0.2)), 
+        "'PCAmissingRate' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple strings for PCAalgorithm parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAalgorithm=c("randomized", "exact")), 
+        paste0("'PCAalgorithm' slot must have one character string. ", 
+            "The valid options are: \"exact\" or \"randomized\"."))
+})
+
+test_that("create a RAIDSparam class with wrong string for PCAalgorithm parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAalgorithm="test"), 
+        paste0("'PCAalgorithm' slot must have one character string. ", 
+            "The valid options are: \"exact\" or \"randomized\"."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCount parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCount=c(1L, 2L)), 
+        paste0("'eigenCount' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCountSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCountSyn=c(1L, 2L)), 
+        paste0("'eigenCountSyn' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCountSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCountSyn=c(1L, 2L)), 
+        paste0("'eigenCountSyn' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with negative integer for kList parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", kList=c(-1L)), 
+        paste0("'kList' slot must have one or more positive integer values."))
+})
+
+test_that("create a RAIDSparam class with negative integer for pcaList parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pcaList=c(-1L)), 
+        paste0("'pcaList' slot must have one or more positive integer values."))
+})
+
+test_that("create a RAIDSparam class with multiple strings for fieldPopInRef parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", fieldPopInRef=c("a", "b")), 
+        paste0("'fieldPopInRef' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with multiple strings for fieldSubPop parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", fieldSubPop=c("a", "b")), 
+        paste0("'fieldSubPop' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with multiple logicals for verbose parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", verbose=c(FALSE, FALSE)), 
+        paste0("'verbose' slot must have one logical value."))
+})
+
+#############################################################################
+### Tests RAIDSparam function
+#############################################################################
+
+context("RAIDSparam function results")
+
+test_that("create a RAIDSparam function with all default parameters should return an object", {
+
+    exp_studyDF <- data.frame(study.id="NotDef",
+                                study.desc="NotDef",
+                                study.platform="NotDef",
+                                stringsAsFactors=FALSE)
+    
+    exp_studyDFSyn <- data.frame(study.id="NotDef.Synthetic",
+                            study.desc="NotDef synthetic data",
+                            study.platform="Synthetic", stringsAsFactors=FALSE)
+
+    exp_pedStudy <- data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"),
+                        Sample.Type=c("type"), Diagnosis="NotDef",
+                        Source=c("NotDef"), stringsAsFactors=FALSE, 
+                        row.names=c("ProfileId"))
+
+    exp_chrInfo <- c(248956422L, 242193529L, 198295559L, 190214555L, 181538259L,
+        170805979L, 159345973L, 145138636L, 138394717L, 133797422L, 135086622L, 
+        133275309L, 114364328L, 107043718L, 101991189L,  90338345L,  83257441L, 
+        80373285L,  58617616L,  64444167L,  46709983L,  50818468L, 156040895L,
+        57227415L, 16569L)
+    names(exp_chrInfo) <- c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
+    
+    exp_paramAncestry <- list(ScanBamParam=NULL, PileupParam=NULL,
+                                yieldSize=10000000)
+    
+    ## New RAIDSparam with all default values
+    paramTest <- RAIDSparam()
+
+    expect_true(inherits(paramTest, "RAIDSparam"))
+    ## TODO ADD test for slots
+
+    ## Test studyDF
+    expect_true(is.data.frame(paramTest@studyDF))
+    expect_identical(paramTest@studyDF, exp_studyDF)
+
+    ## Test studyDFSyn
+    expect_true(is.data.frame(paramTest@studyDFSyn))
+    expect_identical(paramTest@studyDFSyn, exp_studyDFSyn)
+
+    ## Test pedStudy
+    expect_true(is.data.frame(paramTest@pedStudy))
+    expect_identical(paramTest@pedStudy, exp_pedStudy)
+
+    ## Test studyType
+    expect_true(paramTest@studyType == "LD")
+
+    ## Test genoSource 
+    expect_null(paramTest@genoSource)
+
+    ## Test blockTypeId
+    expect_true(paramTest@blockTypeId == "GeneS.Ensembl.Hsapiens.v86")
+
+    ## Test reference
+    expect_true(paramTest@reference == "1KGv1.0")
+
+    ## Test genome
+    expect_true(paramTest@genome == "HG38")
+
+    ## Test chrInfo
+    expect_true(all(paramTest@chrInfo == exp_chrInfo))
+
+    ## Test paramAncestry
+    expect_identical(paramTest@paramAncestry, exp_paramAncestry)
+
+    ## Test profileFile
+    expect_null(paramTest@profileFile)
+
+        ## Validate the profileFileGeno parameter TODO
+    
+    ## Test pathProfileGDS 
+    expect_null(paramTest@pathProfileGDS)
+    
+    ## Test fileReferenceGDS 
+    expect_null(paramTest@fileReferenceGDS)
+
+    ## Test fileReferenceAnnotGDS
+    expect_null(paramTest@fileReferenceAnnotGDS)
+
+    ## Test inferenceType
+    expect_identical(paramTest@inferenceType, "PCAknn")
+
+    ## Test sampleRef
+    expect_null(paramTest@sampleRef)
+
+    ## Test batch
+    expect_true(paramTest@batch == 1L)
+
+    ## Test prefix
+    expect_equal(paramTest@prefix, "1")
+
+    ## Test nbSim
+    expect_true(paramTest@nbSim == 1L)
+
+    ## Test offset
+    expect_true(paramTest@offset == -1L)
+
+    ## Test minCov
+    expect_true(paramTest@minCov == 10L)
+
+    ## Test minProb
+    expect_true(paramTest@minProb == 0.999)
+
+    ## Test seqError
+    expect_true(paramTest@seqError == 0.001)
+
+    ## Test seqErrorSyn
+    expect_true(paramTest@seqErrorSyn == 0.001)
+
+    ## Test pRecomb
+    expect_true(paramTest@pRecomb == 0.01)
+
+    ## Test np
+    expect_true(paramTest@np == 1L)
+  
+    ## Test listPos
+    expect_null(paramTest@listPos)
+
+    ## Test syntheticRefDF
+    expect_null(paramTest@syntheticRefDF)
+    
+    ## Test pruningMethod
+    expect_equal(paramTest@pruningMethod, "corr")
+
+    ## Test slideWindowMaxBP 
+    expect_equal(paramTest@slideWindowMaxBP, 500000L)
+
+    ## Test thresholdLD 
+    expect_equal(paramTest@thresholdLD, sqrt(0.1))
+
+    ## Test specificSNV
+    expect_null(paramTest@specificSNV)
+
+    ## Test genoType
+    expect_equal(paramTest@genoType, "geno.ref")
+  
+    ## Test phaseType 
+    expect_equal(paramTest@phaseType, "phase.ref")
+    
+    ## Test phase
+    expect_false(paramTest@phase)
+    
+    ## Test PCAmissingRate 
+    expect_equal(paramTest@PCAmissingRate, 0.025)
+    
+    ## Test PCAalgorithm
+    expect_equal(paramTest@PCAalgorithm, "exact")
+
+    ## Test eigenCount
+    expect_equal(paramTest@eigenCount, 32L)
+    
+    ## Test eigenCountSyn 
+    expect_equal(paramTest@eigenCountSyn, 15L)
+    
+    ## Test kList
+    expect_equal(paramTest@kList, seq(2L, 15L, 1L))
+
+    ## Test pcaList
+    expect_equal(paramTest@pcaList, seq(2L, 15L, 1L))
+
+    ## Test fieldPopInRef
+    expect_equal(paramTest@fieldPopInRef, "superPop")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldPopInfAnc, "superPop")
+
+    ## Test fieldPopInfAnc
+    expect_equal(paramTest@fieldSubPop, "pop.group")
+
+    ## Test verbose
+    expect_false(paramTest@verbose)
+})
+
+test_that("create a RAIDSparam function with multiple logicals for verbose parameter should generate an error", {
+
+    expect_error(RAIDSparam(verbose=c(FALSE, FALSE)), 
+        paste0("'verbose' slot must have one logical value."))
 })

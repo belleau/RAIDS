@@ -624,7 +624,7 @@ setValidity("RAIDSparam",
               "\"composite\"."))
         }
 
-        ## Validate the slideWindowMaxBP parameter TODO
+        ## Validate the slideWindowMaxBP parameter
         if (length(object@slideWindowMaxBP) != 1 || 
                             object@slideWindowMaxBP < 0) {
           return(paste0("'slideWindowMaxBP' slot must have one positive ", 
@@ -665,9 +665,9 @@ setValidity("RAIDSparam",
       
         ## Validate the PCAalgorithm parameter
         if (length(object@PCAalgorithm) != 1 || 
-                !object@PCAalgorithm %in% c("exact", "randomized")) {
-          return("'PCAalgorithm' slot must have one character string. ", 
-                "The valid options are: \"exact\" or \"randomized\".")
+              !object@PCAalgorithm %in% c("exact", "randomized")) {
+          return(paste0("'PCAalgorithm' slot must have one character string. ", 
+              "The valid options are: \"exact\" or \"randomized\"."))
         }
       
         ## Validate the eigenCount parameter
