@@ -665,9 +665,9 @@ setValidity("RAIDSparam",
       
         ## Validate the PCAalgorithm parameter
         if (length(object@PCAalgorithm) != 1 || 
-                !object@PCAalgorithm %in% c("exact", "randomized")) {
-          return("'PCAalgorithm' slot must have one character string. ", 
-                "The valid options are: \"exact\" or \"randomized\".")
+              !object@PCAalgorithm %in% c("exact", "randomized")) {
+          return(paste0("'PCAalgorithm' slot must have one character string. ", 
+              "The valid options are: \"exact\" or \"randomized\"."))
         }
       
         ## Validate the eigenCount parameter

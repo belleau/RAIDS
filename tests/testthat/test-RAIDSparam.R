@@ -780,6 +780,79 @@ test_that("create a RAIDSparam class with multiple logical for phase parameter s
         "'verbose' slot must have one logical value.")
 })
 
+test_that("create a RAIDSparam class with negative numeric for PCAmissingRate parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAmissingRate=-0.011), 
+        "'PCAmissingRate' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple numerics for PCAmissingRate parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAmissingRate=c(0.01, 0.2)), 
+        "'PCAmissingRate' slot must have one positive numeric value.")
+})
+
+test_that("create a RAIDSparam class with multiple strings for PCAalgorithm parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAalgorithm=c("randomized", "exact")), 
+        paste0("'PCAalgorithm' slot must have one character string. ", 
+            "The valid options are: \"exact\" or \"randomized\"."))
+})
+
+test_that("create a RAIDSparam class with wrong string for PCAalgorithm parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", PCAalgorithm="test"), 
+        paste0("'PCAalgorithm' slot must have one character string. ", 
+            "The valid options are: \"exact\" or \"randomized\"."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCount parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCount=c(1L, 2L)), 
+        paste0("'eigenCount' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCountSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCountSyn=c(1L, 2L)), 
+        paste0("'eigenCountSyn' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with multiple integers for eigenCountSyn parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", eigenCountSyn=c(1L, 2L)), 
+        paste0("'eigenCountSyn' slot must have one integer value."))
+})
+
+test_that("create a RAIDSparam class with negative integer for kList parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", kList=c(-1L)), 
+        paste0("'kList' slot must have one or more positive integer values."))
+})
+
+test_that("create a RAIDSparam class with negative integer for pcaList parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", pcaList=c(-1L)), 
+        paste0("'pcaList' slot must have one or more positive integer values."))
+})
+
+test_that("create a RAIDSparam class with multiple strings for fieldPopInRef parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", fieldPopInRef=c("a", "b")), 
+        paste0("'fieldPopInRef' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with multiple strings for fieldSubPop parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", fieldSubPop=c("a", "b")), 
+        paste0("'fieldSubPop' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with multiple logicals for verbose parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", verbose=c(FALSE, FALSE)), 
+        paste0("'verbose' slot must have one logical value."))
+})
 
 #############################################################################
 ### Tests RAIDSparam function
@@ -958,4 +1031,10 @@ test_that("create a RAIDSparam function with all default parameters should retur
 
     ## Test verbose
     expect_false(paramTest@verbose)
+})
+
+test_that("create a RAIDSparam function with multiple logicals for verbose parameter should generate an error", {
+
+    expect_error(RAIDSparam(verbose=c(FALSE, FALSE)), 
+        paste0("'verbose' slot must have one logical value."))
 })
