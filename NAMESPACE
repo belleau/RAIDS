@@ -75,117 +75,87 @@ importFrom(BSgenome,strand)
 importFrom(BSgenome.Hsapiens.UCSC.hg38,Hsapiens)
 importFrom(BiocParallel,bplapply)
 importFrom(GENESIS,pcairPartition)
-importFrom(GenomicRanges,
-  GRanges,
-  reduce,
-  seqnames,
-  start,
-  width
-)
+importFrom(GenomicRanges,GRanges)
+importFrom(GenomicRanges,reduce)
+importFrom(GenomicRanges,seqnames)
+importFrom(GenomicRanges,start)
+importFrom(GenomicRanges,width)
 importFrom(IRanges,IRanges)
 importFrom(MatrixGenerics,rowRanges)
-importFrom(Rsamtools,
-  BamFile,
-  PileupParam,
-  ScanBamParam,
-  pileup
-)
-importFrom(S4Vectors,
-  Rle,
-  aggregate,
-  isSingleNumber,
-  isSingleString
-)
-importFrom(SNPRelate,
-  snpgdsClose,
-  snpgdsGetGeno,
-  snpgdsIBDKING,
-  snpgdsLDpruning,
-  snpgdsOpen,
-  snpgdsPCA,
-  snpgdsPCASNPLoading,
-  snpgdsPCASampLoading
-)
+importFrom(Rsamtools,BamFile)
+importFrom(Rsamtools,PileupParam)
+importFrom(Rsamtools,ScanBamParam)
+importFrom(Rsamtools,pileup)
+importFrom(S4Vectors,Rle)
+importFrom(S4Vectors,aggregate)
+importFrom(S4Vectors,isSingleNumber)
+importFrom(S4Vectors,isSingleString)
+importFrom(SNPRelate,snpgdsClose)
+importFrom(SNPRelate,snpgdsGetGeno)
+importFrom(SNPRelate,snpgdsIBDKING)
+importFrom(SNPRelate,snpgdsLDpruning)
+importFrom(SNPRelate,snpgdsOpen)
+importFrom(SNPRelate,snpgdsPCA)
+importFrom(SNPRelate,snpgdsPCASNPLoading)
+importFrom(SNPRelate,snpgdsPCASampLoading)
 importFrom(Seqinfo,seqlengths)
-importFrom(VariantAnnotation,
-  geno,
-  readVcf
-)
+importFrom(VariantAnnotation,geno)
+importFrom(VariantAnnotation,readVcf)
 importFrom(class,knn)
-importFrom(dplyr,
-  "%>%",
-  group_by,
-  summarize
-)
-importFrom(ensembldb,
-  exonsBy,
-  genes,
-  toSAF
-)
-importFrom(gdsfmt,
-  add.gdsn,
-  append.gdsn,
-  closefn.gds,
-  compression.gdsn,
-  createfn.gds,
-  delete.gdsn,
-  index.gdsn,
-  ls.gdsn,
-  objdesp.gdsn,
-  openfn.gds,
-  put.attr.gdsn,
-  read.gdsn,
-  readmode.gdsn,
-  sync.gds,
-  write.gdsn
-)
-importFrom(genio,
-  write_bed,
-  write_bim,
-  write_fam
-)
-importFrom(ggplot2,
-  aes,
-  element_rect,
-  element_text,
-  facet_grid,
-  geom_line,
-  geom_ribbon,
-  ggplot,
-  ggtitle,
-  scale_colour_manual,
-  theme,
-  theme_classic,
-  ylab,
-  ylim
-)
-importFrom(methods,
-  is,
-  new
-)
-importFrom(pROC,
-  multiclass.roc,
-  roc
-)
-importFrom(rlang,
-  .data,
-  arg_match
-)
-importFrom(stats,
-  dbinom,
-  mad,
-  median,
-  pbinom,
-  qbinom,
-  quantile,
-  rmultinom
-)
+importFrom(dplyr,"%>%")
+importFrom(dplyr,group_by)
+importFrom(dplyr,summarize)
+importFrom(ensembldb,exonsBy)
+importFrom(ensembldb,genes)
+importFrom(ensembldb,toSAF)
+importFrom(gdsfmt,add.gdsn)
+importFrom(gdsfmt,append.gdsn)
+importFrom(gdsfmt,closefn.gds)
+importFrom(gdsfmt,compression.gdsn)
+importFrom(gdsfmt,createfn.gds)
+importFrom(gdsfmt,delete.gdsn)
+importFrom(gdsfmt,index.gdsn)
+importFrom(gdsfmt,ls.gdsn)
+importFrom(gdsfmt,objdesp.gdsn)
+importFrom(gdsfmt,openfn.gds)
+importFrom(gdsfmt,put.attr.gdsn)
+importFrom(gdsfmt,read.gdsn)
+importFrom(gdsfmt,readmode.gdsn)
+importFrom(gdsfmt,sync.gds)
+importFrom(gdsfmt,write.gdsn)
+importFrom(genio,write_bed)
+importFrom(genio,write_bim)
+importFrom(genio,write_fam)
+importFrom(ggplot2,aes)
+importFrom(ggplot2,element_rect)
+importFrom(ggplot2,element_text)
+importFrom(ggplot2,facet_grid)
+importFrom(ggplot2,geom_line)
+importFrom(ggplot2,geom_ribbon)
+importFrom(ggplot2,ggplot)
+importFrom(ggplot2,ggtitle)
+importFrom(ggplot2,scale_colour_manual)
+importFrom(ggplot2,theme)
+importFrom(ggplot2,theme_classic)
+importFrom(ggplot2,ylab)
+importFrom(ggplot2,ylim)
+importFrom(methods,is)
+importFrom(methods,new)
+importFrom(pROC,multiclass.roc)
+importFrom(pROC,roc)
+importFrom(rlang,.data)
+importFrom(rlang,arg_match)
+importFrom(stats,dbinom)
+importFrom(stats,mad)
+importFrom(stats,median)
+importFrom(stats,pbinom)
+importFrom(stats,qbinom)
+importFrom(stats,quantile)
+importFrom(stats,rmultinom)
 importFrom(stringr,str_detect)
-importFrom(utils,
-  read.csv,
-  read.csv2,
-  read.delim,
-  write.csv,
-  write.csv2,
-  write.table
-)
+importFrom(utils,read.csv)
+importFrom(utils,read.csv2)
+importFrom(utils,read.delim)
+importFrom(utils,write.csv)
+importFrom(utils,write.csv2)
+importFrom(utils,write.table)

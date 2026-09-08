@@ -79,8 +79,6 @@ validateParamRAIDS <- function(parameters) {
   
     validateParamRAIDS_subpart02(parameters=parameters)
 
-    validateParamRAIDS_subpart03(parameters=parameters)
-
     invisible(TRUE)
 }
 
@@ -245,70 +243,3 @@ validateParamRAIDS_subpart02 <- function(parameters) {
     invisible(TRUE)
 }
 
-
-#' @title Validate the third subsection of the parametersRAIDS object
-#'
-#' @description This function validates a subsection of the parameters 
-#' present in the \code{parametersRAIDS} object. The validated parameters are:
-#' "eigenCount", "kList", "pcaList", "fieldPopInRef", "fieldPopInfAnc", 
-#' "fieldSubPop", and "verbose".
-#'
-#' @param parameters a \code{parametersRAIDS} an object with all the RAIDS
-#' parameters
-#'
-#' @return \code{TRUE} when all the parameters tested in the object are valid; 
-#' otherwise \code{FALSE}
-#'
-#' @examples
-#' 
-#' ## Create an object of class 'parametersRAIDS' with most parameters filled
-#' ## default values
-#' parameterAll <- paramRAIDS(genoSource='generic', verbose=TRUE)
-#'
-#' ## Return TRUE when the tested parameters are valid
-#' RAIDS:::validateParamRAIDS_subpart03(parameters=parameterAll)
-#'
-#' @author Pascal Belleau and Astrid Deschênes
-#' @encoding UTF-8
-#' @importFrom S4Vectors isSingleNumber
-#' @keywords internal
-validateParamRAIDS_subpart03 <- function(parameters) {
-   
-    ## The eigenCount must be a single integer
-    if(!(isSingleNumber(parameters$eigenCount))) {
-        stop("The \'eigenCount\' parameter must be a single integer.")
-    }
-
-    ## The kList must be a vector of positive integers
-    validatePositiveIntegerVector(parameters$kList, "kList")
-
-    ## The pcaList must be a vector of positive integers
-    validatePositiveIntegerVector(parameters$pcaList, "pcaList")
-
-    ## The fieldPopInRef parameter should be a character string
-    if (!is.character(parameters$fieldPopInRef)) {
-        stop("The \'fieldPopInRef\' parameter must be a character string ", 
-            "representing an existing column that contains the known ancestry", 
-            " for the reference profiles in the Population Reference ", 
-            "GDS file.")
-    }
-
-    ## The fieldPopInfAnc parameter should be a character string
-    if (!is.character(parameters$fieldPopInfAnc)) {
-        stop("The \'fieldPopInfAnc\' parameter must be a character string ", 
-            "representing an existing column in the data frame containing the ", 
-            "inferred super-population ancestry results.")
-    }
-
-    ## The fieldSubPop parameter should be a character string
-    if (!is.character(parameters$fieldSubPop)) {
-        stop("The \'fieldSubPop\' parameter must be a character string ", 
-            "representing an existing column in the Population Reference ", 
-            "GDS file.")
-    }
-
-    ## The verbose parameter should be a logical
-    validateLogical(parameters$verbose, "verbose")
-
-    invisible(TRUE)
-}
