@@ -716,8 +716,18 @@ setValidity("RAIDSparam",
     }
 )
 
+###########################################################################
+## All the getter functions for the RAIDSparam class
+###########################################################################
 
-#' Generic function for getting thea studyDF slot in a class
+#' Generic function for getting the studyDF slot in a class
+#' 
+#' @description A generic function for getting the studyDF slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
 #' @export
 setGeneric("studyDF", function(x) standardGeneric("studyDF"))
 
@@ -727,6 +737,13 @@ setMethod("studyDF", "RAIDSparam", function(x) {
 })
 
 #' Generic function for getting the studyDFSyn slot in a class
+#' 
+#' @description A generic function for getting the studyDFSyn slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
 #' @export
 setGeneric("studyDFSyn", function(x) standardGeneric("studyDFSyn"))
 
@@ -735,9 +752,28 @@ setMethod("studyDFSyn", "RAIDSparam", function(x) {
   return(x@studyDFSyn)
 })
 
+
+#' Generic function for getting the pedStudy slot in a class
+#' 
+#' @description A generic function for getting the pedStudy slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @export
+setGeneric("pedStudy", function(x) standardGeneric("pedStudy"))
+
+#' Getter method for pedStudy slot in the "RAIDSparam" class
+setMethod("pedStudy", "RAIDSparam", function(x) {
+  return(x@pedStudy)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
+
 
 #' Generic function for replacement of studyDF slot in a class
 #' 
@@ -759,6 +795,7 @@ setMethod("studyDF<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
 #' Generic function for replacement of studyDFSyn slot in a class
 #' 
 #' @description A generic function for replacement of studyDFSyn slot in a 
@@ -778,6 +815,30 @@ setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of pedStudy slot in a class
+#' 
+#' @description A generic function for replacement of pedStudy slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @export
+setGeneric("pedStudy<-", function(x, value) standardGeneric("pedStudy<-"))
+
+#' Implement the method for the "RAIDSparam" class
+setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
+  x@pedStudy <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+
 
 
 #' @title Create a RAIDSparam object 
