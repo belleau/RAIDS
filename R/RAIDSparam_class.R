@@ -716,6 +716,30 @@ setValidity("RAIDSparam",
     }
 )
 
+
+#' Generic function for getter
+#' @export
+setGeneric("studyDF", function(x) standardGeneric("studyDF"))
+
+#' Getter method for studyDF slot in the "RAIDSparam" class
+setMethod("studyDF", "RAIDSparam", function(x) {
+  return(x@studyDF)
+})
+
+#' Generic function for replacement
+#' @export
+setGeneric("studyDF<-", function(x, value) standardGeneric("studyDF<-"))
+
+#' Implement the method for the "StudRAIDSparament" class
+setMethod("studyDF<-", "RAIDSparam", function(x, value) {
+  x@studyDF <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
 #' @title Create a RAIDSparam object 
 #'
 #' @description The function uses all parameters to create a 

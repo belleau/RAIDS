@@ -854,6 +854,21 @@ test_that("create a RAIDSparam class with multiple logicals for verbose paramete
         paste0("'verbose' slot must have one logical value."))
 })
 
+test_that("create a RAIDSparam class with all studyDF setter and getter should return an object", {
+
+    exp_studyDF <- data.frame(study.id="TEST1",
+                                study.desc="Test",
+                                study.platform="CSHL",
+                                stringsAsFactors=FALSE)
+
+    paramTest <- RAIDSparam()
+    studyDF(paramTest) <- exp_studyDF
+
+    expect_equal(studyDF(paramTest), exp_studyDF)
+    expect_error(studyDF(paramTest) <- 33L)
+    expect_equal(studyDF(paramTest), exp_studyDF)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
@@ -1034,6 +1049,7 @@ test_that("create a RAIDSparam function with all default parameters should retur
 })
 
 
+
 test_that("create a RAIDSparam function with all non-default parameters should return an object", {
 
     exp_studyDF <- data.frame(study.id="Test1",
@@ -1079,6 +1095,7 @@ test_that("create a RAIDSparam function with all non-default parameters should r
         prefix="3", nbSim=11L, offset=0L, minProb=0.889, minCov=20L,
         pruningMethod="dprime", np=2L, pRecomb=0.21, seqError=0.12, 
         seqErrorSyn=0.02, pathProfileGDS=dataDir, fileReferenceGDS=fileGDS,
+        fileReferenceAnnotGDS=fileGDS,
         listPos=data.frame("snp.chromosome"=c("1", "1"), "snp.position"=c(1,3)),
         syntheticRefDF=data.frame(sample.id=c("Sample1", "Sample1"), 
         pop.group=c("EUR", "AFR"), superPop=c("EUR", "AFR")), 
@@ -1137,7 +1154,7 @@ test_that("create a RAIDSparam function with all non-default parameters should r
     expect_equal(paramTest@fileReferenceGDS, fileGDS)
 
     ## Test fileReferenceAnnotGDS
-    expect_null(paramTest@fileReferenceAnnotGDS)
+    expect_equal(paramTest@fileReferenceAnnotGDS, fileGDS)
 
     ## Test inferenceType
     expect_identical(paramTest@inferenceType, "haploAdmixture")
