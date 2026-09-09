@@ -5,18 +5,20 @@
 \alias{writeBedBimFilesProfileFilter}
 \title{Generate a plink bed file TODO}
 \usage{
-writeBedBimFilesProfileFilter(pathOut, fileP, listProfile, indexS = 1, pRAIDS)
+writeBedBimFilesProfileFilter(pathOut, prefOut, fileP, listProfile, pRAIDS)
 }
 \arguments{
-\item{pathOut}{TODO}
+\item{pathOut}{a \code{character} string representing the path where
+to save the output}
+
+\item{prefOut}{a \code{character} string representing the prefix of
+file name of the new bed, bim, and P.in files.}
 
 \item{fileP}{a \code{character} string representing the path and
 the file name of the new bim file.}
 
 \item{listProfile}{a \code{vector} of \code{character} representing the list
 of profiles from gdsProfile to keep.}
-
-\item{indexS}{a \code{integer} TODO. Default: \code{1}.}
 
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
 parameters.}
