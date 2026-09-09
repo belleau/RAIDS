@@ -698,7 +698,11 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL,
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param pathOut TODO
+#' @param pathOut a \code{character} string representing the path where
+#' to save the output
+#' 
+#' @param prefOut a \code{character} string representing the prefix of
+#' file name of the new bed, bim, and P.in files.
 #' 
 #' @param fileP a \code{character} string representing the path and
 #' the file name of the new bim file.
@@ -706,8 +710,6 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL,
 #' @param listProfile a \code{vector} of \code{character} representing the list
 #' of profiles from gdsProfile to keep.
 #'
-#' @param indexS a \code{integer} TODO. Default: \code{1}.
-#' 
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters.
 #'
@@ -726,8 +728,8 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL,
 #' @importFrom utils write.table
 #' @encoding UTF-8
 #' @export
-writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile, 
-    indexS=1, pRAIDS) {
+writeBedBimFilesProfileFilter <- function(pathOut, prefOut, fileP, listProfile, 
+    pRAIDS) {
     
     fileGDSProfile <- file.path(pRAIDS$pathProfileGDS, 
                                     paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
@@ -750,22 +752,29 @@ writeBedBimFilesProfileFilter <- function(pathOut, fileP, listProfile,
                           alt="A",
                           ref="B",
                           stringsAsFactors=FALSE)
-    snpInfo <- snpInfo[-1 * list2RM,]
-    write_bim(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", 
-                    indexS,".sv.bim")), snpInfo)
-    write_bed(file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.", 
-                    indexS,".sv.bed")), gS, verbose=TRUE, append=FALSE)
+    if(length(list2RM) > 0){
+        snpInfo <- snpInfo[-1 * list2RM,]
+    }
+    write_bim(file.path(pathOut, paste0(prefOut, 
+        ".bim")), snpInfo)
+    write_bed(file.path(pathOut, paste0(prefOut, 
+        ".bed")), gS, verbose=TRUE, append=FALSE)
 
     snpgdsClose(gdsProfile)
 
     resP <- read.delim(fileP, sep=" ", header=FALSE)
-    resP <- resP[-1 * list2RM,]
+    if(length(list2RM) > 0){
+        resP <- resP[-1 * list2RM,]
+    }
     # 068ba2ae-288c-446d-8d17-72445ce4f788.syn.1.sv.5.P.in
-    write.table(resP, file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], 
-                                        ".syn.", indexS,".sv.5.P.in")),
+    write.table(resP, file.path(pathOut, paste0(prefOut , 
+        ".", ncol(resP), ".P.in")),
                 col.names=FALSE, row.names=FALSE, quote=FALSE, sep=" ")
+    # write.table(resP, file.path(pathOut, paste0(pRAIDS$pedStudy$Name.ID[1], 
+    #                                     ".syn.", indexS,".sv.5.P.in")),
+    #             col.names=FALSE, row.names=FALSE, quote=FALSE, sep=" ")
     return(0)
-}
+    }
 
 
 #' @title Generate a plink fam file
@@ -955,7 +964,7 @@ writePMatrix <- function( pathOut,rowF, pRAIDS) {
         rowF=rowF
         )
     matP <- t(do.call(rbind, matP))
-    write.table(matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+    write.table(1-matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
     
     for(i in seq_len(nb)){
         flag <- FALSE
@@ -976,7 +985,7 @@ writePMatrix <- function( pathOut,rowF, pRAIDS) {
             )
             matP <- t(do.call(rbind, matP))
             k<-k+1
-            write.table(matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1],".syn.", k, ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+            write.table(1-matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1],".syn.", k, ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
         }
         matPIndex[i] <- ifelse(! flag,1, k)
         
