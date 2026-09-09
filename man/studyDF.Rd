@@ -2,10 +2,10 @@
 % Please edit documentation in R/RAIDSparam_class.R
 \name{studyDF}
 \alias{studyDF}
-\title{Generic function for getter}
+\title{Generic function for getting thea studyDF slot in a class}
 \usage{
 studyDF(x)
 }
 \description{
-Generic function for getter
+Generic function for getting thea studyDF slot in a class
 }

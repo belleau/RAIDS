@@ -717,7 +717,7 @@ setValidity("RAIDSparam",
 )
 
 
-#' Generic function for getter
+#' Generic function for getting thea studyDF slot in a class
 #' @export
 setGeneric("studyDF", function(x) standardGeneric("studyDF"))
 
@@ -726,13 +726,53 @@ setMethod("studyDF", "RAIDSparam", function(x) {
   return(x@studyDF)
 })
 
-#' Generic function for replacement
+#' Generic function for getting the studyDFSyn slot in a class
+#' @export
+setGeneric("studyDFSyn", function(x) standardGeneric("studyDFSyn"))
+
+#' Getter method for studyDFSyn slot in the "RAIDSparam" class
+setMethod("studyDFSyn", "RAIDSparam", function(x) {
+  return(x@studyDFSyn)
+})
+
+###########################################################################
+## All the setter functions for the RAIDSparam class
+###########################################################################
+
+#' Generic function for replacement of studyDF slot in a class
+#' 
+#' @description A generic function for replacement of studyDF slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
 #' @export
 setGeneric("studyDF<-", function(x, value) standardGeneric("studyDF<-"))
 
-#' Implement the method for the "StudRAIDSparament" class
+#' Implement the method for the "RAIDSparam" class
 setMethod("studyDF<-", "RAIDSparam", function(x, value) {
   x@studyDF <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+#' Generic function for replacement of studyDFSyn slot in a class
+#' 
+#' @description A generic function for replacement of studyDFSyn slot in a 
+#' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @export
+setGeneric("studyDFSyn<-", function(x, value) standardGeneric("studyDFSyn<-"))
+
+#' Implement the method for the "RAIDSparam" class
+setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
+  x@studyDFSyn <- value
 
   # Validate and return the modified object
   validObject(x) 
