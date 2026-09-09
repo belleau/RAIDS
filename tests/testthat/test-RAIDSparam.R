@@ -884,6 +884,24 @@ test_that("create a RAIDSparam class with all studyDFSyn setter and getter shoul
     expect_equal(studyDFSyn(paramTest), exp_studyDFSyn)
 })
 
+test_that("create a RAIDSparam class with all pedStudy setter and getter should return an object", {
+
+    exp_pedStudy <- data.frame(Name.ID=c("TEST12", "Test22"),
+                                Case.ID=c("Case1", "Case12"),
+                                Sample.Type=c("Cancer", "Cancer"),
+                                Diagnosis=c("NA", "sarcoma"),
+                                Source=c("NA", "CSHL"),
+                                stringsAsFactors=FALSE, 
+                                row.names=c("TEST12", "Test22"))
+
+    paramTest <- RAIDSparam()
+    pedStudy(paramTest) <- exp_pedStudy
+
+    expect_equal(pedStudy(paramTest), exp_pedStudy)
+    expect_error(pedStudy(paramTest) <- 323L)
+    expect_equal(pedStudy(paramTest), exp_pedStudy)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
