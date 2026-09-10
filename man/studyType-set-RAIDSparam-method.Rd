@@ -10,9 +10,9 @@
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
 
-\item{value}{a single character string representing the type of study.
-The possible choices are: "LD" and "GeneAware". The study type affects
-how the allelic fraction is estimated.}
+\item{value}{a single \code{character} string representing the type of
+study. The possible choices are: "LD" and "GeneAware". The study type
+affects how the allelic fraction is estimated.}
 }
 \value{
 the modified \code{RAIDSparam} object when the new value is valid.

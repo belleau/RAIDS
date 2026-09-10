@@ -869,6 +869,7 @@ setMethod("pedStudy", "RAIDSparam", function(x) {
 #' @return a value from the studyType slot in the S4 object.
 #' 
 #' @examples
+#' 
 #' # Define a dummy class to show usage
 #' setClass("MyClass", slots = list(studyType="character"))
 #' 
@@ -891,7 +892,7 @@ setGeneric("studyType", function(x) standardGeneric("studyType"))
 #' 
 #' @param x a \code{RAIDSparam} object.
 #' 
-#' @return a a single \code{character} string representing the type 
+#' @return a single \code{character} string representing the type 
 #' of study.
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
@@ -908,6 +909,61 @@ setGeneric("studyType", function(x) standardGeneric("studyType"))
 #' @export
 setMethod("studyType", "RAIDSparam", function(x) {
   return(x@studyType)
+})
+
+
+#' Generic function for getting the genoSource slot in a class
+#' 
+#' @description A generic function for getting the genoSource slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the genoSource slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(genoSource="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", genoSource="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # genoSource(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("genoSource", function(x) standardGeneric("genoSource"))
+
+
+#' A getter for the genoSource slot in a RAIDSparam class
+#' 
+#' @description A function for getting the genoSource slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string corresponding to the type 
+#' of file with the genotype and the allele information of the profile that 
+#' will be provided in the 'profileFile' slot. The valid options are: "VCF", 
+#' "generic", "snp-pileup", and "bam". 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the genoSource slot for the object
+#' genoSource(paramDemo)
+#' 
+#' @export
+setMethod("genoSource", "RAIDSparam", function(x) {
+  return(x@genoSource)
 })
 
 
@@ -1159,9 +1215,9 @@ setGeneric("studyType<-", function(x, value) standardGeneric("studyType<-"))
 #' 
 #' @param x a \code{RAIDSparam} object.
 #' 
-#' @param value a single character string representing the type of study. 
-#' The possible choices are: "LD" and "GeneAware". The study type affects 
-#' how the allelic fraction is estimated.
+#' @param value a single \code{character} string representing the type of 
+#' study. The possible choices are: "LD" and "GeneAware". The study type 
+#' affects how the allelic fraction is estimated.
 #' 
 #' @return the modified \code{RAIDSparam} object when the new value is valid.
 #' 
@@ -1185,6 +1241,71 @@ setMethod("studyType<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of genoSource slot in a class
+#' 
+#' @description A generic function for replacement of genoSource slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(genoSource="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", genoSource="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # genoSource(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("genoSource<-", function(x, value) standardGeneric("genoSource<-"))
+
+
+#' Setter function for replacement of genoSource slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of genoSource slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string corresponding to the type 
+#' of file with the genotype and the allele information of the profile that 
+#' will be provided in the 'profileFile' slot. The valid options are: "VCF", 
+#' "generic", "snp-pileup", and "bam".
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the new study type to the genoSource slot in the object
+#' genoSource(paramDemo) <- "bam"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("genoSource<-", "RAIDSparam", function(x, value) {
+  x@genoSource <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 
 #' @title Create a RAIDSparam object 

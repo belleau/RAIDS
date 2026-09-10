@@ -11,7 +11,7 @@
 \item{x}{a \code{RAIDSparam} object.}
 }
 \value{
-a a single \code{character} string representing the type
+a single \code{character} string representing the type
 of study.
 }
 \description{
