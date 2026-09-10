@@ -939,6 +939,24 @@ test_that("create a RAIDSparam class with all blockTypeId setter and getter shou
     expect_equal(blockTypeId(paramTest), exp_blockTypeId)
 })
 
+test_that("create a RAIDSparam class with all reference setter and getter should return an object", {
+
+    exp_reference <- "1k_hgdpV0.1"
+
+    paramTest <- RAIDSparam()
+    reference(paramTest) <- exp_reference
+
+    expect_equal(reference(paramTest), exp_reference)
+    expect_error(reference(paramTest) <- 323L)
+    expect_equal(reference(paramTest), exp_reference)
+})
+
+test_that("create a RAIDSparam class with all genome getter should return an object", {
+
+    paramTest <- RAIDSparam()
+
+    expect_equal(genome(paramTest), "HG38")
+})
 
 #############################################################################
 ### Tests RAIDSparam function

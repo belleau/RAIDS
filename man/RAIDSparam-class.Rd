@@ -71,7 +71,7 @@ the block type used to extract the block identifiers. The block type must
 be present in the GDS Reference Annotation file.
 Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
-\item{\code{reference}}{a \code{character} string with two possible values:
+\item{\code{reference}}{a single \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
 Default: \code{"1KGv1.0"}.}
 
@@ -233,8 +233,8 @@ the values tested for the  \emph{D} parameter. The \emph{D} parameter represents
 number of dimensions used in the PCA analysis.
 Default: \code{seq(2L, 15L, 1L)}.}
 
-\item{\code{fieldPopInRef}}{a \code{character} string representing the name of the
-column that contains the known ancestry for the reference profiles in
+\item{\code{fieldPopInRef}}{a single \code{character} string representing the name
+of the column that contains the known ancestry for the reference profiles in
 the Population Reference GDS file (corresponding to the
 \code{fileReferenceGDS} parameter). Default: \code{"superPop"}.}
 
