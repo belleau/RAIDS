@@ -31,19 +31,22 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot studyDF a \code{data.frame} containing the information about the
 #' study associated to the analysed sample(s). The \code{data.frame} must have
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
-#' must be in \code{character} strings (no factor). Default: 
+#' must be in \code{character} strings (no factors). Default: 
 #' \code{data.frame(study.id="NotDef", study.desc="NotDef", 
 #' study.platform="NotDef", stringsAsFactors=FALSE)}.
 #' 
 #' @slot studyDFSyn a \code{data.frame} containing the information about the
 #' synthetic data to the analysed sample(s). The \code{data.frame} must have
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
-#' must be in \code{character} strings (no factor). Default: \code{NULL}.
+#' must be in \code{character} strings (no factors). Default: 
+#' \code{data.frame(study.id="NotDef.Synthetic", 
+#' study.desc="NotDef synthetic data", study.platform="Synthetic", 
+#' stringsAsFactors=FALSE)}.
 #' 
 #' @slot pedStudy a \code{data.frame} containing the information TODO 
 #' with those mandatory columns: "Name.ID",
 #' "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
-#' \code{character} strings (no factor). All row names should correspond to the
+#' \code{character} strings (no factors). All row names should correspond to the
 #' values in the "Name.ID" column.
 #' Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"), 
 #' Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
@@ -392,6 +395,7 @@ setClass("RAIDSparam",
   )
 )
 
+## Validation
 setValidity("RAIDSparam",
     function(object)
     {
@@ -725,21 +729,50 @@ setValidity("RAIDSparam",
 #' @description A generic function for getting the studyDF slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
 #' 
+#' @param x an object.
+#' 
+#' @return an object.
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
 #' @export
 setGeneric("studyDF", function(x) standardGeneric("studyDF"))
 
-#' Getter method for studyDF slot in the "RAIDSparam" class
+#' Getter for the studyDF slot in a RAIDSparam class
+#' 
+#' @description A function for getting the studyDF slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{data.frame}.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the studyDF slot for the object
+#' studyDF(paramDemo)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @export
 setMethod("studyDF", "RAIDSparam", function(x) {
   return(x@studyDF)
 })
+
 
 #' Generic function for getting the studyDFSyn slot in a class
 #' 
 #' @description A generic function for getting the studyDFSyn slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
+#' 
+#' @param x an object.
+#' 
+#' @return an object.
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
@@ -747,7 +780,29 @@ setMethod("studyDF", "RAIDSparam", function(x) {
 #' @export
 setGeneric("studyDFSyn", function(x) standardGeneric("studyDFSyn"))
 
-#' Getter method for studyDFSyn slot in the "RAIDSparam" class
+
+#' A getter for the studyDFSyn slot in a RAIDSparam class
+#' 
+#' @description A function for getting the studyDFSyn slot in a 
+#' \code{RAIDSparam} class.
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{data.frame}.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the studyDFSyn slot for the object
+#' studyDFSyn(paramDemo)
+#' 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @export
 setMethod("studyDFSyn", "RAIDSparam", function(x) {
   return(x@studyDFSyn)
 })
@@ -758,13 +813,37 @@ setMethod("studyDFSyn", "RAIDSparam", function(x) {
 #' @description A generic function for getting the pedStudy slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
 #' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{data.frame}.
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
 #' @export
 setGeneric("pedStudy", function(x) standardGeneric("pedStudy"))
 
-#' Getter method for pedStudy slot in the "RAIDSparam" class
+#' A getter for the pedStudy slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pedStudy slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{data.frame}.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pedStudy slot for the object
+#' pedStudy(paramDemo)
+#' 
+#' @export
 setMethod("pedStudy", "RAIDSparam", function(x) {
   return(x@pedStudy)
 })
@@ -780,13 +859,40 @@ setMethod("pedStudy", "RAIDSparam", function(x) {
 #' @description A generic function for replacement of studyDF slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
 #' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' about the study associated with the analyzed sample(s). The 
+#' \code{data.frame} must have those 3 columns: "study.id", "study.desc", 
+#' "study.platform". All columns must be character strings (no factors).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
 #' @export
 setGeneric("studyDF<-", function(x, value) standardGeneric("studyDF<-"))
 
-#' Implement the method for the "RAIDSparam" class
+
+#' Replacement of studyDF slot in a \code{RAIDSparam} object
+#' 
+#' @description A function for replacement of the studyDF slot in a 
+#' \code{RAIDSparam} class.
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' about the study associated with the analyzed sample(s). The 
+#' \code{data.frame} must have those 3 columns: "study.id", "study.desc", 
+#' "study.platform". All columns must be character strings (no factors).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @importFrom methods validObject
+#' @export
 setMethod("studyDF<-", "RAIDSparam", function(x, value) {
   x@studyDF <- value
 
@@ -801,13 +907,40 @@ setMethod("studyDF<-", "RAIDSparam", function(x, value) {
 #' @description A generic function for replacement of studyDFSyn slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
 #' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' about the synthetic data for the analyzed sample(s). The \code{data.frame} 
+#' must have those 3 columns: "study.id", "study.desc", "study.platform". All 
+#' columns must be character strings (no factors).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#'  
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
 #' @export
 setGeneric("studyDFSyn<-", function(x, value) standardGeneric("studyDFSyn<-"))
 
-#' Implement the method for the "RAIDSparam" class
+
+#' Replacement of studyDFSyn slot in a \code{RAIDSparam} object
+#' 
+#' @description A function for replacement of the studyDFSyn slot in a 
+#' \code{RAIDSparam} class.
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' about the synthetic data for the analyzed sample(s). The \code{data.frame} 
+#' must have those 3 columns: "study.id", "study.desc", "study.platform". All 
+#' columns must be character strings (no factors).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @importFrom methods validObject
+#' @export
 setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
   x@studyDFSyn <- value
 
@@ -822,13 +955,44 @@ setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
 #' @description A generic function for replacement of pedStudy slot in a 
 #' class. The function is implemented for the \code{RAIDSparam} class.
 #' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' TODO with those mandatory columns: "Name.ID", "Case.ID", "Sample.Type", 
+#' "Diagnosis", and "Source". All columns must be character strings 
+#' (no factors). All row names should correspond to the values in the 
+#' "Name.ID" column. 
+#' 
+#' @return the modified object when the new value is valid.
+#'  
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
+#' @importFrom methods validObject
 #' @export
 setGeneric("pedStudy<-", function(x, value) standardGeneric("pedStudy<-"))
 
-#' Implement the method for the "RAIDSparam" class
+
+#' Setter function for replacement of pedStudy slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of pedStudy slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{data.frame} containing the information 
+#' TODO with those mandatory columns: "Name.ID", "Case.ID", "Sample.Type", 
+#' "Diagnosis", and "Source". All columns must be character strings 
+#' (no factors). All row names should correspond to the values in the 
+#' "Name.ID" column. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#'  
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
 setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
   x@pedStudy <- value
 
@@ -850,7 +1014,7 @@ setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
 #' @param studyDF a \code{data.frame} containing the information about the
 #' study associated to the analysed sample(s). The \code{data.frame} must have
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
-#' must be in \code{character} strings (no factor). If \code{NULL}, the 
+#' must be \code{character} strings (no factors). If \code{NULL}, the 
 #' following will be assigned: 
 #' \code{data.frame(study.id="NotDef", study.desc="NotDef", 
 #' study.platform="NotDef", stringsAsFactors=FALSE)}.
@@ -859,7 +1023,7 @@ setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
 #' @param studyDFSyn a \code{data.frame} containing the information about the
 #' synthetic data to the analysed sample(s). The \code{data.frame} must have
 #' those 3 columns: "study.id", "study.desc", "study.platform". All columns
-#' must be in \code{character} strings (no factor). If \code{NULL}, the 
+#' must be \code{character} strings (no factors). If \code{NULL}, the 
 #' following will be assigned: \code{data.frame(study.id="NotDef.Synthetic", 
 #' study.desc="NotDef synthetic data", study.platform="Synthetic", 
 #' stringsAsFactors=FALSE)}.
@@ -868,8 +1032,8 @@ setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
 #' @param pedStudy a \code{data.frame} containing the information TODO 
 #' with those mandatory columns: "Name.ID",
 #' "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
-#' \code{character} strings (no factor). All row names should correspond to the
-#' values in the "Name.ID" column. If \code{NULL}, the 
+#' \code{character} strings (no factors). All row names should correspond to 
+#' the values in the "Name.ID" column. If \code{NULL}, the 
 #' following will be assigned:  \code{data.frame(Name.ID=c("ProfileId"), 
 #' Case.ID=c("ProfileId"), Sample.Type=c("type"), Diagnosis="NotDef", 
 #' Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.

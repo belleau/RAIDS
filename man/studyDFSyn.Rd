@@ -7,6 +7,12 @@
 \usage{
 studyDFSyn(x)
 }
+\arguments{
+\item{x}{an object.}
+}
+\value{
+an object.
+}
 \description{
 A generic function for getting the studyDFSyn slot in a
 class. The function is implemented for the \code{RAIDSparam} class.

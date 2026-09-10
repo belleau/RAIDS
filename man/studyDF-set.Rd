@@ -7,6 +7,17 @@
 \usage{
 studyDF(x) <- value
 }
+\arguments{
+\item{x}{a \code{RAIDSparam} object.}
+
+\item{value}{a \code{data.frame} containing the information
+about the study associated with the analyzed sample(s). The
+\code{data.frame} must have those 3 columns: "study.id", "study.desc",
+"study.platform". All columns must be character strings (no factors).}
+}
+\value{
+the modified \code{RAIDSparam} object when the new value is valid.
+}
 \description{
 A generic function for replacement of studyDF slot in a
 class. The function is implemented for the \code{RAIDSparam} class.

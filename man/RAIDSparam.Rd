@@ -58,7 +58,7 @@ RAIDSparam(
 \item{studyDF}{a \code{data.frame} containing the information about the
 study associated to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor). If \code{NULL}, the
+must be \code{character} strings (no factors). If \code{NULL}, the
 following will be assigned:
 \code{data.frame(study.id="NotDef", study.desc="NotDef", 
 study.platform="NotDef", stringsAsFactors=FALSE)}.
@@ -67,7 +67,7 @@ Default: \code{NULL}.}
 \item{studyDFSyn}{a \code{data.frame} containing the information about the
 synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor). If \code{NULL}, the
+must be \code{character} strings (no factors). If \code{NULL}, the
 following will be assigned: \code{data.frame(study.id="NotDef.Synthetic", 
 study.desc="NotDef synthetic data", study.platform="Synthetic", 
 stringsAsFactors=FALSE)}.
@@ -76,8 +76,8 @@ Default: \code{NULL}.}
 \item{pedStudy}{a \code{data.frame} containing the information TODO
 with those mandatory columns: "Name.ID",
 "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
-\code{character} strings (no factor). All row names should correspond to the
-values in the "Name.ID" column. If \code{NULL}, the
+\code{character} strings (no factors). All row names should correspond to
+the values in the "Name.ID" column. If \code{NULL}, the
 following will be assigned:  \code{data.frame(Name.ID=c("ProfileId"), 
 Case.ID=c("ProfileId"), Sample.Type=c("type"), Diagnosis="NotDef", 
 Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
