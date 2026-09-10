@@ -859,6 +859,58 @@ setMethod("pedStudy", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the studyType slot in a class
+#' 
+#' @description A generic function for getting the studyType slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the studyType slot in the S4 object.
+#' 
+#' @examples
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(studyType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", studyType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # studyType(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("studyType", function(x) standardGeneric("studyType"))
+
+
+#' A getter for the studyType slot in a RAIDSparam class
+#' 
+#' @description A function for getting the studyType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a a single \code{character} string representing the type 
+#' of study.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the studyType slot for the object
+#' studyType(paramDemo)
+#' 
+#' @export
+setMethod("studyType", "RAIDSparam", function(x) {
+  return(x@studyType)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -1009,6 +1061,18 @@ setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
 #' 
 #' @return the modified S4 object when the new value is valid.
 #'  
+#' @examples
+#' 
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pedStudy="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pedStudy="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pedStudy(obj) <- "333"
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @export
@@ -1060,7 +1124,67 @@ setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
 })
 
 
+#' Generic function for replacement of studyType slot in a class
+#' 
+#' @description A generic function for replacement of studyType slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(studyType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", studyType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # studyType(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("studyType<-", function(x, value) standardGeneric("studyType<-"))
 
+
+#' Setter function for replacement of studyType slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of studyType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single character string representing the type of study. 
+#' The possible choices are: "LD" and "GeneAware". The study type affects 
+#' how the allelic fraction is estimated.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the new study type to the studyType slot in the object
+#' studyType(paramDemo) <- "GeneAware"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("studyType<-", "RAIDSparam", function(x, value) {
+  x@studyType <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 
 #' @title Create a RAIDSparam object 
@@ -1098,8 +1222,8 @@ setMethod("pedStudy<-", "RAIDSparam", function(x, value) {
 #' Default: \code{NULL}.
 #' 
 #' @param studyType a single \code{character} string representing the type 
-#' of study. The possible choices are: "LD" and "GeneAware". The type of 
-#' study affects the way the estimation of the allelic fraction is done. 
+#' of study. The possible choices are: "LD" and "GeneAware". The study type 
+#' affects how the allelic fraction is estimated. 
 #' Default: \code{"LD"}.
 #' 
 #' @param genoSource a single \code{character} string corresponding to the type 

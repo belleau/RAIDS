@@ -84,8 +84,8 @@ Source=c("NotDef"), stringsAsFactors=FALSE, row.names = c("ProfileId"))}.
 Default: \code{NULL}.}
 
 \item{studyType}{a single \code{character} string representing the type
-of study. The possible choices are: "LD" and "GeneAware". The type of
-study affects the way the estimation of the allelic fraction is done.
+of study. The possible choices are: "LD" and "GeneAware". The study type
+affects how the allelic fraction is estimated.
 Default: \code{"LD"}.}
 
 \item{genoSource}{a single \code{character} string corresponding to the type

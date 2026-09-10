@@ -902,6 +902,18 @@ test_that("create a RAIDSparam class with all pedStudy setter and getter should 
     expect_equal(pedStudy(paramTest), exp_pedStudy)
 })
 
+test_that("create a RAIDSparam class with all studyType setter and getter should return an object", {
+
+    exp_studyType <- "GeneAware"
+
+    paramTest <- RAIDSparam()
+    studyType(paramTest) <- exp_studyType
+
+    expect_equal(studyType(paramTest), exp_studyType)
+    expect_error(studyType(paramTest) <- 323L)
+    expect_equal(studyType(paramTest), exp_studyType)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
