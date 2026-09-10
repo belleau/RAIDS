@@ -927,6 +927,18 @@ test_that("create a RAIDSparam class with all genoSource setter and getter shoul
     expect_equal(genoSource(paramTest), exp_genoSource)
 })
 
+test_that("create a RAIDSparam class with all blockTypeId setter and getter should return an object", {
+
+    exp_blockTypeId <- "TEST"
+
+    paramTest <- RAIDSparam()
+    blockTypeId(paramTest) <- exp_blockTypeId
+
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+    expect_error(blockTypeId(paramTest) <- 323L)
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+})
+
 
 #############################################################################
 ### Tests RAIDSparam function

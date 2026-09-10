@@ -967,6 +967,59 @@ setMethod("genoSource", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the blockTypeId slot in a class
+#' 
+#' @description A generic function for getting the blockTypeId slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the blockTypeId slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(blockTypeId="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", blockTypeId="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # blockTypeId(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("blockTypeId", function(x) standardGeneric("blockTypeId"))
+
+
+#' A getter for the blockTypeId slot in a RAIDSparam class
+#' 
+#' @description A function for getting the blockTypeId slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string corresponding to the block type 
+#' used to extract the block identifiers. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the blockTypeId slot for the object
+#' blockTypeId(paramDemo)
+#' 
+#' @export
+setMethod("blockTypeId", "RAIDSparam", function(x) {
+  return(x@blockTypeId)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -1306,6 +1359,68 @@ setMethod("genoSource<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of blockTypeId slot in a class
+#' 
+#' @description A generic function for replacement of blockTypeId slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(blockTypeId="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", blockTypeId="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # blockTypeId(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("blockTypeId<-", function(x, value) standardGeneric("blockTypeId<-"))
+
+
+#' Setter function for replacement of blockTypeId slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of blockTypeId slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string corresponding to 
+#' the block type used to extract the block identifiers. The block type must 
+#' be present in the GDS Reference Annotation file.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the new blockTypeId to the blockTypeId slot in the object
+#' blockTypeId(paramDemo) <- "TEST"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("blockTypeId<-", "RAIDSparam", function(x, value) {
+  x@blockTypeId <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 
 #' @title Create a RAIDSparam object 
