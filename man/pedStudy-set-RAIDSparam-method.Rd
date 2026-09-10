@@ -23,6 +23,23 @@ the modified \code{RAIDSparam} object when the new value is valid.
 A function for replacement of pedStudy slot in a
 \code{RAIDSparam} class.
 }
+\examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Demo PED study
+pedStudy <- data.frame(Name.ID=c("TEST11", "Test12"),
+    Case.ID=c("Case1", "Case2"), 
+    Sample.Type=c("Cancer", "Cancer"), 
+    Diagnosis=c("sarcoma", "sarcoma"),
+    Source=c("CSHL", "CSHL"), stringsAsFactors=FALSE, 
+    row.names=c("TEST11", "Test12"))
+
+## Assign the new PED study to the pedStudy slot in the object
+pedStudy(paramDemo) <- pedStudy
+
+}
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }

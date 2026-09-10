@@ -22,6 +22,19 @@ the modified \code{RAIDSparam} object when the new value is valid.
 A function for replacement of the studyDF slot in a
 \code{RAIDSparam} class.
 }
+\examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Demo study data frame
+studyDF <- data.frame(study.id="TEST1", study.desc="Study1",
+    study.platform="CSHL", stringsAsFactors=FALSE)
+
+## Assign the new table to the studyDF slot in the object
+studyDF(paramDemo) <- studyDF
+
+}
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }

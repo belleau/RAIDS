@@ -8,14 +8,25 @@
 pedStudy(x)
 }
 \arguments{
-\item{x}{a \code{RAIDSparam} object.}
+\item{x}{a S4 object.}
 }
 \value{
-a \code{data.frame}.
+a value from the pedStudy slot in the S4 object.
 }
 \description{
 A generic function for getting the pedStudy slot in a
-class. The function is implemented for the \code{RAIDSparam} class.
+S4 object.
+}
+\examples{
+# Define a dummy class to show usage
+setClass("MyClass", slots = list(studyDF="character"))
+
+# Create an instance
+obj <- new("MyClass", studyDF="123")
+
+# Call the generic (assuming a method is implemented)
+# studyDF(obj)
+
 }
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz

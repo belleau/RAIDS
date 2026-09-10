@@ -8,20 +8,16 @@
 pedStudy(x) <- value
 }
 \arguments{
-\item{x}{a \code{RAIDSparam} object.}
+\item{x}{a S4 object.}
 
-\item{value}{a \code{data.frame} containing the information
-TODO with those mandatory columns: "Name.ID", "Case.ID", "Sample.Type",
-"Diagnosis", and "Source". All columns must be character strings
-(no factors). All row names should correspond to the values in the
-"Name.ID" column.}
+\item{value}{the new value to assign or update.}
 }
 \value{
-the modified object when the new value is valid.
+the modified S4 object when the new value is valid.
 }
 \description{
 A generic function for replacement of pedStudy slot in a
-class. The function is implemented for the \code{RAIDSparam} class.
+S4 object.
 }
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz

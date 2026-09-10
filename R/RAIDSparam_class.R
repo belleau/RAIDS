@@ -811,17 +811,27 @@ setMethod("studyDFSyn", "RAIDSparam", function(x) {
 #' Generic function for getting the pedStudy slot in a class
 #' 
 #' @description A generic function for getting the pedStudy slot in a 
-#' class. The function is implemented for the \code{RAIDSparam} class.
+#' S4 object.
 #' 
-#' @param x a \code{RAIDSparam} object.
+#' @param x a S4 object.
 #' 
-#' @return a \code{data.frame}.
+#' @return a value from the pedStudy slot in the S4 object.
+#' 
+#' @examples
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(studyDF="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", studyDF="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # studyDF(obj)
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' 
 #' @export
 setGeneric("pedStudy", function(x) standardGeneric("pedStudy"))
+
 
 #' A getter for the pedStudy slot in a RAIDSparam class
 #' 
@@ -857,20 +867,27 @@ setMethod("pedStudy", "RAIDSparam", function(x) {
 #' Generic function for replacement of studyDF slot in a class
 #' 
 #' @description A generic function for replacement of studyDF slot in a 
-#' class. The function is implemented for the \code{RAIDSparam} class.
+#' S4 object.
 #' 
-#' @param x a \code{RAIDSparam} object.
+#' @param x a S4 object.
 #' 
-#' @param value a \code{data.frame} containing the information 
-#' about the study associated with the analyzed sample(s). The 
-#' \code{data.frame} must have those 3 columns: "study.id", "study.desc", 
-#' "study.platform". All columns must be character strings (no factors).
+#' @param value the new value to assign or update.
 #' 
-#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' @return the modified S4 object when the new value is valid.
+#' 
+#' @examples
+#'  
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(studyDF="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", studyDF="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # studyDF(obj) <- "333"
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' 
 #' @export
 setGeneric("studyDF<-", function(x, value) standardGeneric("studyDF<-"))
 
@@ -889,6 +906,18 @@ setGeneric("studyDF<-", function(x, value) standardGeneric("studyDF<-"))
 #' 
 #' @return the modified \code{RAIDSparam} object when the new value is valid.
 #' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Demo study data frame
+#' studyDF <- data.frame(study.id="TEST1", study.desc="Study1",
+#'     study.platform="CSHL", stringsAsFactors=FALSE)
+#' 
+#' ## Assign the new table to the studyDF slot in the object
+#' studyDF(paramDemo) <- studyDF
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @importFrom methods validObject
@@ -905,20 +934,27 @@ setMethod("studyDF<-", "RAIDSparam", function(x, value) {
 #' Generic function for replacement of studyDFSyn slot in a class
 #' 
 #' @description A generic function for replacement of studyDFSyn slot in a 
-#' class. The function is implemented for the \code{RAIDSparam} class.
+#' S4 object.
 #' 
-#' @param x a \code{RAIDSparam} object.
+#' @param x an S4 object.
 #' 
-#' @param value a \code{data.frame} containing the information 
-#' about the synthetic data for the analyzed sample(s). The \code{data.frame} 
-#' must have those 3 columns: "study.id", "study.desc", "study.platform". All 
-#' columns must be character strings (no factors).
+#' @param value the new value to assign or update.
 #' 
-#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' @return the modified S4 object when the new value is valid.
+#' 
+#' @examples
 #'  
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(studyDFSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", studyDFSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # studyDFSyn(obj) <- "333"
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' 
 #' @export
 setGeneric("studyDFSyn<-", function(x, value) standardGeneric("studyDFSyn<-"))
 
@@ -937,6 +973,18 @@ setGeneric("studyDFSyn<-", function(x, value) standardGeneric("studyDFSyn<-"))
 #' 
 #' @return the modified \code{RAIDSparam} object when the new value is valid.
 #' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Demo synthetic study data frame
+#' studyDFSyn <- data.frame(study.id="TEST1", study.desc="Synthetic",
+#'     study.platform="CSHL", stringsAsFactors=FALSE)
+#' 
+#' ## Assign the new table to the studyDFSyn slot in the object
+#' studyDFSyn(paramDemo) <- studyDFSyn
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @importFrom methods validObject
@@ -953,22 +1001,16 @@ setMethod("studyDFSyn<-", "RAIDSparam", function(x, value) {
 #' Generic function for replacement of pedStudy slot in a class
 #' 
 #' @description A generic function for replacement of pedStudy slot in a 
-#' class. The function is implemented for the \code{RAIDSparam} class.
+#' S4 object. 
 #' 
-#' @param x a \code{RAIDSparam} object.
+#' @param x a S4 object.
 #' 
-#' @param value a \code{data.frame} containing the information 
-#' TODO with those mandatory columns: "Name.ID", "Case.ID", "Sample.Type", 
-#' "Diagnosis", and "Source". All columns must be character strings 
-#' (no factors). All row names should correspond to the values in the 
-#' "Name.ID" column. 
+#' @param value the new value to assign or update.
 #' 
-#' @return the modified object when the new value is valid.
+#' @return the modified S4 object when the new value is valid.
 #'  
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
-#' 
-#' @importFrom methods validObject
 #' @export
 setGeneric("pedStudy<-", function(x, value) standardGeneric("pedStudy<-"))
 
@@ -987,7 +1029,23 @@ setGeneric("pedStudy<-", function(x, value) standardGeneric("pedStudy<-"))
 #' "Name.ID" column. 
 #' 
 #' @return the modified \code{RAIDSparam} object when the new value is valid.
-#'  
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Demo PED study
+#' pedStudy <- data.frame(Name.ID=c("TEST11", "Test12"),
+#'     Case.ID=c("Case1", "Case2"), 
+#'     Sample.Type=c("Cancer", "Cancer"), 
+#'     Diagnosis=c("sarcoma", "sarcoma"),
+#'     Source=c("CSHL", "CSHL"), stringsAsFactors=FALSE, 
+#'     row.names=c("TEST11", "Test12"))
+#' 
+#' ## Assign the new PED study to the pedStudy slot in the object
+#' pedStudy(paramDemo) <- pedStudy
+#' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 

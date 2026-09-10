@@ -22,6 +22,19 @@ the modified \code{RAIDSparam} object when the new value is valid.
 A function for replacement of the studyDFSyn slot in a
 \code{RAIDSparam} class.
 }
+\examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Demo synthetic study data frame
+studyDFSyn <- data.frame(study.id="TEST1", study.desc="Synthetic",
+    study.platform="CSHL", stringsAsFactors=FALSE)
+
+## Assign the new table to the studyDFSyn slot in the object
+studyDFSyn(paramDemo) <- studyDFSyn
+
+}
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }

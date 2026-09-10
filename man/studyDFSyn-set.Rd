@@ -8,19 +8,28 @@
 studyDFSyn(x) <- value
 }
 \arguments{
-\item{x}{a \code{RAIDSparam} object.}
+\item{x}{an S4 object.}
 
-\item{value}{a \code{data.frame} containing the information
-about the synthetic data for the analyzed sample(s). The \code{data.frame}
-must have those 3 columns: "study.id", "study.desc", "study.platform". All
-columns must be character strings (no factors).}
+\item{value}{the new value to assign or update.}
 }
 \value{
-the modified \code{RAIDSparam} object when the new value is valid.
+the modified S4 object when the new value is valid.
 }
 \description{
 A generic function for replacement of studyDFSyn slot in a
-class. The function is implemented for the \code{RAIDSparam} class.
+S4 object.
+}
+\examples{
+ 
+# Define a dummy class to show usage
+setClass("MyClass", slots = list(studyDFSyn="character"))
+
+# Create an instance
+obj <- new("MyClass", studyDFSyn="123")
+
+# Call the generic (assuming a method is implemented)
+# studyDFSyn(obj) <- "333"
+
 }
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
