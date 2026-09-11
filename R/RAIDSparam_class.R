@@ -1124,6 +1124,60 @@ setMethod("genome", "RAIDSparam", function(x) {
   return(x@genome)
 })
 
+
+#' Generic function for getting the chrInfo slot in a class
+#' 
+#' @description A generic function for getting the chrInfo slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the chrInfo slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(chrInfo="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", chrInfo="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # chrInfo(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("chrInfo", function(x) standardGeneric("chrInfo"))
+
+
+#' A getter for the chrInfo slot in a RAIDSparam class
+#' 
+#' @description A function for getting the chrInfo slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{vector} of positive \code{integer} values 
+#' representing the length of the chromosomes.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the chrInfo slot for the object
+#' chrInfo(paramDemo)
+#' 
+#' @export
+setMethod("chrInfo", "RAIDSparam", function(x) {
+  return(x@chrInfo)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -1582,6 +1636,68 @@ setGeneric("reference<-", function(x, value) standardGeneric("reference<-"))
 #' @export
 setMethod("reference<-", "RAIDSparam", function(x, value) {
   x@reference <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of chrInfo slot in a class
+#' 
+#' @description A generic function for replacement of chrInfo slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(chrInfo="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", chrInfo="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # chrInfo(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("chrInfo<-", function(x, value) standardGeneric("chrInfo<-"))
+
+
+#' Setter function for replacement of chrInfo slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of chrInfo slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{vector} of positive \code{integer} values 
+#' representing the length of the chromosomes.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the new chrInfo to the chrInfo slot in the object
+#' chrInfo(paramDemo) <- c(122222L, 333333L)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("chrInfo<-", "RAIDSparam", function(x, value) {
+  x@chrInfo <- value
 
   # Validate and return the modified object
   validObject(x) 
