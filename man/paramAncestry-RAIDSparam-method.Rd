@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{paramAncestry,RAIDSparam-method}
 \alias{paramAncestry,RAIDSparam-method}
-\title{A getter for the chrInfo slot in a RAIDSparam class}
+\title{A getter for the paramAncestry slot in a RAIDSparam class}
 \usage{
 \S4method{paramAncestry}{RAIDSparam}(x)
 }

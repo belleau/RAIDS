@@ -498,7 +498,7 @@ setValidity("RAIDSparam",
         } 
         
         ## Validate the profileFile file exists when not null
-        if (!is.null(object@profileFile) && !dir.exists(object@profileFile)) {
+        if (!is.null(object@profileFile) && !file.exists(object@profileFile)) {
             return(paste0("'profileFile' slot must have one character ", 
                     "string representing an existing file."))
         }
@@ -1204,7 +1204,7 @@ setMethod("chrInfo", "RAIDSparam", function(x) {
 setGeneric("paramAncestry", function(x) standardGeneric("paramAncestry"))
 
 
-#' A getter for the chrInfo slot in a RAIDSparam class
+#' A getter for the paramAncestry slot in a RAIDSparam class
 #' 
 #' @description A function for getting the paramAncestry slot in a 
 #' \code{RAIDSparam} class. 
@@ -1227,6 +1227,59 @@ setGeneric("paramAncestry", function(x) standardGeneric("paramAncestry"))
 #' @export
 setMethod("paramAncestry", "RAIDSparam", function(x) {
   return(x@paramAncestry)
+})
+
+
+#' Generic function for getting the profileFile slot in a class
+#' 
+#' @description A generic function for getting the profileFile slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the profileFile slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(profileFile="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", profileFile="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # profileFile(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("profileFile", function(x) standardGeneric("profileFile"))
+
+
+#' A getter for the profileFile slot in a RAIDSparam class
+#' 
+#' @description A function for getting the profileFile slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or \code{character} string representing the path to 
+#' the file with genotype and the allele information of the profile.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the profileFile slot for the object
+#' profileFile(paramDemo)
+#' 
+#' @export
+setMethod("profileFile", "RAIDSparam", function(x) {
+  return(x@profileFile)
 })
 
 
@@ -1821,6 +1874,79 @@ setMethod("paramAncestry<-", "RAIDSparam", function(x, value) {
 })
 
 
+#' Generic function for replacement of profileFile slot in a class
+#' 
+#' @description A generic function for replacement of profileFile slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(profileFile="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", profileFile="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # profileFile(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("profileFile<-", function(x, value) 
+    standardGeneric("profileFile<-"))
+
+
+#' Setter function for replacement of profileFile slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of profileFile slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a a \code{character} string representing the 
+#' path to the file 
+#' with genotype and the allele information of the profile. The format of 
+#' the accepted file is determined by the value in the 'genoSource' slot. A 
+#' profile would have a file with extension "vcf.gz" when 'genoSource' slot 
+#' is "VCF". If 'genoSource' is "generic" or "snp-pileup", then ".txt.gz". If 
+#' 'genoSource' is "bam", then ".bam" (the file needs to be indexed with 
+#' an existing corresponding ".bai" file).
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Directory where demo GDS files are located
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Adjust the genoSource slot to the updated format file
+#' genoSource(paramDemo) <- "generic"
+#' 
+#' ## Assign the existing profile file to the profileFile slot in the object
+#' profileFile(paramDemo) <- file.path(dataDir, "tests/ex1.txt.gz")
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("profileFile<-", "RAIDSparam", function(x, value) {
+  x@profileFile <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 
 

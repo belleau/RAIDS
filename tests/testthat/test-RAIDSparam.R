@@ -1,7 +1,7 @@
 ### Unit tests for processStudy.R functions
 
 library(RAIDS)
-
+library(withr)
 
 #############################################################################
 ### Tests RAIDSparam class
@@ -993,6 +993,19 @@ test_that("create a RAIDSparam class with all paramAncestry setter and getter sh
     expect_equal(paramAncestry(paramTest), exp)
     expect_error(paramAncestry(paramTest) <- "AA")
     expect_equal(paramAncestry(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all profileFile setter and getter should return an object", {
+
+    exp <- test_path("fixtures", "ex1.txt.gz")
+
+    paramTest <- RAIDSparam()
+    genoSource(paramTest) <- "generic"
+    profileFile(paramTest) <- exp
+
+    expect_equal(profileFile(paramTest), exp)
+    expect_error(profileFile(paramTest) <- "AA")
+    expect_equal(profileFile(paramTest), exp)
 })
 
 
