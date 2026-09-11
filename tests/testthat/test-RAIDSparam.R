@@ -1,7 +1,7 @@
 ### Unit tests for processStudy.R functions
 
 library(RAIDS)
-
+library(withr)
 
 #############################################################################
 ### Tests RAIDSparam class
@@ -868,6 +868,146 @@ test_that("create a RAIDSparam class with all studyDF setter and getter should r
     expect_error(studyDF(paramTest) <- 33L)
     expect_equal(studyDF(paramTest), exp_studyDF)
 })
+
+test_that("create a RAIDSparam class with all studyDFSyn setter and getter should return an object", {
+
+    exp_studyDFSyn <- data.frame(study.id=c("TEST12", "Test22"),
+                                study.desc=c("Test", "Canada"),
+                                study.platform=c("CSHL", "Alpha"),
+                                stringsAsFactors=FALSE)
+
+    paramTest <- RAIDSparam()
+    studyDFSyn(paramTest) <- exp_studyDFSyn
+
+    expect_equal(studyDFSyn(paramTest), exp_studyDFSyn)
+    expect_error(studyDFSyn(paramTest) <- 323L)
+    expect_equal(studyDFSyn(paramTest), exp_studyDFSyn)
+})
+
+test_that("create a RAIDSparam class with all pedStudy setter and getter should return an object", {
+
+    exp_pedStudy <- data.frame(Name.ID=c("TEST12", "Test22"),
+                                Case.ID=c("Case1", "Case12"),
+                                Sample.Type=c("Cancer", "Cancer"),
+                                Diagnosis=c("NA", "sarcoma"),
+                                Source=c("NA", "CSHL"),
+                                stringsAsFactors=FALSE, 
+                                row.names=c("TEST12", "Test22"))
+
+    paramTest <- RAIDSparam()
+    pedStudy(paramTest) <- exp_pedStudy
+
+    expect_equal(pedStudy(paramTest), exp_pedStudy)
+    expect_error(pedStudy(paramTest) <- 323L)
+    expect_equal(pedStudy(paramTest), exp_pedStudy)
+})
+
+test_that("create a RAIDSparam class with all studyType setter and getter should return an object", {
+
+    exp_studyType <- "GeneAware"
+
+    paramTest <- RAIDSparam()
+    studyType(paramTest) <- exp_studyType
+
+    expect_equal(studyType(paramTest), exp_studyType)
+    expect_error(studyType(paramTest) <- 323L)
+    expect_equal(studyType(paramTest), exp_studyType)
+})
+
+
+test_that("create a RAIDSparam class with all genoSource setter and getter should return an object", {
+
+    exp_genoSource <- "bam"
+
+    paramTest <- RAIDSparam()
+    genoSource(paramTest) <- exp_genoSource
+
+    expect_equal(genoSource(paramTest), exp_genoSource)
+    expect_error(genoSource(paramTest) <- 323L)
+    expect_equal(genoSource(paramTest), exp_genoSource)
+})
+
+test_that("create a RAIDSparam class with all blockTypeId setter and getter should return an object", {
+
+    exp_blockTypeId <- "TEST"
+
+    paramTest <- RAIDSparam()
+    blockTypeId(paramTest) <- exp_blockTypeId
+
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+    expect_error(blockTypeId(paramTest) <- 323L)
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+})
+
+test_that("create a RAIDSparam class with all reference setter and getter should return an object", {
+
+    exp_reference <- "1k_hgdpV0.1"
+
+    paramTest <- RAIDSparam()
+    reference(paramTest) <- exp_reference
+
+    expect_equal(reference(paramTest), exp_reference)
+    expect_error(reference(paramTest) <- 323L)
+    expect_equal(reference(paramTest), exp_reference)
+})
+
+test_that("create a RAIDSparam class with all genome getter should return an object", {
+
+    paramTest <- RAIDSparam()
+
+    expect_equal(genome(paramTest), "HG38")
+})
+
+
+test_that("create a RAIDSparam class with all blockTypeId setter and getter should return an object", {
+
+    exp_blockTypeId <- "TEST"
+
+    paramTest <- RAIDSparam()
+    blockTypeId(paramTest) <- exp_blockTypeId
+
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+    expect_error(blockTypeId(paramTest) <- 323L)
+    expect_equal(blockTypeId(paramTest), exp_blockTypeId)
+})
+
+test_that("create a RAIDSparam class with all chrInfo setter and getter should return an object", {
+
+    exp_chrInfo <- c(212L, 333L)
+
+    paramTest <- RAIDSparam()
+    chrInfo(paramTest) <- exp_chrInfo
+
+    expect_equal(chrInfo(paramTest), exp_chrInfo)
+    expect_error(chrInfo(paramTest) <- "AA")
+    expect_equal(chrInfo(paramTest), exp_chrInfo)
+})
+
+test_that("create a RAIDSparam class with all paramAncestry setter and getter should return an object", {
+
+    exp <- list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000023232)
+
+    paramTest <- RAIDSparam()
+    paramAncestry(paramTest) <- exp
+
+    expect_equal(paramAncestry(paramTest), exp)
+    expect_error(paramAncestry(paramTest) <- "AA")
+    expect_equal(paramAncestry(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all profileFile setter and getter should return an object", {
+
+    exp <- test_path("fixtures", "ex1.txt.gz")
+
+    paramTest <- RAIDSparam()
+    genoSource(paramTest) <- "generic"
+    profileFile(paramTest) <- exp
+
+    expect_equal(profileFile(paramTest), exp)
+    expect_error(profileFile(paramTest) <- "AA")
+    expect_equal(profileFile(paramTest), exp)
+})
+
 
 #############################################################################
 ### Tests RAIDSparam function

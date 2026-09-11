@@ -29,19 +29,22 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
 \item{\code{studyDF}}{a \code{data.frame} containing the information about the
 study associated to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor). Default:
+must be in \code{character} strings (no factors). Default:
 \code{data.frame(study.id="NotDef", study.desc="NotDef", 
 study.platform="NotDef", stringsAsFactors=FALSE)}.}
 
 \item{\code{studyDFSyn}}{a \code{data.frame} containing the information about the
 synthetic data to the analysed sample(s). The \code{data.frame} must have
 those 3 columns: "study.id", "study.desc", "study.platform". All columns
-must be in \code{character} strings (no factor). Default: \code{NULL}.}
+must be in \code{character} strings (no factors). Default:
+\code{data.frame(study.id="NotDef.Synthetic", 
+study.desc="NotDef synthetic data", study.platform="Synthetic", 
+stringsAsFactors=FALSE)}.}
 
 \item{\code{pedStudy}}{a \code{data.frame} containing the information TODO
 with those mandatory columns: "Name.ID",
 "Case.ID", "Sample.Type", "Diagnosis", and "Source". All columns must be in
-\code{character} strings (no factor). All row names should correspond to the
+\code{character} strings (no factors). All row names should correspond to the
 values in the "Name.ID" column.
 Default: \code{data.frame(Name.ID=c("ProfileId"), Case.ID=c("ProfileId"), 
 Sample.Type=c("type"), Diagnosis="NotDef", Source=c("NotDef"), 
@@ -68,7 +71,7 @@ the block type used to extract the block identifiers. The block type must
 be present in the GDS Reference Annotation file.
 Default: \code{"GeneS.Ensembl.Hsapiens.v86"}.}
 
-\item{\code{reference}}{a \code{character} string with two possible values:
+\item{\code{reference}}{a single \code{character} string with two possible values:
 '1KGv1.0', '1k_hgdpV0.1'. It specifies the type of inference.
 Default: \code{"1KGv1.0"}.}
 
@@ -230,8 +233,8 @@ the values tested for the  \emph{D} parameter. The \emph{D} parameter represents
 number of dimensions used in the PCA analysis.
 Default: \code{seq(2L, 15L, 1L)}.}
 
-\item{\code{fieldPopInRef}}{a \code{character} string representing the name of the
-column that contains the known ancestry for the reference profiles in
+\item{\code{fieldPopInRef}}{a single \code{character} string representing the name
+of the column that contains the known ancestry for the reference profiles in
 the Population Reference GDS file (corresponding to the
 \code{fileReferenceGDS} parameter). Default: \code{"superPop"}.}
 
