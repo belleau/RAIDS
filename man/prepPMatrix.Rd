@@ -5,7 +5,7 @@
 \alias{prepPMatrix}
 \title{Generate the row for the ADMIXTURE P-matrax}
 \usage{
-prepPMatrix(anchor, snpId, matGr, pRAIDS)
+prepPMatrix(anchor, snpId, matGr = NULL, pRAIDS)
 }
 \arguments{
 \item{anchor}{a \code{vector} of \code{character} representing the

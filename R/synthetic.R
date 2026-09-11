@@ -305,6 +305,7 @@ prepSynthetic <- function(fileProfileGDS, listSampleRef,
 
     ## Create Pedigree information data frame for the synthetic samples
     ## The sample type is always set to "Synthetic" (idem for the source)
+    ## Ordered by listSampleRef
     pedSim <- data.frame(Name.ID=sampleSim,
                 Case.ID=rep(listSampleRef, each=nbSim),
                 Sample.Type=rep("Synthetic", length(listSampleRef) * nbSim),

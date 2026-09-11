@@ -879,7 +879,7 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
 #' @encoding UTF-8
 #' @export
 prepPMatrix <- function( anchor, 
-        snpId, matGr, pRAIDS) {
+        snpId, matGr=NULL, pRAIDS) {
     # c("EURag", "EASag", "AMRag", "AFRag", "SASag")
     tmpTime <- system.time({ag <- unique(anchor)
     ag <- ag[ag != "-"]
@@ -896,21 +896,24 @@ prepPMatrix <- function( anchor,
             f <- list()
             f[[1]]  <- colSums(matGeno)/ (2*dim(matGeno)[1])
             k<-1
-            matchinF <- integer(nrow(matGr))
-            for(i in seq_len(nrow(matGr))){
-                matchinF[i] <- 1
-                tmp <- which(keepProfiles %in% matGr[i,])
-                if(length(tmp) > 0){ 
-                    # remove some anchors for the freq
-                    k <- k + 1
-                    f[[k]]  <- colSums(matGeno[-1 * tmp, ]) / 
-                        (2*dim(matGeno[ -1 * tmp, ])[1])
-                    matchinF[i] <- k
+            matchinF <- NULL
+            if(! is.null(matGr)){
+                matchinF <- integer(nrow(matGr))
+                for(i in seq_len(nrow(matGr))){
+                    matchinF[i] <- 1
+                    tmp <- which(keepProfiles %in% matGr[i,])
+                    if(length(tmp) > 0){ 
+                        # remove some anchors for the freq
+                        k <- k + 1
+                        f[[k]]  <- colSums(matGeno[-1 * tmp, ]) / 
+                            (2*dim(matGeno[ -1 * tmp, ])[1])
+                        matchinF[i] <- k
+                    }
                 }
             }
             # f <- colSums(matGeno)/ (2*dim(matGeno)[1])
             return(list(f = f, index = matchinF))
-        },
+            },
         gdsReference=gdsReference,
         profileRef=profileRef,
         pruned=snpId,
@@ -964,7 +967,7 @@ writePMatrix <- function( pathOut,rowF, pRAIDS) {
         rowF=rowF
         )
     matP <- t(do.call(rbind, matP))
-    write.table(1-matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+    write.table(round(1-matP, 5), file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
     
     for(i in seq_len(nb)){
         flag <- FALSE
@@ -985,7 +988,7 @@ writePMatrix <- function( pathOut,rowF, pRAIDS) {
             )
             matP <- t(do.call(rbind, matP))
             k<-k+1
-            write.table(1-matP, file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1],".syn.", k, ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
+            write.table(round(1-matP, 5), file.path(pathOut, paste0( pRAIDS$pedStudy$Name.ID[1],".syn.", k, ".P.in")),row.names = FALSE,col.names = FALSE, sep=" ")
         }
         matPIndex[i] <- ifelse(! flag,1, k)
         
