@@ -580,7 +580,7 @@ profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
 
     ## parse the read.count if the pRAIDS$listPos is not
     ## it define it and return an update pRAIDS
-    ## Creaste if note exists profileGDS
+    ## Create if note exists profileGDS
     ## add in the profile gds the "Ref.count", "Alt.count", and "Total.count"
     pRAIDS <- generateProfileRawGDS2(pRAIDS)
 
@@ -747,6 +747,7 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
     gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
     dfRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))
     row.names(dfRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
+    # If pRAIDS$sampleRef is define we restricted the sample to pRAIDS$sampleRef
     if(! is.null(pRAIDS$sampleRef)){
         dfRef <- dfRef[pRAIDS$sampleRef,]
     }
@@ -754,9 +755,10 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
     # listCatPop <- unique(spRef)
     snpgdsClose(gdsReference)
 
-    ## Get study information from the GDS Sample file
+    ## Get study information from the GDS profile file
     studyAnnotAll <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
     snpgdsClose(gdsProfile)
+
     studyAnnot <- studyAnnotAll[which(studyAnnotAll$study.id ==
                     pRAIDS$studyDFSyn$study.id & studyAnnotAll$data.id %in%
                     listEigenvector$sample.id), ]
