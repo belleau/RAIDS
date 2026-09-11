@@ -1178,6 +1178,58 @@ setMethod("chrInfo", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the paramAncestry slot in a class
+#' 
+#' @description A generic function for getting the paramAncestry slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the paramAncestry slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(paramAncestry="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", paramAncestry="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # paramAncestry(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("paramAncestry", function(x) standardGeneric("paramAncestry"))
+
+
+#' A getter for the chrInfo slot in a RAIDSparam class
+#' 
+#' @description A function for getting the paramAncestry slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{list} of parameters related to ancestry.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the paramAncestry slot for the object
+#' paramAncestry(paramDemo)
+#' 
+#' @export
+setMethod("paramAncestry", "RAIDSparam", function(x) {
+  return(x@paramAncestry)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -1703,6 +1755,74 @@ setMethod("chrInfo<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of paramAncestry slot in a class
+#' 
+#' @description A generic function for replacement of paramAncestry slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(paramAncestry="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", paramAncestry="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # paramAncestry(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("paramAncestry<-", function(x, value) 
+    standardGeneric("paramAncestry<-"))
+
+
+#' Setter function for replacement of paramAncestry slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of paramAncestry slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{vector} of positive \code{integer} values 
+#' representing the length of the chromosomes.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the new chrInfo to the paramAncestry slot in the object
+#' paramAncestry(paramDemo) <- list(ScanBamParam=NULL, PileupParam=NULL, 
+#'     yieldSize=1000023)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("paramAncestry<-", "RAIDSparam", function(x, value) {
+  x@paramAncestry <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+
+
 
 
 #' @title Create a RAIDSparam object 

@@ -983,6 +983,19 @@ test_that("create a RAIDSparam class with all chrInfo setter and getter should r
     expect_equal(chrInfo(paramTest), exp_chrInfo)
 })
 
+test_that("create a RAIDSparam class with all paramAncestry setter and getter should return an object", {
+
+    exp <- list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000023232)
+
+    paramTest <- RAIDSparam()
+    paramAncestry(paramTest) <- exp
+
+    expect_equal(paramAncestry(paramTest), exp)
+    expect_error(paramAncestry(paramTest) <- "AA")
+    expect_equal(paramAncestry(paramTest), exp)
+})
+
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
