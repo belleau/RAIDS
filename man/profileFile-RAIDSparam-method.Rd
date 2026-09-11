@@ -11,7 +11,7 @@
 \item{x}{a \code{RAIDSparam} object.}
 }
 \value{
-\code{NULL} or \code{character} string representing the path to
+\code{NULL} or a \code{character} string representing the path to
 the file with genotype and the allele information of the profile.
 }
 \description{

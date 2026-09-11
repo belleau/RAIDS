@@ -1008,6 +1008,17 @@ test_that("create a RAIDSparam class with all profileFile setter and getter shou
     expect_equal(profileFile(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all pathProfileGDS setter and getter should return an object", {
+
+    exp <- test_path("fixtures")
+
+    paramTest <- RAIDSparam()
+    pathProfileGDS(paramTest) <- exp
+
+    expect_equal(pathProfileGDS(paramTest), exp)
+    expect_error(pathProfileGDS(paramTest) <- "AA")
+    expect_equal(pathProfileGDS(paramTest), exp)
+})
 
 #############################################################################
 ### Tests RAIDSparam function

@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
 
-\item{value}{\code{NULL} or a a \code{character} string representing the
+\item{value}{\code{NULL} or a \code{character} string representing the
 path to the file
 with genotype and the allele information of the profile. The format of
 the accepted file is determined by the value in the 'genoSource' slot. A
