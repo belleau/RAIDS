@@ -1020,6 +1020,18 @@ test_that("create a RAIDSparam class with all pathProfileGDS setter and getter s
     expect_equal(pathProfileGDS(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all fileReferenceGDS setter and getter should return an object", {
+
+    exp <- test_path("fixtures", "1KG_Test.gds")
+  
+    paramTest <- RAIDSparam()
+    fileReferenceGDS(paramTest) <- exp
+
+    expect_equal(fileReferenceGDS(paramTest), exp)
+    expect_error(fileReferenceGDS(paramTest) <- "AA")
+    expect_equal(fileReferenceGDS(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

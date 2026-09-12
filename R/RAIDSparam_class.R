@@ -1335,6 +1335,60 @@ setMethod("pathProfileGDS", "RAIDSparam", function(x) {
   return(x@pathProfileGDS)
 })
 
+
+#' Generic function for getting the fileReferenceGDS slot in a class
+#' 
+#' @description A generic function for getting the fileReferenceGDS slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the fileReferenceGDS slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fileReferenceGDS="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fileReferenceGDS="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fileReferenceGDS(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fileReferenceGDS", function(x) standardGeneric("fileReferenceGDS"))
+
+
+#' A getter for the fileReferenceGDS slot in a RAIDSparam class
+#' 
+#' @description A function for getting the fileReferenceGDS slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a single \code{character} string representing 
+#' the file name of the Reference GDS file.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the fileReferenceGDS slot for the object
+#' fileReferenceGDS(paramDemo)
+#' 
+#' @export
+setMethod("fileReferenceGDS", "RAIDSparam", function(x) {
+  return(x@fileReferenceGDS)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -2061,6 +2115,73 @@ setGeneric("pathProfileGDS<-", function(x, value)
 #' @export
 setMethod("pathProfileGDS<-", "RAIDSparam", function(x, value) {
   x@pathProfileGDS <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of fileReferenceGDS slot in a class
+#' 
+#' @description A generic function for replacement of fileReferenceGDS slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fileReferenceGDS="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fileReferenceGDS="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fileReferenceGDS(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fileReferenceGDS<-", function(x, value) 
+    standardGeneric("fileReferenceGDS<-"))
+
+
+#' Setter function for replacement of fileReferenceGDS slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of fileReferenceGDS slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a single \code{character} string representing 
+#' the file name of the Reference GDS file. If specified, the file must exist.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Directory where demo GDS files are located
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the existing file to the fileReferenceGDS slot in the object
+#' fileReferenceGDS(paramDemo) <- file.path(dataDir, 
+#'     "tests/ex1_good_small_1KG.gds")
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("fileReferenceGDS<-", "RAIDSparam", function(x, value) {
+  x@fileReferenceGDS <- value
 
   # Validate and return the modified object
   validObject(x) 
