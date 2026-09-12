@@ -1389,6 +1389,60 @@ setMethod("fileReferenceGDS", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the fileReferenceAnnotGDS slot in a class
+#' 
+#' @description A generic function for getting the fileReferenceAnnotGDS slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the fileReferenceAnnotGDS slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fileReferenceAnnotGDS="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fileReferenceAnnotGDS="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fileReferenceAnnotGDS(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fileReferenceAnnotGDS", 
+    function(x) standardGeneric("fileReferenceAnnotGDS"))
+
+
+#' A getter for the fileReferenceAnnotGDS slot in a RAIDSparam class
+#' 
+#' @description A function for getting the fileReferenceAnnotGDS slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a \code{character} string representing the file 
+#' name of the Population Reference GDS Annotation file.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the fileReferenceAnnotGDS slot for the object
+#' fileReferenceAnnotGDS(paramDemo)
+#' 
+#' @export
+setMethod("fileReferenceAnnotGDS", "RAIDSparam", function(x) {
+  return(x@fileReferenceAnnotGDS)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -2182,6 +2236,74 @@ setGeneric("fileReferenceGDS<-", function(x, value)
 #' @export
 setMethod("fileReferenceGDS<-", "RAIDSparam", function(x, value) {
   x@fileReferenceGDS <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of fileReferenceAnnotGDS slot in a class
+#' 
+#' @description A generic function for replacement of fileReferenceAnnotGDS 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fileReferenceAnnotGDS="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fileReferenceAnnotGDS="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fileReferenceAnnotGDS(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fileReferenceAnnotGDS<-", function(x, value) 
+    standardGeneric("fileReferenceAnnotGDS<-"))
+
+
+#' Setter function for replacement of fileReferenceAnnotGDS slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of fileReferenceAnnotGDS slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{character} string representing the 
+#' file name of the Population Reference GDS Annotation file.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Directory where demo GDS files are located
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the existing file to the fileReferenceAnnotGDS slot in the object
+#' fileReferenceAnnotGDS(paramDemo) <- file.path(dataDir, 
+#'     "tests/ex1_good_small_1KG_Annot.gds")
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("fileReferenceAnnotGDS<-", "RAIDSparam", function(x, value) {
+  x@fileReferenceAnnotGDS <- value
 
   # Validate and return the modified object
   validObject(x) 
