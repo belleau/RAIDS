@@ -1008,6 +1008,42 @@ test_that("create a RAIDSparam class with all profileFile setter and getter shou
     expect_equal(profileFile(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all pathProfileGDS setter and getter should return an object", {
+
+    exp <- test_path("fixtures")
+
+    paramTest <- RAIDSparam()
+    pathProfileGDS(paramTest) <- exp
+
+    expect_equal(pathProfileGDS(paramTest), exp)
+    expect_error(pathProfileGDS(paramTest) <- "AA")
+    expect_equal(pathProfileGDS(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all fileReferenceGDS setter and getter should return an object", {
+
+    exp <- test_path("fixtures", "1KG_Test.gds")
+  
+    paramTest <- RAIDSparam()
+    fileReferenceGDS(paramTest) <- exp
+
+    expect_equal(fileReferenceGDS(paramTest), exp)
+    expect_error(fileReferenceGDS(paramTest) <- "AA")
+    expect_equal(fileReferenceGDS(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all fileReferenceAnnotGDS setter and getter should return an object", {
+
+    exp <- test_path("fixtures", "1KG_Test.gds")
+  
+    paramTest <- RAIDSparam()
+    fileReferenceAnnotGDS(paramTest) <- exp
+
+    expect_equal(fileReferenceAnnotGDS(paramTest), exp)
+    expect_error(fileReferenceAnnotGDS(paramTest) <- "AA")
+    expect_equal(fileReferenceAnnotGDS(paramTest), exp)
+})
+
 
 #############################################################################
 ### Tests RAIDSparam function
