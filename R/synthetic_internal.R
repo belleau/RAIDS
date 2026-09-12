@@ -545,3 +545,6 @@ computeSyntheticConfMat <- function(matKNN, matKNNAncestryColumn,
 
     return(res)
 }
+
+
+

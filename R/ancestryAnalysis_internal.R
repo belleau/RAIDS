@@ -533,3 +533,99 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
     resMat <- do.call(rbind, resMat)
     return(resMat)
 }
+
+
+#' @title compute admixture proportion
+#'
+#' @description 
+#'
+#' @param pathOut temporary path where the directory mat use to generate the P-matrix
+#' 
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#'
+#' @return \code{vector} with the info of the index associated the synthetic
+#' group with the matrix-P 
+#'
+#'
+#' @details
+#'
+#' 
+#'
+#'
+#' @examples
+#'
+#'
+#' ## Load the known ancestry for the demo 1KG reference profiles
+#' data(demoKnownSuperPop1KG)
+#' 
+#' ## The Reference GDS file
+#' path1KG <- system.file("extdata/tests", package="RAIDS")
+#'
+#' ## Path to the demo Profile GDS file is located in this package
+#' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
+#' 
+#' # The name of the synthetic study
+#' studyID <- "MYDATA"
+#' 
+#' studyDF <- data.frame(study.id=studyID,
+#'                              study.desc=studyID,
+#'                              study.platform="NotDef",
+#'                              stringsAsFactors=FALSE)
+#' pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+#' fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+#' pedStudy <- data.frame(Name.ID=c("ex1"),
+#'                              Case.ID=c("ex1"),
+#'                              Sample.Type=c("type"),
+#'                              Diagnosis="NotDef",
+#'                              Source=c("NotDef"),
+#'                              stringsAsFactors=FALSE)
+#'      row.names(pedStudy) <- pedStudy$Name.ID
+#' 
+#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'                       pedStudy=pedStudy,
+#'                       pathProfileGDS=pathProfileGDS,
+#'                       fileReferenceGDS=fileReferenceGDS,
+#'                       fieldPopInfAnc="SuperPop")
+#' 
+#' ### TODO call
+#' ### 
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
+#' @importFrom SNPRelate snpgdsOpen
+#' @encoding UTF-8
+#' @keywords internal
+computePmatrix <- function(pathOut, pRAIDS) {
+    
+    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
+                            paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    
+    
+    gdsProfile <- snpgdsOpen(fileGDSProfile)
+    pruned <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
+    snpgdsClose(gdsProfile)
+    #anchor <- read.delim("/grid/krasnitz/data/belleau/process1000G/samples1000gUnrelated/data/admix2026.03/metadata/noAdmix1kgS0.95.V0.1.pop", header=FALSE)
+    
+    # TODO select the good anchor
+    pos <- 1
+    
+    gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
+    anchor <- read.gdsn(index.gdsn(gdsReference, "anchor.ref"),
+                        start=c(1, pos), count=c(-1,1))
+    snpgdsClose(gdsReference)
+    # Bad order
+    matGr <- getMatrixPopSynthetic(pRAIDS)
+
+    rowF <- prepPMatrix( anchor, snpId = pruned, matGr, pRAIDS)
+
+    pathBaseAdmix <- file.path(pathOut,"matP")
+    if(!dir.exists(file.path(pathBaseAdmix))){
+        dir.create(file.path(pathBaseAdmix))
+    }
+
+    matPIndex <- writePMatrix(pathBaseAdmix, rowF, pRAIDS)
+
+    return(matPIndex)
+}
