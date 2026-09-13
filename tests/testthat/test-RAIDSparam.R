@@ -1044,6 +1044,18 @@ test_that("create a RAIDSparam class with all fileReferenceAnnotGDS setter and g
     expect_equal(fileReferenceAnnotGDS(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all inferenceType setter and getter should return an object", {
+
+    exp <- "haploAdmixture"
+  
+    paramTest <- RAIDSparam()
+    inferenceType(paramTest) <- exp
+
+    expect_equal(inferenceType(paramTest), exp)
+    expect_error(inferenceType(paramTest) <- "AA")
+    expect_equal(inferenceType(paramTest), exp)
+})
+
 
 #############################################################################
 ### Tests RAIDSparam function

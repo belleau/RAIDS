@@ -1391,8 +1391,8 @@ setMethod("fileReferenceGDS", "RAIDSparam", function(x) {
 
 #' Generic function for getting the fileReferenceAnnotGDS slot in a class
 #' 
-#' @description A generic function for getting the fileReferenceAnnotGDS slot in a 
-#' S4 object.
+#' @description A generic function for getting the fileReferenceAnnotGDS slot 
+#' in a S4 object.
 #' 
 #' @param x a S4 object.
 #' 
@@ -1440,6 +1440,61 @@ setGeneric("fileReferenceAnnotGDS",
 #' @export
 setMethod("fileReferenceAnnotGDS", "RAIDSparam", function(x) {
   return(x@fileReferenceAnnotGDS)
+})
+
+
+
+#' Generic function for getting the inferenceType slot in a class
+#' 
+#' @description A generic function for getting the inferenceType slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the inferenceType slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(inferenceType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", inferenceType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # inferenceType(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("inferenceType", 
+    function(x) standardGeneric("inferenceType"))
+
+
+#' A getter for the inferenceType slot in a RAIDSparam class
+#' 
+#' @description A function for getting the inferenceType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing the genotype 
+#' ancestry inference method.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the inferenceType slot for the object
+#' inferenceType(paramDemo)
+#' 
+#' @export
+setMethod("inferenceType", "RAIDSparam", function(x) {
+  return(x@inferenceType)
 })
 
 
@@ -2310,6 +2365,73 @@ setMethod("fileReferenceAnnotGDS<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of inferenceType slot in a class
+#' 
+#' @description A generic function for replacement of inferenceType 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(inferenceType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", inferenceType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # inferenceType(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("inferenceType<-", function(x, value) 
+    standardGeneric("inferenceType<-"))
+
+
+#' Setter function for replacement of inferenceType slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of inferenceType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string representing the genotype 
+#' ancestry inference method. The two possible values are 'PCAknn' and 
+#' 'haploAdmixture'.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Directory where demo GDS files are located
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the inferenceType slot in the object
+#' inferenceType(paramDemo) <- "haploAdmixture"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("inferenceType<-", "RAIDSparam", function(x, value) {
+  x@inferenceType <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
