@@ -1553,6 +1553,59 @@ setMethod("sampleRef", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the batch slot in a class
+#' 
+#' @description A generic function for getting the batch slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the batch slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(batch="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", batch="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # batch(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("batch", function(x) standardGeneric("batch"))
+
+
+#' A getter for the batch slot in a RAIDSparam class
+#' 
+#' @description A function for getting the batch slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} representing the current 
+#' identifier for the batch.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the batch slot for the object
+#' batch(paramDemo)
+#' 
+#' @export
+setMethod("batch", "RAIDSparam", function(x) {
+  return(x@batch)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -2538,7 +2591,7 @@ setGeneric("sampleRef<-", function(x, value)
 #' ## Create a RAIDSparam object
 #' paramDemo <- RAIDSparam()
 #' 
-#' ## Assign a new values to the sampleRef slot in the object
+#' ## Assign new values to the sampleRef slot in the object
 #' sampleRef(paramDemo) <- c("Sample1", "Sample2")
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
@@ -2548,6 +2601,70 @@ setGeneric("sampleRef<-", function(x, value)
 #' @export
 setMethod("sampleRef<-", "RAIDSparam", function(x, value) {
   x@sampleRef <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of sampbatchleRef slot in a class
+#' 
+#' @description A generic function for replacement of batch 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(batch="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", batch="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # batch(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("batch<-", function(x, value) 
+    standardGeneric("batch<-"))
+
+
+#' Setter function for replacement of batch slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of batch slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} representing the current 
+#' identifier for the batch. 
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the batch slot in the object
+#' batch(paramDemo) <- 34L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("batch<-", "RAIDSparam", function(x, value) {
+  x@batch <- value
 
   # Validate and return the modified object
   validObject(x) 

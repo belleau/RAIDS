@@ -1068,6 +1068,19 @@ test_that("create a RAIDSparam class with all sampleRef setter and getter should
     expect_equal(sampleRef(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all batch setter and getter should return an object", {
+
+    exp <- 33L
+  
+    paramTest <- RAIDSparam()
+    batch(paramTest) <- exp
+
+    expect_equal(batch(paramTest), exp)
+    expect_error(batch(paramTest) <- "AA")
+    expect_equal(batch(paramTest), exp)
+})
+
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

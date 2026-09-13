@@ -28,7 +28,7 @@ A function for replacement of sampleRef slot in a
 ## Create a RAIDSparam object
 paramDemo <- RAIDSparam()
 
-## Assign a new values to the sampleRef slot in the object
+## Assign new values to the sampleRef slot in the object
 sampleRef(paramDemo) <- c("Sample1", "Sample2")
 
 }
