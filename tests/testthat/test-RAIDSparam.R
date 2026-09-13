@@ -1056,6 +1056,17 @@ test_that("create a RAIDSparam class with all inferenceType setter and getter sh
     expect_equal(inferenceType(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all sampleRef setter and getter should return an object", {
+
+    exp <- c("Sample1", "Sample2")
+  
+    paramTest <- RAIDSparam()
+    sampleRef(paramTest) <- exp
+
+    expect_equal(sampleRef(paramTest), exp)
+    expect_error(sampleRef(paramTest) <- 22L)
+    expect_equal(sampleRef(paramTest), exp)
+})
 
 #############################################################################
 ### Tests RAIDSparam function

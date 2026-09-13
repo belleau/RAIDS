@@ -1498,6 +1498,61 @@ setMethod("inferenceType", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the sampleRef slot in a class
+#' 
+#' @description A generic function for getting the sampleRef slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the sampleRef slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(sampleRef="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", sampleRef="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # sampleRef(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("sampleRef", function(x) standardGeneric("sampleRef"))
+
+
+#' A getter for the inferenceType slot in a RAIDSparam class
+#' 
+#' @description A function for getting the sampleRef slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a \code{vector} of \code{character} strings that 
+#' represent a subset of sample identifiers from the GDS Reference File. 
+#' Those samples will be used for the ancestry inference. If \code{NULL}, all 
+#' the samples are retained.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the sampleRef slot for the object
+#' sampleRef(paramDemo)
+#' 
+#' @export
+setMethod("sampleRef", "RAIDSparam", function(x) {
+  return(x@sampleRef)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -2432,6 +2487,73 @@ setMethod("inferenceType<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of sampleRef slot in a class
+#' 
+#' @description A generic function for replacement of sampleRef 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(sampleRef="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", sampleRef="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # sampleRef(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("sampleRef<-", function(x, value) 
+    standardGeneric("sampleRef<-"))
+
+
+#' Setter function for replacement of sampleRef slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of sampleRef slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{vector} of \code{character} strings 
+#' that represent a subset of sample identifiers from the GDS Reference File. 
+#' Those samples will be used for the ancestry inference. If \code{NULL}, all 
+#' the samples are retained.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new values to the sampleRef slot in the object
+#' sampleRef(paramDemo) <- c("Sample1", "Sample2")
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("sampleRef<-", "RAIDSparam", function(x, value) {
+  x@sampleRef <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
