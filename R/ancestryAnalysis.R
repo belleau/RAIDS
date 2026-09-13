@@ -1368,7 +1368,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
 
 #' @title compute admixture proportion
 #'
-#' @description 
+#' @description TODO
 #'
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
@@ -1380,7 +1380,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #' are returned.
 #'
 #'
-#' @details
+#' @details TODO
 #'
 #' 
 #'
@@ -1439,9 +1439,7 @@ computeAdmixtureProportion <- function(pRAIDS) {
     }
     matPIndex <- computePmatrix(pathOut=pathOut, pRAIDS=pRAIDS)
 
-    
-
-
+    generateProfilePlinkFiles(pathOut=pathOut, pRAIDS=pRAIDS)
 }
 
 

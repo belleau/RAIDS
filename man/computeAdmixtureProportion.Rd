@@ -19,7 +19,10 @@ Only the rows corresponding to the specified study ('studyID' parameter)
 are returned.
 }
 \description{
-compute admixture proportion
+TODO
+}
+\details{
+TODO
 }
 \examples{
 
