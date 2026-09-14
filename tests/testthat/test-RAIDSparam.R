@@ -1080,6 +1080,30 @@ test_that("create a RAIDSparam class with all batch setter and getter should ret
     expect_equal(batch(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all prefix setter and getter should return an object", {
+
+    exp <- "allo"
+  
+    paramTest <- RAIDSparam()
+    prefix(paramTest) <- exp
+
+    expect_equal(prefix(paramTest), exp)
+    expect_error(prefix(paramTest) <- 43L)
+    expect_equal(prefix(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all nbSim setter and getter should return an object", {
+
+    exp <- 4L
+  
+    paramTest <- RAIDSparam()
+    nbSim(paramTest) <- exp
+
+    expect_equal(nbSim(paramTest), exp)
+    expect_error(nbSim(paramTest) <- -43L)
+    expect_equal(nbSim(paramTest), exp)
+})
+
 
 #############################################################################
 ### Tests RAIDSparam function

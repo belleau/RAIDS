@@ -1553,6 +1553,58 @@ setMethod("sampleRef", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the prefix slot in a class
+#' 
+#' @description A generic function for getting the prefix slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the prefix slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(prefix="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", prefix="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # prefix(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("prefix", function(x) standardGeneric("prefix"))
+
+
+#' A getter for the prefix slot in a RAIDSparam class
+#' 
+#' @description A function for getting the prefix slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing TODO.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the prefix slot for the object
+#' prefix(paramDemo)
+#' 
+#' @export
+setMethod("prefix", "RAIDSparam", function(x) {
+  return(x@prefix)
+})
+
+
 #' Generic function for getting the batch slot in a class
 #' 
 #' @description A generic function for getting the batch slot in a 
@@ -1603,6 +1655,84 @@ setGeneric("batch", function(x) standardGeneric("batch"))
 #' @export
 setMethod("batch", "RAIDSparam", function(x) {
   return(x@batch)
+})
+
+
+#' A getter for the prefix slot in a RAIDSparam class
+#' 
+#' @description A function for getting the prefix slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing TODO.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the prefix slot for the object
+#' prefix(paramDemo)
+#' 
+#' @export
+setMethod("prefix", "RAIDSparam", function(x) {
+  return(x@prefix)
+})
+
+
+#' Generic function for getting the nbSim slot in a class
+#' 
+#' @description A generic function for getting the nbSim slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the nbSim slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(nbSim="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", nbSim="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # nbSim(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("nbSim", function(x) standardGeneric("nbSim"))
+
+
+#' A getter for the nbSim slot in a RAIDSparam class
+#' 
+#' @description A function for getting the nbSim slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a positive \code{integer} representing TODO.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the nbSim slot for the object
+#' nbSim(paramDemo)
+#' 
+#' @export
+setMethod("nbSim", "RAIDSparam", function(x) {
+  return(x@nbSim)
 })
 
 
@@ -2608,7 +2738,7 @@ setMethod("sampleRef<-", "RAIDSparam", function(x, value) {
 })
 
 
-#' Generic function for replacement of sampbatchleRef slot in a class
+#' Generic function for replacement of batch slot in a class
 #' 
 #' @description A generic function for replacement of batch 
 #' slot in a S4 object. 
@@ -2671,6 +2801,131 @@ setMethod("batch<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of prefix slot in a class
+#' 
+#' @description A generic function for replacement of prefix 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(prefix="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", prefix="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # prefix(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("prefix<-", function(x, value) 
+    standardGeneric("prefix<-"))
+
+
+#' Setter function for replacement of prefix slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of prefix slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string representing TODO.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the prefix slot in the object
+#' prefix(paramDemo) <- "test"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("prefix<-", "RAIDSparam", function(x, value) {
+  x@prefix <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+
+#' Generic function for replacement of nbSim slot in a class
+#' 
+#' @description A generic function for replacement of nbSim 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(nbSim="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", nbSim="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # nbSim(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("nbSim<-", function(x, value) standardGeneric("nbSim<-"))
+
+
+#' Setter function for replacement of nbSim slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of nbSim slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a positive \code{integer} representing TODO.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the nbSim slot in the object
+#' nbSim(paramDemo) <- 33L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("nbSim<-", "RAIDSparam", function(x, value) {
+  x@nbSim <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
