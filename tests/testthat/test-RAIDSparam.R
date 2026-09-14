@@ -1044,6 +1044,114 @@ test_that("create a RAIDSparam class with all fileReferenceAnnotGDS setter and g
     expect_equal(fileReferenceAnnotGDS(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all inferenceType setter and getter should return an object", {
+
+    exp <- "haploAdmixture"
+  
+    paramTest <- RAIDSparam()
+    inferenceType(paramTest) <- exp
+
+    expect_equal(inferenceType(paramTest), exp)
+    expect_error(inferenceType(paramTest) <- "AA")
+    expect_equal(inferenceType(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all sampleRef setter and getter should return an object", {
+
+    exp <- c("Sample1", "Sample2")
+  
+    paramTest <- RAIDSparam()
+    sampleRef(paramTest) <- exp
+
+    expect_equal(sampleRef(paramTest), exp)
+    expect_error(sampleRef(paramTest) <- 22L)
+    expect_equal(sampleRef(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all batch setter and getter should return an object", {
+
+    exp <- 33L
+  
+    paramTest <- RAIDSparam()
+    batch(paramTest) <- exp
+
+    expect_equal(batch(paramTest), exp)
+    expect_error(batch(paramTest) <- "AA")
+    expect_equal(batch(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all prefix setter and getter should return an object", {
+
+    exp <- "allo"
+  
+    paramTest <- RAIDSparam()
+    prefix(paramTest) <- exp
+
+    expect_equal(prefix(paramTest), exp)
+    expect_error(prefix(paramTest) <- 43L)
+    expect_equal(prefix(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all nbSim setter and getter should return an object", {
+
+    exp <- 4L
+  
+    paramTest <- RAIDSparam()
+    nbSim(paramTest) <- exp
+
+    expect_equal(nbSim(paramTest), exp)
+    expect_error(nbSim(paramTest) <- -43L)
+    expect_equal(nbSim(paramTest), exp)
+})
+
+
+test_that("create a RAIDSparam class with all nbSim setter and getter should return an object", {
+
+    exp <- 4L
+  
+    paramTest <- RAIDSparam()
+    nbSim(paramTest) <- exp
+
+    expect_equal(nbSim(paramTest), exp)
+    expect_error(nbSim(paramTest) <- -43L)
+    expect_equal(nbSim(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all minCov setter and getter should return an object", {
+
+    exp <- 21L
+  
+    paramTest <- RAIDSparam()
+    minCov(paramTest) <- exp
+
+    expect_equal(minCov(paramTest), exp)
+    expect_error(minCov(paramTest) <- "A")
+    expect_equal(minCov(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all minProb setter and getter should return an object", {
+
+    exp <- 0.011
+  
+    paramTest <- RAIDSparam()
+    minProb(paramTest) <- exp
+
+    expect_equal(minProb(paramTest), exp)
+    expect_error(minProb(paramTest) <- "A")
+    expect_equal(minProb(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all offset setter and getter should return an object", {
+
+    exp <- 1L
+  
+    paramTest <- RAIDSparam()
+    offset(paramTest) <- exp
+
+    expect_equal(offset(paramTest), exp)
+    expect_error(offset(paramTest) <- "A")
+    expect_equal(offset(paramTest), exp)
+})
 
 #############################################################################
 ### Tests RAIDSparam function

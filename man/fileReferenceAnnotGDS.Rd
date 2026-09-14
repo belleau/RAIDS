@@ -14,8 +14,8 @@ fileReferenceAnnotGDS(x)
 a value from the fileReferenceAnnotGDS slot in the S4 object.
 }
 \description{
-A generic function for getting the fileReferenceAnnotGDS slot in a
-S4 object.
+A generic function for getting the fileReferenceAnnotGDS slot
+in a S4 object.
 }
 \examples{
 
