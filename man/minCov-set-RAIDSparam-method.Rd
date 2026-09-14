@@ -7,6 +7,8 @@
 a RAIDSparam class}
 \usage{
 \S4method{minCov}{RAIDSparam}(x) <- value
+
+\S4method{minCov}{RAIDSparam}(x) <- value
 }
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
@@ -16,12 +18,24 @@ required coverage.}
 }
 \value{
 the modified \code{RAIDSparam} object when the new value is valid.
+
+the modified \code{RAIDSparam} object when the new value is valid.
 }
 \description{
 A function for replacement of minCov slot in a
 \code{RAIDSparam} class.
+
+A function for replacement of minCov slot in a
+\code{RAIDSparam} class.
 }
 \examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Assign a new value to the minCov slot in the object
+minCov(paramDemo) <- 3L
+
 
 ## Create a RAIDSparam object
 paramDemo <- RAIDSparam()
