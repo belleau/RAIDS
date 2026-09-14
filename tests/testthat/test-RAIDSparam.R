@@ -1104,6 +1104,43 @@ test_that("create a RAIDSparam class with all nbSim setter and getter should ret
     expect_equal(nbSim(paramTest), exp)
 })
 
+
+test_that("create a RAIDSparam class with all nbSim setter and getter should return an object", {
+
+    exp <- 4L
+  
+    paramTest <- RAIDSparam()
+    nbSim(paramTest) <- exp
+
+    expect_equal(nbSim(paramTest), exp)
+    expect_error(nbSim(paramTest) <- -43L)
+    expect_equal(nbSim(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all minCov setter and getter should return an object", {
+
+    exp <- 21L
+  
+    paramTest <- RAIDSparam()
+    minCov(paramTest) <- exp
+
+    expect_equal(minCov(paramTest), exp)
+    expect_error(minCov(paramTest) <- "A")
+    expect_equal(minCov(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all minProb setter and getter should return an object", {
+
+    exp <- 0.011
+  
+    paramTest <- RAIDSparam()
+    minProb(paramTest) <- exp
+
+    expect_equal(minProb(paramTest), exp)
+    expect_error(minProb(paramTest) <- "A")
+    expect_equal(minProb(paramTest), exp)
+})
+
 test_that("create a RAIDSparam class with all offset setter and getter should return an object", {
 
     exp <- 1L

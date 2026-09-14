@@ -1762,6 +1762,59 @@ setMethod("prefix", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the minCov slot in a class
+#' 
+#' @description A generic function for getting the minCov slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the minCov slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(minCov="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", minCov="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # minCov(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("minCov", function(x) standardGeneric("minCov"))
+
+
+#' A getter for the minCov slot in a RAIDSparam class
+#' 
+#' @description A function for getting the minCov slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} representing the minimum 
+#' required coverage. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the minCov slot for the object
+#' minCov(paramDemo)
+#' 
+#' @export
+setMethod("minCov", "RAIDSparam", function(x) {
+  return(x@minCov)
+})
+
+
 #' Generic function for getting the offset slot in a class
 #' 
 #' @description A generic function for getting the offset slot in a 
@@ -1812,6 +1865,59 @@ setGeneric("offset", function(x) standardGeneric("offset"))
 #' @export
 setMethod("offset", "RAIDSparam", function(x) {
   return(x@offset)
+})
+
+
+#' Generic function for getting the minProb slot in a class
+#' 
+#' @description A generic function for getting the offset slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the minProb slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(minProb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", minProb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # minProb(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("minProb", function(x) standardGeneric("minProb"))
+
+
+#' A getter for the minProb slot in a RAIDSparam class
+#' 
+#' @description A function for getting the minProb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability that the calculated genotype call is correct.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the minProb slot for the object
+#' minProb(paramDemo)
+#' 
+#' @export
+setMethod("minProb", "RAIDSparam", function(x) {
+  return(x@minProb)
 })
 
 
@@ -3068,6 +3174,131 @@ setMethod("offset<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of minCov slot in a class
+#' 
+#' @description A generic function for replacement of minCov 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(minCov="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", minCov="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # minCov(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("minCov<-", function(x, value) standardGeneric("minCov<-"))
+
+
+#' Setter function for replacement of minCov slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of minCov slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} representing the minimum 
+#' required coverage.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the minCov slot in the object
+#' minCov(paramDemo) <- 3L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("minCov<-", "RAIDSparam", function(x, value) {
+  x@minCov <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of minProb slot in a class
+#' 
+#' @description A generic function for replacement of minProb  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(minProb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", minProb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # minProb(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("minProb<-", function(x, value) standardGeneric("minProb<-"))
+
+
+#' Setter function for replacement of minProb slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of minProb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability that the calculated genotype call is correct.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the minProb slot in the object
+#' minProb(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("minProb<-", "RAIDSparam", function(x, value) {
+  x@minProb <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
