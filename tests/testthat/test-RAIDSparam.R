@@ -1104,6 +1104,17 @@ test_that("create a RAIDSparam class with all nbSim setter and getter should ret
     expect_equal(nbSim(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all offset setter and getter should return an object", {
+
+    exp <- 1L
+  
+    paramTest <- RAIDSparam()
+    offset(paramTest) <- exp
+
+    expect_equal(offset(paramTest), exp)
+    expect_error(offset(paramTest) <- "A")
+    expect_equal(offset(paramTest), exp)
+})
 
 #############################################################################
 ### Tests RAIDSparam function

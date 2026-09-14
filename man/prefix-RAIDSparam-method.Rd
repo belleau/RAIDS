@@ -8,11 +8,15 @@
 \S4method{prefix}{RAIDSparam}(x)
 
 \S4method{prefix}{RAIDSparam}(x)
+
+\S4method{prefix}{RAIDSparam}(x)
 }
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
 }
 \value{
+a single \code{character} string representing TODO.
+
 a single \code{character} string representing TODO.
 
 a single \code{character} string representing TODO.
@@ -23,8 +27,18 @@ A function for getting the prefix slot in a
 
 A function for getting the prefix slot in a
 \code{RAIDSparam} class.
+
+A function for getting the prefix slot in a
+\code{RAIDSparam} class.
 }
 \examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Extract the prefix slot for the object
+prefix(paramDemo)
+
 
 ## Create a RAIDSparam object
 paramDemo <- RAIDSparam()

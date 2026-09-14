@@ -1736,6 +1736,85 @@ setMethod("nbSim", "RAIDSparam", function(x) {
 })
 
 
+#' A getter for the prefix slot in a RAIDSparam class
+#' 
+#' @description A function for getting the prefix slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing TODO.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the prefix slot for the object
+#' prefix(paramDemo)
+#' 
+#' @export
+setMethod("prefix", "RAIDSparam", function(x) {
+  return(x@prefix)
+})
+
+
+#' Generic function for getting the offset slot in a class
+#' 
+#' @description A generic function for getting the offset slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the offset slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(offset="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", offset="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # offset(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("offset", function(x) standardGeneric("offset"))
+
+
+#' A getter for the offset slot in a RAIDSparam class
+#' 
+#' @description A function for getting the offset slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{integer} that is added to the SNP position to 
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the offset slot for the object
+#' offset(paramDemo)
+#' 
+#' @export
+setMethod("offset", "RAIDSparam", function(x) {
+  return(x@offset)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -2865,7 +2944,6 @@ setMethod("prefix<-", "RAIDSparam", function(x, value) {
 })
 
 
-
 #' Generic function for replacement of nbSim slot in a class
 #' 
 #' @description A generic function for replacement of nbSim 
@@ -2926,6 +3004,70 @@ setMethod("nbSim<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of offset slot in a class
+#' 
+#' @description A generic function for replacement of offset 
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(offset="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", offset="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # offset(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("offset<-", function(x, value) standardGeneric("offset<-"))
+
+
+#' Setter function for replacement of offset slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of offset slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{integer} that is added to the SNP position to
+#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the offset slot in the object
+#' offset(paramDemo) <- 0L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("offset<-", "RAIDSparam", function(x, value) {
+  x@offset <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
