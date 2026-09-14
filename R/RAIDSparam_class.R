@@ -1973,6 +1973,60 @@ setMethod("seqError", "RAIDSparam", function(x) {
   return(x@seqError)
 })
 
+
+#' Generic function for getting the seqErrorSyn slot in a class
+#' 
+#' @description A generic function for getting the seqErrorSyn slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the seqErrorSyn slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqErrorSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqErrorSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqErrorSyn(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqErrorSyn", function(x) standardGeneric("seqErrorSyn"))
+
+
+#' A getter for the seqErrorSyn slot in a RAIDSparam class
+#' 
+#' @description A function for getting the seqErrorSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error for synthetic.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the seqErrorSyn slot for the object
+#' seqErrorSyn(paramDemo)
+#' 
+#' @export
+setMethod("seqErrorSyn", "RAIDSparam", function(x) {
+  return(x@seqErrorSyn)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -3445,6 +3499,70 @@ setGeneric("seqError<-", function(x, value) standardGeneric("seqError<-"))
 #' @export
 setMethod("seqError<-", "RAIDSparam", function(x, value) {
   x@seqError <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+
+#' Generic function for replacement of seqErrorSyn slot in a class
+#' 
+#' @description A generic function for replacement of seqErrorSyn  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqErrorSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqErrorSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqErrorSyn(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqErrorSyn<-", function(x, value) standardGeneric("seqErrorSyn<-"))
+
+
+#' Setter function for replacement of seqErrorSyn slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of seqErrorSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error for synthetic.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the seqErrorSyn slot in the object
+#' seqErrorSyn(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("seqErrorSyn<-", "RAIDSparam", function(x, value) {
+  x@seqErrorSyn <- value
 
   # Validate and return the modified object
   validObject(x) 
