@@ -1153,6 +1153,18 @@ test_that("create a RAIDSparam class with all offset setter and getter should re
     expect_equal(offset(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all seqError setter and getter should return an object", {
+
+    exp <- 0.043423
+  
+    paramTest <- RAIDSparam()
+    seqError(paramTest) <- exp
+
+    expect_equal(seqError(paramTest), exp)
+    expect_error(seqError(paramTest) <- "A")
+    expect_equal(seqError(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

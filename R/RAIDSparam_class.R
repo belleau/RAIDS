@@ -1870,7 +1870,7 @@ setMethod("offset", "RAIDSparam", function(x) {
 
 #' Generic function for getting the minProb slot in a class
 #' 
-#' @description A generic function for getting the offset slot in a 
+#' @description A generic function for getting the minProb slot in a 
 #' S4 object.
 #' 
 #' @param x a S4 object.
@@ -1920,6 +1920,58 @@ setMethod("minProb", "RAIDSparam", function(x) {
   return(x@minProb)
 })
 
+
+#' Generic function for getting the seqError slot in a class
+#' 
+#' @description A generic function for getting the seqError slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the seqError slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqError="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqError="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqError(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqError", function(x) standardGeneric("seqError"))
+
+
+#' A getter for the seqError slot in a RAIDSparam class
+#' 
+#' @description A function for getting the seqError slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the seqError slot for the object
+#' seqError(paramDemo)
+#' 
+#' @export
+setMethod("seqError", "RAIDSparam", function(x) {
+  return(x@seqError)
+})
 
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
@@ -3299,6 +3351,106 @@ setMethod("minProb<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+
+#' Setter function for replacement of minCov slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of minCov slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} representing the minimum 
+#' required coverage.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the minCov slot in the object
+#' minCov(paramDemo) <- 3L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("minCov<-", "RAIDSparam", function(x, value) {
+  x@minCov <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of seqError slot in a class
+#' 
+#' @description A generic function for replacement of seqError  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqError="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqError="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqError(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqError<-", function(x, value) standardGeneric("seqError<-"))
+
+
+#' Setter function for replacement of seqError slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of seqError slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the seqError slot in the object
+#' seqError(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("seqError<-", "RAIDSparam", function(x, value) {
+  x@seqError <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
