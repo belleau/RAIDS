@@ -2027,6 +2027,59 @@ setMethod("seqErrorSyn", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the pRecomb slot in a class
+#' 
+#' @description A generic function for getting the pRecomb slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the pRecomb slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pRecomb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pRecomb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pRecomb(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pRecomb", function(x) standardGeneric("pRecomb"))
+
+
+#' A getter for the pRecomb slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pRecomb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{numeric} between \code{0} and \code{1} 
+#' that represents the frequency of phase switching in the synthetic profiles.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pRecomb slot for the object
+#' pRecomb(paramDemo)
+#' 
+#' @export
+setMethod("pRecomb", "RAIDSparam", function(x) {
+  return(x@pRecomb)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -3506,7 +3559,6 @@ setMethod("seqError<-", "RAIDSparam", function(x, value) {
 })
 
 
-
 #' Generic function for replacement of seqErrorSyn slot in a class
 #' 
 #' @description A generic function for replacement of seqErrorSyn  
@@ -3563,6 +3615,71 @@ setGeneric("seqErrorSyn<-", function(x, value) standardGeneric("seqErrorSyn<-"))
 #' @export
 setMethod("seqErrorSyn<-", "RAIDSparam", function(x, value) {
   x@seqErrorSyn <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+
+#' Generic function for replacement of pRecomb slot in a class
+#' 
+#' @description A generic function for replacement of pRecomb  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pRecomb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pRecomb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pRecomb(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pRecomb<-", function(x, value) standardGeneric("pRecomb<-"))
+
+
+#' Setter function for replacement of pRecomb slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of pRecomb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{numeric} between \code{0} and 
+#' \code{1} that represents the frequency of phase switching in the 
+#' synthetic profiles.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the pRecomb slot in the object
+#' pRecomb(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("pRecomb<-", "RAIDSparam", function(x, value) {
+  x@pRecomb <- value
 
   # Validate and return the modified object
   validObject(x) 
