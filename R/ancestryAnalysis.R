@@ -1373,11 +1373,15 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
 #' parameters
 #'
-#' @return \code{data.frame} containing the columns extracted from the
-#' GDS Sample 'study.annot' node with a extra column named as the 'popName'
-#' parameter that has been extracted from the 1KG GDS 'sample.annot' node.
-#' Only the rows corresponding to the specified study ('studyID' parameter)
-#' are returned.
+#' @return a \code{list} containing 2 entries:
+#' \describe{
+#' \item{\code{profileQ}}{ a \code{matrix} containing the admixture 
+#' proportions of the profile }
+#' \item{\code{syntheticQ}}{ a \code{matrix} containing for each
+#' synthetic profile the admixture proportions of the synthetic profile,
+#' the synthetic proportions of the reference using the same position as 
+#' the profile, and the admixture proportion of the gold standard}
+#' }
 #'
 #'
 #' @details TODO
@@ -1433,13 +1437,19 @@ computeAdmixtureProportion <- function(pRAIDS) {
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
                                     profile=pRAIDS$pedStudy$Name.ID[1])
     
-    pathOut <- file.path(pRAIDS$pathProfileGDS, tmp)
+    pathOut <- file.path(pRAIDS$pathProfileGDS, "tmp")
     if(! dir.exists(pathOut)){
         dir.create(pathOut)
     }
     matPIndex <- computePmatrix(pathOut=pathOut, pRAIDS=pRAIDS)
 
     generateProfilePlinkFiles(pathOut=pathOut, pRAIDS=pRAIDS)
+    profileQ <- runADMIXTURE(pathOut = pathOut,
+            fileBed = paste0(pRAIDS$pedStudy$Name.ID[1], ".bed"),
+            seedAdmix=pRAIDS$seedADMIXTURE, pRAIDS)
+    
+    syntheticQ <- runSynADMIXTURE(pathOut=pathOut, matPIndex=matPIndex, pRAIDS=pRAIDS)
+    return(list(profileQ=profileQ, syntheticQ=syntheticQ))
 }
 
 

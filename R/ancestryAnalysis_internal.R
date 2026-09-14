@@ -604,16 +604,17 @@ computePmatrix <- function(pathOut, pRAIDS) {
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     pruned <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
     snpgdsClose(gdsProfile)
-    #anchor <- read.delim("/grid/krasnitz/data/belleau/process1000G/samples1000gUnrelated/data/admix2026.03/metadata/noAdmix1kgS0.95.V0.1.pop", header=FALSE)
     
-    # TODO select the good anchor
-    pos <- 1
-
     gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
+    
+    admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))
+    pos <- admixDesc[admixDesc$id == pRAIDS$anchorId, "id.seq"]
+
     anchor <- read.gdsn(index.gdsn(gdsReference, "anchor.ref"),
                         start=c(1, pos), count=c(-1,1))
     snpgdsClose(gdsReference)
-    # Bad order
+    
+    # Bad order but ok
     matGr <- getMatrixPopSynthetic(pRAIDS)
 
     rowF <- prepPMatrix( anchor, snpId = pruned, matGr, pRAIDS)
@@ -698,22 +699,24 @@ generateProfilePlinkFiles <- function(pathOut, pRAIDS) {
         dir.create(file.path(pathOutP))
     }
 
-    # TODO select the population group
-    pos <- 1
-
+    
     gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
     
+    admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))
+    pos <- admixDesc[admixDesc$id == pRAIDS$anchorId, "id.seq"]
     popSelected <- read.gdsn(index.gdsn(gdsReference, "admixture.ag"))
+    popSelected <- popSelected[popSelected$id.seq == pos,]
     
     snpgdsClose(gdsReference)
 
-    file.copy(file.path(pathBaseAdmix, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),
-          file.path(pathOutP,
-                    paste0(pRAIDS$pedStudy$Name.ID[1], ".", ".P.in")))
 
-    writeBimPruned(fileOut=file.path(pathOutSP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bim")),pRAIDS=pRAIDS)
-    writeBedProfile(fileOut=file.path(pathOutSP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bed")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
-    writeFamProfile(fileOut=file.path(pathOutSP, paste0(pRAIDS$pedStudy$Name.ID[1], ".fam")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
+    file.copy(file.path(pathBaseMatP, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),
+          file.path(pathOutP,
+                    paste0(pRAIDS$pedStudy$Name.ID[1], ".", nrow(popSelected), ".P.in")))
+
+    writeBimPruned(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bim")),pRAIDS=pRAIDS)
+    writeBedProfile(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bed")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
+    writeFamProfile(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".fam")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
     
     return(0L)
 }

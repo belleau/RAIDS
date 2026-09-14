@@ -5,14 +5,16 @@
 \alias{runADMIXTURE}
 \title{Call ADMIXTURE}
 \usage{
-runADMIXTURE(pathBed, outPref, seedAdmix = 3435L, pRAIDS)
+runADMIXTURE(pathOut, fileBed, seedAdmix = 3435L, pRAIDS)
 }
 \arguments{
-\item{pathBed}{a \code{character} representing path
-where the bed need by ADMIXTURE is located.}
+\item{pathOut}{a \code{character} representing path
+where the file for ADMIXTURE (BED,BIM, FAM, and P.in)
+are located and where the output of ADMIXTURE
+will be generated.}
 
-\item{outPref}{a \code{character} representing path
-follow by the prefix for the output of ADMIXTURE.}
+\item{fileBed}{a \code{character} represented
+the BED file name (without path) for a}
 
 \item{seedAdmix}{a \code{integer} representing the seed
 pass to ADMIXTURE.
