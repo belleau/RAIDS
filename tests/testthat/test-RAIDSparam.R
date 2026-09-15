@@ -1261,6 +1261,17 @@ test_that("create a RAIDSparam class with slideWindowMaxBP setter and getter sho
     expect_equal(slideWindowMaxBP(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with thresholdLD setter and getter should return an object", {
+
+    exp <- 444L
+
+    paramTest <- RAIDSparam()
+    thresholdLD(paramTest) <- exp
+
+    expect_equal(thresholdLD(paramTest), exp)
+    expect_error(thresholdLD(paramTest) <- "test")
+    expect_equal(thresholdLD(paramTest), exp)
+})
 
 #############################################################################
 ### Tests RAIDSparam function

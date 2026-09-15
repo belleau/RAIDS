@@ -2348,6 +2348,89 @@ setMethod("slideWindowMaxBP", "RAIDSparam", function(x) {
 })
 
 
+
+#' A getter for the pruningMethod slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pruningMethod slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing the method that 
+#' will be used to calculate the linkage disequilibrium in the 
+#' \code{\link[SNPRelate]{snpgdsLDpruning}}() function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pruningMethod slot for the object
+#' pruningMethod(paramDemo)
+#' 
+#' @export
+setMethod("pruningMethod", "RAIDSparam", function(x) {
+  return(x@pruningMethod)
+})
+
+
+#' Generic function for getting the thresholdLD slot in a class
+#' 
+#' @description A generic function for getting the thresholdLD slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the thresholdLD slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(thresholdLD="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", thresholdLD="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # thresholdLD(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("thresholdLD", function(x) standardGeneric("thresholdLD"))
+
+
+#' A getter for the thresholdLD slot in a RAIDSparam class
+#' 
+#' @description A function for getting the thresholdLD slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the thresholdLD slot for the object
+#' thresholdLD(paramDemo)
+#' 
+#' @export
+setMethod("thresholdLD", "RAIDSparam", function(x) {
+  return(x@thresholdLD)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -4288,6 +4371,72 @@ setMethod("slideWindowMaxBP<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of thresholdLD slot in a class
+#' 
+#' @description A generic function for replacement of thresholdLD  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(thresholdLD="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", thresholdLD="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # thresholdLD(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("thresholdLD<-", 
+  function(x, value) standardGeneric("thresholdLD<-"))
+
+
+#' Setter function for replacement of thresholdLD slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of thresholdLD slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the thresholdLD slot in the object
+#' thresholdLD(paramDemo) <- 1000L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("thresholdLD<-", "RAIDSparam", function(x, value) {
+  x@thresholdLD <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function

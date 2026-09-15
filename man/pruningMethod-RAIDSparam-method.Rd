@@ -6,6 +6,8 @@
 \title{A getter for the pruningMethod slot in a RAIDSparam class}
 \usage{
 \S4method{pruningMethod}{RAIDSparam}(x)
+
+\S4method{pruningMethod}{RAIDSparam}(x)
 }
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
@@ -14,12 +16,26 @@
 a single \code{character} string representing the method that
 will be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function.
+
+a single \code{character} string representing the method that
+will be used to calculate the linkage disequilibrium in the
+\code{\link[SNPRelate]{snpgdsLDpruning}}() function.
 }
 \description{
 A function for getting the pruningMethod slot in a
 \code{RAIDSparam} class.
+
+A function for getting the pruningMethod slot in a
+\code{RAIDSparam} class.
 }
 \examples{
+
+## Create a RAIDSparam object
+paramDemo <- RAIDSparam()
+
+## Extract the pruningMethod slot for the object
+pruningMethod(paramDemo)
+
 
 ## Create a RAIDSparam object
 paramDemo <- RAIDSparam()
