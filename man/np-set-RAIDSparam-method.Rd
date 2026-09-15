@@ -11,9 +11,8 @@ a RAIDSparam class}
 \arguments{
 \item{x}{a \code{RAIDSparam} object.}
 
-\item{value}{a single positive \code{numeric} between \code{0} and
-\code{1} that represents the frequency of phase switching in the
-synthetic profiles.}
+\item{value}{a single positive \code{integer} specifying the number of
+threads to be used.}
 }
 \value{
 the modified \code{RAIDSparam} object when the new value is valid.

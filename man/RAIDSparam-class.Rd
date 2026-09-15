@@ -132,7 +132,7 @@ Default: \code{"1"}.}
 \item{\code{nbSim}}{a positive \code{integer} representing TODO.
 Default: \code{1L}.}
 
-\item{\code{offset}}{a single \code{integer} that is added to the SNP position to
+\item{\code{posOffset}}{a single \code{integer} that is added to the SNP position to
 switch from 0-based to 1-based coordinate when needed (or reverse).
 Default: \code{-1L}.}
 

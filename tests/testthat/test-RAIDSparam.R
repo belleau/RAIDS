@@ -103,8 +103,8 @@ test_that("create a RAIDSparam class with all default parameters should return a
     ## Test nbSim
     expect_true(paramTest@nbSim == 1L)
 
-    ## Test offset
-    expect_true(paramTest@offset == -1L)
+    ## Test posOffset
+    expect_true(paramTest@posOffset == -1L)
 
     ## Test minCov
     expect_true(paramTest@minCov == 10L)
@@ -565,10 +565,10 @@ test_that("create a RAIDSparam class with multiple numbers for nbSim parameter s
         "'nbSim' slot must have one positive integer.")
 })
 
-test_that("create a RAIDSparam class with multiple integers for offset parameter should generate an error", {
+test_that("create a RAIDSparam class with multiple integers for posOffset parameter should generate an error", {
 
-    expect_error(new("RAIDSparam", offset=c(0L, 1L)), 
-        "'offset' slot must have one integer.")
+    expect_error(new("RAIDSparam", posOffset=c(0L, 1L)), 
+        "'posOffset' slot must have one integer.")
 })
 
 test_that("create a RAIDSparam class with multiple integers for minCov parameter should generate an error", {
@@ -971,7 +971,7 @@ test_that("create a RAIDSparam class with all blockTypeId setter and getter shou
     expect_equal(blockTypeId(paramTest), exp_blockTypeId)
 })
 
-test_that("create a RAIDSparam class with all chrInfo setter and getter should return an object", {
+test_that("create a RAIDSparam class with chrInfo setter and getter should return an object", {
 
     exp_chrInfo <- c(212L, 333L)
 
@@ -983,7 +983,7 @@ test_that("create a RAIDSparam class with all chrInfo setter and getter should r
     expect_equal(chrInfo(paramTest), exp_chrInfo)
 })
 
-test_that("create a RAIDSparam class with all paramAncestry setter and getter should return an object", {
+test_that("create a RAIDSparam class with paramAncestry setter and getter should return an object", {
 
     exp <- list(ScanBamParam=NULL, PileupParam=NULL, yieldSize=10000023232)
 
@@ -1129,7 +1129,7 @@ test_that("create a RAIDSparam class with all minCov setter and getter should re
     expect_equal(minCov(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all minProb setter and getter should return an object", {
+test_that("create a RAIDSparam class with minProb setter and getter should return an object", {
 
     exp <- 0.011
   
@@ -1141,19 +1141,19 @@ test_that("create a RAIDSparam class with all minProb setter and getter should r
     expect_equal(minProb(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all offset setter and getter should return an object", {
+test_that("create a RAIDSparam class with posOffset setter and getter should return an object", {
 
     exp <- 1L
   
     paramTest <- RAIDSparam()
-    offset(paramTest) <- exp
+    posOffset(paramTest) <- exp
 
-    expect_equal(offset(paramTest), exp)
-    expect_error(offset(paramTest) <- "A")
-    expect_equal(offset(paramTest), exp)
+    expect_equal(posOffset(paramTest), exp)
+    expect_error(posOffset(paramTest) <- "A")
+    expect_equal(posOffset(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all seqError setter and getter should return an object", {
+test_that("create a RAIDSparam class with seqError setter and getter should return an object", {
 
     exp <- 0.043423
   
@@ -1165,7 +1165,7 @@ test_that("create a RAIDSparam class with all seqError setter and getter should 
     expect_equal(seqError(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all seqErrorSyn setter and getter should return an object", {
+test_that("create a RAIDSparam class with seqErrorSyn setter and getter should return an object", {
 
     exp <- 0.043423
   
@@ -1177,7 +1177,7 @@ test_that("create a RAIDSparam class with all seqErrorSyn setter and getter shou
     expect_equal(seqErrorSyn(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all pRecomb setter and getter should return an object", {
+test_that("create a RAIDSparam class with pRecomb setter and getter should return an object", {
 
     exp <- 0.043423
   
@@ -1189,7 +1189,7 @@ test_that("create a RAIDSparam class with all pRecomb setter and getter should r
     expect_equal(pRecomb(paramTest), exp)
 })
 
-test_that("create a RAIDSparam class with all np setter and getter should return an object", {
+test_that("create a RAIDSparam class with np setter and getter should return an object", {
 
     exp <- 12L
   
@@ -1199,6 +1199,42 @@ test_that("create a RAIDSparam class with all np setter and getter should return
     expect_equal(np(paramTest), exp)
     expect_error(np(paramTest) <- "A")
     expect_equal(np(paramTest), exp)
+})
+
+
+
+test_that("create a RAIDSparam class with listPos setter and getter should return an object", {
+
+    exp <- data.frame(snp.chromosome=c("1", "2"), snp.position=c(12, 3333334))
+  
+    paramTest <- RAIDSparam()
+    listPos(paramTest) <- exp
+
+    expect_equal(listPos(paramTest), exp)
+    expect_error(listPos(paramTest) <- "A")
+    expect_equal(listPos(paramTest), exp)
+})
+
+
+
+test_that("create a RAIDSparam class with all genome getter should return an object", {
+
+    paramTest <- RAIDSparam()
+
+    expect_equal(genome(paramTest), "HG38")
+})
+
+test_that("create a RAIDSparam class with all syntheticRefDF setter and getter should return an object", {
+
+    exp <- data.frame(sample.id=c("A", "B"), pop.group=c("CEU", "CEU"), 
+        superPop=c("EUR", "EUR"))
+
+    paramTest <- RAIDSparam()
+    syntheticRefDF(paramTest) <- exp
+
+    expect_equal(syntheticRefDF(paramTest), exp)
+    expect_error(syntheticRefDF(paramTest) <- 323L)
+    expect_equal(syntheticRefDF(paramTest), exp)
 })
 
 #############################################################################
@@ -1301,8 +1337,8 @@ test_that("create a RAIDSparam function with all default parameters should retur
     ## Test nbSim
     expect_true(paramTest@nbSim == 1L)
 
-    ## Test offset
-    expect_true(paramTest@offset == -1L)
+    ## Test posOffset
+    expect_true(paramTest@posOffset == -1L)
 
     ## Test minCov
     expect_true(paramTest@minCov == 10L)
@@ -1424,7 +1460,7 @@ test_that("create a RAIDSparam function with all non-default parameters should r
         stringsAsFactors=FALSE, row.names=c("SampleE")), chrInfo=exp_chrInfo,
         studyType="GeneAware", genoSource="bam", blockTypeId="E", 
         reference="1k_hgdpV0.1", inferenceType="haploAdmixture", batch=12L,
-        prefix="3", nbSim=11L, offset=0L, minProb=0.889, minCov=20L,
+        prefix="3", nbSim=11L, posOffset=0L, minProb=0.889, minCov=20L,
         pruningMethod="dprime", np=2L, pRecomb=0.21, seqError=0.12, 
         seqErrorSyn=0.02, pathProfileGDS=dataDir, fileReferenceGDS=fileGDS,
         fileReferenceAnnotGDS=fileGDS,
@@ -1503,8 +1539,8 @@ test_that("create a RAIDSparam function with all non-default parameters should r
     ## Test nbSim
     expect_true(paramTest@nbSim == 11L)
 
-    ## Test offset
-    expect_true(paramTest@offset == 0L)
+    ## Test posOffset
+    expect_true(paramTest@posOffset == 0L)
 
     ## Test minCov
     expect_true(paramTest@minCov == 20L)
