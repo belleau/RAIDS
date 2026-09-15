@@ -1189,6 +1189,18 @@ test_that("create a RAIDSparam class with all pRecomb setter and getter should r
     expect_equal(pRecomb(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with all np setter and getter should return an object", {
+
+    exp <- 12L
+  
+    paramTest <- RAIDSparam()
+    np(paramTest) <- exp
+
+    expect_equal(np(paramTest), exp)
+    expect_error(np(paramTest) <- "A")
+    expect_equal(np(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

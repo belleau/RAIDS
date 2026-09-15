@@ -2080,6 +2080,59 @@ setMethod("pRecomb", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the np slot in a class
+#' 
+#' @description A generic function for getting the np slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the np slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(np="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", np="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # np(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("np", function(x) standardGeneric("np"))
+
+
+#' A getter for the np slot in a RAIDSparam class
+#' 
+#' @description A function for getting the np slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} specifying the number of 
+#' threads to be used.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the np slot for the object
+#' np(paramDemo)
+#' 
+#' @export
+setMethod("np", "RAIDSparam", function(x) {
+  return(x@np)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -3622,7 +3675,6 @@ setMethod("seqErrorSyn<-", "RAIDSparam", function(x, value) {
 })
 
 
-
 #' Generic function for replacement of pRecomb slot in a class
 #' 
 #' @description A generic function for replacement of pRecomb  
@@ -3686,6 +3738,68 @@ setMethod("pRecomb<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of np slot in a class
+#' 
+#' @description A generic function for replacement of np  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(np="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", np="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # np(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("np<-", function(x, value) standardGeneric("np<-"))
+
+
+#' Setter function for replacement of np slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of np slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} specifying the number of 
+#' threads to be used.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the np slot in the object
+#' np(paramDemo) <-3L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("np<-", "RAIDSparam", function(x, value) {
+  x@np <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
