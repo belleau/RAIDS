@@ -1237,6 +1237,18 @@ test_that("create a RAIDSparam class with all syntheticRefDF setter and getter s
     expect_equal(syntheticRefDF(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with pruningMethod setter and getter should return an object", {
+
+    exp <- "dprime"
+
+    paramTest <- RAIDSparam()
+    pruningMethod(paramTest) <- exp
+
+    expect_equal(pruningMethod(paramTest), exp)
+    expect_error(pruningMethod(paramTest) <- 323L)
+    expect_equal(pruningMethod(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

@@ -177,8 +177,8 @@ super-population assigned to the sample. }
 }
 Default: \code{NULL}.}
 
-\item{\code{pruningMethod}}{a \code{character} string representing the method that
-will be used to calculate the linkage disequilibrium in the
+\item{\code{pruningMethod}}{a single \code{character} string representing the
+method that will be used to calculate the linkage disequilibrium in the
 \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.}
 
