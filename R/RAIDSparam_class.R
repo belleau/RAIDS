@@ -134,7 +134,7 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot nbSim a positive \code{integer} representing TODO. 
 #' Default: \code{1L}.
 #' 
-#' @slot offset a single \code{integer} that is added to the SNP position to
+#' @slot posOffset a single \code{integer} that is added to the SNP position to
 #' switch from 0-based to 1-based coordinate when needed (or reverse).
 #' Default: \code{-1L}.
 #' 
@@ -179,8 +179,8 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' }
 #' Default: \code{NULL}.
 #' 
-#' @slot pruningMethod a \code{character} string representing the method that 
-#' will be used to calculate the linkage disequilibrium in the
+#' @slot pruningMethod a single \code{character} string representing the 
+#' method that will be used to calculate the linkage disequilibrium in the
 #' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values
 #' are: "corr", "r", "dprime", and "composite". Default: \code{"corr"}.
 #' 
@@ -306,7 +306,7 @@ setClass("RAIDSparam",
     batch="integer",
     prefix="character",
     nbSim="integer",
-    offset="integer",
+    posOffset="integer",
     minCov="integer",
     minProb="numeric",
     seqError="numeric",
@@ -366,7 +366,7 @@ setClass("RAIDSparam",
     batch=1L,
     prefix="1",
     nbSim=1L,
-    offset=-1L,
+    posOffset=-1L,
     minCov=10L,
     minProb=0.999,
     seqError=0.001,
@@ -557,9 +557,9 @@ setValidity("RAIDSparam",
             return("'nbSim' slot must have one positive integer.")
         }
 
-        ## Validate the offset parameter
-        if (length(object@offset) != 1) {
-            return("'offset' slot must have one integer.")
+        ## Validate the posOffset parameter
+        if (length(object@posOffset) != 1) {
+            return("'posOffset' slot must have one integer.")
         }
         
         ## Validate the minCov parameter
@@ -1815,35 +1815,35 @@ setMethod("minCov", "RAIDSparam", function(x) {
 })
 
 
-#' Generic function for getting the offset slot in a class
+#' Generic function for getting the posOffset slot in a class
 #' 
-#' @description A generic function for getting the offset slot in a 
+#' @description A generic function for getting the offposOffsetset slot in a 
 #' S4 object.
 #' 
 #' @param x a S4 object.
 #' 
-#' @return a value from the offset slot in the S4 object.
+#' @return a value from the posOffset slot in the S4 object.
 #' 
 #' @examples
 #' 
 #' # Define a dummy class to show usage
-#' setClass("MyClass", slots = list(offset="character"))
+#' setClass("MyClass", slots = list(posOffset="character"))
 #' 
 #' # Create an instance
-#' obj <- new("MyClass", offset="123")
+#' obj <- new("MyClass", posOffset="123")
 #' 
 #' # Call the generic (assuming a method is implemented)
-#' # offset(obj)
+#' # posOffset(obj)
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @export
-setGeneric("offset", function(x) standardGeneric("offset"))
+setGeneric("posOffset", function(x) standardGeneric("posOffset"))
 
 
-#' A getter for the offset slot in a RAIDSparam class
+#' A getter for the posOffset slot in a RAIDSparam class
 #' 
-#' @description A function for getting the offset slot in a 
+#' @description A function for getting the posOffset slot in a 
 #' \code{RAIDSparam} class. 
 #' 
 #' @param x a \code{RAIDSparam} object.
@@ -1859,12 +1859,12 @@ setGeneric("offset", function(x) standardGeneric("offset"))
 #' ## Create a RAIDSparam object
 #' paramDemo <- RAIDSparam()
 #' 
-#' ## Extract the offset slot for the object
-#' offset(paramDemo)
+#' ## Extract the posOffset slot for the object
+#' posOffset(paramDemo)
 #' 
 #' @export
-setMethod("offset", "RAIDSparam", function(x) {
-  return(x@offset)
+setMethod("posOffset", "RAIDSparam", function(x) {
+  return(x@posOffset)
 })
 
 
@@ -1972,6 +1972,521 @@ setGeneric("seqError", function(x) standardGeneric("seqError"))
 setMethod("seqError", "RAIDSparam", function(x) {
   return(x@seqError)
 })
+
+
+#' Generic function for getting the seqErrorSyn slot in a class
+#' 
+#' @description A generic function for getting the seqErrorSyn slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the seqErrorSyn slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqErrorSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqErrorSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqErrorSyn(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqErrorSyn", function(x) standardGeneric("seqErrorSyn"))
+
+
+#' A getter for the seqErrorSyn slot in a RAIDSparam class
+#' 
+#' @description A function for getting the seqErrorSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error for synthetic.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the seqErrorSyn slot for the object
+#' seqErrorSyn(paramDemo)
+#' 
+#' @export
+setMethod("seqErrorSyn", "RAIDSparam", function(x) {
+  return(x@seqErrorSyn)
+})
+
+
+#' Generic function for getting the pRecomb slot in a class
+#' 
+#' @description A generic function for getting the pRecomb slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the pRecomb slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pRecomb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pRecomb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pRecomb(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pRecomb", function(x) standardGeneric("pRecomb"))
+
+
+#' A getter for the pRecomb slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pRecomb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{numeric} between \code{0} and \code{1} 
+#' that represents the frequency of phase switching in the synthetic profiles.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pRecomb slot for the object
+#' pRecomb(paramDemo)
+#' 
+#' @export
+setMethod("pRecomb", "RAIDSparam", function(x) {
+  return(x@pRecomb)
+})
+
+
+#' Generic function for getting the np slot in a class
+#' 
+#' @description A generic function for getting the np slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the np slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(np="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", np="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # np(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("np", function(x) standardGeneric("np"))
+
+
+#' A getter for the np slot in a RAIDSparam class
+#' 
+#' @description A function for getting the np slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} specifying the number of 
+#' threads to be used.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the np slot for the object
+#' np(paramDemo)
+#' 
+#' @export
+setMethod("np", "RAIDSparam", function(x) {
+  return(x@np)
+})
+
+
+#' Generic function for getting the listPos slot in a class
+#' 
+#' @description A generic function for getting the listPos slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the listPos slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(listPos="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", listPos="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # listPos(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("listPos", function(x) standardGeneric("listPos"))
+
+
+#' A getter for the listPos slot in a RAIDSparam class
+#' 
+#' @description A function for getting the listPos slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} specifying the number of 
+#' threads to be used.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the listPos slot for the object
+#' listPos(paramDemo)
+#' 
+#' @export
+setMethod("listPos", "RAIDSparam", function(x) {
+  return(x@listPos)
+})
+
+
+#' Generic function for getting the syntheticRefDF slot in a class
+#' 
+#' @description A generic function for getting the syntheticRefDF slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the syntheticRefDF slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(syntheticRefDF="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", syntheticRefDF="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # syntheticRefDF(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("syntheticRefDF", function(x) standardGeneric("syntheticRefDF"))
+
+
+#' A getter for the syntheticRefDF slot in a RAIDSparam class
+#' 
+#' @description A function for getting the syntheticRefDF slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a \code{data.frame} containing a subset of 
+#' reference profiles for each sub-population present in the Reference GDS 
+#' file.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the syntheticRefDF slot for the object
+#' syntheticRefDF(paramDemo)
+#' 
+#' @export
+setMethod("syntheticRefDF", "RAIDSparam", function(x) {
+  return(x@syntheticRefDF)
+})
+
+
+#' Generic function for getting the pruningMethod slot in a class
+#' 
+#' @description A generic function for getting the pruningMethod slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the pruningMethod slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pruningMethod="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pruningMethod="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pruningMethod(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pruningMethod", function(x) standardGeneric("pruningMethod"))
+
+
+#' A getter for the pruningMethod slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pruningMethod slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing the method that 
+#' will be used to calculate the linkage disequilibrium in the 
+#' \code{\link[SNPRelate]{snpgdsLDpruning}}() function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pruningMethod slot for the object
+#' pruningMethod(paramDemo)
+#' 
+#' @export
+setMethod("pruningMethod", "RAIDSparam", function(x) {
+  return(x@pruningMethod)
+})
+
+
+#' Generic function for getting the slideWindowMaxBP slot in a class
+#' 
+#' @description A generic function for getting the slideWindowMaxBP slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the slideWindowMaxBP slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(slideWindowMaxBP="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", slideWindowMaxBP="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # slideWindowMaxBP(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("slideWindowMaxBP", function(x) standardGeneric("slideWindowMaxBP"))
+
+#' A getter for the slideWindowMaxBP slot in a RAIDSparam class
+#' 
+#' @description A function for getting the slideWindowMaxBP slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} that represents the maximum 
+#' basepairs (bp) in the sliding window. This parameter is used for 
+#' the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the slideWindowMaxBP slot for the object
+#' slideWindowMaxBP(paramDemo)
+#' 
+#' @export
+setMethod("slideWindowMaxBP", "RAIDSparam", function(x) {
+  return(x@slideWindowMaxBP)
+})
+
+
+
+#' A getter for the pruningMethod slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pruningMethod slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing the method that 
+#' will be used to calculate the linkage disequilibrium in the 
+#' \code{\link[SNPRelate]{snpgdsLDpruning}}() function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pruningMethod slot for the object
+#' pruningMethod(paramDemo)
+#' 
+#' @export
+setMethod("pruningMethod", "RAIDSparam", function(x) {
+  return(x@pruningMethod)
+})
+
+
+#' Generic function for getting the thresholdLD slot in a class
+#' 
+#' @description A generic function for getting the thresholdLD slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the thresholdLD slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(thresholdLD="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", thresholdLD="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # thresholdLD(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("thresholdLD", function(x) standardGeneric("thresholdLD"))
+
+
+#' A getter for the thresholdLD slot in a RAIDSparam class
+#' 
+#' @description A function for getting the thresholdLD slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the thresholdLD slot for the object
+#' thresholdLD(paramDemo)
+#' 
+#' @export
+setMethod("thresholdLD", "RAIDSparam", function(x) {
+  return(x@thresholdLD)
+})
+
+
+#' Generic function for getting the specificSNV slot in a class
+#' 
+#' @description A generic function for getting the specificSNV slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the specificSNV slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(specificSNV="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", specificSNV="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # specificSNV(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("specificSNV", function(x) standardGeneric("specificSNV"))
+
+
+#' A getter for the specificSNV slot in a RAIDSparam class
+#' 
+#' @description A function for getting the specificSNV slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a \code{data.frame} containing 2 columns. The first 
+#' column, called "snp.chromosome" contains the name of the chromosome where 
+#' the SNV is located. The second column, called "snp.position", contains the 
+#' position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference. It 
+#' is used during the pruning step. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the specificSNV slot for the object
+#' specificSNV(paramDemo)
+#' 
+#' @export
+setMethod("specificSNV", "RAIDSparam", function(x) {
+  return(x@specificSNV)
+})
+
 
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
@@ -3164,9 +3679,9 @@ setMethod("nbSim<-", "RAIDSparam", function(x, value) {
 })
 
 
-#' Generic function for replacement of offset slot in a class
+#' Generic function for replacement of posOffset slot in a class
 #' 
-#' @description A generic function for replacement of offset 
+#' @description A generic function for replacement of posOffset 
 #' slot in a S4 object. 
 #' 
 #' @param x a S4 object.
@@ -3178,24 +3693,24 @@ setMethod("nbSim<-", "RAIDSparam", function(x, value) {
 #' @examples
 #' 
 #' # Define a dummy class to show usage
-#' setClass("MyClass", slots = list(offset="character"))
+#' setClass("MyClass", slots = list(posOffset="character"))
 #' 
 #' # Create an instance
-#' obj <- new("MyClass", offset="123")
+#' obj <- new("MyClass", posOffset="123")
 #' 
 #' # Call the generic (assuming a method is implemented)
-#' # offset(obj) <- "333"
+#' # posOffset(obj) <- "333"
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' @export
-setGeneric("offset<-", function(x, value) standardGeneric("offset<-"))
+setGeneric("posOffset<-", function(x, value) standardGeneric("posOffset<-"))
 
 
-#' Setter function for replacement of offset slot in 
+#' Setter function for replacement of posOffset slot in 
 #' a RAIDSparam class
 #' 
-#' @description A function for replacement of offset slot in a 
+#' @description A function for replacement of posOffset slot in a 
 #' \code{RAIDSparam} class. 
 #' 
 #' @param x a \code{RAIDSparam} object.
@@ -3210,16 +3725,16 @@ setGeneric("offset<-", function(x, value) standardGeneric("offset<-"))
 #' ## Create a RAIDSparam object
 #' paramDemo <- RAIDSparam()
 #' 
-#' ## Assign a new value to the offset slot in the object
-#' offset(paramDemo) <- 0L
+#' ## Assign a new value to the posOffset slot in the object
+#' posOffset(paramDemo) <- 0L
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
 #' 
 #' @importFrom methods validObject
 #' @export
-setMethod("offset<-", "RAIDSparam", function(x, value) {
-  x@offset <- value
+setMethod("posOffset<-", "RAIDSparam", function(x, value) {
+  x@posOffset <- value
 
   # Validate and return the modified object
   validObject(x) 
@@ -3452,6 +3967,602 @@ setMethod("seqError<-", "RAIDSparam", function(x, value) {
 })
 
 
+#' Generic function for replacement of seqErrorSyn slot in a class
+#' 
+#' @description A generic function for replacement of seqErrorSyn  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seqErrorSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seqErrorSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seqErrorSyn(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seqErrorSyn<-", function(x, value) standardGeneric("seqErrorSyn<-"))
+
+
+#' Setter function for replacement of seqErrorSyn slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of seqErrorSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{numeric} between \code{0} and \code{1} 
+#' representing the probability of sequencing error for synthetic.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the seqErrorSyn slot in the object
+#' seqErrorSyn(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("seqErrorSyn<-", "RAIDSparam", function(x, value) {
+  x@seqErrorSyn <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of pRecomb slot in a class
+#' 
+#' @description A generic function for replacement of pRecomb  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pRecomb="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pRecomb="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pRecomb(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pRecomb<-", function(x, value) standardGeneric("pRecomb<-"))
+
+
+#' Setter function for replacement of pRecomb slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of pRecomb slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{numeric} between \code{0} and 
+#' \code{1} that represents the frequency of phase switching in the 
+#' synthetic profiles.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the pRecomb slot in the object
+#' pRecomb(paramDemo) <- 0.03
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("pRecomb<-", "RAIDSparam", function(x, value) {
+  x@pRecomb <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of np slot in a class
+#' 
+#' @description A generic function for replacement of np  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(np="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", np="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # np(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("np<-", function(x, value) standardGeneric("np<-"))
+
+
+#' Setter function for replacement of np slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of np slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} specifying the number of 
+#' threads to be used.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign a new value to the np slot in the object
+#' np(paramDemo) <-3L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("np<-", "RAIDSparam", function(x, value) {
+  x@np <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of syntheticRefDF slot in a class
+#' 
+#' @description A generic function for replacement of syntheticRefDF  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(syntheticRefDF="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", syntheticRefDF="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # syntheticRefDF(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("syntheticRefDF<-", 
+    function(x, value) standardGeneric("syntheticRefDF<-"))
+
+
+#' Setter function for replacement of syntheticRefDF slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of syntheticRefDF slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{data.frame} containing a subset of 
+#' reference profiles for each sub-population present in the Reference GDS 
+#' file. The \code{data.frame} must have those columns: 
+#' \describe{ 
+#' \item{sample.id}{ a \code{character} string representing the sample 
+#' identifier. } 
+#' \item{pop.group}{ a \code{character} string representing the 
+#' subcontinental population assigned to the sample. } 
+#' \item{superPop}{ a \code{character} string representing the 
+#' super-population assigned to the sample. }
+#' }
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new values to the syntheticRefDF slot in the object
+#' syntheticRefDF(paramDemo) <- data.frame(sample.id=c("A", "B"), 
+#'     pop.group=c("CEU", "CEU"), superPop=c("EUR", "EUR"))
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("syntheticRefDF<-", "RAIDSparam", function(x, value) {
+  x@syntheticRefDF <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of listPos slot in a class
+#' 
+#' @description A generic function for replacement of listPos  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(listPos="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", listPos="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # listPos(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("listPos<-", function(x, value) standardGeneric("listPos<-"))
+
+
+#' Setter function for replacement of listPos slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of listPos slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{data.frame} containing 2 columns named: 
+#' "snp.chromosome" and "snp.position". The first column, called 
+#' "snp.chromosome", contains the name of the chromosome where the SNV 
+#' is located. The second column, called "snp.position", contains the 
+#' position of the SNV on the chromosome.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new values to the listPos slot in the object
+#' listPos(paramDemo) <-data.frame(snp.chromosome=c("1", "1"), 
+#'     snp.position=c(12232, 433333))
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("listPos<-", "RAIDSparam", function(x, value) {
+  x@listPos <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of pruningMethod slot in a class
+#' 
+#' @description A generic function for replacement of pruningMethod  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pruningMethod="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pruningMethod="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pruningMethod(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pruningMethod<-", 
+  function(x, value) standardGeneric("pruningMethod<-"))
+
+
+#' Setter function for replacement of pruningMethod slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of pruningMethod slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string representing the method that 
+#' will be used to calculate the linkage disequilibrium in the 
+#' \code{\link[SNPRelate]{snpgdsLDpruning}}() function. The 4 possible values 
+#' are: "corr", "r", "dprime", and "composite".
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the pruningMethod slot in the object
+#' pruningMethod(paramDemo) <- "r"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("pruningMethod<-", "RAIDSparam", function(x, value) {
+  x@pruningMethod <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of slideWindowMaxBP slot in a class
+#' 
+#' @description A generic function for replacement of slideWindowMaxBP  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(slideWindowMaxBP="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", slideWindowMaxBP="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # slideWindowMaxBP(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("slideWindowMaxBP<-", 
+  function(x, value) standardGeneric("slideWindowMaxBP<-"))
+
+
+#' Setter function for replacement of slideWindowMaxBP slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of slideWindowMaxBP slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} that represents the maximum 
+#' basepairs (bp) in the sliding window. This parameter is used 
+#' for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the slideWindowMaxBP slot in the object
+#' slideWindowMaxBP(paramDemo) <- 1000L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("slideWindowMaxBP<-", "RAIDSparam", function(x, value) {
+  x@slideWindowMaxBP <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of thresholdLD slot in a class
+#' 
+#' @description A generic function for replacement of thresholdLD  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(thresholdLD="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", thresholdLD="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # thresholdLD(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("thresholdLD<-", 
+  function(x, value) standardGeneric("thresholdLD<-"))
+
+
+#' Setter function for replacement of thresholdLD slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of thresholdLD slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{numeric} value that represents 
+#' the LD threshold used in the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the thresholdLD slot in the object
+#' thresholdLD(paramDemo) <- 1000L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("thresholdLD<-", "RAIDSparam", function(x, value) {
+  x@thresholdLD <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of specificSNV slot in a class
+#' 
+#' @description A generic function for replacement of specificSNV  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(specificSNV="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", specificSNV="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # specificSNV(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("specificSNV<-", 
+  function(x, value) standardGeneric("specificSNV<-"))
+
+
+#' Setter function for replacement of specificSNV slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of specificSNV slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{data.frame} containing 2 columns. The 
+#' first column, called "snp.chromosome" contains the name of the chromosome 
+#' wherethe SNV is located. The second column, called "snp.position", contains 
+#' the position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the specificSNV slot in the object
+#' specificSNV(paramDemo) <- data.frame(snp.chromosome=c("1", "1"), 
+#'     snp.position=c(13333, 2222213))
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("specificSNV<-", "RAIDSparam", function(x, value) {
+  x@specificSNV <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
 ###########################################################################
 ## RAIDSparam function
 ###########################################################################
@@ -3573,8 +4684,8 @@ setMethod("seqError<-", "RAIDSparam", function(x, value) {
 #' @param nbSim a positive \code{integer} representing TODO. 
 #' Default: \code{1L}.
 #' 
-#' @param offset a single \code{integer} that is added to the SNP position to
-#' switch from 0-based to 1-based coordinate when needed (or reverse).
+#' @param posOffset a single \code{integer} that is added to the SNP position 
+#' to switch from 0-based to 1-based coordinate when needed (or reverse).
 #' Default: \code{-1L}.
 #' 
 #' @param minCov a single positive \code{integer} representing the minimum
@@ -3734,7 +4845,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     genome="HG38", chrInfo=NULL, paramAncestry=NULL, profileFile=NULL,
     profileFileGeno=NULL, pathProfileGDS=NULL, fileReferenceGDS=NULL,
     fileReferenceAnnotGDS=NULL, inferenceType="PCAknn", sampleRef=NULL,
-    batch=1L, prefix="1", nbSim=1L, offset=-1L, minCov=10L, minProb=0.999,
+    batch=1L, prefix="1", nbSim=1L, posOffset=-1L, minCov=10L, minProb=0.999,
     seqError=0.001, seqErrorSyn=0.001, pRecomb=0.01, np=1L, listPos=NULL, 
     syntheticRefDF=NULL, pruningMethod=c("corr", "r", "dprime", "composite"), 
     slideWindowMaxBP=500000L, thresholdLD=sqrt(0.1), specificSNV=NULL, 
@@ -3746,7 +4857,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     
     batch <- as.integer(batch)
     nbSim <- as.integer(nbSim)
-    offset <- as.integer(offset)
+    posOffset <- as.integer(posOffset)
     minCov <- as.integer(minCov)
     np <- as.integer(np)
     slideWindowMaxBP <- as.integer(slideWindowMaxBP)
@@ -3802,10 +4913,11 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     pathProfileGDS=pathProfileGDS, fileReferenceGDS=fileReferenceGDS,
     fileReferenceAnnotGDS=fileReferenceAnnotGDS,
     inferenceType=inferenceType, sampleRef=sampleRef, batch=batch, 
-    prefix=prefix, nbSim=nbSim, offset=offset, minCov=minCov, minProb=minProb,
-    seqError=seqError, seqErrorSyn=seqErrorSyn, pRecomb=pRecomb, np=np,
-    listPos=listPos, syntheticRefDF=syntheticRefDF, pruningMethod=pruningMethod,
-    slideWindowMaxBP=slideWindowMaxBP, thresholdLD=thresholdLD,
+    prefix=prefix, nbSim=nbSim, posOffset=posOffset, minCov=minCov, 
+    minProb=minProb, seqError=seqError, seqErrorSyn=seqErrorSyn, 
+    pRecomb=pRecomb, np=np, listPos=listPos, syntheticRefDF=syntheticRefDF, 
+    pruningMethod=pruningMethod, slideWindowMaxBP=slideWindowMaxBP, 
+    thresholdLD=thresholdLD,
     specificSNV=specificSNV, genoType=genoType, phaseType=phaseType, 
     phase=phase, PCAmissingRate=PCAmissingRate, PCAalgorithm=PCAalgorithm,
     eigenCount=eigenCount, eigenCountSyn=eigenCountSyn, kList=kList,

@@ -26,7 +26,7 @@ RAIDSparam(
   batch = 1L,
   prefix = "1",
   nbSim = 1L,
-  offset = -1L,
+  posOffset = -1L,
   minCov = 10L,
   minProb = 0.999,
   seqError = 0.001,
@@ -166,8 +166,8 @@ Default: \code{"1"}.}
 \item{nbSim}{a positive \code{integer} representing TODO.
 Default: \code{1L}.}
 
-\item{offset}{a single \code{integer} that is added to the SNP position to
-switch from 0-based to 1-based coordinate when needed (or reverse).
+\item{posOffset}{a single \code{integer} that is added to the SNP position
+to switch from 0-based to 1-based coordinate when needed (or reverse).
 Default: \code{-1L}.}
 
 \item{minCov}{a single positive \code{integer} representing the minimum
