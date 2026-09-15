@@ -2294,6 +2294,60 @@ setMethod("pruningMethod", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the slideWindowMaxBP slot in a class
+#' 
+#' @description A generic function for getting the slideWindowMaxBP slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the slideWindowMaxBP slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(slideWindowMaxBP="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", slideWindowMaxBP="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # slideWindowMaxBP(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("slideWindowMaxBP", function(x) standardGeneric("slideWindowMaxBP"))
+
+#' A getter for the slideWindowMaxBP slot in a RAIDSparam class
+#' 
+#' @description A function for getting the slideWindowMaxBP slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single positive \code{integer} that represents the maximum 
+#' basepairs (bp) in the sliding window. This parameter is used for 
+#' the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the slideWindowMaxBP slot for the object
+#' slideWindowMaxBP(paramDemo)
+#' 
+#' @export
+setMethod("slideWindowMaxBP", "RAIDSparam", function(x) {
+  return(x@slideWindowMaxBP)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -4163,6 +4217,72 @@ setGeneric("pruningMethod<-",
 #' @export
 setMethod("pruningMethod<-", "RAIDSparam", function(x, value) {
   x@pruningMethod <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of slideWindowMaxBP slot in a class
+#' 
+#' @description A generic function for replacement of slideWindowMaxBP  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(slideWindowMaxBP="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", slideWindowMaxBP="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # slideWindowMaxBP(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("slideWindowMaxBP<-", 
+  function(x, value) standardGeneric("slideWindowMaxBP<-"))
+
+
+#' Setter function for replacement of slideWindowMaxBP slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of slideWindowMaxBP slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single positive \code{integer} that represents the maximum 
+#' basepairs (bp) in the sliding window. This parameter is used 
+#' for the LD pruning done by the \code{\link[SNPRelate]{snpgdsLDpruning}} 
+#' function.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the slideWindowMaxBP slot in the object
+#' slideWindowMaxBP(paramDemo) <- 1000L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("slideWindowMaxBP<-", "RAIDSparam", function(x, value) {
+  x@slideWindowMaxBP <- value
 
   # Validate and return the modified object
   validObject(x) 

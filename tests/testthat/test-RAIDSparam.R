@@ -1249,6 +1249,19 @@ test_that("create a RAIDSparam class with pruningMethod setter and getter should
     expect_equal(pruningMethod(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with slideWindowMaxBP setter and getter should return an object", {
+
+    exp <- 444L
+
+    paramTest <- RAIDSparam()
+    slideWindowMaxBP(paramTest) <- exp
+
+    expect_equal(slideWindowMaxBP(paramTest), exp)
+    expect_error(slideWindowMaxBP(paramTest) <- "test")
+    expect_equal(slideWindowMaxBP(paramTest), exp)
+})
+
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
