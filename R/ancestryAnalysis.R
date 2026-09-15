@@ -1437,14 +1437,14 @@ computeAdmixtureProportion <- function(pRAIDS) {
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
                                     profile=pRAIDS$pedStudy$Name.ID[1])
     
-    pathOut <- file.path(pRAIDS$pathProfileGDS, "tmp")
+    pathOut <- file.path(pRAIDS$pathProfileGDS, paste0("tmp.", pRAIDS$pedStudy$Name.ID[1]))
     if(! dir.exists(pathOut)){
         dir.create(pathOut)
     }
     matPIndex <- computePmatrix(pathOut=pathOut, pRAIDS=pRAIDS)
 
     generateProfilePlinkFiles(pathOut=pathOut, pRAIDS=pRAIDS)
-    profileQ <- runADMIXTURE(pathOut = pathOut,
+    profileQ <- runADMIXTURE(pathOut = file.path(pathOut, "profileAdmixture"),
             fileBed = paste0(pRAIDS$pedStudy$Name.ID[1], ".bed"),
             seedAdmix=pRAIDS$seedADMIXTURE, pRAIDS)
     

@@ -1565,11 +1565,11 @@ runGrSynADMIXTURE <- function(pathOut, gr, matGr, matPIndex, matQGS, pRAIDS) {
     
     matQSynRef <- runADMIXTURE(pathOut = file.path(pathOut, paste0("syn.", gr)),
         fileBed = paste0(pRAIDS$pedStudy$Name.ID[1], ".synRef.bed"),
-        seedAdmix=pRAIDS$seedADMIXTURE, pRAIDS)
+        seedAdmix=pRAIDS$seedADMIXTURE + gr, pRAIDS)
     
     matQSyn <- runADMIXTURE(pathOut = file.path(pathOut, paste0("syn.", gr)),
         fileBed = paste0(pRAIDS$pedStudy$Name.ID[1], ".syn.bed"),
-        seedAdmix=pRAIDS$seedADMIXTURE, pRAIDS)
+        seedAdmix=pRAIDS$seedADMIXTURE + gr, pRAIDS)
     
     matQ <- data.frame(id=row.names(matQSynRef),
                 idSyn=row.names(matQSyn),
@@ -1694,7 +1694,8 @@ runSynADMIXTURE <- function( pathOut, matPIndex, pRAIDS) {
         matGr=matGr,
         matPIndex=matPIndex,
         matQGS=matQGS,
-        pRAIDS=pRAIDS)
+        pRAIDS=pRAIDS,
+        BPPARAM = param)
     }
     res <- do.call(rbind, res)
     return(res)
