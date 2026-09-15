@@ -1285,6 +1285,31 @@ test_that("create a RAIDSparam class with specificSNV setter and getter should r
     expect_equal(specificSNV(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with phaseType setter and getter should return an object", {
+
+    exp <- "TOTO"
+  
+    paramTest <- RAIDSparam()
+    phaseType(paramTest) <- exp
+
+    expect_equal(phaseType(paramTest), exp)
+    expect_error(phaseType(paramTest) <- 33L)
+    expect_equal(phaseType(paramTest), exp)
+})
+
+
+test_that("create a RAIDSparam class with phase setter and getter should return an object", {
+
+    exp <- TRUE
+  
+    paramTest <- RAIDSparam()
+    phase(paramTest) <- exp
+
+    expect_equal(phase(paramTest), exp)
+    expect_error(phase(paramTest) <- 33L)
+    expect_equal(phase(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

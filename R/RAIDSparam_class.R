@@ -2488,6 +2488,109 @@ setMethod("specificSNV", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the phaseType slot in a class
+#' 
+#' @description A generic function for getting the phaseType slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the phaseType slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(phaseType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", phaseType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # phaseType(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("phaseType", function(x) standardGeneric("phaseType"))
+
+
+#' A getter for the phaseType slot in a RAIDSparam class
+#' 
+#' @description A function for getting the phaseType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string TODO
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the phaseType slot for the object
+#' phaseType(paramDemo)
+#' 
+#' @export
+setMethod("phaseType", "RAIDSparam", function(x) {
+  return(x@phaseType)
+})
+
+
+#' Generic function for getting the phaseType slot in a class
+#' 
+#' @description A generic function for getting the phase slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the phase slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(phase="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", phase="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # phase(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("phase", function(x) standardGeneric("phase"))
+
+
+#' A getter for the phase slot in a RAIDSparam class
+#' 
+#' @description A function for getting the phase slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{logical}  TODO
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the phase slot for the object
+#' phase(paramDemo)
+#' 
+#' @export
+setMethod("phase", "RAIDSparam", function(x) {
+  return(x@phase)
+})
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -4562,6 +4665,128 @@ setMethod("specificSNV<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of phaseType slot in a class
+#' 
+#' @description A generic function for replacement of phaseType  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(phaseType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", phaseType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # phaseType(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("phaseType<-", function(x, value) standardGeneric("phaseType<-"))
+
+
+#' Setter function for replacement of phaseType slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of phaseType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string TODO
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the phaseType slot in the object
+#' phaseType(paramDemo) <- "test"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("phaseType<-", "RAIDSparam", function(x, value) {
+  x@phaseType <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+#' Generic function for replacement of phase slot in a class
+#' 
+#' @description A generic function for replacement of phase  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(phase="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", phase="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # phase(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("phase<-", function(x, value) standardGeneric("phase<-"))
+
+
+#' Setter function for replacement of phase slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of phase slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{logical} TODO
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the phase slot in the object
+#' phase(paramDemo) <-  TRUE
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("phase<-", "RAIDSparam", function(x, value) {
+  x@phase <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
