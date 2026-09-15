@@ -1297,7 +1297,6 @@ test_that("create a RAIDSparam class with phaseType setter and getter should ret
     expect_equal(phaseType(paramTest), exp)
 })
 
-
 test_that("create a RAIDSparam class with phase setter and getter should return an object", {
 
     exp <- TRUE
@@ -1308,6 +1307,18 @@ test_that("create a RAIDSparam class with phase setter and getter should return 
     expect_equal(phase(paramTest), exp)
     expect_error(phase(paramTest) <- 33L)
     expect_equal(phase(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with PCAmissingRate setter and getter should return an object", {
+
+    exp <- 0.02113
+  
+    paramTest <- RAIDSparam()
+    PCAmissingRate(paramTest) <- exp
+
+    expect_equal(PCAmissingRate(paramTest), exp)
+    expect_error(PCAmissingRate(paramTest) <- "toto")
+    expect_equal(PCAmissingRate(paramTest), exp)
 })
 
 #############################################################################

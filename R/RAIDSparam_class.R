@@ -208,7 +208,7 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' 
 #' @slot PCAmissingRate a positive \code{numeric} representing the maximum 
 #' missing rate retained accepted to use SNPs in the PCA analysis done 
-#' with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
+#' with the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
 #' missing threshold. Default: \code{0.025}.
 #' 
 #' @slot PCAalgorithm a single \code{character} string representing the 
@@ -2540,7 +2540,7 @@ setMethod("phaseType", "RAIDSparam", function(x) {
 })
 
 
-#' Generic function for getting the phaseType slot in a class
+#' Generic function for getting the phase slot in a class
 #' 
 #' @description A generic function for getting the phase slot in a 
 #' S4 object.
@@ -2590,6 +2590,61 @@ setGeneric("phase", function(x) standardGeneric("phase"))
 setMethod("phase", "RAIDSparam", function(x) {
   return(x@phase)
 })
+
+
+#' Generic function for getting the PCAmissingRate slot in a class
+#' 
+#' @description A generic function for getting the PCAmissingRate slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the PCAmissingRate slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(PCAmissingRate="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", PCAmissingRate="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # PCAmissingRate(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("PCAmissingRate", function(x) standardGeneric("PCAmissingRate"))
+
+
+#' A getter for the PCAmissingRate slot in a RAIDSparam class
+#' 
+#' @description A function for getting the PCAmissingRate slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a positive \code{numeric} representing the maximum missing rate 
+#' accepted to use SNPs in the PCA analysis done with the 
+#' \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no missing threshold.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the PCAmissingRate slot for the object
+#' PCAmissingRate(paramDemo)
+#' 
+#' @export
+setMethod("PCAmissingRate", "RAIDSparam", function(x) {
+  return(x@PCAmissingRate)
+})
+
 
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
@@ -4788,6 +4843,73 @@ setMethod("phase<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of PCAmissingRate slot in a class
+#' 
+#' @description A generic function for replacement of PCAmissingRate  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(PCAmissingRate="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", PCAmissingRate="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # PCAmissingRate(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("PCAmissingRate<-", 
+  function(x, value) standardGeneric("PCAmissingRate<-"))
+
+
+#' Setter function for replacement of PCAmissingRate slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of PCAmissingRate slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a positive \code{numeric} representing the maximum missing 
+#' rate accepted to use SNPs in the PCA analysis done with 
+#' the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
+#' missing threshold.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the PCAmissingRate slot in the object
+#' PCAmissingRate(paramDemo) <-  0.03322
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("PCAmissingRate<-", "RAIDSparam", function(x, value) {
+  x@PCAmissingRate <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
 ###########################################################################
 ## RAIDSparam function
 ###########################################################################
@@ -4983,7 +5105,7 @@ setMethod("phase<-", "RAIDSparam", function(x, value) {
 #' 
 #' @param PCAmissingRate a positive \code{numeric} representing the maximum 
 #' missing rate retained accepted to use SNPs in the PCA analysis done 
-#' with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
+#' with the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no 
 #' missing threshold. Default: \code{0.025}.
 #' 
 #' @param PCAalgorithm a \code{character} string representing the algorithm 

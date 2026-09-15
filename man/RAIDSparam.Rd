@@ -240,7 +240,7 @@ is used during the pruning step. Default: \code{NULL}.}
 
 \item{PCAmissingRate}{a positive \code{numeric} representing the maximum
 missing rate retained accepted to use SNPs in the PCA analysis done
-with the the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
+with the \link[SNPRelate]{snpgdsPCA} function. If \code{NaN}, no
 missing threshold. Default: \code{0.025}.}
 
 \item{PCAalgorithm}{a \code{character} string representing the algorithm
