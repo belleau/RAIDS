@@ -2431,6 +2431,63 @@ setMethod("thresholdLD", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the specificSNV slot in a class
+#' 
+#' @description A generic function for getting the specificSNV slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the specificSNV slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(specificSNV="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", specificSNV="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # specificSNV(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("specificSNV", function(x) standardGeneric("specificSNV"))
+
+
+#' A getter for the specificSNV slot in a RAIDSparam class
+#' 
+#' @description A function for getting the specificSNV slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return \code{NULL} or a \code{data.frame} containing 2 columns. The first 
+#' column, called "snp.chromosome" contains the name of the chromosome where 
+#' the SNV is located. The second column, called "snp.position", contains the 
+#' position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference. It 
+#' is used during the pruning step. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the specificSNV slot for the object
+#' specificSNV(paramDemo)
+#' 
+#' @export
+setMethod("specificSNV", "RAIDSparam", function(x) {
+  return(x@specificSNV)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -4431,6 +4488,74 @@ setGeneric("thresholdLD<-",
 #' @export
 setMethod("thresholdLD<-", "RAIDSparam", function(x, value) {
   x@thresholdLD <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of specificSNV slot in a class
+#' 
+#' @description A generic function for replacement of specificSNV  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(specificSNV="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", specificSNV="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # specificSNV(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("specificSNV<-", 
+  function(x, value) standardGeneric("specificSNV<-"))
+
+
+#' Setter function for replacement of specificSNV slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of specificSNV slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value \code{NULL} or a \code{data.frame} containing 2 columns. The 
+#' first column, called "snp.chromosome" contains the name of the chromosome 
+#' wherethe SNV is located. The second column, called "snp.position", contains 
+#' the position of the SNV on the chromosome. Optionally, the column "snvKeep" 
+#' contains the SNV index in the reference or -1 if not in the reference.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the specificSNV slot in the object
+#' specificSNV(paramDemo) <- data.frame(snp.chromosome=c("1", "1"), 
+#'     snp.position=c(13333, 2222213))
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("specificSNV<-", "RAIDSparam", function(x, value) {
+  x@specificSNV <- value
 
   # Validate and return the modified object
   validObject(x) 

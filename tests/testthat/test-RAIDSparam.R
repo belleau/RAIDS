@@ -1273,6 +1273,18 @@ test_that("create a RAIDSparam class with thresholdLD setter and getter should r
     expect_equal(thresholdLD(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with specificSNV setter and getter should return an object", {
+
+    exp <- data.frame(snp.chromosome=c("1", "2"), snp.position=c(12, 3333334))
+  
+    paramTest <- RAIDSparam()
+    specificSNV(paramTest) <- exp
+
+    expect_equal(specificSNV(paramTest), exp)
+    expect_error(specificSNV(paramTest) <- "test")
+    expect_equal(specificSNV(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
