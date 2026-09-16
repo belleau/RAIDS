@@ -1321,6 +1321,31 @@ test_that("create a RAIDSparam class with PCAmissingRate setter and getter shoul
     expect_equal(PCAmissingRate(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with PCAalgorithm setter and getter should return an object", {
+
+    exp <- "randomized"
+  
+    paramTest <- RAIDSparam()
+    PCAalgorithm(paramTest) <- exp
+
+    expect_equal(PCAalgorithm(paramTest), exp)
+    expect_error(PCAalgorithm(paramTest) <- 33L)
+    expect_equal(PCAalgorithm(paramTest), exp)
+})
+
+
+test_that("create a RAIDSparam class with eigenCount setter and getter should return an object", {
+
+    exp <- 44L
+  
+    paramTest <- RAIDSparam()
+    eigenCount(paramTest) <- exp
+
+    expect_equal(eigenCount(paramTest), exp)
+    expect_error(eigenCount(paramTest) <- "toto")
+    expect_equal(eigenCount(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

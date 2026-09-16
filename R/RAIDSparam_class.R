@@ -2646,6 +2646,113 @@ setMethod("PCAmissingRate", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the PCAalgorithm slot in a class
+#' 
+#' @description A generic function for getting the PCAalgorithm slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the PCAalgorithm slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(PCAalgorithm="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", PCAalgorithm="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # PCAalgorithm(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("PCAalgorithm", function(x) standardGeneric("PCAalgorithm"))
+
+
+#' A getter for the PCAalgorithm slot in a RAIDSparam class
+#' 
+#' @description A function for getting the PCAalgorithm slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{character} string representing the algorithm to use 
+#' with the \link[SNPRelate]{snpgdsPCA} function. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the PCAalgorithm slot for the object
+#' PCAalgorithm(paramDemo)
+#' 
+#' @export
+setMethod("PCAalgorithm", "RAIDSparam", function(x) {
+  return(x@PCAalgorithm)
+})
+
+
+#' Generic function for getting the eigenCount slot in a class
+#' 
+#' @description A generic function for getting the eigenCount slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the eigenCount slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(eigenCount="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", eigenCount="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # eigenCount(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("eigenCount", function(x) standardGeneric("eigenCount"))
+
+
+#' A getter for the eigenCount slot in a RAIDSparam class
+#' 
+#' @description A function for getting the eigenCount slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{integer} indicating the number of 
+#' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA} 
+#' function; if 'eigenCount' <= 0, then all eigenvectors are returned.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the eigenCount slot for the object
+#' eigenCount(paramDemo)
+#' 
+#' @export
+setMethod("eigenCount", "RAIDSparam", function(x) {
+  return(x@eigenCount)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -4909,6 +5016,135 @@ setMethod("PCAmissingRate<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of PCAalgorithm slot in a class
+#' 
+#' @description A generic function for replacement of PCAalgorithm  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(PCAalgorithm="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", PCAalgorithm="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # PCAalgorithm(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("PCAalgorithm<-", 
+  function(x, value) standardGeneric("PCAalgorithm<-"))
+
+
+#' Setter function for replacement of PCAalgorithm slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of PCAalgorithm slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{character} string representing the algorithm to 
+#' use with the \link[SNPRelate]{snpgdsPCA} function. The algorithm must be 
+#' implemented and available to the \link[SNPRelate]{snpgdsPCA} function.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the PCAalgorithm slot in the object
+#' PCAalgorithm(paramDemo) <-  "randomized"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("PCAalgorithm<-", "RAIDSparam", function(x, value) {
+  x@PCAalgorithm <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of eigenCount slot in a class
+#' 
+#' @description A generic function for replacement of eigenCount  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(eigenCount="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", eigenCount="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # eigenCount(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("eigenCount<-", 
+  function(x, value) standardGeneric("eigenCount<-"))
+
+
+#' Setter function for replacement of eigenCount slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of eigenCount slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{integer} indicating the number of 
+#' eigenvectors that will be in the output of the \link[SNPRelate]{snpgdsPCA} 
+#' function; if 'eigenCount' <= 0, then all eigenvectors are returned.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the eigenCount slot in the object
+#' eigenCount(paramDemo) <-  33L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("eigenCount<-", "RAIDSparam", function(x, value) {
+  x@eigenCount <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
