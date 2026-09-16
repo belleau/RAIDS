@@ -2753,6 +2753,59 @@ setMethod("eigenCount", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the eigenCountSyn slot in a class
+#' 
+#' @description A generic function for getting the eigenCountSyn slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the eigenCountSyn slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(eigenCountSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", eigenCountSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # eigenCountSyn(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("eigenCountSyn", function(x) standardGeneric("eigenCountSyn"))
+
+
+#' A getter for the eigenCountSyn slot in a RAIDSparam class
+#' 
+#' @description A function for getting the eigenCountSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{integer} indicating the number of 
+#' eigenvectors TODO
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the eigenCountSyn slot for the object
+#' eigenCountSyn(paramDemo)
+#' 
+#' @export
+setMethod("eigenCountSyn", "RAIDSparam", function(x) {
+  return(x@eigenCountSyn)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5140,6 +5193,70 @@ setGeneric("eigenCount<-",
 #' @export
 setMethod("eigenCount<-", "RAIDSparam", function(x, value) {
   x@eigenCount <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of eigenCountSyn slot in a class
+#' 
+#' @description A generic function for replacement of eigenCountSyn   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(eigenCountSyn="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", eigenCountSyn="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # eigenCountSyn(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("eigenCountSyn<-", 
+  function(x, value) standardGeneric("eigenCountSyn<-"))
+
+
+#' Setter function for replacement of eigenCountSyn slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of eigenCountSyn slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{integer} indicating the number of 
+#' eigenvectors TODO
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the eigenCountSyn slot in the object
+#' eigenCountSyn(paramDemo) <-  33L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("eigenCountSyn<-", "RAIDSparam", function(x, value) {
+  x@eigenCountSyn <- value
 
   # Validate and return the modified object
   validObject(x) 
