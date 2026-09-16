@@ -2806,6 +2806,60 @@ setMethod("eigenCountSyn", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the kList slot in a class
+#' 
+#' @description A generic function for getting the kList slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the kList slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(kList="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", kList="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # kList(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("kList", function(x) standardGeneric("kList"))
+
+
+#' A getter for the kList slot in a RAIDSparam class
+#' 
+#' @description A function for getting the kList slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{vector} of positive \code{integer} representing the 
+#' values tested for the  \emph{K} parameter. The \emph{K} parameter 
+#' represents the number of neighbors used in the K-nearest neighbor analysis.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the kList slot for the object
+#' kList(paramDemo)
+#' 
+#' @export
+setMethod("kList", "RAIDSparam", function(x) {
+  return(x@kList)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5257,6 +5311,71 @@ setGeneric("eigenCountSyn<-",
 #' @export
 setMethod("eigenCountSyn<-", "RAIDSparam", function(x, value) {
   x@eigenCountSyn <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
+#' Generic function for replacement of kList slot in a class
+#' 
+#' @description A generic function for replacement of kList   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(kList="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", kList="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # kList(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("kList<-", 
+  function(x, value) standardGeneric("kList<-"))
+
+
+#' Setter function for replacement of kList slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of kList slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{vector} of positive \code{integer} representing the 
+#' values tested for the  \emph{K} parameter. The \emph{K} parameter 
+#' represents the number of neighbors used in the K-nearest neighbor analysis.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the kList slot in the object
+#' kList(paramDemo) <-  c(2L, 3L, 4L, 5L)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("kList<-", "RAIDSparam", function(x, value) {
+  x@kList <- value
 
   # Validate and return the modified object
   validObject(x) 

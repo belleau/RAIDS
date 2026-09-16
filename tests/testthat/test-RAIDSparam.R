@@ -1358,6 +1358,18 @@ test_that("create a RAIDSparam class with eigenCountSyn setter and getter should
     expect_equal(eigenCountSyn(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with kList setter and getter should return an object", {
+
+    exp <- c(3L, 4L, 5L)
+  
+    paramTest <- RAIDSparam()
+    kList(paramTest) <- exp
+
+    expect_equal(kList(paramTest), exp)
+    expect_error(kList(paramTest) <- "toto")
+    expect_equal(kList(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
