@@ -1370,6 +1370,18 @@ test_that("create a RAIDSparam class with kList setter and getter should return 
     expect_equal(kList(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with pcaList setter and getter should return an object", {
+
+    exp <- c(3L, 4L, 5L)
+  
+    paramTest <- RAIDSparam()
+    pcaList(paramTest) <- exp
+
+    expect_equal(pcaList(paramTest), exp)
+    expect_error(pcaList(paramTest) <- "toto")
+    expect_equal(pcaList(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

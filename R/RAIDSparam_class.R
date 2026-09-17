@@ -2860,6 +2860,59 @@ setMethod("kList", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the pcaList slot in a class
+#' 
+#' @description A generic function for getting the pcaList slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the pcaList slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pcaList="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pcaList="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pcaList(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pcaList", function(x) standardGeneric("pcaList"))
+
+
+#' A getter for the pcaList slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pcaList slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{vector} of positive \code{integer} representing the values 
+#' tested for the  \emph{D} parameter. The \emph{D} parameter represents the 
+#' number of dimensions used in the PCA analysis.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pcaList slot for the object
+#' pcaList(paramDemo)
+#' 
+#' @export
+setMethod("pcaList", "RAIDSparam", function(x) {
+  return(x@pcaList)
+})
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5381,6 +5434,71 @@ setMethod("kList<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of pcaList slot in a class
+#' 
+#' @description A generic function for replacement of pcaList   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pcaList="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pcaList="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pcaList(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pcaList<-", function(x, value) standardGeneric("pcaList<-"))
+
+
+#' Setter function for replacement of pcaList slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of pcaList slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{vector} of positive \code{integer} representing the 
+#' values tested for the  \emph{D} parameter. The \emph{D} parameter 
+#' represents the number of dimensions used in the PCA analysis.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the pcaList slot in the object
+#' pcaList(paramDemo) <-  c(2L, 3L, 4L, 5L)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("pcaList<-", "RAIDSparam", function(x, value) {
+  x@pcaList <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
