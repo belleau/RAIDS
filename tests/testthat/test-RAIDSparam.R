@@ -1407,6 +1407,18 @@ test_that("create a RAIDSparam class with fieldPopInfAnc setter and getter shoul
     expect_equal(fieldPopInfAnc(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with fieldSubPop setter and getter should return an object", {
+
+    exp <- "extraPop"
+  
+    paramTest <- RAIDSparam()
+    fieldSubPop(paramTest) <- exp
+
+    expect_equal(fieldSubPop(paramTest), exp)
+    expect_error(fieldSubPop(paramTest) <- 33L)
+    expect_equal(fieldSubPop(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################
