@@ -1419,6 +1419,18 @@ test_that("create a RAIDSparam class with fieldSubPop setter and getter should r
     expect_equal(fieldSubPop(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with verbose setter and getter should return an object", {
+
+    exp <- TRUE
+  
+    paramTest <- RAIDSparam()
+    verbose(paramTest) <- exp
+
+    expect_equal(verbose(paramTest), exp)
+    expect_error(verbose(paramTest) <- 33L)
+    expect_equal(verbose(paramTest), exp)
+})
+
 #############################################################################
 ### Tests RAIDSparam function
 #############################################################################

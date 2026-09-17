@@ -3080,6 +3080,59 @@ setMethod("fieldSubPop", "RAIDSparam", function(x) {
 })
 
 
+#' Generic function for getting the verbose slot in a class
+#' 
+#' @description A generic function for getting the verbose slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the verbose slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(verbose="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", verbose="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # verbose(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("verbose", function(x) standardGeneric("verbose"))
+
+
+#' A getter for the verbose slot in a RAIDSparam class
+#' 
+#' @description A function for getting the verbose slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{logical} indicating if message information should be 
+#' printed. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the verbose slot for the object
+#' verbose(paramDemo)
+#' 
+#' @export
+setMethod("verbose", "RAIDSparam", function(x) {
+  return(x@verbose)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5864,6 +5917,71 @@ setMethod("fieldSubPop<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of verbose slot in a class
+#' 
+#' @description A generic function for replacement of verbose   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(verbose="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", verbose="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # verbose(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("verbose<-", 
+  function(x, value) standardGeneric("verbose<-"))
+
+
+#' Setter function for replacement of verbose slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of verbose slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{logical} indicating if message information 
+#' should be printed. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the verbose slot in the object
+#' verbose(paramDemo) <-  TRUE
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("verbose<-", "RAIDSparam", function(x, value) {
+  x@verbose <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
