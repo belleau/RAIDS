@@ -2968,6 +2968,62 @@ setMethod("fieldPopInRef", "RAIDSparam", function(x) {
   return(x@fieldPopInRef)
 })
 
+
+#' Generic function for getting the fieldPopInfAnc slot in a class
+#' 
+#' @description A generic function for getting the fieldPopInfAnc slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the fieldPopInfAnc slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fieldPopInfAnc="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fieldPopInfAnc="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fieldPopInfAnc(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fieldPopInfAnc", function(x) standardGeneric("fieldPopInfAnc"))
+
+
+#' A getter for the fieldPopInfAnc slot in a RAIDSparam class
+#' 
+#' @description A function for getting the fieldPopInfAnc slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{character} string representing the name of 
+#' the column in the data frame that contains the inferred 
+#' super-population ancestry for the samples. The column should be 
+#' present in the data frame.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the fieldPopInfAnc slot for the object
+#' fieldPopInfAnc(paramDemo)
+#' 
+#' @export
+setMethod("fieldPopInfAnc", "RAIDSparam", function(x) {
+  return(x@fieldPopInfAnc)
+})
+
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5619,6 +5675,73 @@ setMethod("fieldPopInRef<-", "RAIDSparam", function(x, value) {
   validObject(x) 
   return(x)
 })
+
+
+#' Generic function for replacement of fieldPopInfAnc slot in a class
+#' 
+#' @description A generic function for replacement of fieldPopInfAnc   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fieldPopInfAnc="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fieldPopInRef="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fieldPopInfAnc(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fieldPopInfAnc<-", 
+  function(x, value) standardGeneric("fieldPopInfAnc<-"))
+
+
+#' Setter function for replacement of fieldPopInfAnc slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of fieldPopInfAnc slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{character} string representing the name of 
+#' the column in the data frame that contains the inferred 
+#' super-population ancestry for the samples. The column should be 
+#' present in the data frame. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the fieldPopInfAnc slot in the object
+#' fieldPopInfAnc(paramDemo) <-  "superPOPULATION"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("fieldPopInfAnc<-", "RAIDSparam", function(x, value) {
+  x@fieldPopInfAnc <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
 
 ###########################################################################
 ## RAIDSparam function
