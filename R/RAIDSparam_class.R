@@ -5694,7 +5694,7 @@ setMethod("fieldPopInRef<-", "RAIDSparam", function(x, value) {
 #' setClass("MyClass", slots = list(fieldPopInfAnc="character"))
 #' 
 #' # Create an instance
-#' obj <- new("MyClass", fieldPopInRef="123")
+#' obj <- new("MyClass", fieldPopInfAnc="123")
 #' 
 #' # Call the generic (assuming a method is implemented)
 #' # fieldPopInfAnc(obj) <- "333"
