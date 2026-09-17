@@ -2913,6 +2913,61 @@ setMethod("pcaList", "RAIDSparam", function(x) {
   return(x@pcaList)
 })
 
+
+#' Generic function for getting the fieldPopInRef slot in a class
+#' 
+#' @description A generic function for getting the fieldPopInRef slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the fieldPopInRef slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fieldPopInRef="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fieldPopInRef="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fieldPopInRef(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fieldPopInRef", function(x) standardGeneric("fieldPopInRef"))
+
+
+#' A getter for the fieldPopInRef slot in a RAIDSparam class
+#' 
+#' @description A function for getting the fieldPopInRef slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{character} string representing the name of the 
+#' column that contains the known ancestry for the reference profiles in 
+#' the Population Reference GDS file (corresponding to the 
+#' \code{fileReferenceGDS} parameter).
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the fieldPopInRef slot for the object
+#' fieldPopInRef(paramDemo)
+#' 
+#' @export
+setMethod("fieldPopInRef", "RAIDSparam", function(x) {
+  return(x@fieldPopInRef)
+})
+
 ###########################################################################
 ## All the setter functions for the RAIDSparam class
 ###########################################################################
@@ -5499,6 +5554,71 @@ setMethod("pcaList<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+
+#' Generic function for replacement of fieldPopInRef slot in a class
+#' 
+#' @description A generic function for replacement of fieldPopInRef   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(fieldPopInRef="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", fieldPopInRef="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # fieldPopInRef(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("fieldPopInRef<-", 
+  function(x, value) standardGeneric("fieldPopInRef<-"))
+
+
+#' Setter function for replacement of fieldPopInRef slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of fieldPopInRef slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{character} string representing the name of the 
+#' column that contains the known ancestry for the reference profiles in 
+#' the Population Reference GDS file (corresponding to the 
+#' \code{fileReferenceGDS} parameter).
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the fieldPopInRef slot in the object
+#' fieldPopInRef(paramDemo) <-  "newPop"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("fieldPopInRef<-", "RAIDSparam", function(x, value) {
+  x@fieldPopInRef <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 ###########################################################################
 ## RAIDSparam function
