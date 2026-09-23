@@ -200,7 +200,9 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' contains the SNV index in the reference or -1 if not in the reference. It 
 #' is used during the pruning step. Default: \code{NULL}.
 #' 
-#' @slot genoType a TODO. Default: \code{"geno.ref"}.
+#' @slot genoType a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' Default: \code{"geno.ref"}.
 #' 
 #' @slot phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
@@ -654,8 +656,11 @@ setValidity("RAIDSparam",
                 " and \"snp.position\"."))
         }
 
-        ## Validate the genoType parameter TODO
-
+        ## Validate the genoType parameter
+        if (length(object@genoType) != 1) {
+          return("'genoType' slot must have one character string.")
+        }
+      
         ## Validate the phaseType parameter
         if (length(object@phaseType) != 1) {
             return("'phaseType' slot must be one character string.")
@@ -6174,7 +6179,9 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' contains the SNV index in the reference or -1 if not in the reference. It 
 #' is used during the pruning step. Default: \code{NULL}.
 #' 
-#' @param genoType TODO
+#' @param genoType a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' Default: \code{"geno.ref"}.
 #' 
 #' @param phaseType a TODO. Default: \code{"phase.ref"}.
 #' 

@@ -773,8 +773,11 @@ test_that("create a RAIDSparam class with snp.chromosome column missing for spec
                 " and \"snp.position\"."))
 })
 
-## Validate the genoType parameter TODO
+test_that("create a RAIDSparam class with multiple strings for genoType parameter should generate an error", {
 
+    expect_error(new("RAIDSparam", genoType=c("snp.position", "test")), 
+        paste0("'genoType' slot must have one character string."))
+})
 
 test_that("create a RAIDSparam class with multiple strings for phaseType parameter should generate an error", {
 
