@@ -17,14 +17,11 @@
 #' parameters updated.
 #'
 #' @examples
-#'
-#' ## Required library for GDS
-#' library(gdsfmt)
-#'
+#' 
 #' ## Path to the demo Reference GDS file is located in this package
 #' dataDir <- system.file("extdata/tests", package="RAIDS")
 #' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
-#'
+#' 
 #' ## The data.frame containing the information about the study
 #' ## The 3 mandatory columns: "study.id", "study.desc", "study.platform"
 #' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
@@ -32,7 +29,7 @@
 #'                         study.desc = "Description",
 #'                         study.platform = "PLATFORM",
 #'                         stringsAsFactors = FALSE)
-#'
+#' 
 #' ## The data.frame containing the information about the samples
 #' ## The entries should be strings, not factors (stringsAsFactors=FALSE)
 #' samplePED <- data.frame(Name.ID = c("ex1", "ex2"),
@@ -41,38 +38,37 @@
 #'                     Sample.Type = rep("Primary Tumor", 2),
 #'                     Source = rep("Databank B", 2), stringsAsFactors = FALSE)
 #' rownames(samplePED) <- samplePED$Name.ID
-#'
+#' 
 #' ## Temporary Profile GDS file
 #' pathProfileGDS <- tempdir()
 #' profileFile <- file.path(pathProfileGDS, "ex1.gds")
-#'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
-#'     studyDF=studyDF,
-#'     genoSource="snp-pileup",
-#'     pedStudy=samplePED,
-#'     pathProfileGDS=pathProfileGDS,
-#'     fileReferenceGDS=fileGDS
-#'     )
+#' 
+#' pRAIDS <- RAIDSparam( studyDF=studyDF,
+#'                       profileFile=file.path(dataDir, "ex1.txt.gz"), 
+#'                       genoSource = "snp-pileup",
+#'                       pedStudy=samplePED,
+#'                       pathProfileGDS=pathProfileGDS,
+#'                       fileReferenceGDS=fileGDS)
+#' 
 #' ## Copy the Profile GDS file demo that has not been pruned yet
 #' file.copy(file.path(dataDir, "ex1_demo.gds"), profileFile)
-#'
-#'
+#' 
+#' 
 #' ## Compute the list of pruned SNVs for a specific profile 'ex1'
 #' ## and save it in the Profile GDS file 'ex1.gds'
 #' pRAIDS <- pruningProfile2(pRAIDS)
-#'
-#'
+#' 
+#' 
 #' ## Check content of Profile GDS file
 #' ## The 'pruned.study' entry should be present
 #' content <- openfn.gds(profileFile)
 #' content
-#'
+#' 
 #' ## Close the Profile GDS file (important)
 #' closefn.gds(content)
-#'
+#' 
 #' ## Remove Profile GDS file (created for demo purpose)
-#' unlink(profileFile, force=TRUE)
-#'
+#' unlink(profileFile, force=TRUE) 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt index.gdsn read.gdsn openfn.gds ls.gdsn closefn.gds
@@ -89,16 +85,20 @@ pruningProfile2 <- function(pRAIDS) {
     #                       verbose=verbose, chr=chr, superPopMinAF=superPopMinAF,
     #                       keepPrunedGDS=keepPrunedGDS, pathProfileGDS=pathProfileGDS,
     #                       keepFile=keepFile, pathPrunedGDS=pathPrunedGDS, outPrefix=outPrefix)
-    if(!is.null(pRAIDS$specificSNV)){
-        pRAIDS <- specificSNVKeep(pRAIDS)
-    }
+
+    # TODO manage specificSNV with paramRAIDS
+    # not important without new reference
+    # if(!is.null(specificSNV(pRAIDS))){
+    #     pRAIDS <- specificSNVKeep(pRAIDS)
+    # }
+    
     ## Matches a character method against a table of candidate values
     # method <- arg_match(method)
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
 
     ## Profile GDS file name
-    fileGDSSample <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                              profile=pRAIDS$pedStudy$Name.ID[1])
+    fileGDSSample <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
+                                              profile=pedStudy(pRAIDS)$Name.ID[1])
 
     # filePruned <- file.path(pathPrunedGDS, paste0(outPrefix, ".rds"))
     # fileObj <- file.path(pathPrunedGDS, paste0(outPrefix, ".Obj.rds"))
@@ -117,8 +117,8 @@ pruningProfile2 <- function(pRAIDS) {
     study.annot <- read.gdsn(node=index.gdsn(gdsSample, "study.annot"))
 
     ## Select study information associated to the current profile
-    posSample <- which(study.annot$data.id == pRAIDS$pedStudy$Name.ID[1] &
-                           study.annot$study.id == pRAIDS$studyDF$study.id)
+    posSample <- which(study.annot$data.id == pedStudy(pRAIDS)$Name.ID[1] &
+                           study.annot$study.id == studyDF(pRAIDS)$study.id)
 
     ## Check that the information is found for the specified profile and study
     if(length(posSample) != 1) {
@@ -129,8 +129,9 @@ pruningProfile2 <- function(pRAIDS) {
 
     ## Get the SNV genotype information for the current profile
     # "geno.ref"
-    if(pRAIDS$genoType %in% ls.gdsn(gdsSample)){
-        g <- read.gdsn(index.gdsn(gdsSample, pRAIDS$genoType),
+    # TODO use genoType(pRAIDS) when it is ready
+    if(pRAIDS@genoType %in% ls.gdsn(gdsSample)){
+        g <- read.gdsn(index.gdsn(gdsSample, pRAIDS@genoType),
                        start=c(1, posSample), count=c(-1,1))
 
     }else{
@@ -145,14 +146,14 @@ pruningProfile2 <- function(pRAIDS) {
     # This position are the position in keepPos (I suppose the position in genotype match keepPos)
     listKeepPos <- listGeno
 
-    if(!is.null(pRAIDS$specificSNV)){
-        listKeepPos <- intersect(pRAIDS$specificSNV$snvKeep[pRAIDS$specificSNV$snvKeep > 0], listKeepPos)
+    if(!is.null(specificSNV(pRAIDS))){
+        listKeepPos <- intersect(specificSNV(pRAIDS)$snvKeep[specificSNV(pRAIDS)$snvKeep > 0], listKeepPos)
     }
 
 
 
     if (length(listKeepPos) == 0) {
-        stop("In pruningSample, the sample ", pRAIDS$pedStudy$Name.ID[1],
+        stop("In pruningSample, the sample ", pedStudy(pRAIDS)$Name.ID[1],
              " doesn't have SNPs after filters\n")
     }
     # Not snp.id match keepPos
@@ -162,10 +163,10 @@ pruningProfile2 <- function(pRAIDS) {
     listSamples <- sample.id[which(sample.ref == 1)]
 
     ## Use a LD analysis to generate a subset of SNPs
-    snpset <- runLDPruning(gds=gdsReference, method=pRAIDS$pruningMethod,
+    snpset <- runLDPruning(gds=gdsReference, method=pruningMethod(pRAIDS),
                            listSamples=listSamples, listKeep=listKeep,
-                           slideWindowMaxBP=pRAIDS$slideWindowMaxBP, thresholdLD=pRAIDS$thresholdLD,
-                           np=pRAIDS$np, verbose=pRAIDS$verbose)
+                           slideWindowMaxBP=slideWindowMaxBP(pRAIDS), thresholdLD=thresholdLD(pRAIDS),
+                           np=np(pRAIDS), verbose=verbose(pRAIDS))
     pruned <- unlist(snpset, use.names=FALSE)
 
     gdsProfile <- openfn.gds(filename=fileGDSSample, readonly=FALSE)
@@ -479,51 +480,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #'
 #' @examples
 #'
-#'
-#' ## Path to the demo 1KG GDS file is located in this package
-#' dataDir <- system.file("extdata", package="RAIDS")
-#'
-#'
-#' #################################################################
-#' ## The 1KG GDS file and the 1KG SNV Annotation GDS file
-#' ## need to be located in the same directory
-#' ## Note that the 1KG GDS file used for this example is a
-#' ## simplified version and CANNOT be used for any real analysis
-#' #################################################################
-#' path1KG <- file.path(dataDir, "tests")
-#'
-#' fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
-#' fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
-#'
-#' #################################################################
-#' ## The Sample SNP pileup files (one per sample) need
-#' ## to be located in the same directory.
-#' #################################################################
-#' demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
-#'
-#' #################################################################
-#' ## The path where the Profile GDS Files (one per sample)
-#' ## will be created need to be specified.
-#' #################################################################
-#' pathProfileGDS <- file.path(tempdir(), "out.tmp")
-#'
-#' ####################################################################
-#' ## Fix seed to ensure reproducible results
-#' ####################################################################
-#' set.seed(3043)
-#'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
-#'     genoSource="snp-pileup",
-#'     pathProfileGDS=pathProfileGDS,
-#'     fileReferenceGDS=fileReferenceGDS,
-#'     fileReferenceAnnotGDS=fileAnnotGDS
-#'     )
-#' 
-#' 
-#' 
-#' pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
-#'
-#' unlink(file.path(pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+#' ## TODO See ../testR/exampleTransit.R  for the old version
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom utils write.csv

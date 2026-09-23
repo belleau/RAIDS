@@ -21,51 +21,7 @@ RDS Sample description file and the Population Reference GDS file.
 }
 \examples{
 
-
-## Path to the demo 1KG GDS file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
-
-
-#################################################################
-## The 1KG GDS file and the 1KG SNV Annotation GDS file
-## need to be located in the same directory
-## Note that the 1KG GDS file used for this example is a
-## simplified version and CANNOT be used for any real analysis
-#################################################################
-path1KG <- file.path(dataDir, "tests")
-
-fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
-fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
-
-#################################################################
-## The Sample SNP pileup files (one per sample) need
-## to be located in the same directory.
-#################################################################
-demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
-
-#################################################################
-## The path where the Profile GDS Files (one per sample)
-## will be created need to be specified.
-#################################################################
-pathProfileGDS <- file.path(tempdir(), "out.tmp")
-
-####################################################################
-## Fix seed to ensure reproducible results
-####################################################################
-set.seed(3043)
-
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
-    genoSource="snp-pileup",
-    pathProfileGDS=pathProfileGDS,
-    fileReferenceGDS=fileReferenceGDS,
-    fileReferenceAnnotGDS=fileAnnotGDS
-    )
-
-
-
-pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
-
-unlink(file.path(pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+## TODO See ../testR/exampleTransit.R  for the old version
 
 }
 \author{

@@ -28,9 +28,6 @@ function can be specified by the user.
 }
 \examples{
 
-## Required library for GDS
-library(gdsfmt)
-
 ## Path to the demo Reference GDS file is located in this package
 dataDir <- system.file("extdata/tests", package="RAIDS")
 fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
@@ -56,13 +53,13 @@ rownames(samplePED) <- samplePED$Name.ID
 pathProfileGDS <- tempdir()
 profileFile <- file.path(pathProfileGDS, "ex1.gds")
 
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
-    studyDF=studyDF,
-    genoSource="snp-pileup",
-    pedStudy=samplePED,
-    pathProfileGDS=pathProfileGDS,
-    fileReferenceGDS=fileGDS
-    )
+pRAIDS <- RAIDSparam( studyDF=studyDF,
+                      profileFile=file.path(dataDir, "ex1.txt.gz"), 
+                      genoSource = "snp-pileup",
+                      pedStudy=samplePED,
+                      pathProfileGDS=pathProfileGDS,
+                      fileReferenceGDS=fileGDS)
+
 ## Copy the Profile GDS file demo that has not been pruned yet
 file.copy(file.path(dataDir, "ex1_demo.gds"), profileFile)
 
@@ -81,8 +78,7 @@ content
 closefn.gds(content)
 
 ## Remove Profile GDS file (created for demo purpose)
-unlink(profileFile, force=TRUE)
-
+unlink(profileFile, force=TRUE) 
 
 }
 \author{
