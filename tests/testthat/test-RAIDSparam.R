@@ -477,6 +477,14 @@ test_that("create a RAIDSparam class with wrong extension for profileFile parame
     expect_error(new("RAIDSparam", genoSource="generic", profileFile="test.csv"), message)
 })
 
+test_that("create a RAIDSparam class with wrong extension for profileFile parameter when genoSource NULL should generate an error", {
+
+    message <- paste0("'genoSource' slot must be coherent with the ", 
+            "'profileFile' slot. The 'genoSource' slot is currently NULL.")
+    
+    expect_error(new("RAIDSparam", genoSource=NULL, profileFile="test.csv"), message)
+})
+
 test_that("create a RAIDSparam class with not existing dir for pathProfileGDS parameter should generate an error", {
 
     message <- paste0("'pathProfileGDS' slot must have one character string ", 
