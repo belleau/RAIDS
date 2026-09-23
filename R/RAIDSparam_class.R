@@ -475,26 +475,30 @@ setValidity("RAIDSparam",
         if (!is.null(object@profileFile) && length(object@profileFile) != 1) {
             return("'profileFile' slot must have one character string.")
         } 
-      
+
         ## Validate the profileFile parameter using genoSource information
         if (!is.null(object@profileFile) && length(object@profileFile) == 1) {
-            genoSource <- object@genoSource
-            if (genoSource == "bam" && 
+            genoSourceVal <- object@genoSource
+            if (is.null(genoSourceVal)) {
+                return(paste0("'genoSource' slot must be coherent with the ", 
+                    "'profileFile' slot. The 'genoSource' slot is currently ", 
+                    "NULL."))
+            } else if (genoSourceVal == "bam" && 
                     !stringr::str_detect(object@profileFile, ".bam$")) {
                 return(paste0("'profileFile' slot must have one character ", 
                     "string representing a file with extension '.bam' ", 
                     "according to 'genoSource' slot."))
-            } else if (genoSource == "VCF" && 
+            } else if (genoSourceVal == "VCF" && 
                     !stringr::str_detect(object@profileFile, ".vcf.gz$")) {
                 return(paste0("'profileFile' slot must have one character ", 
                     "string representing a file with extension '.vcf.gz' ", 
                     "according to 'genoSource' slot."))
-            } else if (genoSource %in% c("snp-pileup", "generic") && 
+            } else if (genoSourceVal %in% c("snp-pileup", "generic") && 
                     !stringr::str_detect(object@profileFile, ".txt.gz$")) {
                 return(paste0("'profileFile' slot must have one character ", 
                     "string representing a file with extension '.txt.gz' ", 
                     "according to 'genoSource' slot."))
-            } 
+            }
         } 
         
         ## Validate the profileFile file exists when not null
