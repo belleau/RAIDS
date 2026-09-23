@@ -1296,6 +1296,18 @@ test_that("create a RAIDSparam class with specificSNV setter and getter should r
     expect_equal(specificSNV(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with genoType setter and getter should return an object", {
+
+    exp <- "data.REF"
+  
+    paramTest <- RAIDSparam()
+    genoType(paramTest) <- exp
+
+    expect_equal(genoType(paramTest), exp)
+    expect_error(genoType(paramTest) <- 33)
+    expect_equal(genoType(paramTest), exp)
+})
+
 test_that("create a RAIDSparam class with phaseType setter and getter should return an object", {
 
     exp <- "TOTO"
