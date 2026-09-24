@@ -232,7 +232,9 @@ position of the SNV on the chromosome. Optionally, the column "snvKeep"
 contains the SNV index in the reference or -1 if not in the reference. It
 is used during the pruning step. Default: \code{NULL}.}
 
-\item{genoType}{TODO}
+\item{genoType}{a single \code{character} string representing the field
+in the GDS profile file that contains all the genotype information.
+Default: \code{"geno.ref"}.}
 
 \item{phaseType}{a TODO. Default: \code{"phase.ref"}.}
 

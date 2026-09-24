@@ -773,8 +773,11 @@ test_that("create a RAIDSparam class with snp.chromosome column missing for spec
                 " and \"snp.position\"."))
 })
 
-## Validate the genoType parameter TODO
+test_that("create a RAIDSparam class with multiple strings for genoType parameter should generate an error", {
 
+    expect_error(new("RAIDSparam", genoType=c("snp.position", "test")), 
+        paste0("'genoType' slot must have one character string."))
+})
 
 test_that("create a RAIDSparam class with multiple strings for phaseType parameter should generate an error", {
 
@@ -1291,6 +1294,18 @@ test_that("create a RAIDSparam class with specificSNV setter and getter should r
     expect_equal(specificSNV(paramTest), exp)
     expect_error(specificSNV(paramTest) <- "test")
     expect_equal(specificSNV(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with genoType setter and getter should return an object", {
+
+    exp <- "data.REF"
+  
+    paramTest <- RAIDSparam()
+    genoType(paramTest) <- exp
+
+    expect_equal(genoType(paramTest), exp)
+    expect_error(genoType(paramTest) <- 33)
+    expect_equal(genoType(paramTest), exp)
 })
 
 test_that("create a RAIDSparam class with phaseType setter and getter should return an object", {

@@ -200,7 +200,9 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' contains the SNV index in the reference or -1 if not in the reference. It 
 #' is used during the pruning step. Default: \code{NULL}.
 #' 
-#' @slot genoType a TODO. Default: \code{"geno.ref"}.
+#' @slot genoType a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' Default: \code{"geno.ref"}.
 #' 
 #' @slot phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
@@ -654,8 +656,11 @@ setValidity("RAIDSparam",
                 " and \"snp.position\"."))
         }
 
-        ## Validate the genoType parameter TODO
-
+        ## Validate the genoType parameter
+        if (length(object@genoType) != 1) {
+          return("'genoType' slot must have one character string.")
+        }
+      
         ## Validate the phaseType parameter
         if (length(object@phaseType) != 1) {
             return("'phaseType' slot must be one character string.")
@@ -2489,6 +2494,59 @@ setGeneric("specificSNV", function(x) standardGeneric("specificSNV"))
 #' @export
 setMethod("specificSNV", "RAIDSparam", function(x) {
   return(x@specificSNV)
+})
+
+
+#' Generic function for getting the genoType slot in a class
+#' 
+#' @description A generic function for getting the genoType slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the genoType slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(genoType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", genoType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # genoType(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("genoType", function(x) standardGeneric("genoType"))
+
+
+#' A getter for the genoType slot in a RAIDSparam class
+#' 
+#' @description A function for getting the genoType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the genoType slot for the object
+#' genoType(paramDemo)
+#' 
+#' @export
+setMethod("genoType", "RAIDSparam", function(x) {
+  return(x@genoType)
 })
 
 
@@ -5212,6 +5270,70 @@ setMethod("specificSNV<-", "RAIDSparam", function(x, value) {
 })
 
 
+#' Generic function for replacement of genoType slot in a class
+#' 
+#' @description A generic function for replacement of genoType  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(genoType="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", genoType="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # genoType(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("genoType<-", 
+  function(x, value) standardGeneric("genoType<-"))
+
+
+#' Setter function for replacement of genoType slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of genoType slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the genoType slot in the object
+#' genoType(paramDemo) <- "geno.REF"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("genoType<-", "RAIDSparam", function(x, value) {
+  x@genoType <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
 #' Generic function for replacement of phaseType slot in a class
 #' 
 #' @description A generic function for replacement of phaseType  
@@ -6174,7 +6296,9 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' contains the SNV index in the reference or -1 if not in the reference. It 
 #' is used during the pruning step. Default: \code{NULL}.
 #' 
-#' @param genoType TODO
+#' @param genoType a single \code{character} string representing the field 
+#' in the GDS profile file that contains all the genotype information. 
+#' Default: \code{"geno.ref"}.
 #' 
 #' @param phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
