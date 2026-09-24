@@ -957,7 +957,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 #' }
 #' 
 #' @examples
-#'
+#' 
 #' ## Current directory
 #' dataDir <- file.path(tempdir())
 #'
@@ -984,7 +984,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 #'                     Source=rep("Databank B", 2), stringsAsFactors=FALSE)
 #' rownames(samplePED) <- samplePED$Name.ID
 #'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+#' pRAIDS <- RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
 #'     studyDF=studyDF,
 #'     genoSource="snp-pileup",
 #'     pedStudy=samplePED,
@@ -993,7 +993,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 #'     )
 #' infoCov <- RAIDS:::dispatchParseReadCov(pRAIDS)
 #' names(infoCov)
-#' 
+#'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @encoding UTF-8
@@ -1001,22 +1001,25 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 dispatchParseReadCov <- function(pRAIDS){
 
     matSample <- NULL
-    if(pRAIDS$genoSource == "snp-pileup") {
-        matSample <- readSNVPileupFile(pRAIDS$profileFile, pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "generic") {
-        matSample <- readSNVFileGeneric(pRAIDS$profileFile, pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "VCF") {
+    if(genoSource(pRAIDS) == "snp-pileup") {
+        matSample <- readSNVPileupFile(profileFile(pRAIDS), posOffset(pRAIDS))
+    } else if(genoSource(pRAIDS) == "generic") {
+        matSample <- readSNVFileGeneric(profileFile(pRAIDS), posOffset(pRAIDS))
+    } else if(genoSource(pRAIDS) == "VCF") {
         # tmpProfile <- gsub(".vcf.gz", "",listMat[pos])
-        matSample <- readSNVVCF(pRAIDS$profileFile,
-                                profileName=pRAIDS$pedStudy$Name.ID[1], pRAIDS$offset)
-    } else if(pRAIDS$genoSource == "bam"){
-        colnames(pRAIDS$listPos)[seq_len(2)] <- c("chr", "start")
-        matSample <- readSNVBAM(fileName=pRAIDS$profileFile,
-                                varSelected=pRAIDS$listPos, paramSNVBAM=pRAIDS$paramProfileGDS,
-                                pRAIDS$offset,
-                                verbose=pRAIDS$verbose)
+        matSample <- readSNVVCF(profileFile(pRAIDS),
+                                profileName=pedStudy(pRAIDS)$Name.ID[1], posOffset(pRAIDS))
+    } else if(genoSource(pRAIDS)== "bam"){
+        colnames(listPos(pRAIDS))[seq_len(2)] <- c("chr", "start")
+        matSample <- readSNVBAM(fileName=profileFile(pRAIDS),
+                                varSelected=listPos(pRAIDS), paramSNVBAM=paramProfileGDS(pRAIDS),
+                                posOffset(pRAIDS),
+                                verbose=verbose(pRAIDS))
         # listPos <- do.call(rbind, listPos)
-        colnames(pRAIDS$listPos)[seq_len(2)] <- c("snp.chromosome", "snp.position")
+        tmp <- listPos(pRAIDS)
+        colnames(tmp)[seq_len(2)] <- c("snp.chromosome", "snp.position")
+        listPos(pRAIDS) <- tmp
+        rm(tmp)
 
     }
     return(list(matProfile = matSample,

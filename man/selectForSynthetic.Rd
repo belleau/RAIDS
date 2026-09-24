@@ -38,6 +38,7 @@ subcontinental population has less samples than the fixed number, all
 samples from the subcontinental population are selected.
 }
 \examples{
+
 ## Path to the demo 1KG GDS file is located in this package
 dataDir <- system.file("extdata", package="RAIDS")
 
@@ -53,26 +54,12 @@ path1KG <- file.path(dataDir, "tests")
 fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
 fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
 
-#################################################################
-## The Sample SNP pileup files (one per sample) need
-## to be located in the same directory.
-#################################################################
-demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
-
-#################################################################
-## The path where the Profile GDS Files (one per sample)
-## will be created need to be specified.
-#################################################################
-pathProfileGDS <- file.path(tempdir(), "out.tmp")
-
 ####################################################################
 ## Fix seed to ensure reproducible results
 ####################################################################
 set.seed(3043)
 
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
-    genoSource="snp-pileup",
-    pathProfileGDS=pathProfileGDS,
+pRAIDS <- RAIDSparam(
     fileReferenceGDS=fileReferenceGDS,
     fileReferenceAnnotGDS=fileAnnotGDS
     )
@@ -80,8 +67,6 @@ pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
 ## The number of samples needed by subcontinental population
 ## The number is small for demonstration purpose
 nbProfiles <- 5L
-
-fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
 
 ## Extract a selected number of random samples
 ## for each subcontinental population

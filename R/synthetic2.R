@@ -28,6 +28,7 @@
 #' }
 #'
 #' @examples
+#' 
 #' ## Path to the demo 1KG GDS file is located in this package
 #' dataDir <- system.file("extdata", package="RAIDS")
 #'
@@ -43,26 +44,12 @@
 #' fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
 #' fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
 #'
-#' #################################################################
-#' ## The Sample SNP pileup files (one per sample) need
-#' ## to be located in the same directory.
-#' #################################################################
-#' demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
-#'
-#' #################################################################
-#' ## The path where the Profile GDS Files (one per sample)
-#' ## will be created need to be specified.
-#' #################################################################
-#' pathProfileGDS <- file.path(tempdir(), "out.tmp")
-#'
 #' ####################################################################
 #' ## Fix seed to ensure reproducible results
 #' ####################################################################
 #' set.seed(3043)
 #'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
-#'     genoSource="snp-pileup",
-#'     pathProfileGDS=pathProfileGDS,
+#' pRAIDS <- RAIDSparam(
 #'     fileReferenceGDS=fileReferenceGDS,
 #'     fileReferenceAnnotGDS=fileAnnotGDS
 #'     )
@@ -71,13 +58,11 @@
 #' ## The number is small for demonstration purpose
 #' nbProfiles <- 5L
 #' 
-#' fileGDS <- file.path(dataDir, "PopulationReferenceDemo.gds")
-#'
 #' ## Extract a selected number of random samples
 #' ## for each subcontinental population
 #' ## In the 1KG GDS Demo file, there is one subcontinental population
 #' dataR <- selectForSynthetic(pRAIDS=pRAIDS, nbProfiles=nbProfiles)
-#'
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt index.gdsn read.gdsn
@@ -86,15 +71,15 @@
 #' @encoding UTF-8
 #' @export
 selectForSynthetic <- function(pRAIDS, nbProfiles=30L) {
-    df <- pRAIDS$syntheticRefDF
-    if(is.null(pRAIDS$syntheticRefDF)){
-        if(pRAIDS$reference == "1KGv1.0"){
-            df <- select1KGPopForSynthetic(fileReferenceGDS=pRAIDS$fileReferenceGDS,
+    df <- syntheticRefDF(pRAIDS)
+    if(is.null(syntheticRefDF(pRAIDS))){
+        if(reference(pRAIDS) == "1KGv1.0"){
+            df <- select1KGPopForSynthetic(fileReferenceGDS=fileReferenceGDS(pRAIDS),
                                                               nbProfiles=nbProfiles)
-        }else if(pRAIDS$reference == "HGDP1kgV0.1"){
+        }else if(reference(pRAIDS) == "HGDP1kgV0.1"){
             # new synthetic profile selection function for HGDP1kgV0.1
             df <- selectHGDP1kgForSynthetic(pRAIDS = pRAIDS,
-                                                              nbProfiles=nbProfiles)
+                                        nbProfiles=nbProfiles)
         }
     }
     return(df)
@@ -220,17 +205,13 @@ select1KGPopForSynthetic <- function(fileReferenceGDS, nbProfiles) {
 #' @export
 selectHGDP1kgForSynthetic <- function(pRAIDS, nbProfiles=30L) {
 
-    ## The fileReferenceGDS must be a character string and the file must exists
-    if (!(is.character(pRAIDS$fileReferenceGDS) && (file.exists(pRAIDS$fileReferenceGDS)))) {
-        stop("The \'fileReferenceGDS\' must be a character string ",
-             "representing the Reference GDS file. The file must exist.")
-    }
+    
     ## Validate that nbProfiles parameter is a single positive numeric
     if(! (isSingleNumber(nbProfiles) && nbProfiles > 0)) {
         stop("The \'nbProfiles\' parameter must be a single positive integer.")
     }
 
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
     ## Select reference samples
     listRef <- read.gdsn(index.gdsn(gdsReference, "sample.ref"))
     listKeep <- which(listRef == 1)
@@ -241,11 +222,11 @@ selectHGDP1kgForSynthetic <- function(pRAIDS, nbProfiles=30L) {
     sample.annot <- read.gdsn(index.gdsn(gdsReference,
                         "sample.annot"))[listKeep,]
     sample.id <- read.gdsn(index.gdsn(gdsReference, "sample.id"))[listKeep]
-    grAna <- list(g1 <- c("AFRag"),
-                g2 <- c("EASag"),
-                g3 <- c("EURag"),
-                g4 <- c("SASag"),
-                g5 <- c("AMRag", "MIDag", "OTHag"),
+    grAna <- list(g1 <- c("agAFR"),
+                g2 <- c("agEAS"),
+                g3 <- c("agEUR"),
+                g4 <- c("agSAS"),
+                g5 <- c("agAMR", "agMID", "agOTH"),
                 g6 <- c("ADM"))
 
     ## For each subcontinental population, randomly select a fixed number of
@@ -299,45 +280,50 @@ selectHGDP1kgForSynthetic <- function(pRAIDS, nbProfiles=30L) {
 #' dataDir <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Profile GDS file (temporary)
-#' fileNameGDS <- file.path(tempdir(), "ex1.gds")
+#' pathProfileGDS <- tempdir()
+#' 
+#' fileNameGDS <- file.path(pathProfileGDS, "ex1.gds")
 #'
 #' ## Copy the Profile GDS file demo that has been pruned and annotated
 #' file.copy(file.path(dataDir, "ex1_demo_with_pruning_and_1KG_annot.gds"),
 #'                  fileNameGDS)
 #'
-#' ## Information about the synthetic data set
-#' syntheticStudyDF <- data.frame(study.id="MYDATA.Synthetic",
-#'         study.desc="MYDATA synthetic data", study.platform="PLATFORM",
-#'         stringsAsFactors=FALSE)
-#'
-#' ## Add information related to the synthetic profiles into the Profile GDS
-#' prepSynthetic(fileProfileGDS=fileNameGDS,
-#'         listSampleRef=c("HG00243", "HG00150"), profileID="ex1",
-#'         studyDF=syntheticStudyDF, nbSim=1L, prefix="synthTest",
-#'         verbose=FALSE)
-#'
-#' ## The 1KG files
-#' gds1KG <- snpgdsOpen(file.path(dataDir,
-#'                             "ex1_good_small_1KG.gds"))
-#' gds1KGAnnot <- openfn.gds(file.path(dataDir,
-#'                             "ex1_good_small_1KG_Annot.gds"))
-#'
+#' studyDF <- data.frame(study.id = "MYDATA",
+#'                       study.desc = "Description",
+#'                       study.platform = "PLATFORM",
+#'                       stringsAsFactors = FALSE)
+#' samplePED <- data.frame(Name.ID = c("ex1", "ex2"),
+#'                         Case.ID = c("Patient_h11", "Patient_h12"),
+#'                         Diagnosis = rep("Cancer", 2),
+#'                         Sample.Type = rep("Primary Tumor", 2),
+#'                         Source = rep("Databank B", 2), stringsAsFactors = FALSE)
+#' rownames(samplePED) <- samplePED$Name.ID
+#' 
+#' pRAIDS <- RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
+#'                      genoSource="snp-pileup",
+#'                      studyDF=studyDF,
+#'                      pedStudy=samplePED,
+#'                      prefix="synthTest",
+#'                      pathProfileGDS=pathProfileGDS,
+#'                      fileReferenceGDS=file.path(dataDir,
+#'                                                 "ex1_good_small_1KG.gds"),
+#'                      fileReferenceAnnotGDS=file.path(dataDir,
+#'                                                      "ex1_good_small_1KG_Annot.gds")
+#' )
+#' 
+#' syntheticRefDF(pRAIDS) <- selectForSynthetic(pRAIDS = pRAIDS,
+#'                           nbProfiles=30L)
+#' 
 #' ## Generate the synthetic profiles and add them into the Profile GDS
-#' syntheticGeno(gdsReference=gds1KG, gdsRefAnnot=gds1KGAnnot,
-#'         fileProfileGDS=fileNameGDS, profileID="ex1",
-#'         listSampleRef=c("HG00243", "HG00150"), nbSim=1,
-#'         prefix="synthTest",
-#'         pRecomb=0.01, minProb=0.999, seqError=0.001)
-#'
-#' ## Open Profile GDS file
+#' syntheticGeno2(pRAIDS)
+#' 
+#' 
 #' profileGDS <- openfn.gds(fileNameGDS)
 #'
 #' tail(read.gdsn(index.gdsn(profileGDS, "sample.id")))
 #'
 #' ## Close GDS files (important)
 #' closefn.gds(profileGDS)
-#' closefn.gds(gds1KG)
-#' closefn.gds(gds1KGAnnot)
 #'
 #' ## Remove Profile GDS file (created for demo purpose)
 #' unlink(fileNameGDS, force=TRUE)
@@ -350,26 +336,26 @@ selectHGDP1kgForSynthetic <- function(pRAIDS, nbProfiles=30L) {
 #' @export
 syntheticGeno2 <- function(pRAIDS) {
 
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-    gdsRefAnnot <- openfn.gds(pRAIDS$fileReferenceAnnotGDS)
-    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                               profile=pRAIDS$pedStudy$Name.ID[1])
-    listSampleRef <- pRAIDS$syntheticRefDF$sample.id
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+    gdsRefAnnot <- openfn.gds(fileReferenceAnnotGDS(pRAIDS))
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
+                                               profile=pedStudy(pRAIDS)$Name.ID[1])
+    listSampleRef <- syntheticRefDF(pRAIDS)$sample.id
 
     ## Validate the input parameters
     validateSyntheticGeno(gdsReference=gdsReference, gdsRefAnnot=gdsRefAnnot,
-                          fileProfileGDS=fileProfileGDS, profileID=pRAIDS$pedStudy$Name.ID[1],
-                          listSampleRef=listSampleRef, nbSim=pRAIDS$nbSim, prefix=pRAIDS$prefix,
-                          pRecomb=pRAIDS$pRecomb, minProb=pRAIDS$minProb, seqError=pRAIDS$seqErrorSyn)
+                          fileProfileGDS=fileProfileGDS, profileID=pedStudy(pRAIDS)$Name.ID[1],
+                          listSampleRef=listSampleRef, nbSim=nbSim(pRAIDS), prefix=prefix(pRAIDS),
+                          pRecomb=pRecomb(pRAIDS), minProb=minProb(pRAIDS), seqError=seqErrorSyn(pRAIDS))
 
     ## Open the GDS Sample file
     #gdsSample <- openfn.gds(filename=fileProfileGDS, readonly=FALSE)
     gdsProfile <- snpgdsOpen(fileProfileGDS, readonly=FALSE)
 
     ## The name of the simulated profiles
-    sampleSim <- paste(paste0(pRAIDS$prefix, ".", pRAIDS$pedStudy$Name.ID[1]),
-                       paste(rep(listSampleRef,each=pRAIDS$nbSim),
-                             seq_len(pRAIDS$nbSim), sep="."), sep = ".")
+    sampleSim <- paste(paste0(prefix(pRAIDS), ".", pedStudy(pRAIDS)$Name.ID[1]),
+                       paste(rep(listSampleRef,each=nbSim(pRAIDS)),
+                             seq_len(nbSim(pRAIDS)), sep="."), sep = ".")
 
     sample.id <- read.gdsn(index.gdsn(gdsProfile, "sample.id"))
 
@@ -421,7 +407,7 @@ syntheticGeno2 <- function(pRAIDS) {
     posDF <- c(0,cumsum(df$Freq))
 
     block.Annot <- read.gdsn(index.gdsn(gdsRefAnnot, "block.annot"))
-    if(pRAIDS$reference == "1KGv1.0"){
+    if(reference(pRAIDS) == "1KGv1.0"){
         posSP <- data.frame(EAS=which(block.Annot$block.id == "EAS.0.05.500k"),
                             EUR=which(block.Annot$block.id == "EUR.0.05.500k"),
                             AFR=which(block.Annot$block.id == "AFR.0.05.500k"),
@@ -438,7 +424,7 @@ syntheticGeno2 <- function(pRAIDS) {
                                             start=c(1,posSP$AMR), count = c(-1,1))[listRef],
                               SAS=read.gdsn(index.gdsn(gdsRefAnnot, "block"),
                                             start=c(1,posSP$SAS), count = c(-1,1))[listRef])
-    }else if(pRAIDS$reference == "HGDP1kgV0.1"){
+    }else if(reference(pRAIDS) == "HGDP1kgV0.1"){
         posSP <- data.frame(AFRag=which(block.Annot$block.id == "AFRag.F0.05"),
                             AMRag=which(block.Annot$block.id == "AMRag.F0.05"),
                             EASag=which(block.Annot$block.id == "EASag.F0.05"),
@@ -476,8 +462,8 @@ syntheticGeno2 <- function(pRAIDS) {
         # Order the SNV by count.tot and, lap (low allelic proportion)
         gOrder <- g[listOrderSNP]
 
-        matSim1 <- matrix(nrow=sum(df$Freq), ncol=pRAIDS$nbSim)
-        matSim2 <- matrix(nrow=sum(df$Freq), ncol=pRAIDS$nbSim)
+        matSim1 <- matrix(nrow=sum(df$Freq), ncol=nbSim(pRAIDS))
+        matSim2 <- matrix(nrow=sum(df$Freq), ncol=nbSim(pRAIDS))
 
         # Loop on the read.count and lap
         # Faster to group the read.count and lap to run rmultinom
@@ -490,36 +476,36 @@ syntheticGeno2 <- function(pRAIDS) {
             hetero <- which(gOrder[(posDF[i]+1):(posDF[i+1])] == 1)
             nbHetero <- length(hetero)
             # Define the tree prob for the muultinomial
-            p1 <- lap * (1- 3 *pRAIDS$seqErrorSyn) + (1 - lap) * pRAIDS$seqErrorSyn
+            p1 <- lap * (1- 3 *seqErrorSyn(pRAIDS)) + (1 - lap) * seqErrorSyn(pRAIDS)
 
-            p2 <- (1 - lap) * (1- 3 *pRAIDS$seqErrorSyn) + lap * pRAIDS$seqErrorSyn
+            p2 <- (1 - lap) * (1- 3 * seqErrorSyn(pRAIDS)) + lap * seqErrorSyn(pRAIDS)
 
-            p3 <- 2 * pRAIDS$seqErrorSyn
+            p3 <- 2 * seqErrorSyn(pRAIDS)
 
-            tmp <- rmultinom(nbHetero * pRAIDS$nbSim,
+            tmp <- rmultinom(nbHetero * nbSim(pRAIDS),
                              as.numeric(as.character(df$count.tot[i])),  c(p1, p2, p3))
             # depth of allele 1
             matSim1[listOrderSNP[hetero + posDF[i]],] <- matrix(tmp[1,],
-                                                                ncol=pRAIDS$nbSim)
+                                                                ncol=nbSim(pRAIDS))
             # depth of allele 2
             matSim2[listOrderSNP[hetero + posDF[i]],] <- matrix(tmp[2,],
-                                                                ncol=pRAIDS$nbSim)
+                                                                ncol=nbSim(pRAIDS))
 
             # number of SNV homozygote corresponding to
             # df$count.tot[i] and df$lap[i]
             nbHomo <- df$Freq[i] - nbHetero
             homo <- which(gOrder[(posDF[i]+1):(posDF[i+1])] != 1)
 
-            tmpHomo <- rmultinom(nbHomo * pRAIDS$nbSim,
+            tmpHomo <- rmultinom(nbHomo * nbSim(pRAIDS),
                                  as.numeric(as.character(df$count.tot[i])),
-                                 c(1- 3 * pRAIDS$seqErrorSyn, pRAIDS$seqErrorSyn, 2*pRAIDS$seqErrorSyn))
+                                 c(1- 3 * seqErrorSyn(pRAIDS), seqErrorSyn(pRAIDS), 2*seqErrorSyn(pRAIDS)))
 
             # The order between between ref and alt is done with the phase
             # later
             matSim1[listOrderSNP[homo + posDF[i]],] <- matrix(tmpHomo[1,],
-                                                              ncol=pRAIDS$nbSim)
+                                                              ncol=nbSim(pRAIDS))
             matSim2[listOrderSNP[homo + posDF[i]],] <- matrix(tmpHomo[2,],
-                                                              ncol=pRAIDS$nbSim)
+                                                              ncol=nbSim(pRAIDS))
         }
 
         # superPop of the 1kg sample r is the same
@@ -535,9 +521,9 @@ syntheticGeno2 <- function(pRAIDS) {
         listB <- unique(blockDF[,curSP])
 
         # block where the phase switch
-        recombSwitch <- matrix(sample(x=c(0, 1), size=pRAIDS$nbSim *(length(listB)),
+        recombSwitch <- matrix(sample(x=c(0, 1), size=nbSim(pRAIDS) *(length(listB)),
                                       replace=TRUE,
-                                      prob=c(1-pRAIDS$pRecomb, pRAIDS$pRecomb)), ncol=pRAIDS$nbSim)
+                                      prob=c(1-pRecomb(pRAIDS), pRecomb(pRAIDS))), ncol=nbSim(pRAIDS))
 
         # indice for each zone with the same phase
         blockZone <- apply(recombSwitch, 2, cumsum)
@@ -550,7 +536,7 @@ syntheticGeno2 <- function(pRAIDS) {
 
         # We have to manage multiple simulation which means
         # different number of zone for the different simulations
-        LAPparent <- matrix(nrow = nbSNV, ncol = pRAIDS$nbSim)
+        LAPparent <- matrix(nrow = nbSNV, ncol = nbSim(pRAIDS))
         # for(i in seq_len(nbSim)){
         #     # list of zone with the same phase relatively to 1KG
         #     listZone <- unique(blockZone[,i])
@@ -570,7 +556,7 @@ syntheticGeno2 <- function(pRAIDS) {
 
         # We have to manage multiple simulations which means
         # different number of zones for the different simulations
-        lapValues <- vapply(seq_len(pRAIDS$nbSim), function(i) {
+        lapValues <- vapply(seq_len(nbSim(pRAIDS)), function(i) {
             # list of zone with the same phase relatively to 1KG
             listZone <- unique(blockZone[,i])
 
@@ -584,7 +570,7 @@ syntheticGeno2 <- function(pRAIDS) {
             return(lapPos[as.character(blockZone[as.character(blockDF[,
                                                                       curSP]),i]),])
         }, double(nbSNV))
-        LAPparent[, seq_len(pRAIDS$nbSim)] <- lapValues
+        LAPparent[, seq_len(nbSim(pRAIDS))] <- lapValues
 
         phaseVal <- read.gdsn(index.gdsn(gdsRefAnnot, "phase"),
                               start=c(1,listPosRef.Index[r]), count=c(-1,1))[listRef]
@@ -603,15 +589,15 @@ syntheticGeno2 <- function(pRAIDS) {
         cutOffA <- data.frame(count=unlist(vapply(as.integer(names(listCount)),
                                                   FUN=function(x, minProb, eProb){
                                                       return(max(2,qbinom(minProb, x,eProb))) },
-                                                  FUN.VALUE=numeric(1), minProb=pRAIDS$minProb,
-                                                  eProb= 2 * pRAIDS$seqErrorSyn )),
+                                                  FUN.VALUE=numeric(1), minProb=minProb(pRAIDS),
+                                                  eProb= 2 * seqErrorSyn(pRAIDS) )),
                               allele=unlist(vapply(as.integer(names(listCount)),
                                                    FUN=function(x, minProb, eProb){
                                                        return(max(2,qbinom(minProb, x,eProb))) },
-                                                   FUN.VALUE=numeric(1), minProb=pRAIDS$minProb, eProb=pRAIDS$seqErrorSyn)))
+                                                   FUN.VALUE=numeric(1), minProb=minProb(pRAIDS), eProb=seqErrorSyn(pRAIDS))))
         row.names(cutOffA) <- names(listCount)
 
-        gSyn <- matrix(rep(-1, pRAIDS$nbSim * nrow(infoSNV)), nrow=nrow(infoSNV))
+        gSyn <- matrix(rep(-1, nbSim(pRAIDS) * nrow(infoSNV)), nrow=nrow(infoSNV))
 
         # count total multiply by 0 if too much error
         gSyn <- gSyn +
@@ -628,9 +614,9 @@ syntheticGeno2 <- function(pRAIDS) {
 
         ## Append the profile names of to the Profile GDS file "sample.id" node
         appendGDSSampleOnly(gds=gdsProfile,
-                            listSamples=paste(paste0(pRAIDS$prefix, ".", pRAIDS$pedStudy$Name.ID[1]),
-                                              paste(rep(sampleRef[curSynt], each=pRAIDS$nbSim),
-                                                    seq_len(pRAIDS$nbSim), sep="."), sep = "."))
+                            listSamples=paste(paste0(prefix(pRAIDS), ".", pedStudy(pRAIDS)$Name.ID[1]),
+                                              paste(rep(sampleRef[curSynt], each=nbSim(pRAIDS)),
+                                                    seq_len(nbSim(pRAIDS)), sep="."), sep = "."))
 
         ## Append the genotype matrix to the GDS Sample file "genotype" node
         appendGDSgenotypeMat(gdsProfile, gSyn)

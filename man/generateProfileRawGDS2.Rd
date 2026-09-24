@@ -6,7 +6,7 @@
 \title{Append the genotype information from a profile into the associated
 Profile GDS File}
 \usage{
-generateProfileRawGDS2(pRAIDS = pRAIDS)
+generateProfileRawGDS2(pRAIDS)
 }
 \arguments{
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
@@ -49,7 +49,7 @@ samplePED <- data.frame(Name.ID=c("ex1", "ex2"),
                     Source=rep("Databank B", 2), stringsAsFactors=FALSE)
 rownames(samplePED) <- samplePED$Name.ID
 
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+pRAIDS <- RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
     studyDF=studyDF,
     genoSource="snp-pileup",
     pedStudy=samplePED,

@@ -37,45 +37,50 @@ library(gdsfmt)
 dataDir <- system.file("extdata/tests", package="RAIDS")
 
 ## Profile GDS file (temporary)
-fileNameGDS <- file.path(tempdir(), "ex1.gds")
+pathProfileGDS <- tempdir()
+
+fileNameGDS <- file.path(pathProfileGDS, "ex1.gds")
 
 ## Copy the Profile GDS file demo that has been pruned and annotated
 file.copy(file.path(dataDir, "ex1_demo_with_pruning_and_1KG_annot.gds"),
                  fileNameGDS)
 
-## Information about the synthetic data set
-syntheticStudyDF <- data.frame(study.id="MYDATA.Synthetic",
-        study.desc="MYDATA synthetic data", study.platform="PLATFORM",
-        stringsAsFactors=FALSE)
+studyDF <- data.frame(study.id = "MYDATA",
+                      study.desc = "Description",
+                      study.platform = "PLATFORM",
+                      stringsAsFactors = FALSE)
+samplePED <- data.frame(Name.ID = c("ex1", "ex2"),
+                        Case.ID = c("Patient_h11", "Patient_h12"),
+                        Diagnosis = rep("Cancer", 2),
+                        Sample.Type = rep("Primary Tumor", 2),
+                        Source = rep("Databank B", 2), stringsAsFactors = FALSE)
+rownames(samplePED) <- samplePED$Name.ID
 
-## Add information related to the synthetic profiles into the Profile GDS
-prepSynthetic(fileProfileGDS=fileNameGDS,
-        listSampleRef=c("HG00243", "HG00150"), profileID="ex1",
-        studyDF=syntheticStudyDF, nbSim=1L, prefix="synthTest",
-        verbose=FALSE)
+pRAIDS <- RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
+                     genoSource="snp-pileup",
+                     studyDF=studyDF,
+                     pedStudy=samplePED,
+                     prefix="synthTest",
+                     pathProfileGDS=pathProfileGDS,
+                     fileReferenceGDS=file.path(dataDir,
+                                                "ex1_good_small_1KG.gds"),
+                     fileReferenceAnnotGDS=file.path(dataDir,
+                                                     "ex1_good_small_1KG_Annot.gds")
+)
 
-## The 1KG files
-gds1KG <- snpgdsOpen(file.path(dataDir,
-                            "ex1_good_small_1KG.gds"))
-gds1KGAnnot <- openfn.gds(file.path(dataDir,
-                            "ex1_good_small_1KG_Annot.gds"))
+syntheticRefDF(pRAIDS) <- selectForSynthetic(pRAIDS = pRAIDS,
+                          nbProfiles=30L)
 
 ## Generate the synthetic profiles and add them into the Profile GDS
-syntheticGeno(gdsReference=gds1KG, gdsRefAnnot=gds1KGAnnot,
-        fileProfileGDS=fileNameGDS, profileID="ex1",
-        listSampleRef=c("HG00243", "HG00150"), nbSim=1,
-        prefix="synthTest",
-        pRecomb=0.01, minProb=0.999, seqError=0.001)
+syntheticGeno2(pRAIDS)
 
-## Open Profile GDS file
+
 profileGDS <- openfn.gds(fileNameGDS)
 
 tail(read.gdsn(index.gdsn(profileGDS, "sample.id")))
 
 ## Close GDS files (important)
 closefn.gds(profileGDS)
-closefn.gds(gds1KG)
-closefn.gds(gds1KGAnnot)
 
 ## Remove Profile GDS file (created for demo purpose)
 unlink(fileNameGDS, force=TRUE)

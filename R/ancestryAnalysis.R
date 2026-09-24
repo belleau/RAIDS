@@ -78,14 +78,7 @@
 #' @export
 pruningProfile2 <- function(pRAIDS) {
 
-    ## Validate input parameters
-    # validatePruningSample(gdsReference=gdsReference, method=method,
-    #                       currentProfile=currentProfile, studyID=studyID, listSNP=listSNP,
-    #                       slideWindowMaxBP=slideWindowMaxBP, thresholdLD=thresholdLD, np=np,
-    #                       verbose=verbose, chr=chr, superPopMinAF=superPopMinAF,
-    #                       keepPrunedGDS=keepPrunedGDS, pathProfileGDS=pathProfileGDS,
-    #                       keepFile=keepFile, pathPrunedGDS=pathPrunedGDS, outPrefix=outPrefix)
-
+    
     # TODO manage specificSNV with paramRAIDS
     # not important without new reference
     # if(!is.null(specificSNV(pRAIDS))){
@@ -480,7 +473,51 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #'
 #' @examples
 #'
-#' ## TODO See ../testR/exampleTransit.R  for the old version
+#' ## Path to the demo 1KG GDS file is located in this package
+#' dataDir <- system.file("extdata", package="RAIDS")
+#'
+#'
+#' #################################################################
+#' ## The 1KG GDS file and the 1KG SNV Annotation GDS file
+#' ## need to be located in the same directory
+#' ## Note that the 1KG GDS file used for this example is a
+#' ## simplified version and CANNOT be used for any real analysis
+#' #################################################################
+#' path1KG <- file.path(dataDir, "tests")
+#'
+#' fileReferenceGDS <- file.path(path1KG, "ex1_good_small_1KG.gds")
+#' fileAnnotGDS <- file.path(path1KG, "ex1_good_small_1KG_Annot.gds")
+#'
+#' #################################################################
+#' ## The Sample SNP pileup files (one per sample) need
+#' ## to be located in the same directory.
+#' #################################################################
+#' demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
+#'
+#' #################################################################
+#' ## The path where the Profile GDS Files (one per sample)
+#' ## will be created need to be specified.
+#' #################################################################
+#' pathProfileGDS <- file.path(tempdir(), "out.tmp")
+#'
+#' ####################################################################
+#' ## Fix seed to ensure reproducible results
+#' ####################################################################
+#' set.seed(3043)
+#'
+#' pRAIDS <- RAIDSparam(profileFile=demoProfileEx1,
+#'     genoSource="snp-pileup",
+#'     pathProfileGDS=pathProfileGDS,
+#'     fileReferenceGDS=fileReferenceGDS,
+#'     fileReferenceAnnotGDS=fileAnnotGDS
+#'     )
+#'
+#'
+#'
+#' pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
+#'
+#' unlink(file.path(pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+#' 
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom utils write.csv
@@ -489,12 +526,12 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #' @importFrom rlang arg_match
 #' @encoding UTF-8
 #' @export
-profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
-    
-    profileBaseName <- basename(pRAIDS$profileFile)
-    pathGeno <- dirname(pRAIDS$profileFile)
+profileGenoSynthesis <- function(pRAIDS) {
+    # =RAIDSparam()
+    profileBaseName <- basename(profileFile(pRAIDS))
+    pathGeno <- dirname(profileFile(pRAIDS))
 
-    if(is.null(pRAIDS$studyType) || !(pRAIDS$studyType %in% c("LD", "GeneAware"))){
+    if(is.null(studyType(pRAIDS)) || !(studyType(pRAIDS) %in% c("LD", "GeneAware"))){
         stop("The study must be specify as LD or GeneAware in the studyType or paramRAIDS.\n")
     }
 
@@ -504,33 +541,28 @@ profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
     for(extCur in c( "\\.vcf$", "\\.txt$", "\\.bam", "\\.tsv", "\\.csv")){
         profileName <- gsub(extCur, "", profileName, ignore.case = TRUE)
     }
-    
-    pRAIDS$pedStudy$Name.ID[1] <- profileName
-    pRAIDS$pedStudy$Case.ID[1] <- profileName
+    tmp <- pedStudy(pRAIDS)
 
-    if(file.exists(file.path(pRAIDS$pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")))){
-        stop(paste0("The gds file for ", pRAIDS$pedStudy$Name.ID[1], " already exist."))
+    tmp$Name.ID[1] <- profileName
+    tmp$Case.ID[1] <- profileName
+    rownames(tmp) <- tmp$Name.ID
+    
+    pedStudy(pRAIDS) <- tmp
+    
+
+    if(file.exists(file.path(pathProfileGDS(pRAIDS), paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds")))){
+        stop(paste0("The gds file for ", pedStudy(pRAIDS)$Name.ID[1], " already exist."))
     }
 
     ## Generate the synthetic dataset if not included
-    if(is.null(pRAIDS$syntheticRefDF)){
-        pRAIDS$syntheticRefDF <- selectForSynthetic(pRAIDS = pRAIDS,
+    if(is.null(syntheticRefDF(pRAIDS))){
+        syntheticRefDF(pRAIDS) <- selectForSynthetic(pRAIDS = pRAIDS,
                                                     nbProfiles=30L)
     }
 
     
 
-    ## Validate parameters
-    validateRunExomeOrRNAAncestry(pedStudy=pRAIDS$pedStudy,
-                                  studyDF=pRAIDS$studyDF,
-                                  pathGeno=pathGeno,
-                                  pathProfileGDS=pRAIDS$pathProfileGDS,
-                                  pathOut="./",
-                                  fileReferenceGDS=pRAIDS$fileReferenceGDS,
-                                  fileReferenceAnnotGDS=pRAIDS$fileReferenceAnnotGDS,
-                                  chrInfo=pRAIDS$chrInfo,
-                                  syntheticRefDF=pRAIDS$syntheticRefDF,
-                                  genoSource=pRAIDS$genoSource, verbose=pRAIDS$verbose)
+    
     ##########################
     ## Create profile section
     ##########################
@@ -556,20 +588,20 @@ profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
     ## Section allelic fraction
     ##########################
 
-    studyTypeLeg <- ifelse(pRAIDS$studyType=="LD", "DNA", "RNA")
+    studyTypeLeg <- ifelse(studyType(pRAIDS) == "LD", "DNA", "RNA")
     ## Profile GDS file name
-    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                               profile=pRAIDS$pedStudy$Name.ID[1])
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
+                                               profile=pedStudy(pRAIDS)$Name.ID[1])
     ## Open Profile GDS file
     gdsProfile <- snpgdsOpen(fileProfileGDS, readonly=FALSE)
 
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-    gdsRefAnnot <- openfn.gds(pRAIDS$fileReferenceAnnotGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+    gdsRefAnnot <- openfn.gds(fileReferenceAnnotGDS(pRAIDS))
 
     estimateAllelicFraction(gdsReference=gdsReference, gdsProfile=gdsProfile,
-                            currentProfile=pRAIDS$pedStudy$Name.ID[1], studyID=pRAIDS$studyDF$study.id,
-                            chrInfo=pRAIDS$chrInfo, studyType=studyTypeLeg, gdsRefAnnot=gdsRefAnnot,
-                            blockID=pRAIDS$blockTypeId, verbose=pRAIDS$verbose)
+                            currentProfile=pedStudy(pRAIDS)$Name.ID[1], studyID=studyDF(pRAIDS)$study.id,
+                            chrInfo=chrInfo(pRAIDS), studyType=studyTypeLeg, gdsRefAnnot=gdsRefAnnot,
+                            blockID=blockTypeId(pRAIDS), verbose=verbose(pRAIDS))
     snpgdsClose(gdsProfile)
     snpgdsClose(gdsReference)
     closefn.gds(gdsRefAnnot)
@@ -580,10 +612,10 @@ profileGenoSynthesis <- function(pRAIDS=paramRAIDS()) {
 
     ## Add information related to the synthetic profiles in Profile GDS file
     prepSynthetic(fileProfileGDS=fileProfileGDS,
-                  listSampleRef=pRAIDS$syntheticRefDF$sample.id,  profileID=pRAIDS$pedStudy$Name.ID[1],
-                  studyDF=pRAIDS$studyDFSyn, prefix=pRAIDS$prefix, verbose=pRAIDS$verbose)
+                  listSampleRef=syntheticRefDF(pRAIDS)$sample.id,  profileID=pedStudy(pRAIDS)$Name.ID[1],
+                  studyDF=studyDFSyn(pRAIDS), prefix=prefix(pRAIDS), verbose=verbose(pRAIDS))
 
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("syntheticGeno start ", Sys.time())
     }
 
