@@ -6,7 +6,7 @@
 \title{Extract the specified column from the 1KG GDS 'sample.ref' node
 for the reference profiles (real ancestry assignation)}
 \usage{
-getRefSuperPop2(pRAIDS = pRAIDS)
+getRefSuperPop2(pRAIDS)
 }
 \arguments{
 \item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
@@ -26,8 +26,14 @@ the reference profiles is returned. The values
 represent the known ancestry assignation.
 }
 \examples{
+## Path for gds reference files
+fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
 
-## TODO
+pRAIDS <- RAIDSparam(fileReferenceGDS=fileGDS)
+
+spRef <- getRefSuperPop2(pRAIDS)
+
+head(spRef)
 
 }
 \author{

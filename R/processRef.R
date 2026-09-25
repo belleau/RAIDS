@@ -117,20 +117,26 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
 #' identifiers are used as names for the \code{vector}.
 #'
 #' @examples
-#'
-#' ## TODO
+#' ## Path for gds reference files
+#' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
+#' 
+#' pRAIDS <- RAIDSparam(fileReferenceGDS=fileGDS)
+#' 
+#' spRef <- getRefSuperPop2(pRAIDS)
+#' 
+#' head(spRef)
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
-getRefSuperPop2 <- function(pRAIDS=pRAIDS) {
+getRefSuperPop2 <- function(pRAIDS) {
     ## , popName="superPop"
     ## The gdsReference must be an object of class "gds.class"
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
-    ## validateGDSClass(gds=gdsReference, "gdsReference")
-    popName <- pRAIDS$fieldPopInRef
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+    
+    popName <- fieldPopInRef(pRAIDS)
     ## The popName is a character string
     if (!is.character(popName)) {
         stop("The \'popName\' parameter must be a single character string.")
