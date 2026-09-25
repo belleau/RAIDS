@@ -1418,6 +1418,30 @@ test_that("create a RAIDSparam class with pcaList setter and getter should retur
     expect_equal(pcaList(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with pcaList setter and getter should return an object", {
+
+    exp <- c(3L, 4L, 5L)
+  
+    paramTest <- RAIDSparam()
+    pcaList(paramTest) <- exp
+
+    expect_equal(pcaList(paramTest), exp)
+    expect_error(pcaList(paramTest) <- "toto")
+    expect_equal(pcaList(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with fieldPopInRef setter and getter should return an object", {
+
+    exp <- "ref.col"
+  
+    paramTest <- RAIDSparam()
+    fieldPopInRef(paramTest) <- exp
+
+    expect_equal(fieldPopInRef(paramTest), exp)
+    expect_error(fieldPopInRef(paramTest) <- 33L)
+    expect_equal(fieldPopInRef(paramTest), exp)
+})
+
 test_that("create a RAIDSparam class with fieldPopInfAnc setter and getter should return an object", {
 
     exp <- "extraPop"
