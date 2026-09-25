@@ -123,8 +123,8 @@ pruningProfile2 <- function(pRAIDS) {
     ## Get the SNV genotype information for the current profile
     # "geno.ref"
     # TODO use genoType(pRAIDS) when it is ready
-    if(pRAIDS@genoType %in% ls.gdsn(gdsSample)){
-        g <- read.gdsn(index.gdsn(gdsSample, pRAIDS@genoType),
+    if(genoType(pRAIDS) %in% ls.gdsn(gdsSample)){
+        g <- read.gdsn(index.gdsn(gdsSample, genoType(pRAIDS)),
                        start=c(1, posSample), count=c(-1,1))
 
     }else{

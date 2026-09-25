@@ -330,7 +330,7 @@ generateProfileGenoCall <- function(pRAIDS) {
 
     #g <- as.matrix(g)
     if("geno.ref" %in% ls.gdsn(gdsProfile)){
-        var.geno <- index.gdsn(gdsProfile, pRAIDS@genoType)
+        var.geno <- index.gdsn(gdsProfile, genoType(pRAIDS))
 
         compression.gdsn(var.geno, compress="")
         append.gdsn(var.geno, g, check=TRUE)
@@ -338,7 +338,7 @@ generateProfileGenoCall <- function(pRAIDS) {
         readmode.gdsn(var.geno)
 
     }else{
-        var.geno <- add.gdsn(gdsProfile, pRAIDS@genoType, valdim=c(length(g), 1),
+        var.geno <- add.gdsn(gdsProfile, genoType(pRAIDS), valdim=c(length(g), 1),
                              g, storage="bit2", compress = "LZMA_RA.fast")
         readmode.gdsn(var.geno)
     }
@@ -473,7 +473,7 @@ addGenotypeProfile <- function(pRAIDS) {
                         study.annot$study.id == studyDF(pRAIDS)$study.id[1])
 
 
-    g <- read.gdsn(index.gdsn(gdsProfile, pRAIDS@genoType), start=c(1, posCur),
+    g <- read.gdsn(index.gdsn(gdsProfile, genoType(pRAIDS)), start=c(1, posCur),
                                     count=c(-1, 1))[listSNP]
     if(! ("genotype" %in% ls.gdsn(gdsProfile))){
         var.geno <- add.gdsn(gdsProfile, "genotype",
