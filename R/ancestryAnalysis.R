@@ -425,13 +425,13 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                      }, sampleRM=sampleRM, pRAIDS=pRAIDS,
                      spRef=spRef)
 
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("SyntheticAncestry end ", Sys.time())
     }
     resSyn <- do.call(rbind, resSyn)
 
     
-    pedSyn <- prepPedSyntheticRef(pRAIDS)
+    pedSyn <- prepPedSyntheticRef(pRAIDS) #### Here
     
     resCall <- computeAncestryFromSynthetic2(syntheticKNN=resSyn,
                             pedSyn=pedSyn,
@@ -1262,19 +1262,18 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #'
 #' @examples
 #'
-#'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
+#'
 #' ## The Reference GDS file
 #' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -1288,13 +1287,13 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop")
-#' 
+#'
 #' pedSyn <- RAIDS:::prepPedSyntheticRef(pRAIDS)
 #' head(pedSyn)
 #'
@@ -1305,18 +1304,15 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' @encoding UTF-8
 #' @keywords @export
 prepPedSyntheticRef <- function(pRAIDS) {
-    # gdsReference=gdsReference,
-    # gdsSample=gdsProfile,
-    # studyID=pRAIDS$studyDFSyn$study.id,
-    # popName="superPop"
-    studyID <- pRAIDS$studyDFSyn$study.id
-    popName <- pRAIDS$fieldPopInRef
-    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                    profile=pRAIDS$pedStudy$Name.ID[1])
+    
+    studyID <- studyDFSyn(pRAIDS)$study.id
+    popName <- fieldPopInRef(pRAIDS)
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
+                                    profile=pedStudy(pRAIDS)$Name.ID[1])
     ## Open Profile GDS file
     gdsProfile <- snpgdsOpen(fileProfileGDS, readonly=TRUE)
 
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
 
     ## Extract study information from the Profile GDS file
     studyAnnot <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))

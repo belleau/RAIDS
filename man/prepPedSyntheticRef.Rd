@@ -42,7 +42,6 @@ as an extra column to the final 'data.frame'. In that situation, the
 }
 \examples{
 
-
 ## Load the known ancestry for the demo 1KG reference profiles
 data(demoKnownSuperPop1KG)
 
@@ -69,7 +68,7 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
 
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS,
