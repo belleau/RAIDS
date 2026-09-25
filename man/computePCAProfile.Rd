@@ -59,7 +59,7 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
 
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS,
@@ -67,8 +67,9 @@ pRAIDS <- paramRAIDS(studyDF=studyDF,
 
 listPCARef <- RAIDS:::computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
 listPCAProfile <- RAIDS:::computePCAProfile(listPCA=listPCARef, 
-                      profileId=pRAIDS$pedStudy$Name.ID[1], 
+                      profileId=pedStudy(pRAIDS)$Name.ID[1], 
                       pRAIDS=pRAIDS)
+
 
 }
 \references{

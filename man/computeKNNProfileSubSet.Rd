@@ -100,19 +100,19 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
 
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS,
                       fieldPopInfAnc="SuperPop")
 
-gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
 dfRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))
 row.names(dfRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
-if(! is.null(pRAIDS$sampleRef)){
-   dfRef <- dfRef[pRAIDS$sampleRef,]
+if(! is.null(sampleRef(pRAIDS))){
+   dfRef <- dfRef[sampleRef(pRAIDS),]
 }
- 
+
 snpgdsClose(gdsReference)
 
 ## The PCA with 1 profile projected on the 1KG reference PCA

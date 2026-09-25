@@ -52,8 +52,6 @@ subset of the synthetic data set. The function uses the 'knn' package.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
 
 ## Load the demo PCA on the synthetic profiles projected on the
 ## demo 1KG reference PCA
@@ -83,7 +81,7 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
 
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS)

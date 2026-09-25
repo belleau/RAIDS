@@ -406,11 +406,11 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
     spRef <- getRefSuperPop2(pRAIDS)
     
     # get a list of each pop.group in pRAIDS$syntheticRefDF
-    sampleRM <- splitSelectByPop(pRAIDS$syntheticRefDF)
+    sampleRM <- splitSelectByPop(syntheticRefDF(pRAIDS))
 
     
 
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("SyntheticAncestry start ", Sys.time())
     }
 
@@ -672,8 +672,6 @@ profileGenoSynthesis <- function(pRAIDS) {
 #'
 #' @examples
 #'
-#' ## Required library
-#' library(gdsfmt)
 #'
 #' ## Load the demo PCA on the synthetic profiles projected on the
 #' ## demo 1KG reference PCA
@@ -688,7 +686,7 @@ profileGenoSynthesis <- function(pRAIDS) {
 #'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA.Synthetic"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -702,8 +700,8 @@ profileGenoSynthesis <- function(pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS)
@@ -714,7 +712,7 @@ profileGenoSynthesis <- function(pRAIDS) {
 #' ## The inferred ancestry for the synthetic profiles for different values
 #' ## of D and K
 #' head(results$matKNN)
-#'
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds closefn.gds
@@ -724,21 +722,17 @@ profileGenoSynthesis <- function(pRAIDS) {
 #' @export
 computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pathProfileGDS(pRAIDS),
+                                    paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds"))
     gdsProfile <- snpgdsOpen(filename=fileGDSProfile)
 
-    ## Validate the input parameters
-    # validateComputeKNNRefSynthetic(gdsProfile=gdsProfile,
-    # listEigenvector=listEigenvector,
-    # listCatPop=listCatPop, studyIDSyn=pRAIDS$studyDFSyn$study.id, spRef=spRef,
-    # fieldPopInfAnc=pRAIDS$fieldPopInfAnc, kList=pRAIDS$kList, pcaList=pRAIDS$pcaList)
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
     dfRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))
     row.names(dfRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
     # If pRAIDS$sampleRef is define we restricted the sample to pRAIDS$sampleRef
-    if(! is.null(pRAIDS$sampleRef)){
-        dfRef <- dfRef[pRAIDS$sampleRef,]
+    if(! is.null(sampleRef(pRAIDS))){
+        dfRef <- dfRef[sampleRef(pRAIDS),]
     }
     
     # listCatPop <- unique(spRef)
@@ -749,13 +743,13 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
     snpgdsClose(gdsProfile)
 
     studyAnnot <- studyAnnotAll[which(studyAnnotAll$study.id ==
-                    pRAIDS$studyDFSyn$study.id & studyAnnotAll$data.id %in%
+                    studyDFSyn(pRAIDS)$study.id & studyAnnotAll$data.id %in%
                     listEigenvector$sample.id), ]
-    pcaList <- pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCountSyn]
+    pcaList <- pcaList(pRAIDS)[pcaList(pRAIDS) <= eigenCountSyn(pRAIDS)]
 
     listMat <- lapply(pcaList,
                     FUN=function(pcaD, listEigenvector, dfRef, pRAIDS){
-                        resMat <- lapply(pRAIDS$kList,
+                        resMat <- lapply(kList(pRAIDS),
                             FUN=function(kV, pcaD, listEigenvector,
                                     dfRef, pRAIDS){
                                 return(computeKNNProfileSubSet(listEigenvector, 
@@ -838,10 +832,10 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA.Synthetic"
-#' 
+#'
 #' samplesRM <- c("HG00246", "HG00325", "HG00611", "HG01173", "HG02165",
 #'     "HG01112", "HG01615", "HG01968", "HG02658", "HG01850", "HG02013",
 #'     "HG02465", "HG02974", "HG03814", "HG03445", "HG03689", "HG03789",
@@ -854,7 +848,7 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -868,12 +862,12 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS)
-#' 
+#'
 #' result <- computePoolSyntheticAncestryGr2(sampleRM=samplesRM,
 #'                              spRef=demoKnownSuperPop1KG,
 #'                              pRAIDS=pRAIDS)
@@ -890,29 +884,30 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
     pRAIDS) {
 
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                                paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pathProfileGDS(pRAIDS),
+                                paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds"))
     gdsProfile <- openfn.gds(filename=fileGDSProfile)
     ## Validate the input parameters
+    ## TODO just validate sampleRM and spRef
     validateComputePoolSyntheticAncestryGr(gdsProfile=gdsProfile,
         sampleRM=sampleRM, spRef=spRef,
-        studyIDSyn=pRAIDS$studyDFSyn$study.id,
-        np=pRAIDS$np,
+        studyIDSyn=studyDFSyn(pRAIDS)$study.id,
+        np=np(pRAIDS),
         listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-        pcaList=pRAIDS$pcaList,
-        fieldPopInfAnc=pRAIDS$fieldPopInfAnc,
-        kList=pRAIDS$kList,
-        algorithm=pRAIDS$PCAalgorithm,
-        eigenCount=pRAIDS$eigenCountSyn,
-        missingRate=pRAIDS$PCAmissingRate,
-        verbose=pRAIDS$verbose)
+        pcaList=pcaList(pRAIDS),
+        fieldPopInfAnc=fieldPopInfAnc(pRAIDS),
+        kList=kList(pRAIDS),
+        algorithm=PCAalgorithm(pRAIDS),
+        eigenCount=eigenCountSyn(pRAIDS),
+        missingRate=PCAmissingRate(pRAIDS),
+        verbose=verbose(pRAIDS))
     
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("computePoolSyntheticAncestryGr2 p1 ", Sys.time())
     }
     # Get the list of syn profiles to process
     study.annot <- read.gdsn(index.gdsn(gdsProfile, "study.annot"))
-    study.annot <- study.annot[which(study.annot$study.id == pRAIDS$studyDFSyn$study.id &
+    study.annot <- study.annot[which(study.annot$study.id == studyDFSyn(pRAIDS)$study.id &
                         study.annot$case.id %in% sampleRM),]
     closefn.gds(gdsProfile)
     ## Set algorithm
@@ -920,7 +915,7 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 
     ## Calculate Principal Component Analysis (PCA) on SNV genotype dataset
     ## excluded the selected profiles used to generate the synthetic profiles
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("computePoolSyntheticAncestryGr2 p2 ", Sys.time())
     }
     pcaRef <- computePCARefRMMulti2(listRM=sampleRM, pRAIDS=pRAIDS)
@@ -929,7 +924,7 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 
     # resPCA <- computePCAMultiSynthetic(gdsProfile=gdsProfile, listPCA=pca1KG,
     #                                    sampleRef=sampleRM, studyIDSyn=studyIDSyn, verbose=verbose)
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("computePoolSyntheticAncestryGr2 p3 ", Sys.time())
     }
     resPCA <- computePCAProfile(listPCA=pcaRef, profileId =study.annot$data.id , pRAIDS)
@@ -939,12 +934,12 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
     #                                    listEigenvector=resPCA,
     #                                    listCatPop=listCatPop, studyIDSyn=studyIDSyn, spRef=spRef,
     #                                    fieldPopInfAnc=fieldPopInfAnc, kList=kList, pcaList=pcaList)
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("computePoolSyntheticAncestryGr2 p4 ", Sys.time())
     }
     synthKNN <- computeKNNRefSyn(listEigenvector=resPCA,
                                  pRAIDS=pRAIDS)
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("computePoolSyntheticAncestryGr2 end ", Sys.time())
     }
     return(synthKNN)

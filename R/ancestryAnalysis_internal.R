@@ -211,7 +211,7 @@ createProfile2 <- function(pRAIDS) {
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
 #' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
@@ -220,6 +220,7 @@ createProfile2 <- function(pRAIDS) {
 #' listPCARef <- RAIDS:::computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
 #' 
 #' names(listPCARef)
+#' 
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds
@@ -232,10 +233,10 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
     # missingRate=0.025, verbose
     # unrelatedSamples <- refProfileIDs[which(!(refProfileIDs %in% listRM))]
 
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pathProfileGDS(pRAIDS),
+                                    paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds"))
     gdsProfile <- openfn.gds(filename=fileGDSProfile)
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
     unrelatedSamples <- read.gdsn(index.gdsn(gdsReference, "sample.id"))[
             read.gdsn(index.gdsn(gdsReference, "sample.ref")) == 1]
     
@@ -251,15 +252,15 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
     listPCA[["pca.unrel"]] <- snpgdsPCA(gdsobj=gdsReference,
                                         sample.id=unrelatedSamples,
                                         snp.id=listPCA[["pruned"]],
-                                        num.thread=pRAIDS$np,
-                                        missing.rate=pRAIDS$PCAmissingRate,
-                                        algorithm=pRAIDS$PCAalgorithm,
-                                        eigen.cnt=pRAIDS$eigenCount,
-                                        verbose=pRAIDS$verbose)
+                                        num.thread=np(pRAIDS),
+                                        missing.rate=PCAmissingRate(pRAIDS),
+                                        algorithm=PCAalgorithm(pRAIDS),
+                                        eigen.cnt=eigenCount(pRAIDS),
+                                        verbose=verbose(pRAIDS))
     listPCA[["snp.load"]] <- snpgdsPCASNPLoading(listPCA[["pca.unrel"]],
                                                     gdsobj=gdsReference,
-                                                    num.thread=pRAIDS$np,
-                                                    verbose=pRAIDS$verbose)
+                                                    num.thread=np(pRAIDS),
+                                                    verbose=verbose(pRAIDS))
     closefn.gds(gdsReference)
     closefn.gds(gdsProfile)
     return(listPCA)
@@ -323,7 +324,7 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
 #' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
@@ -331,22 +332,23 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
 #' 
 #' listPCARef <- RAIDS:::computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
 #' listPCAProfile <- RAIDS:::computePCAProfile(listPCA=listPCARef, 
-#'                       profileId=pRAIDS$pedStudy$Name.ID[1], 
+#'                       profileId=pedStudy(pRAIDS)$Name.ID[1], 
 #'                       pRAIDS=pRAIDS)
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
-#' @importFrom gdsfmt read.gdsn index.gdsn openfn.gds closefn.gds
-#' @importFrom SNPRelate snpgdsPCA snpgdsPCASampLoading
+#' @importFrom gdsfmt read.gdsn index.gdsn
+#' @importFrom SNPRelate snpgdsPCA snpgdsPCASampLoading snpgdsOpen snpgdsClose
 #' @encoding UTF-8
 #' @keywords internal
 computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                                    paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
-    gdsProfile <- openfn.gds(filename=fileGDSProfile)
+    fileGDSProfile <- file.path(pathProfileGDS(pRAIDS),
+                                    paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds"))
+    gdsProfile <- snpgdsOpen(filename=fileGDSProfile)
     listPCA[["samp.load"]] <- snpgdsPCASampLoading(listPCA[["snp.load"]],
             gdsobj=gdsProfile, sample.id=profileId,
-            num.thread=pRAIDS$np, verbose=pRAIDS$verbose)
+            num.thread=np(pRAIDS), verbose=verbose(pRAIDS))
 
     rownames(listPCA[["pca.unrel"]]$eigenvect) <-
         listPCA[["pca.unrel"]]$sample.id
@@ -357,7 +359,7 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
                     eigenvector.ref=listPCA[["pca.unrel"]]$eigenvect,
                     eigenvector=listPCA[["samp.load"]]$eigenvect)
 
-    closefn.gds(gdsProfile)
+    snpgdsClose(gdsProfile)
     return(listRes)
 }
 
@@ -423,23 +425,23 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' 
 #' ## Required library
 #' library(SNPRelate)
-#' 
+#'
 #' ## Load the demo PCA on the synthetic profiles projected on the
 #' ## demo 1KG reference PCA
 #' data(demoPCASyntheticProfiles)
 #'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
+#'
 #' #' ## The Reference GDS file
 #' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -453,22 +455,22 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop")
-#' 
-#' gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+#'
+#' gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
 #' dfRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot"))
 #' row.names(dfRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
-#' if(! is.null(pRAIDS$sampleRef)){
-#'    dfRef <- dfRef[pRAIDS$sampleRef,]
+#' if(! is.null(sampleRef(pRAIDS))){
+#'    dfRef <- dfRef[sampleRef(pRAIDS),]
 #' }
-#'  
+#'
 #' snpgdsClose(gdsReference)
-#' 
+#'
 #' ## The PCA with 1 profile projected on the 1KG reference PCA
 #' ## Only one profile is retained
 #' pca <- demoPCASyntheticProfiles
@@ -487,14 +489,7 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' @keywords internal
 computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
 
-    # gdsProfile, listEigenvector,
-    # listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-    # studyIDSyn, spRef, fieldPopInfAnc="SuperPop",
-    # kList=seq(2, 15, 1), pcaList=seq(2, 15, 1)
-    ## Assign default value if kList is NULL
-
-    # 
-
+    
     # spRef <- read.gdsn(index.gdsn(gdsReference, "sample.annot/superPop"))
     # names(spRef) <- read.gdsn(index.gdsn(gdsReference, "sample.id"))
     
@@ -522,7 +517,7 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
                                           D=D,
                                           K=K,
                                           stringsAsFactors=FALSE)
-                         df[[pRAIDS$fieldPopInfAnc]] <- listCatPop[as.integer(yPred)]
+                         df[[fieldPopInfAnc(pRAIDS)]] <- listCatPop[as.integer(yPred)]
                          return(df)
                      },
                      listEigenvector=listEigenvector,
