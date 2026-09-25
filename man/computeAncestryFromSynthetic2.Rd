@@ -194,7 +194,7 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
 
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS,
@@ -208,6 +208,8 @@ resCall <- computeAncestryFromSynthetic2(syntheticKNN=syntheticKNN,
                       spRef=spRef,
                       listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
                       pRAIDS=pRAIDS)
+
+resCall$Ancestry
 
 
 

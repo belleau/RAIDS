@@ -431,7 +431,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
     resSyn <- do.call(rbind, resSyn)
 
     
-    pedSyn <- prepPedSyntheticRef(pRAIDS) #### Here
+    pedSyn <- prepPedSyntheticRef(pRAIDS)
     
     resCall <- computeAncestryFromSynthetic2(syntheticKNN=resSyn,
                             pedSyn=pedSyn,
@@ -1109,16 +1109,16 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 #'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
+#'
 #' ## The Reference GDS file
 #' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -1132,13 +1132,13 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop")
-#' 
+#'
 #' pedSyn <- RAIDS:::prepPedSyntheticRef(pRAIDS)
 #' spRef <- getRefSuperPop2(pRAIDS)
 #' syntheticKNN <- readRDS(file.path(dataDir, "ex1", "KNN.synt.ex1.2.rds"))
@@ -1147,6 +1147,8 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 #'                       spRef=spRef,
 #'                       listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
 #'                       pRAIDS=pRAIDS)
+#' 
+#' resCall$Ancestry
 #' 
 #' 
 #'
@@ -1159,23 +1161,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
                                          spRef,
                                          listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
                                          pRAIDS=pRAIDS) {
-    # gdsReference, gdsProfile,
-    # syntheticKNN,
-    # pedSyn,
-    # currentProfile,
-    # spRef,
-    # studyIDSyn,
-    # np=1L,
-    # listCatPop=c("EAS", "EUR", "AFR", "AMR", "SAS"),
-    # fieldPopInRef="superPop",
-    # fieldPopInfAnc="SuperPop",
-    # kList=seq(2, 15, 1),
-    # pcaList=seq(2, 15, 1),
-    # algorithm=c("exact", "randomized"),
-    # eigenCount=32L,
-    # missingRate=NaN, verbose=FALSE
-
-
+    
     ## Validate input parameters
     # validateComputeAncestryFromSynthetic(gdsReference=gdsReference,
     #                                          gdsProfile=gdsProfile, syntheticKNN=syntheticKNN,
@@ -1195,11 +1181,11 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
     ## Compile all the inferred ancestry results for different values of
     ## D and K to select the optimal parameters
     listParaSample <- selParaPCAUpQuartile(matKNN=syntheticKNN,
-                                           pedCall=pedSyn, refCall=pRAIDS$fieldPopInRef, predCall=pRAIDS$fieldPopInfAnc,
-                                           listCall=listCatPop,kList=pRAIDS$kList,
-                                           pcaList=pRAIDS$pcaList[pRAIDS$pcaList <= pRAIDS$eigenCountSyn])
+                                           pedCall=pedSyn, refCall=fieldPopInRef(pRAIDS), predCall=fieldPopInfAnc(pRAIDS),
+                                           listCall=listCatPop,kList=kList(pRAIDS),
+                                           pcaList=pcaList(pRAIDS)[pcaList(pRAIDS) <= eigenCountSyn(pRAIDS)])
     listPCARef <- computePCARefRMMulti2(listRM = NULL, pRAIDS = pRAIDS)
-    listPCAProfile <- computePCAProfile(listPCA=listPCARef, profileId=pRAIDS$pedStudy$Name.ID[1], pRAIDS=pRAIDS)
+    listPCAProfile <- computePCAProfile(listPCA=listPCARef, profileId=pedStudy(pRAIDS)$Name.ID[1], pRAIDS=pRAIDS)
     ## Project profile on the PCA created with the reference profiles
     # listPCAProfile <- computePCARefSample(gdsProfile=gdsProfile,
     #                                       currentProfile=currentProfile, studyIDRef="Ref.1KG", np=np,
@@ -1209,8 +1195,8 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
     ## Run a k-nearest neighbors analysis on one specific profile
     listKNNSample <- computeKNNRefSample(listEigenvector=listPCAProfile,
                                          listCatPop=listCatPop, spRef=spRef,
-                                         fieldPopInfAnc=pRAIDS$fieldPopInfAnc,
-                                         kList=pRAIDS$kList, pcaList=pRAIDS$pcaList)
+                                         fieldPopInfAnc=fieldPopInfAnc(pRAIDS),
+                                         kList=kList(pRAIDS), pcaList=pcaList(pRAIDS))
 
     ## The ancestry call for the current profile
     resCall <- listKNNSample$matKNN[
