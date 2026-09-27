@@ -37,7 +37,7 @@
 #'                     drop=FALSE)
 #' rownames(samplePED) <- samplePED$Name.ID
 #'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+#' pRAIDS <- RAIDS:::RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
 #'     studyDF=studyDF,
 #'     genoSource="snp-pileup",
 #'     pedStudy=samplePED,
@@ -52,11 +52,11 @@
 #'
 #' ## The Profile GDS file 'ex1.gds' has been created in the
 #' ## specified directory
-#' list.files(pRAIDS$pathProfileGDS)
+#' dir(pathProfileGDS(pRAIDS), "ex1.gds")
 #'
 #' ## Remove Profile GDS file (created for demo purpose)
-#' unlink(file.path(pRAIDS$pathProfileGDS, "ex1.gds"), force=TRUE)
-#'
+#' unlink(file.path(pathProfileGDS(pRAIDS), "ex1.gds"), force=TRUE)
+#' 
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt createfn.gds put.attr.gdsn closefn.gds read.gdsn
@@ -76,41 +76,30 @@ createProfile2 <- function(pRAIDS) {
     #                   yieldSize=10000000),
     # verbose=FALSE
     ## When filePedRDS is defined and pedStudy is null
-    if (!(is.null(pRAIDS$filePedRDS)) && is.null(pRAIDS$pedStudy)) {
-        ## The filePedRDS must be a character string and the file must exists
-        if (!(is.character(pRAIDS$filePedRDS) && (file.exists(pRAIDS$filePedRDS)))) {
-            stop("The \'filePedRDS\' must be a character string representing",
-                 " the RDS Sample information file. The file must exist.")
-        }
-        ## Open the RDS Sample information file
-        pedStudy <- readRDS(file=pRAIDS$filePedRDS)
-    } else if (!(is.null(pRAIDS$filePedRDS) || is.null(pRAIDS$pedStudy))) {
-        stop("Both \'filePedRDS\' and \'pedStudy\' parameters cannot be ",
-             "defined at the same time.")
-    } else if (is.null(pRAIDS$filePedRDS) && is.null(pRAIDS$pedStudy)) {
-        stop("One of the parameter \'fineNamePED\' of \'pedStudy\' must ",
+    if (is.null(pedStudy(pRAIDS))) {
+        stop("The parameter \'pedStudy\' must ",
              "be defined.")
     }
 
     ## Validate input parameters
-    validatecreateProfile( pedStudy=pRAIDS$pedStudy,
-                           fileNameGDS=pRAIDS$fileReferenceGDS, batch=pRAIDS$batch, studyDF=pRAIDS$studyDF,
-                           listProfiles=pRAIDS$listProfiles, pathProfileGDS=pRAIDS$pathProfileGDS,
-                           genoSource=pRAIDS$genoSource, verbose=pRAIDS$verbose)
+    # validatecreateProfile( pedStudy=pedStudy(pRAIDS),
+    #                        fileNameGDS=fileReferenceGDS(pRAIDS), batch=batch(pRAIDS), studyDF=studyDF(pRAIDS),
+    #                        listProfiles=listProfiles(pRAIDS), pathProfileGDS=pathProfileGDS(pRAIDS),
+    #                        genoSource=genoSource(pRAIDS), verbose=verbose(pRAIDS))
 
-    # genoSource <- arg_match(pRAIDS$genoSource)
+    
 
     ## Read the Reference GDS file
-    gdsReference <- snpgdsOpen(filename=pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
 
     ## Extract the chromosome and position information for all SNPs in 1KG GDS
 
     listPos <- NULL
-    if( is.null(pRAIDS$listPos)){
-        if(pRAIDS$genoSource == "bam"){
+    if( is.null(listPos(pRAIDS))){
+        if(genoSource(pRAIDS) == "bam"){
             alDf <- read.gdsn(index.gdsn(gdsReference, "snp.allele"))
             alDf <- matrix(unlist(strsplit(alDf,"\\/")),nrow=2)
-            pRAIDS$listPos <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
+            listPos(pRAIDS) <- data.frame(snp.chromosome = read.gdsn(index.gdsn(gdsReference, "snp.chromosome")),
                                   snp.position = read.gdsn(index.gdsn(gdsReference, "snp.position")),
                                   REF = alDf[1,],
                                   ALT = alDf[2,],
@@ -126,16 +115,16 @@ createProfile2 <- function(pRAIDS) {
             # names(listPos) <- paste0("chr", listChr)
             rm(alDf)
         } else{
-            pRAIDS$listPos <- data.frame(snp.chromosome=read.gdsn(index.gdsn(node=gdsReference, "snp.chromosome")),
+            listPos(pRAIDS) <- data.frame(snp.chromosome=read.gdsn(index.gdsn(node=gdsReference, "snp.chromosome")),
                                   snp.position=read.gdsn(index.gdsn(node=gdsReference, "snp.position")))
         }
-        #pRAIDS$listPos <- listPos
+        
     }
     ## Create a data.frame containing the information
 
     # Need to reformat for bam in varDf
 
-    if(pRAIDS$verbose) {
+    if(verbose(pRAIDS)) {
         message("Start ", Sys.time())
         message("Sample info DONE ", Sys.time())
     }
@@ -143,7 +132,7 @@ createProfile2 <- function(pRAIDS) {
     generateProfileGenoCall(pRAIDS=pRAIDS)
     # generateProfileGDS2(pRAIDS=pRAIDS)
 
-    if(pRAIDS$verbose) {
+    if(verbose(pRAIDS)) {
         message("Genotype DONE ", Sys.time())
     }
 

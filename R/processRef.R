@@ -117,6 +117,9 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
 #' identifiers are used as names for the \code{vector}.
 #'
 #' @examples
+#' 
+#' dataDir <- system.file("extdata/tests", package="RAIDS")
+#' 
 #' ## Path for gds reference files
 #' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
 #' 

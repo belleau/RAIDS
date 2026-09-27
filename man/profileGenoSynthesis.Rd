@@ -47,6 +47,9 @@ demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
 ## will be created need to be specified.
 #################################################################
 pathProfileGDS <- file.path(tempdir(), "out.tmp")
+if(!dir.exists(pathProfileGDS)){
+    dir.create(pathProfileGDS)
+}
 
 ####################################################################
 ## Fix seed to ensure reproducible results
@@ -64,7 +67,10 @@ pRAIDS <- RAIDSparam(profileFile=demoProfileEx1,
 
 pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
 
-unlink(file.path(pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+unlink(file.path(pathProfileGDS, paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds")) , force=TRUE)
+if (length(dir(pathProfileGDS)) == 0) {
+unlink(pathProfileGDS, recursive = TRUE)
+}
 
 
 }

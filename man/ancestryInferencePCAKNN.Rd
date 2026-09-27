@@ -172,6 +172,7 @@ also created.
 }
 \examples{
 
+
 ## Path to the demo 1KG GDS file is located in this package
 dataDir <- system.file("extdata", package="RAIDS")
 
@@ -198,13 +199,15 @@ demoProfileEx1 <- file.path(dataDir, "example", "snpPileup", "ex1.txt.gz")
 ## will be created need to be specified.
 #################################################################
 pathProfileGDS <- file.path(tempdir(), "out.tmp")
-
+if(!dir.exists(pathProfileGDS)){
+    dir.create(pathProfileGDS)
+}
 ####################################################################
 ## Fix seed to ensure reproducible results
 ####################################################################
 set.seed(3043)
 
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
+pRAIDS <- RAIDS:::RAIDSparam(profileFile=demoProfileEx1,
     genoSource="snp-pileup",
     pathProfileGDS=pathProfileGDS,
     fileReferenceGDS=fileReferenceGDS,
@@ -215,7 +218,13 @@ pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
 
 res <- ancestryInferencePCAKNN(pRAIDS=pRAIDS)
 
-unlink(file.path(pathProfileGDS, paste0(res$pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+res$Ancestry
+
+unlink(file.path(pathProfileGDS, paste0(pedStudy(res$pRAIDS)$Name.ID[1], ".gds")) , force=TRUE)
+if (length(dir(pathProfileGDS)) == 0) {
+unlink(pathProfileGDS, recursive = TRUE)
+}
+
 
 }
 \references{

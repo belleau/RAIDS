@@ -47,7 +47,7 @@ samplePED <- data.frame(Name.ID=c("ex1"),
                     drop=FALSE)
 rownames(samplePED) <- samplePED$Name.ID
 
-pRAIDS <- RAIDS:::paramRAIDS(profileFile=file.path(dataDir, "ex1.txt.gz"),
+pRAIDS <- RAIDS:::RAIDSparam(profileFile=file.path(dataDir, "ex1.txt.gz"),
     studyDF=studyDF,
     genoSource="snp-pileup",
     pedStudy=samplePED,
@@ -62,10 +62,10 @@ pRAIDS <- RAIDS:::createProfile2(pRAIDS)
 
 ## The Profile GDS file 'ex1.gds' has been created in the
 ## specified directory
-list.files(pRAIDS$pathProfileGDS)
+dir(pathProfileGDS(pRAIDS), "ex1.gds")
 
 ## Remove Profile GDS file (created for demo purpose)
-unlink(file.path(pRAIDS$pathProfileGDS, "ex1.gds"), force=TRUE)
+unlink(file.path(pathProfileGDS(pRAIDS), "ex1.gds"), force=TRUE)
 
 
 }

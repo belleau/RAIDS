@@ -26,6 +26,9 @@ the reference profiles is returned. The values
 represent the known ancestry assignation.
 }
 \examples{
+
+dataDir <- system.file("extdata/tests", package="RAIDS")
+
 ## Path for gds reference files
 fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
 

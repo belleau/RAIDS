@@ -116,8 +116,8 @@ pruningProfile2 <- function(pRAIDS) {
     ## Check that the information is found for the specified profile and study
     if(length(posSample) != 1) {
         closefn.gds(gdsSample)
-        stop("In pruningSample the profile \'", pRAIDS$pedStudy$Name.ID[1],
-             "\' doesn't exists for the study \'", pRAIDS$studyDF$study.id[1], "\'\n")
+        stop("In pruningSample the profile \'", pedStudy(pRAIDS)$Name.ID[1],
+             "\' doesn't exists for the study \'", studyDF(pRAIDS)$study.id[1], "\'\n")
     }
 
     ## Get the SNV genotype information for the current profile
@@ -342,6 +342,7 @@ pruningProfile2 <- function(pRAIDS) {
 #'
 #' @examples
 #'
+#' 
 #' ## Path to the demo 1KG GDS file is located in this package
 #' dataDir <- system.file("extdata", package="RAIDS")
 #'
@@ -368,13 +369,15 @@ pruningProfile2 <- function(pRAIDS) {
 #' ## will be created need to be specified.
 #' #################################################################
 #' pathProfileGDS <- file.path(tempdir(), "out.tmp")
-#'
+#' if(!dir.exists(pathProfileGDS)){
+#'     dir.create(pathProfileGDS)
+#' }
 #' ####################################################################
 #' ## Fix seed to ensure reproducible results
 #' ####################################################################
 #' set.seed(3043)
 #'
-#' pRAIDS <- RAIDS:::paramRAIDS(profileFile=demoProfileEx1,
+#' pRAIDS <- RAIDS:::RAIDSparam(profileFile=demoProfileEx1,
 #'     genoSource="snp-pileup",
 #'     pathProfileGDS=pathProfileGDS,
 #'     fileReferenceGDS=fileReferenceGDS,
@@ -384,8 +387,14 @@ pruningProfile2 <- function(pRAIDS) {
 #' 
 #' 
 #' res <- ancestryInferencePCAKNN(pRAIDS=pRAIDS)
-#'
-#' unlink(file.path(pathProfileGDS, paste0(res$pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+#' 
+#' res$Ancestry
+#' 
+#' unlink(file.path(pathProfileGDS, paste0(pedStudy(res$pRAIDS)$Name.ID[1], ".gds")) , force=TRUE)
+#' if (length(dir(pathProfileGDS)) == 0) {
+#' unlink(pathProfileGDS, recursive = TRUE)
+#' }
+#' 
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom utils write.csv
@@ -439,7 +448,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
                             listCatPop=unique(spRef),
                             pRAIDS=pRAIDS)
 
-    if(pRAIDS$verbose){
+    if(verbose(pRAIDS)){
         message("Ancestry end ", Sys.time())
     }
     
@@ -499,6 +508,9 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #' ## will be created need to be specified.
 #' #################################################################
 #' pathProfileGDS <- file.path(tempdir(), "out.tmp")
+#' if(!dir.exists(pathProfileGDS)){
+#'     dir.create(pathProfileGDS)
+#' }
 #'
 #' ####################################################################
 #' ## Fix seed to ensure reproducible results
@@ -516,7 +528,10 @@ ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
 #'
 #' pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
 #'
-#' unlink(file.path(pathProfileGDS, paste0(pRAIDS$pedStudy$Name.ID[1], ".gds")) , force=TRUE)
+#' unlink(file.path(pathProfileGDS, paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds")) , force=TRUE)
+#' if (length(dir(pathProfileGDS)) == 0) {
+#' unlink(pathProfileGDS, recursive = TRUE)
+#' }
 #' 
 #' 
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
