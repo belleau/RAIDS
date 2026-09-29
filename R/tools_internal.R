@@ -1012,7 +1012,7 @@ dispatchParseReadCov <- function(pRAIDS){
     } else if(genoSource(pRAIDS)== "bam"){
         colnames(listPos(pRAIDS))[seq_len(2)] <- c("chr", "start")
         matSample <- readSNVBAM(fileName=profileFile(pRAIDS),
-                                varSelected=listPos(pRAIDS), paramSNVBAM=paramProfileGDS(pRAIDS),
+                                varSelected=listPos(pRAIDS), paramSNVBAM=paramAncestry(pRAIDS),
                                 posOffset(pRAIDS),
                                 verbose=verbose(pRAIDS))
         # listPos <- do.call(rbind, listPos)

@@ -253,6 +253,18 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' information for the samples. The column should be present in the Population 
 #' Reference GDS file. Default: \code{"pop.group"}.
 #' 
+#' @slot anchorId a \code{character} string representing the name of the
+#' identifier of the quasi non-admixed profile from the reference. 
+#' Default: \code{"sp0.95v0.2"}.
+#' 
+#' @slot pathADMIXTURE a \code{character} string representing the path pf
+#' the software ADMIXTURE and the binary. If it use a function using ADMIXTURE, then
+#' if it is null, it will try to find it with \code{Sys.which("admixture")}.
+#' Default: \code{NULL}.
+#' 
+#' @slot seedADMIXTURE a single \code{integer} seed for
+#' ADMIXTURE program. Default: \code{432L}.  
+#' 
 #' @slot verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
 #' 
@@ -333,6 +345,9 @@ setClass("RAIDSparam",
     fieldPopInRef="character",
     fieldPopInfAnc="character",
     fieldSubPop="character",
+    anchorId="character",
+    pathADMIXTURE="CharacterOrNULL",
+    seedADMIXTURE="integer",
     verbose="logical"
   ),
   prototype = list(
@@ -393,6 +408,9 @@ setClass("RAIDSparam",
     fieldPopInRef="superPop",
     fieldPopInfAnc="superPop",
     fieldSubPop="pop.group",
+    anchorId="sp0.95v0.2",
+    pathADMIXTURE=NULL,
+    seedADMIXTURE=432L,
     verbose=FALSE
   )
 )
@@ -668,7 +686,7 @@ setValidity("RAIDSparam",
         
         ## Validate the phase parameter
         if (length(object@phase) != 1) {
-          return("'verbose' slot must have one logical value.")
+          return("'phase' slot must have one logical value.")
         }
 
         ## Validate the PCAmissingRate parameter
@@ -719,7 +737,26 @@ setValidity("RAIDSparam",
         if (length(object@fieldSubPop) != 1) {
           return("'fieldSubPop' slot must have one character string.")
         }
+        
+        ## Validate the anchorId parameter
+        if (length(object@anchorId) != 1) {
+          return("'anchorId' slot must have one character string.")
+        }
+        
+        ## Validate the pathADMIXTURE parameter
+        if ((!is.null(object@pathADMIXTURE) && 
+                    length(object@pathADMIXTURE) != 1) || 
+            (!is.null(object@pathADMIXTURE) && 
+                    !file.exists(object@pathADMIXTURE))) {
+            return(paste0("'pathADMIXTURE' slot must have one character ", 
+                    "string representing an existing file."))
+        }
 
+        ## Validate the seedADMIXTURE parameter 
+        if (length(object@seedADMIXTURE) != 1) {
+          return("'seedADMIXTURE' slot must have one integer value.")
+        }
+      
         ## Validate the verbose parameter
         if (length(object@verbose) != 1) {
           return("'verbose' slot must have one logical value.")
@@ -3139,6 +3176,162 @@ setGeneric("fieldSubPop", function(x) standardGeneric("fieldSubPop"))
 #' @export
 setMethod("fieldSubPop", "RAIDSparam", function(x) {
   return(x@fieldSubPop)
+})
+
+#' Generic function for getting the anchorId slot in a class
+#' 
+#' @description A generic function for getting the anchorId slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the anchorId slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(anchorId="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", anchorId="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # anchorId(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("anchorId", function(x) standardGeneric("anchorId"))
+
+
+#' A getter for the anchorId slot in a RAIDSparam class
+#' 
+#' @description A function for getting the anchorId slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{character} string representing the name of the
+#' identifier of the quasi non-admixed profile from the reference.  
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the anchorId slot for the object
+#' anchorId(paramDemo)
+#' 
+#' @export
+setMethod("anchorId", "RAIDSparam", function(x) {
+  return(x@anchorId)
+})
+
+#' Generic function for getting the pathADMIXTURE slot in a class
+#' 
+#' @description A generic function for getting the pathADMIXTURE slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the pathADMIXTURE slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pathADMIXTURE="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pathADMIXTURE="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pathADMIXTURE(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pathADMIXTURE", function(x) standardGeneric("pathADMIXTURE"))
+
+
+#' A getter for the pathADMIXTURE slot in a RAIDSparam class
+#' 
+#' @description A function for getting the pathADMIXTURE slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a \code{character} string representing the path pf
+#' the software ADMIXTURE and the binary.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the pathADMIXTURE slot for the object
+#' pathADMIXTURE(paramDemo)
+#' 
+#' @export
+setMethod("pathADMIXTURE", "RAIDSparam", function(x) {
+  return(x@pathADMIXTURE)
+})
+
+#' Generic function for getting the seedADMIXTURE slot in a class
+#' 
+#' @description A generic function for getting the seedADMIXTURE slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the seedADMIXTURE slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seedADMIXTURE="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seedADMIXTURE="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seedADMIXTURE(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seedADMIXTURE", function(x) standardGeneric("seedADMIXTURE"))
+
+
+#' A getter for the seedADMIXTURE slot in a RAIDSparam class
+#' 
+#' @description A function for getting the seedADMIXTURE slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{integer} seed for
+#' ADMIXTURE program.
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the seedADMIXTURE slot for the object
+#' seedADMIXTURE(paramDemo)
+#' 
+#' @export
+setMethod("seedADMIXTURE", "RAIDSparam", function(x) {
+  return(x@seedADMIXTURE)
 })
 
 
@@ -6044,6 +6237,199 @@ setMethod("fieldSubPop<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+#' Generic function for replacement of anchorId slot in a class
+#' 
+#' @description A generic function for replacement of anchorId   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(anchorId="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", anchorId="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # anchorId(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("anchorId<-", 
+  function(x, value) standardGeneric("anchorId<-"))
+
+
+#' Setter function for replacement of anchorId slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of anchorId slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{character} string representing the name of the
+#' identifier of the quasi non-admixed profile from the reference.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the anchorId slot in the object
+#' anchorId(paramDemo) <-  "sp0.95vT"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("anchorId<-", "RAIDSparam", function(x, value) {
+  x@anchorId <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+#' Generic function for replacement of pathADMIXTURE slot in a class
+#' 
+#' @description A generic function for replacement of pathADMIXTURE slot in a 
+#' S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(pathADMIXTURE="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", pathADMIXTURE="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # pathADMIXTURE(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("pathADMIXTURE<-", function(x, value) 
+    standardGeneric("pathADMIXTURE<-"))
+
+
+#' Setter function for replacement of pathADMIXTURE slot in a RAIDSparam class
+#' 
+#' @description A function for replacement of pathADMIXTURE slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a \code{character} string representing the path pf
+#' the software ADMIXTURE and the binary. If specified, the 
+#' file must exist.
+#
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Directory where demo GDS files are located
+#' dataDir <- system.file("extdata", package="RAIDS")
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign the existing path to the pathADMIXTURE slot in the object
+#' pathADMIXTURE(paramDemo) <- file.path(dataDir)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("pathADMIXTURE<-", "RAIDSparam", function(x, value) {
+  x@pathADMIXTURE <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+#' Generic function for replacement of seedADMIXTURE slot in a class
+#' 
+#' @description A generic function for replacement of seedADMIXTURE   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(seedADMIXTURE="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", seedADMIXTURE="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # seedADMIXTURE(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("seedADMIXTURE<-", 
+  function(x, value) standardGeneric("seedADMIXTURE<-"))
+
+
+#' Setter function for replacement of seedADMIXTURE slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of seedADMIXTURE slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{integer} seed for
+#' the ADMIXTURE program.
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the seedADMIXTURE slot in the object
+#' seedADMIXTURE(paramDemo) <-  33L
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("seedADMIXTURE<-", "RAIDSparam", function(x, value) {
+  x@seedADMIXTURE <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
+
+
 
 #' Generic function for replacement of verbose slot in a class
 #' 
@@ -6347,6 +6733,17 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' information for the samples. The column should be present in the Population 
 #' Reference GDS file. Default: \code{"pop.group"}.
 #' 
+#' @param anchorId a \code{character} string representing the name of the
+#' identifier of the quasi non-admixed profile from the reference.
+#' Default: \code{"sp0.95v0.2"}
+#' 
+#' @param pathADMIXTURE a \code{character} string representing the path pf
+#' the software ADMIXTURE and the binary. If specified, the file must exist. 
+#' Default: \code{NULL}.
+#' 
+#' @param seedADMIXTURE a single \code{integer} seed for 
+#' the ADMIXTURE program. Default: \code{432L}.
+#' 
 #' @param verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}
 #' 
@@ -6401,7 +6798,8 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     PCAmissingRate=0.025, PCAalgorithm="exact", eigenCount=32L, 
     eigenCountSyn=15L, kList=seq(2L, 15L, 1L), pcaList=seq(2L, 15L, 1L), 
     fieldPopInRef="superPop", fieldPopInfAnc="superPop", 
-    fieldSubPop="pop.group", verbose=FALSE) {
+    fieldSubPop="pop.group", anchorId="sp0.95v0.2",
+    pathADMIXTURE=NULL, seedADMIXTURE=432L, verbose=FALSE) {
     
     batch <- as.integer(batch)
     nbSim <- as.integer(nbSim)
@@ -6413,6 +6811,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     eigenCountSyn <- as.integer(eigenCountSyn)
     kList <- unique(as.integer(kList))
     pcaList <- unique(as.integer(pcaList))
+    seedADMIXTURE <- as.integer(seedADMIXTURE)
     verbose <- as.logical(verbose)
 
     studyType <- arg_match(studyType)
@@ -6470,5 +6869,6 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     phase=phase, PCAmissingRate=PCAmissingRate, PCAalgorithm=PCAalgorithm,
     eigenCount=eigenCount, eigenCountSyn=eigenCountSyn, kList=kList,
     pcaList=pcaList, fieldPopInRef=fieldPopInRef, fieldPopInfAnc=fieldPopInfAnc,
-    fieldSubPop=fieldSubPop, verbose=verbose)
+    fieldSubPop=fieldSubPop, anchorId=anchorId,
+    pathADMIXTURE=pathADMIXTURE, seedADMIXTURE=seedADMIXTURE, verbose=verbose)
 }

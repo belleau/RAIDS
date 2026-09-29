@@ -51,6 +51,9 @@ RAIDSparam(
   fieldPopInRef = "superPop",
   fieldPopInfAnc = "superPop",
   fieldSubPop = "pop.group",
+  anchorId = "sp0.95v0.2",
+  pathADMIXTURE = NULL,
+  seedADMIXTURE = 432L,
   verbose = FALSE
 )
 }
@@ -282,6 +285,17 @@ the column in the Population Reference GDS file (corresponding to the
 \code{fileReferenceGDS} parameter) that contains the sub-population
 information for the samples. The column should be present in the Population
 Reference GDS file. Default: \code{"pop.group"}.}
+
+\item{anchorId}{a \code{character} string representing the name of the
+identifier of the quasi non-admixed profile from the reference.
+Default: \code{"sp0.95v0.2"}}
+
+\item{pathADMIXTURE}{a \code{character} string representing the path pf
+the software ADMIXTURE and the binary. If specified, the file must exist.
+Default: \code{NULL}.}
+
+\item{seedADMIXTURE}{a single \code{integer} seed for
+the ADMIXTURE program. Default: \code{432L}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}}

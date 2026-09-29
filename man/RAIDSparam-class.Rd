@@ -251,6 +251,18 @@ the column in the Population Reference GDS file (corresponding to the
 information for the samples. The column should be present in the Population
 Reference GDS file. Default: \code{"pop.group"}.}
 
+\item{\code{anchorId}}{a \code{character} string representing the name of the
+identifier of the quasi non-admixed profile from the reference.
+Default: \code{"sp0.95v0.2"}.}
+
+\item{\code{pathADMIXTURE}}{a \code{character} string representing the path pf
+the software ADMIXTURE and the binary. If it use a function using ADMIXTURE, then
+if it is null, it will try to find it with \code{Sys.which("admixture")}.
+Default: \code{NULL}.}
+
+\item{\code{seedADMIXTURE}}{a single \code{integer} seed for
+ADMIXTURE program. Default: \code{432L}.}
+
 \item{\code{verbose}}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
 }}

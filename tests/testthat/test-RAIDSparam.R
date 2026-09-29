@@ -177,7 +177,16 @@ test_that("create a RAIDSparam class with all default parameters should return a
 
     ## Test fieldPopInfAnc
     expect_equal(paramTest@fieldSubPop, "pop.group")
+    
+    ## Test anchorId
+    expect_equal(paramTest@anchorId, "sp0.95v0.2")
 
+    ## Test pathADMIXTURE 
+    expect_null(paramTest@pathADMIXTURE)
+
+    ## Test seedADMIXTURE 
+    expect_equal(paramTest@seedADMIXTURE, 432L)
+    
     ## Test verbose
     expect_false(paramTest@verbose)
 })
@@ -788,7 +797,7 @@ test_that("create a RAIDSparam class with multiple strings for phaseType paramet
 test_that("create a RAIDSparam class with multiple logical for phase parameter should generate an error", {
 
     expect_error(new("RAIDSparam", phase=c(TRUE, FALSE)), 
-        "'verbose' slot must have one logical value.")
+        "'phase' slot must have one logical value.")
 })
 
 test_that("create a RAIDSparam class with negative numeric for PCAmissingRate parameter should generate an error", {
@@ -857,6 +866,34 @@ test_that("create a RAIDSparam class with multiple strings for fieldSubPop param
 
     expect_error(new("RAIDSparam", fieldSubPop=c("a", "b")), 
         paste0("'fieldSubPop' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with multiple strings for anchorId parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", anchorId=c("a", "b")), 
+        paste0("'anchorId' slot must have one character string."))
+})
+
+test_that("create a RAIDSparam class with not existing file for pathADMIXTURE parameter should generate an error", {
+
+    message <- paste0("'pathADMIXTURE' slot must have one character string ", 
+        "representing an existing file.")
+    
+    expect_error(new("RAIDSparam", pathADMIXTURE="./generic"), message)
+})
+
+test_that("create a RAIDSparam class with multiple strings for pathADMIXTURE parameter should generate an error", {
+
+    message <- paste0("'pathADMIXTURE' slot must have one character string ", 
+        "representing an existing file.")
+    
+    expect_error(new("RAIDSparam", pathADMIXTURE=c("./generic", "./testCanada")), message)
+})
+
+test_that("create a RAIDSparam class with multiple integers for seedADMIXTURE parameter should generate an error", {
+
+    expect_error(new("RAIDSparam", seedADMIXTURE=c(1L, 2L)), 
+        paste0("'seedADMIXTURE' slot must have one integer value."))
 })
 
 test_that("create a RAIDSparam class with multiple logicals for verbose parameter should generate an error", {
@@ -1466,6 +1503,42 @@ test_that("create a RAIDSparam class with fieldSubPop setter and getter should r
     expect_equal(fieldSubPop(paramTest), exp)
 })
 
+test_that("create a RAIDSparam class with anchorId setter and getter should return an object", {
+
+    exp <- "sp0.95vT"
+  
+    paramTest <- RAIDSparam()
+    anchorId(paramTest) <- exp
+
+    expect_equal(anchorId(paramTest), exp)
+    expect_error(anchorId(paramTest) <- 33L)
+    expect_equal(anchorId(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with all pathADMIXTURE setter and getter should return an object", {
+
+    exp <- test_path("fixtures/1KG_Test.gds")
+
+    paramTest <- RAIDSparam()
+    pathADMIXTURE(paramTest) <- exp
+
+    expect_equal(pathADMIXTURE(paramTest), exp)
+    expect_error(pathADMIXTURE(paramTest) <- "AA")
+    expect_equal(pathADMIXTURE(paramTest), exp)
+})
+
+test_that("create a RAIDSparam class with seedADMIXTURE setter and getter should return an object", {
+
+    exp <- 534L
+  
+    paramTest <- RAIDSparam()
+    seedADMIXTURE(paramTest) <- exp
+
+    expect_equal(seedADMIXTURE(paramTest), exp)
+    expect_error(eigenCoseedADMIXTUREuntSyn(paramTest) <- "toto")
+    expect_equal(seedADMIXTURE(paramTest), exp)
+})
+
 test_that("create a RAIDSparam class with verbose setter and getter should return an object", {
 
     exp <- TRUE
@@ -1650,8 +1723,17 @@ test_that("create a RAIDSparam function with all default parameters should retur
     ## Test fieldPopInfAnc
     expect_equal(paramTest@fieldPopInfAnc, "superPop")
 
-    ## Test fieldPopInfAnc
+    ## Test fieldSubPop
     expect_equal(paramTest@fieldSubPop, "pop.group")
+
+    ## Test anchorId
+    expect_equal(paramTest@anchorId, "sp0.95v0.2")
+
+    ## Test pathADMIXTURE 
+    expect_null(paramTest@pathADMIXTURE)
+
+    ## Test seedADMIXTURE 
+    expect_equal(paramTest@seedADMIXTURE, 432L)
 
     ## Test verbose
     expect_false(paramTest@verbose)
@@ -1691,7 +1773,7 @@ test_that("create a RAIDSparam function with all non-default parameters should r
 
     fileGDS <- test_path("fixtures",  "1KG_Test.gds")
 
-    ## New RAIDSparam with all default values
+    ## New RAIDSparam with all non-default values
     paramTest <- RAIDSparam(studyDF=data.frame(study.id="Test1",
         study.desc="Test Desc", study.platform="Test", stringsAsFactors=FALSE),
         studyDFSyn=data.frame(study.id="Test 02", study.desc="Synthetic data",
@@ -1712,7 +1794,9 @@ test_that("create a RAIDSparam function with all non-default parameters should r
         phaseType="phase.REF", phase=TRUE, PCAmissingRate=0.015, 
         PCAalgorithm="randomized", eigenCount=20L, eigenCountSyn=21L,
         kList=c(3L, 5L), pcaList=c(5L, 9L), fieldPopInRef="superPOP", 
-        fieldPopInfAnc="supERPop", fieldSubPop="POP_GROUP", verbose=TRUE
+        fieldPopInfAnc="supERPop", fieldSubPop="POP_GROUP", 
+        anchorId="sp0.95vT", pathADMIXTURE=file.path(dataDir, "1KG_Test.gds"),
+        seedADMIXTURE=532, verbose=TRUE
     )
 
     expect_true(inherits(paramTest, "RAIDSparam"))
@@ -1854,6 +1938,15 @@ test_that("create a RAIDSparam function with all non-default parameters should r
 
     ## Test fieldPopInfAnc
     expect_equal(paramTest@fieldSubPop, "POP_GROUP")
+
+    ## Test anchorId
+    expect_equal(paramTest@anchorId, "sp0.95vT")
+
+    ## Test pathADMIXTURE 
+    expect_equal(paramTest@pathADMIXTURE, file.path(dataDir, "1KG_Test.gds"))
+
+    ## Test seedADMIXTURE 
+    expect_equal(paramTest@seedADMIXTURE, 532L)
 
     ## Test verbose
     expect_true(paramTest@verbose)
