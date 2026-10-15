@@ -25,29 +25,48 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
+## Load the known ancestry for the demo 1KG reference profiles
+data(demoKnownSuperPop1KG)
 
-## Path to the demo pedigree file is located in this package
-dataDir <- system.file("extdata", package="RAIDS")
+## Path to the demo Profile GDS file is located in this package
+dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
 
-## Demo 1KG Reference GDS file
-fileGDS <- openfn.gds(file.path(dataDir,
-                    "PopulationReferenceDemo.gds"))
+pathOut <- file.path(tempdir(), "out.tmp")
+if(!dir.exists(pathOut)){
+    dir.create(pathOut)
+}
 
-## Output VCF file that will be created (temporary)
-vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
+# The name of the synthetic study
+studyID <- "MYDATA"
 
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-                    freqCutoff=NULL)
+studyDF <- data.frame(study.id=studyID,
+                             study.desc=studyID,
+                             study.platform="NotDef",
+                             stringsAsFactors=FALSE)
+pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+pedStudy <- data.frame(Name.ID=c("ex1"),
+                             Case.ID=c("ex1"),
+                             Sample.Type=c("type"),
+                             Diagnosis="NotDef",
+                             Source=c("NotDef"),
+                             stringsAsFactors=FALSE)
+     row.names(pedStudy) <- pedStudy$Name.ID
 
-## Close GDS file (IMPORTANT)
-closefn.gds(fileGDS)
+pRAIDS <- RAIDSparam(studyDF=studyDF,
+                      pedStudy=pedStudy,
+                      pathProfileGDS=pathProfileGDS,
+                      fileReferenceGDS=fileReferenceGDS,
+                      fieldPopInfAnc="SuperPop")
 
-## Remove temporary VCF file
-unlink(vcfFile, force=TRUE)
+
+writeBimPruned(file.path(pathOut, "test.bim"), pRAIDS)
+
+dir(file.path(pathOut))
+
+unlink(file.path(pathOut, "test.bim"))
+unlink(file.path(pathOut), recursive=TRUE)
+
 
 }
 \author{

@@ -42,6 +42,7 @@ as an extra column to the final 'data.frame'. In that situation, the
 }
 \examples{
 
+
 ## Load the known ancestry for the demo 1KG reference profiles
 data(demoKnownSuperPop1KG)
 
@@ -82,4 +83,3 @@ head(pedSyn)
 \author{
 Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 }
-\keyword{@export}

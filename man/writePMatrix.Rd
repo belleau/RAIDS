@@ -26,7 +26,7 @@ This function write with P-matrix
 }
 \examples{
 
-## TODO
+## see computePmatrix
 
 }
 \author{

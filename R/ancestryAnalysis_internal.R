@@ -537,19 +537,20 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
 #'
 #' @examples
 #'
-#'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
-#' ## The Reference GDS file
-#' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
+#' pathOut <- file.path(tempdir(), "out.tmp")
+#' if(!dir.exists(pathOut)){
+#'     dir.create(pathOut)
+#' }
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -563,15 +564,24 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop")
-#' 
-#' ### TODO call
-#' ### 
+#'
+#' matPIndex <- RAIDS:::computePmatrix(pathOut=pathOut, pRAIDS=pRAIDS)
+#'
+#' dir(file.path(pathOut,"matP"))
+#'
+#' o <- lapply(dir(file.path(pathOut,"matP")),
+#'    FUN=function(x,pathC){unlink(file.path(pathC,x))}, 
+#'    pathC = file.path(pathOut,"matP"))
+#'
+#' unlink(file.path(pathOut,"matP"), recursive=TRUE)
+#' unlink(file.path(pathOut), recursive=TRUE)
+#'
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
@@ -581,18 +591,18 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
 #' @keywords internal
 computePmatrix <- function(pathOut, pRAIDS) {
     
-    fileGDSProfile <- file.path(pRAIDS$pathProfileGDS,
-                            paste0(pRAIDS$pedStudy$Name.ID[1], ".gds"))
+    fileGDSProfile <- file.path(pathProfileGDS(pRAIDS),
+                            paste0(pedStudy(pRAIDS)$Name.ID[1], ".gds"))
     
     
     gdsProfile <- snpgdsOpen(fileGDSProfile)
     pruned <- read.gdsn(index.gdsn(gdsProfile, "pruned.study"))
     snpgdsClose(gdsProfile)
     
-    gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(fileReferenceGDS(pRAIDS))
     
     admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))
-    pos <- admixDesc[admixDesc$id == pRAIDS$anchorId, "id.seq"]
+    pos <- admixDesc[admixDesc$id == anchorId(pRAIDS), "id.seq"]
 
     anchor <- read.gdsn(index.gdsn(gdsReference, "anchor.ref"),
                         start=c(1, pos), count=c(-1,1))
@@ -613,6 +623,7 @@ computePmatrix <- function(pathOut, pRAIDS) {
     return(matPIndex)
 }
 
+
 #' @title Generate the Plink files (BED, BIM, and FAM)
 #' 
 #' @description TODO
@@ -632,19 +643,20 @@ computePmatrix <- function(pathOut, pRAIDS) {
 #'
 #' @examples
 #'
-#'
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
-#' ## The Reference GDS file
-#' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
+#' pathOut <- file.path(tempdir(), "out.tmp")
+#' if(!dir.exists(pathOut)){
+#'     dir.create(pathOut)
+#' }
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
@@ -658,15 +670,24 @@ computePmatrix <- function(pathOut, pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
-#' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#'
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop")
+#'
+#' RAIDS:::generateProfilePlinkFiles(pathOut, pRAIDS) 
+#'
+#' dir(file.path(pathOut,"profileAdmixture"))
+#'
+#' o <- lapply(dir(file.path(pathOut,"profileAdmixture")),
+#'     FUN=function(x,pathC){unlink(file.path(pathC,x))}, 
+#'     pathC = file.path(pathOut,"profileAdmixture"))
+#'
+#' unlink(file.path(pathOut, "profileAdmixture"), recursive = TRUE)
+#' unlink(file.path(pathOut), recursive = TRUE)
 #' 
-#' ### TODO call
-#' ### 
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
@@ -684,23 +705,23 @@ generateProfilePlinkFiles <- function(pathOut, pRAIDS) {
     }
 
     
-    gdsReference <- snpgdsOpen(pRAIDS$fileReferenceGDS)
+    gdsReference <- snpgdsOpen(fileReferenceGDS(pRAIDS))
     
     admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))
-    pos <- admixDesc[admixDesc$id == pRAIDS$anchorId, "id.seq"]
+    pos <- admixDesc[admixDesc$id == anchorId(pRAIDS), "id.seq"]
     popSelected <- read.gdsn(index.gdsn(gdsReference, "admixture.ag"))
     popSelected <- popSelected[popSelected$id.seq == pos,]
     
     snpgdsClose(gdsReference)
 
 
-    file.copy(file.path(pathBaseMatP, paste0( pRAIDS$pedStudy$Name.ID[1], ".P.in")),
+    file.copy(file.path(pathBaseMatP, paste0( pedStudy(pRAIDS)$Name.ID[1], ".P.in")),
           file.path(pathOutP,
-                    paste0(pRAIDS$pedStudy$Name.ID[1], ".", nrow(popSelected), ".P.in")))
+                    paste0(pedStudy(pRAIDS)$Name.ID[1], ".", nrow(popSelected), ".P.in")))
 
-    writeBimPruned(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bim")),pRAIDS=pRAIDS)
-    writeBedProfile(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".bed")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
-    writeFamProfile(fileOut=file.path(pathOutP, paste0(pRAIDS$pedStudy$Name.ID[1], ".fam")), listProfile=pRAIDS$pedStudy$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
+    writeBimPruned(fileOut=file.path(pathOutP, paste0(pedStudy(pRAIDS)$Name.ID[1], ".bim")),pRAIDS=pRAIDS)
+    writeBedProfile(fileOut=file.path(pathOutP, paste0(pedStudy(pRAIDS)$Name.ID[1], ".bed")), listProfile=pedStudy(pRAIDS)$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
+    writeFamProfile(fileOut=file.path(pathOutP, paste0(pedStudy(pRAIDS)$Name.ID[1], ".fam")), listProfile=pedStudy(pRAIDS)$Name.ID[1], profileOnly = TRUE, pRAIDS=pRAIDS)
     
     return(0L)
 }

@@ -28,15 +28,17 @@ TODO
 }
 \examples{
 
-
+\dontrun{
 ## Load the known ancestry for the demo 1KG reference profiles
 data(demoKnownSuperPop1KG)
 
-## The Reference GDS file
-path1KG <- system.file("extdata/tests", package="RAIDS")
-
 ## Path to the demo Profile GDS file is located in this package
 dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
+
+pathOut <- file.path(tempdir(), "out.tmp")
+if(!dir.exists(pathOut)){
+    dir.create(pathOut)
+}
 
 # The name of the synthetic study
 studyID <- "MYDATA"
@@ -54,16 +56,23 @@ pedStudy <- data.frame(Name.ID=c("ex1"),
                              Source=c("NotDef"),
                              stringsAsFactors=FALSE)
      row.names(pedStudy) <- pedStudy$Name.ID
-
-pRAIDS <- paramRAIDS(studyDF=studyDF,
+## Path to admixture
+## pathADMIXTURE <- "PATH/admixture"
+pRAIDS <- RAIDSparam(studyDF=studyDF,
                       pedStudy=pedStudy,
                       pathProfileGDS=pathProfileGDS,
                       fileReferenceGDS=fileReferenceGDS,
-                      fieldPopInfAnc="SuperPop")
+                      fieldPopInfAnc="SuperPop",
+                      pathADMIXTURE=pathADMIXTURE)
+matPIndex <- RAIDS:::computePmatrix(pathOut=pathOut, pRAIDS=pRAIDS)
+RAIDS:::generateProfilePlinkFiles(pathOut, pRAIDS)
 
-### TODO call
-### 
+syntheticQ <- runSynADMIXTURE(pathOut=pathOut, matPIndex=matPIndex, pRAIDS=pRAIDS)
 
+dir(file.path(pathOut))
+head(syntheticQ)
+unlink(file.path(pathOut), recursive = TRUE)
+}
 
 }
 \author{

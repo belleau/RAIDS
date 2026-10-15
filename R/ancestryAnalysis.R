@@ -1262,7 +1262,8 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #'
 #'
 #' @examples
-#'
+#' 
+#' 
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
 #'
@@ -1303,7 +1304,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
-#' @keywords @export
+#' @export
 prepPedSyntheticRef <- function(pRAIDS) {
     
     studyID <- studyDFSyn(pRAIDS)$study.id
@@ -1371,25 +1372,28 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #'
 #'
 #' @examples
-#'
-#'
+#' 
+#' \dontrun{
 #' ## Load the known ancestry for the demo 1KG reference profiles
 #' data(demoKnownSuperPop1KG)
-#' 
-#' ## The Reference GDS file
-#' path1KG <- system.file("extdata/tests", package="RAIDS")
 #'
 #' ## Path to the demo Profile GDS file is located in this package
 #' dataDir <- system.file("extdata/demoAncestryCall", package="RAIDS")
-#' 
+#'
+#' pathOut <- file.path(tempdir(), "out.tmp")
+#' if(!dir.exists(pathOut)){
+#'     dir.create(pathOut)
+#' }
+#'
 #' # The name of the synthetic study
 #' studyID <- "MYDATA"
-#' 
+#'
 #' studyDF <- data.frame(study.id=studyID,
 #'                              study.desc=studyID,
 #'                              study.platform="NotDef",
 #'                              stringsAsFactors=FALSE)
-#' pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+#' pathProfileGDS <- file.path(pathOut) # , "ex1.gds"
+#' file.copy(file.path(dataDir, "ex1.gds"), file.path(pathOut))
 #' fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
 #' pedStudy <- data.frame(Name.ID=c("ex1"),
 #'                              Case.ID=c("ex1"),
@@ -1398,27 +1402,35 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #'                              Source=c("NotDef"),
 #'                              stringsAsFactors=FALSE)
 #'      row.names(pedStudy) <- pedStudy$Name.ID
+#' ## Path to admixture
+#' ## pathADMIXTURE <- "PATH/admixture"
 #' 
-#' pRAIDS <- paramRAIDS(studyDF=studyDF,
+#' pRAIDS <- RAIDSparam(studyDF=studyDF,
 #'                       pedStudy=pedStudy,
 #'                       pathProfileGDS=pathProfileGDS,
 #'                       fileReferenceGDS=fileReferenceGDS,
-#'                       fieldPopInfAnc="SuperPop")
+#'                       fieldPopInfAnc="SuperPop",
+#'                       pathADMIXTURE=pathADMIXTURE)
+#' res <- computeAdmixtureProportion(pRAIDS=pRAIDS)
 #' 
-#' ### TODO call
-#' ### 
-#'
-#'
+#' 
+#' 
+#' dir(file.path(pathProfileGDS))
+#' head(res$profileQ)
+#' head(res$syntheticQ)
+#' 
+#' unlink(file.path(pathOut), recursive = TRUE)#'
+#' }
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
 #' @importFrom gdsfmt index.gdsn read.gdsn closefn.gds
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
-#' @keywords @export
+#' @export
 computeAdmixtureProportion <- function(pRAIDS) {
-    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pRAIDS$pathProfileGDS,
-                                    profile=pRAIDS$pedStudy$Name.ID[1])
+    fileProfileGDS <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
+                                    profile=pedStudy(pRAIDS)$Name.ID[1])
     
-    pathOut <- file.path(pRAIDS$pathProfileGDS, paste0("tmp.", pRAIDS$pedStudy$Name.ID[1]))
+    pathOut <- file.path(pathProfileGDS(pRAIDS), paste0("tmp.", pedStudy(pRAIDS)$Name.ID[1]))
     if(! dir.exists(pathOut)){
         dir.create(pathOut)
     }
@@ -1426,8 +1438,8 @@ computeAdmixtureProportion <- function(pRAIDS) {
 
     generateProfilePlinkFiles(pathOut=pathOut, pRAIDS=pRAIDS)
     profileQ <- runADMIXTURE(pathOut = file.path(pathOut, "profileAdmixture"),
-            fileBed = paste0(pRAIDS$pedStudy$Name.ID[1], ".bed"),
-            seedAdmix=pRAIDS$seedADMIXTURE, pRAIDS)
+            fileBed = paste0(pedStudy(pRAIDS)$Name.ID[1], ".bed"),
+            seedAdmix=seedADMIXTURE(pRAIDS), pRAIDS)
     
     syntheticQ <- runSynADMIXTURE(pathOut=pathOut, matPIndex=matPIndex, pRAIDS=pRAIDS)
     return(list(profileQ=profileQ, syntheticQ=syntheticQ))

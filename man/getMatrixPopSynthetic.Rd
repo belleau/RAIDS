@@ -24,31 +24,32 @@ a VCF file.
 }
 \examples{
 
-## Required library
-library(gdsfmt)
+dataDir <- system.file("extdata/demoKNNSynthetic", package="RAIDS")
 
-## TODO example
+# The name of the synthetic study
+studyID <- "MYDATA"
 
-## Path to the demo pedigree file is located in this package
-## <- system.file("extdata", package="RAIDS")
+studyDF <- data.frame(study.id=studyID,
+                      study.desc=studyID,
+                      study.platform="NotDef",
+                      stringsAsFactors=FALSE)
+pathProfileGDS <- file.path(dataDir) # , "ex1.gds"
+fileReferenceGDS <- system.file("extdata/tests/ex1_good_small_1KG.gds", package="RAIDS")
+pedStudy <- data.frame(Name.ID=c("ex1"),
+                       Case.ID=c("ex1"),
+                       Sample.Type=c("type"),
+                       Diagnosis="NotDef",
+                       Source=c("NotDef"),
+                       stringsAsFactors=FALSE)
+row.names(pedStudy) <- pedStudy$Name.ID
 
-## Demo 1KG Reference GDS file
-##fileGDS <- openfn.gds(file.path(dataDir,
-##                    "PopulationReferenceDemo.gds"))
+pRAIDS <- RAIDSparam(studyDF=studyDF,
+                     pedStudy=pedStudy,
+                     pathProfileGDS=pathProfileGDS,
+                     fileReferenceGDS=fileReferenceGDS)
+matGr <- getMatrixPopSynthetic(pRAIDS)
+dim(matGr)
 
-## Output VCF file that will be created (temporary)
-##vcfFile <- file.path(tempdir(), "Demo_TMP_01.vcf")
-
-## Create a VCF file with the SNV dataset present in the GDS file
-## No cutoff on frequency, so all SNVs are saved
-##snvListVCF(gdsReference=fileGDS, fileOut=vcfFile, offset=0L,
-##                    freqCutoff=NULL)
-
-## Close GDS file (IMPORTANT)
-##closefn.gds(fileGDS)
-
-## Remove temporary VCF file
-##unlink(vcfFile, force=TRUE)
 
 }
 \author{
