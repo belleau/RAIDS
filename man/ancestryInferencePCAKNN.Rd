@@ -6,10 +6,10 @@
 \title{Run most steps leading to the ancestry inference call based on PCA
 and KNN on a specific profile}
 \usage{
-ancestryInferencePCAKNN(pRAIDS = paramRAIDS())
+ancestryInferencePCAKNN(pRAIDS = RAIDSparam())
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{
@@ -145,7 +145,7 @@ number of neighbors) used to infer the ancestry.}
 ancestry.}
 }
 }
-\item{\code{pRAIDS}}{ a \code{list} of class \code{parametersRAIDS} a list of
+\item{\code{pRAIDS}}{ a \code{list} of class \code{RAIDSparam} a list of
 the parameters.}
 }
 }

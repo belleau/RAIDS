@@ -1260,6 +1260,9 @@ getMatrixPopSynthetic <- function(pRAIDS) {
 #' @export
 runADMIXTURE <- function( pathOut, fileBed, seedAdmix=3435L, pRAIDS) {
     
+    if(is.null(pathADMIXTURE(pRAIDS)) || ! file.exists(pathADMIXTURE(pRAIDS))){
+        stop("Fatal, you need to defined pathADMIXTURE in RAIDSparam to use ADMIXTURE")
+    }
     gdsReference <- snpgdsOpen(fileReferenceGDS(pRAIDS))
     
     admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))

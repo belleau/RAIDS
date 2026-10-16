@@ -360,6 +360,7 @@ importFrom(pROC,
   multiclass.roc,
   roc
 )
+importFrom(philentropy,JSD)
 importFrom(rlang,
   .data,
   arg_match

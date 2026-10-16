@@ -726,3 +726,59 @@ generateProfilePlinkFiles <- function(pathOut, pRAIDS) {
     return(0L)
 }
 
+#' @title Compute JSD from the synthetic dataframe
+#' 
+#' @description TODO
+#'
+#' 
+#' @param syntheticQ a \code{data.frame} an object with all the RAIDS
+#' parameters
+#'
+#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' parameters
+#' 
+#' @return \code{data.frame} with three more column for JSD.
+#'
+#'
+#' @details TODO
+#'
+#'
+#' @examples
+#'
+#' ## See computeAdmixtureProportion in ancestryAnalysis.R
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
+#' @importFrom philentropy JSD
+#' @encoding UTF-8
+#' @keywords internal
+syntheticJSD <- function(syntheticQ, pRAIDS) {
+    gdsReference <- snpgdsOpen(fileReferenceGDS(pRAIDS))
+    
+    admixDesc <- read.gdsn(index.gdsn(gdsReference, "admixture.desc"))
+    pos <- admixDesc[admixDesc$id == anchorId(pRAIDS), "id.seq"]
+    popSelected <- read.gdsn(index.gdsn(gdsReference, "admixture.ag"))
+    popSelected <- popSelected[popSelected$id.seq == pos,]
+    
+    snpgdsClose(gdsReference)
+    
+    matR <- rbind(as.matrix(syntheticQ[,popSelected$ag]),
+                                            as.matrix(syntheticQ[,paste0(popSelected$ag, ".p")]))
+    
+    jsd.m <- JSD(as.matrix(matR))
+    syntheticQ$JSDSynVsPos <- diag(jsd.m[1:nrow(syntheticQ), (nrow(syntheticQ) + 1):ncol(jsd.m)])
+    matR <- rbind(as.matrix(syntheticQ[,paste0(popSelected$ag, ".p")]),
+                                            as.matrix(syntheticQ[,paste0(popSelected$ag, ".gs")]))
+    
+    jsd.m <- JSD(as.matrix(matR))
+    syntheticQ$JSDPosVsGs <- diag(jsd.m[1:nrow(syntheticQ), (nrow(syntheticQ) + 1):ncol(jsd.m)])
+    matR <- rbind(as.matrix(syntheticQ[,popSelected$ag]),
+                                            as.matrix(syntheticQ[,paste0(popSelected$ag, ".gs")]))
+    
+    jsd.m <- JSD(as.matrix(matR))
+    syntheticQ$JSDSynVsGs <- diag(jsd.m[1:nrow(syntheticQ), (nrow(syntheticQ) + 1):ncol(jsd.m)])
+    return(syntheticQ)
+}
+

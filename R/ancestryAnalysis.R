@@ -178,7 +178,7 @@ pruningProfile2 <- function(pRAIDS) {
 #' Profile GDS file for the specific profile using the information from a
 #' RDS Sample description file and the Population Reference GDS file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 4 entries:
@@ -313,7 +313,7 @@ pruningProfile2 <- function(pRAIDS) {
 #' ancestry.}
 #' }
 #' }
-#' \item{\code{pRAIDS}}{ a \code{list} of class \code{parametersRAIDS} a list of 
+#' \item{\code{pRAIDS}}{ a \code{list} of class \code{RAIDSparam} a list of 
 #' the parameters.} 
 #' }
 #'
@@ -403,7 +403,7 @@ pruningProfile2 <- function(pRAIDS) {
 #' @importFrom rlang arg_match
 #' @encoding UTF-8
 #' @export
-ancestryInferencePCAKNN <- function(pRAIDS=paramRAIDS()) {
+ancestryInferencePCAKNN <- function(pRAIDS=RAIDSparam()) {
 
     pRAIDS <- profileGenoSynthesis(pRAIDS=pRAIDS)
     
@@ -1427,6 +1427,10 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #' @encoding UTF-8
 #' @export
 computeAdmixtureProportion <- function(pRAIDS) {
+    if(is.null(pathADMIXTURE(pRAIDS)) || ! file.exists(pathADMIXTURE(pRAIDS))){
+        stop("Fatal, you need to defined pathADMIXTURE in RAIDSparam to use ADMIXTURE")
+    }
+
     fileProfileGDS <-  validateProfileGDSExist(pathProfile=pathProfileGDS(pRAIDS),
                                     profile=pedStudy(pRAIDS)$Name.ID[1])
     
@@ -1442,6 +1446,7 @@ computeAdmixtureProportion <- function(pRAIDS) {
             seedAdmix=seedADMIXTURE(pRAIDS), pRAIDS)
     
     syntheticQ <- runSynADMIXTURE(pathOut=pathOut, matPIndex=matPIndex, pRAIDS=pRAIDS)
+    syntheticQ <- syntheticJSD(syntheticQ=syntheticQ, pRAIDS=pRAIDS)
     return(list(profileQ=profileQ, syntheticQ=syntheticQ))
 }
 

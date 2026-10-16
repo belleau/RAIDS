@@ -32,7 +32,8 @@ Depends: R (>= 4.2.0),
     dplyr,
     Rsamtools,
     BiocParallel,
-    genio
+    genio,
+    philentropy
 Imports: S4Vectors,
     GenomicRanges,
     ensembldb,
