@@ -25,7 +25,7 @@ TODO
 }
 \examples{
 
-## See computeAdmixtureProportion in ancestryAnalysis.R
+## See computeAdmixtureProportions in ancestryAnalysis.R
 
 
 }

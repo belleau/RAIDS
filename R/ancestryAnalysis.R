@@ -1415,7 +1415,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #'                       fileReferenceGDS=fileReferenceGDS,
 #'                       fieldPopInfAnc="SuperPop",
 #'                       pathADMIXTURE=pathADMIXTURE)
-#' res <- computeAdmixtureProportion(pRAIDS=pRAIDS)
+#' res <- computeAdmixtureProportions(pRAIDS=pRAIDS)
 #' 
 #' 
 #' 
@@ -1430,7 +1430,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #' @importFrom SNPRelate snpgdsOpen
 #' @encoding UTF-8
 #' @export
-computeAdmixtureProportion <- function(pRAIDS) {
+computeAdmixtureProportions <- function(pRAIDS) {
     if(is.null(pathADMIXTURE(pRAIDS)) || ! file.exists(pathADMIXTURE(pRAIDS))){
         stop("Fatal, you need to defined pathADMIXTURE in RAIDSparam to use ADMIXTURE")
     }

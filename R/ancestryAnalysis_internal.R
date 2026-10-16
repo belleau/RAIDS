@@ -745,7 +745,7 @@ generateProfilePlinkFiles <- function(pathOut, pRAIDS) {
 #'
 #' @examples
 #'
-#' ## See computeAdmixtureProportion in ancestryAnalysis.R
+#' ## See computeAdmixtureProportions in ancestryAnalysis.R
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
