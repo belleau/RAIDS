@@ -25,7 +25,7 @@ row corresponds to the number of samples for each subcontinental population.}
 \item{matQGS}{a \code{matrix} containing contening the admixture gold standard
 from the gdsReference}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

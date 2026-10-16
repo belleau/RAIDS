@@ -20,7 +20,7 @@ the file name of the new bim file.}
 \item{listProfile}{a \code{vector} of \code{character} representing the list
 of profiles from gdsProfile to keep.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters.}
 }
 \value{

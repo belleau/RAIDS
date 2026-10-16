@@ -12,7 +12,7 @@ getMatrixDataId(matGr, pRAIDS)
 each column is the name of a subcontinental population. The number of
 row corresponds to the number of samples for each subcontinental population.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

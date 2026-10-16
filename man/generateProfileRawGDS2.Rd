@@ -9,11 +9,11 @@ Profile GDS File}
 generateProfileRawGDS2(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{
-The function returns a \code{parametersRAIDS} an object with all the RAIDS
+The function returns a \code{RAIDSparam} an object with all the RAIDS
 parameters updated.
 }
 \description{

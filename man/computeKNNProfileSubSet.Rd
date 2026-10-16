@@ -29,7 +29,7 @@ for a subset of the reference profiles. The 1KG profile
 identifiers are used as names for the \code{vector}. It must
 be indexed by the sample.id.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

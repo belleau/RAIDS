@@ -18,7 +18,7 @@ PCA analysis.}
 \item{subset}{a \code{logical} extract the profiles from the reference in
 listRM (TRUE) or extract from the reference not in listRM (FALSE).}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

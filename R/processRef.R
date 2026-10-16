@@ -108,7 +108,7 @@ generateGDSRefSampleV2 <- function(gdsReference, dfPedReference,
 #' the reference profiles is returned. The values
 #' represent the known ancestry assignation.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{vector} of \code{character} strings representing the content

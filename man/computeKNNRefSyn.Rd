@@ -14,7 +14,7 @@ computeKNNRefSyn(listEigenvector, pRAIDS)
 the PCA done on the 1KG reference profiles and the synthetic profiles
 projected onto it.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

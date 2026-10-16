@@ -9,7 +9,7 @@ reference profile combination and add them to the Profile GDS file}
 syntheticGeno2(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

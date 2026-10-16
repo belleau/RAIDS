@@ -8,7 +8,7 @@
 getMatrixPopSynthetic(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} object with all the RAIDS
 parameters}
 }
 \value{

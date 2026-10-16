@@ -19,7 +19,7 @@ If \code{NULL}, all SNPs are retained. Default: \code{NULL}.}
 \item{fileOut}{a \code{character} string representing the path and
 the file name of the new VCF.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

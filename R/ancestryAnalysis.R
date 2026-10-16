@@ -10,10 +10,10 @@
 #' SNVs that are passed to the \code{\link[SNPRelate]{snpgdsLDpruning}}()
 #' function can be specified by the user.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
-#' @return The function returns a \code{parametersRAIDS} an object with all the RAIDS
+#' @return The function returns a \code{RAIDSparam} an object with all the RAIDS
 #' parameters updated.
 #'
 #' @examples
@@ -478,7 +478,7 @@ ancestryInferencePCAKNN <- function(pRAIDS=RAIDSparam()) {
 #' Profile GDS file for the specific profile using the information from a
 #' RDS Sample description file and the Population Reference GDS file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{OL} when the function is successful.
@@ -658,7 +658,7 @@ profileGenoSynthesis <- function(pRAIDS) {
 #' the PCA done on the 1KG reference profiles and the synthetic profiles
 #' projected onto it.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 4 entries:
@@ -820,7 +820,7 @@ computeKNNRefSyn <- function(listEigenvector, pRAIDS) {
 #' known super population ancestry for the 1KG profiles. The 1KG profile
 #' identifiers are used as names for the \code{vector}.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object containing all RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object containing all RAIDS
 #' parameters.
 #'
 #' @return a \code{list} containing the following entries:
@@ -989,7 +989,7 @@ computePoolSyntheticAncestryGr2 <- function(sampleRM, spRef,
 #' representing the list of possible ancestry assignations. Default:
 #' \code{("EAS", "EUR", "AFR", "AMR", "SAS")}.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 4 entries:
@@ -1245,7 +1245,7 @@ computeAncestryFromSynthetic2 <- function(syntheticKNN,
 #' generate each synthetic profile would be added
 #' as an extra column to the final 'data.frame'.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{data.frame} containing the columns extracted from the
@@ -1356,7 +1356,7 @@ prepPedSyntheticRef <- function(pRAIDS) {
 #'
 #' @description TODO
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 2 entries:

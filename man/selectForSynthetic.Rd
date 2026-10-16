@@ -10,7 +10,7 @@ subcontinental population present in the refrence GDS file.
 selectForSynthetic(pRAIDS, nbProfiles = 30L)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 
 \item{nbProfiles}{a single positive \code{integer} representing the number

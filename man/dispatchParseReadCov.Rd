@@ -8,7 +8,7 @@
 dispatchParseReadCov(pRAIDS)
 }
 \arguments{
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{
@@ -31,7 +31,7 @@ alternative nucleotide}
 \item{count}{ a \code{numeric} representing the total count}
 }}
 \item{pRAIDS}{
-a \code{parametersRAIDS} an object with all the RAIDS
+a \code{RAIDSparam} an object with all the RAIDS
 parameters
 }
 }

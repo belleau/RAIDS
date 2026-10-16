@@ -12,7 +12,7 @@ generateProfilePlinkFiles(pathOut, pRAIDS)
 where the directory profileAdmixture is create and where
 the file (BED, BIM, and FAM) aree creted.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

@@ -22,7 +22,7 @@ identifiers are used as names for the \code{vector}.}
 known super population ancestry for the 1KG profiles. The 1KG profile
 identifiers are used as names for the \code{vector}.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object containing all RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object containing all RAIDS
 parameters.}
 }
 \value{

@@ -14,7 +14,7 @@ will be processed}
 
 \item{matPIndex}{a \code{array} of the frequency matrix.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

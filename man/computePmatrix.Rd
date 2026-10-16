@@ -10,7 +10,7 @@ computePmatrix(pathOut, pRAIDS)
 \arguments{
 \item{pathOut}{temporary path where the directory matP use to generate the P-matrix}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

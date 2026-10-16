@@ -929,7 +929,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 #' containing the information about the read counts for the SNVs present in
 #' the file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} 
@@ -951,7 +951,7 @@ processBlockChr <- function(fileReferenceGDS, fileBlock) {
 #' \item{count}{ a \code{numeric} representing the total count}
 #' }}
 #' \item{pRAIDS}{
-#' a \code{parametersRAIDS} an object with all the RAIDS
+#' a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #' }
 #' }
@@ -1045,7 +1045,7 @@ dispatchParseReadCov <- function(pRAIDS){
 #' 
 #' @param matPIndex a \code{array} of the frequency matrix.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{0L} when successful.
@@ -1136,7 +1136,7 @@ prepSynADMIXTURE <- function(pathOut, gr, matGr, matPIndex, pRAIDS){
 #' @param matQGS a \code{matrix} containing contening the admixture gold standard
 #' from the gdsReference
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{0L} when successful.
@@ -1202,7 +1202,7 @@ runGrSynADMIXTURE <- function(pathOut, gr, matGr, matPIndex, matQGS, pRAIDS) {
 #' @param subset a \code{logical} extract the profiles from the reference in
 #' listRM (TRUE) or extract from the reference not in listRM (FALSE).
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{0L} when successful.
@@ -1263,7 +1263,7 @@ writeFamRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
 #' @param subset a \code{logical} extract the genotypes from the reference in
 #' listRM (TRUE) or extract from the reference not in listRM (FALSE).
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{0L} when successful.
@@ -1318,7 +1318,7 @@ writeBedRef <- function(fileOut, listRM=NULL, subset=FALSE, pRAIDS){
 #' each column is the name of a subcontinental population. The number of
 #' row corresponds to the number of samples for each subcontinental population.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{matrix} containing the data.id for synthetic data and where
@@ -1380,7 +1380,7 @@ getMatrixDataId <- function(matGr, pRAIDS){
 #' @param listProfile a \code{vector} of \code{character} representing the list
 #' of profiles from gdsProfile to keep.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters.
 #'
 #' @return The integer \code{0L} when successful.

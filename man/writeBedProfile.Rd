@@ -24,7 +24,7 @@ of profile from gdsProfile to keep}
 
 \item{profileOnly}{a \code{boolean} TODO. Default: \code{FALSE}.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

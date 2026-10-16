@@ -426,7 +426,7 @@ groupChr1KGSNV <- function(pathGenoChr, pathOut) {
 #' @param fileOut a \code{character} string representing the path and
 #' the file name of the new VCF.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{0L} when successful.
@@ -563,7 +563,7 @@ generateVCF <- function(freqCutoff=NULL, chr=NULL , fileOut, pRAIDS) {
 #' @param fileOut a \code{character} string representing the path and
 #' the file name of the new bim file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{0L} when successful.
@@ -655,7 +655,7 @@ writeBimPruned <- function(fileOut, pRAIDS){
 #' 
 #' @param profileOnly a \code{boolean} TODO. Default: \code{FALSE}.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return The integer \code{0L} when successful.
@@ -771,7 +771,7 @@ writeBedProfile <- function(fileOut, listProfile, listRM=NULL,
 #' 
 #' @param profileOnly a \code{integer} TODO. Default: \code{FALSE}.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters.
 #'
 #' @return The integer \code{0L} when successful.
@@ -881,7 +881,7 @@ writeFamProfile <- function(fileOut, listProfile, listRM=NULL,
 #' each column is the name of a subcontinental population. The number of
 #' row corresponds to the number of samples for each subcontinental population.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters.
 #'
 #' @return a \code{list} containing one entry per ancestral group:
@@ -1030,7 +1030,7 @@ prepPMatrix <- function( anchor,
 #' population and and for a subset if intersect quasi-no admix subset
 #' intersect the synthetic
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters.
 #'
 #' @return a \code{array} of the frequency matrix.
@@ -1097,7 +1097,7 @@ writePMatrix <- function( pathOut,rowF, pRAIDS) {
 #' from a GDS SNP information file and save the retained SNP information into
 #' a VCF file.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{matrix} containing the sample identifiers and where
@@ -1191,7 +1191,7 @@ getMatrixPopSynthetic <- function(pRAIDS) {
 #' pass to ADMIXTURE.
 #' Default: \code{3435L}.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{0L} when successful.
@@ -1311,7 +1311,7 @@ runADMIXTURE <- function( pathOut, fileBed, seedAdmix=3435L, pRAIDS) {
 #' 
 #' @param matPIndex a \code{array} of the frequency matrix.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{0L} when successful.

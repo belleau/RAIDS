@@ -14,7 +14,7 @@ with the 1KG reference profiles.}
 \item{profileId}{a \code{character} string representing the profile
 identifier.}
 
-\item{pRAIDS}{a \code{parametersRAIDS} an object with all the RAIDS
+\item{pRAIDS}{a \code{RAIDSparam} an object with all the RAIDS
 parameters}
 }
 \value{

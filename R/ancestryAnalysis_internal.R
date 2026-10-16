@@ -7,10 +7,10 @@
 #' Profile GDS file is created per profile. One Profile GDS file will be
 #' created for each entry present in the \code{listProfiles} parameter.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
-#' @return The function returns a \code{parametersRAIDS} an object with all the RAIDS
+#' @return The function returns a \code{RAIDSparam} an object with all the RAIDS
 #' parameters updated.
 #'
 #' @examples
@@ -154,7 +154,7 @@ createProfile2 <- function(pRAIDS) {
 #' identifiers for the reference samples that need to be removed for the
 #' PCA analysis.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 2 entries:
@@ -267,7 +267,7 @@ computePCARefRMMulti2 <- function(listRM, pRAIDS) {
 #' @param profileId a \code{character} string representing the profile
 #' identifier.
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 2 entries:
@@ -379,7 +379,7 @@ computePCAProfile <- function(listPCA, profileId, pRAIDS) {
 #' identifiers are used as names for the \code{vector}. It must
 #' be indexed by the sample.id.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return a \code{list} containing 4 entries:
@@ -525,7 +525,7 @@ computeKNNProfileSubSet <- function(listEigenvector, K, D, dfRef, pRAIDS) {
 #'
 #' @param pathOut temporary path where the directory matP use to generate the P-matrix
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{vector} with the info of the index associated the synthetic
@@ -632,7 +632,7 @@ computePmatrix <- function(pathOut, pRAIDS) {
 #' where the directory profileAdmixture is create and where
 #' the file (BED, BIM, and FAM) aree creted.
 #' 
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #'
 #' @return \code{0L} when successful.
@@ -734,7 +734,7 @@ generateProfilePlinkFiles <- function(pathOut, pRAIDS) {
 #' @param syntheticQ a \code{data.frame} an object with all the RAIDS
 #' parameters
 #'
-#' @param pRAIDS a \code{parametersRAIDS} an object with all the RAIDS
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
 #' parameters
 #' 
 #' @return \code{data.frame} with three more column for JSD.
