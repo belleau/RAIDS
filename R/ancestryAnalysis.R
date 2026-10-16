@@ -430,6 +430,9 @@ ancestryInferencePCAKNN <- function(pRAIDS=RAIDSparam()) {
                          synthKNN <- computePoolSyntheticAncestryGr2(sampleRM=sampleRM[x,],
                                                                      spRef=spRef,
                                                                      pRAIDS = pRAIDS)
+                         # If modify to keep the order in parallel                                            
+                         # synthKNN$matKNN$pos <- rep(x, nrow(synthKNN$matKNN))
+                         # synthKNN$matKNN$spos <- seq_len(nrow(synthKNN$matKNN)) 
                          return(synthKNN$matKNN)
                      }, sampleRM=sampleRM, pRAIDS=pRAIDS,
                      spRef=spRef)
@@ -438,8 +441,9 @@ ancestryInferencePCAKNN <- function(pRAIDS=RAIDSparam()) {
         message("SyntheticAncestry end ", Sys.time())
     }
     resSyn <- do.call(rbind, resSyn)
-
-    
+    # If modify to keep the order in parallel
+    # resSyn <- resSyn[order(resSyn$pos, resSyn$spos),]
+    # resSyn <- resSyn[,-1 * which(colnames(resSyn) %in% c("pos", "spos"))]
     pedSyn <- prepPedSyntheticRef(pRAIDS)
     
     resCall <- computeAncestryFromSynthetic2(syntheticKNN=resSyn,
