@@ -265,6 +265,9 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot seedADMIXTURE a single \code{integer} seed for
 #' ADMIXTURE program. Default: \code{432L}.  
 #' 
+#' @slot cleanADMIXTUREFiles a single \code{logical} indicating if RAIDS
+#' removes ADMIXTURE files after processing. Default: \code{TRUE}.  
+#' 
 #' @slot verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}.
 #' 
@@ -348,6 +351,7 @@ setClass("RAIDSparam",
     anchorId="character",
     pathADMIXTURE="CharacterOrNULL",
     seedADMIXTURE="integer",
+    cleanADMIXTUREFiles="logical",
     verbose="logical"
   ),
   prototype = list(
@@ -411,6 +415,7 @@ setClass("RAIDSparam",
     anchorId="sp0.95v0.2",
     pathADMIXTURE=NULL,
     seedADMIXTURE=432L,
+    cleanADMIXTUREFiles=TRUE,
     verbose=FALSE
   )
 )
@@ -755,6 +760,11 @@ setValidity("RAIDSparam",
         ## Validate the seedADMIXTURE parameter 
         if (length(object@seedADMIXTURE) != 1) {
           return("'seedADMIXTURE' slot must have one integer value.")
+        }
+        
+        ## Validate the cleanADMIXTUREFiles parameter
+        if (length(object@cleanADMIXTUREFiles) != 1) {
+          return("'cleanADMIXTUREFiles' slot must have one logical value.")
         }
       
         ## Validate the verbose parameter
@@ -3332,6 +3342,58 @@ setGeneric("seedADMIXTURE", function(x) standardGeneric("seedADMIXTURE"))
 #' @export
 setMethod("seedADMIXTURE", "RAIDSparam", function(x) {
   return(x@seedADMIXTURE)
+})
+
+#' Generic function for getting the cleanADMIXTUREFiles slot in a class
+#' 
+#' @description A generic function for getting the cleanADMIXTUREFiles slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the cleanADMIXTUREFiles slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(cleanADMIXTUREFiles="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", cleanADMIXTUREFiles="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # cleanADMIXTUREFiles(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("cleanADMIXTUREFiles", function(x) standardGeneric("cleanADMIXTUREFiles"))
+
+
+#' A getter for the cleanADMIXTUREFiles slot in a RAIDSparam class
+#' 
+#' @description A function for getting the cleanADMIXTUREFiles slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{logical} indicating if message information should be 
+#' printed. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the cleanADMIXTUREFiles slot for the object
+#' cleanADMIXTUREFiles(paramDemo)
+#' 
+#' @export
+setMethod("cleanADMIXTUREFiles", "RAIDSparam", function(x) {
+  return(x@cleanADMIXTUREFiles)
 })
 
 
@@ -6429,6 +6491,68 @@ setMethod("seedADMIXTURE<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+#' Generic function for replacement of cleanADMIXTUREFiles slot in a class
+#' 
+#' @description A generic function for replacement of cleanADMIXTUREFiles   
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(cleanADMIXTUREFiles="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", cleanADMIXTUREFiles="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # cleanADMIXTUREFiles(obj) <- TRUE
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("cleanADMIXTUREFiles<-", 
+  function(x, value) standardGeneric("cleanADMIXTUREFiles<-"))
+
+
+#' Setter function for replacement of cleanADMIXTUREFiles slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of cleanADMIXTUREFiles slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{logical} indicating if message information 
+#' should be printed. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the cleanADMIXTUREFiles slot in the object
+#' cleanADMIXTUREFiles(paramDemo) <-  TRUE
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("cleanADMIXTUREFiles<-", "RAIDSparam", function(x, value) {
+  x@cleanADMIXTUREFiles <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 
 #' Generic function for replacement of verbose slot in a class
@@ -6744,6 +6868,9 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' @param seedADMIXTURE a single \code{integer} seed for 
 #' the ADMIXTURE program. Default: \code{432L}.
 #' 
+#' @param cleanADMIXTUREFiles a single \code{logical} indicating if RAIDS
+#' removes ADMIXTURE files after processing. Default: \code{TRUE}. 
+#' 
 #' @param verbose a \code{logical} indicating if message information should be
 #' printed. Default: \code{FALSE}
 #' 
@@ -6799,7 +6926,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     eigenCountSyn=15L, kList=seq(2L, 15L, 1L), pcaList=seq(2L, 15L, 1L), 
     fieldPopInRef="superPop", fieldPopInfAnc="superPop", 
     fieldSubPop="pop.group", anchorId="sp0.95v0.2",
-    pathADMIXTURE=NULL, seedADMIXTURE=432L, verbose=FALSE) {
+    pathADMIXTURE=NULL, seedADMIXTURE=432L, cleanADMIXTUREFiles=TRUE, verbose=FALSE) {
     
     batch <- as.integer(batch)
     nbSim <- as.integer(nbSim)
@@ -6812,6 +6939,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     kList <- unique(as.integer(kList))
     pcaList <- unique(as.integer(pcaList))
     seedADMIXTURE <- as.integer(seedADMIXTURE)
+    cleanADMIXTUREFiles <- as.logical(cleanADMIXTUREFiles)
     verbose <- as.logical(verbose)
 
     studyType <- arg_match(studyType)
@@ -6870,5 +6998,7 @@ RAIDSparam <- function(studyDF=NULL, studyDFSyn=NULL, pedStudy=NULL,
     eigenCount=eigenCount, eigenCountSyn=eigenCountSyn, kList=kList,
     pcaList=pcaList, fieldPopInRef=fieldPopInRef, fieldPopInfAnc=fieldPopInfAnc,
     fieldSubPop=fieldSubPop, anchorId=anchorId,
-    pathADMIXTURE=pathADMIXTURE, seedADMIXTURE=seedADMIXTURE, verbose=verbose)
+    pathADMIXTURE=pathADMIXTURE, seedADMIXTURE=seedADMIXTURE, 
+    cleanADMIXTUREFiles=cleanADMIXTUREFiles, 
+    verbose=verbose)
 }

@@ -54,6 +54,7 @@ RAIDSparam(
   anchorId = "sp0.95v0.2",
   pathADMIXTURE = NULL,
   seedADMIXTURE = 432L,
+  cleanADMIXTUREFiles = TRUE,
   verbose = FALSE
 )
 }
@@ -296,6 +297,9 @@ Default: \code{NULL}.}
 
 \item{seedADMIXTURE}{a single \code{integer} seed for
 the ADMIXTURE program. Default: \code{432L}.}
+
+\item{cleanADMIXTUREFiles}{a single \code{logical} indicating if RAIDS
+removes ADMIXTURE files after processing. Default: \code{TRUE}.}
 
 \item{verbose}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}}

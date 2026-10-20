@@ -263,6 +263,9 @@ Default: \code{NULL}.}
 \item{\code{seedADMIXTURE}}{a single \code{integer} seed for
 ADMIXTURE program. Default: \code{432L}.}
 
+\item{\code{cleanADMIXTUREFiles}}{a single \code{logical} indicating if RAIDS
+removes ADMIXTURE files after processing. Default: \code{TRUE}.}
+
 \item{\code{verbose}}{a \code{logical} indicating if message information should be
 printed. Default: \code{FALSE}.}
 }}
