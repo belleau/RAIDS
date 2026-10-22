@@ -1451,6 +1451,9 @@ computeAdmixtureProportions <- function(pRAIDS) {
     
     syntheticQ <- runSynADMIXTURE(pathOut=pathOut, matPIndex=matPIndex, pRAIDS=pRAIDS)
     syntheticQ <- syntheticJSD(syntheticQ=syntheticQ, pRAIDS=pRAIDS)
+    if(cleanADMIXTUREFiles(pRAIDS)){
+        unlink(pathOut, recursive = TRUE)
+    }
     return(list(profileQ=profileQ, syntheticQ=syntheticQ))
 }
 
