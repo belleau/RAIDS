@@ -181,7 +181,7 @@ if (!dir.exists(pathWorkingDirectory)) {
 ### 1.2 Download the population reference files
 
 
-The population reference files should be downloaded into the *data/refGDS* 
+The **population reference files** should be downloaded into the *data/refGDS* 
 sub-directory. The following code downloads the complete pre-processed files 
 for 1000 Genomes (1KG), for the hg38 build of the human genome, in the GDS 
 format. The size of the 1KG GDS file is 15GB. 
@@ -209,7 +209,7 @@ ADMIXTURE version 1.3.0 or later (earlier versions may work but have not
 been tested) [@Alexander2009]. You can download it from:
 https://dalexander.github.io/admixture/download.html
 
-Example for Linux for Mac you change :
+Example for Linux and Mac:
 ```
 
 #############################################################################
@@ -231,11 +231,9 @@ cd -
 
 ```
 
-
 <br>
 
-For illustrative purposes, a small 
-**population reference GDS file** (called _ex1_good_small_1KG.gds_) and a small 
+For illustrative purposes, a small **population reference GDS file** (called _ex1_good_small_1KG.gds_) and a small 
 **population reference SNV Annotation GDS file** (called 
 _ex1_good_small_1KG_Annot.gds_) are 
 included in this package. Please note that these "mini-reference" files are 
@@ -265,10 +263,12 @@ pathReference <- file.path(dataDir, "tests")
 fileGDS <- file.path(pathReference, "ex1_good_small_1KG.gds")
 fileAnnotGDS <- file.path(pathReference, "ex1_good_small_1KG_Annot.gds")
 
+## The 'pathWorkingDirectoryData' variable has been set in a previous step
 file.copy(fileGDS, file.path(pathWorkingDirectoryData, "refGDS"))
 file.copy(fileAnnotGDS, file.path(pathWorkingDirectoryData, "refGDS"))
 
 ```
+
 <br>
 <br>
 
@@ -520,6 +520,13 @@ you choose to use the pre-processed files.</span>
 <br>
 <br>
 
+# Acknowledgments
+
+This work was supported by a National Institute of Health award U01 
+CA289357 to AK.
+
+<br>
+<br>
 
 # Session info
 
