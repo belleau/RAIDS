@@ -58,8 +58,10 @@ the following:
 
 # Introduction
 
-The **RAIDS** (Robust Ancerstry Inference using Data Synthesis) package enables accurate and robust inference of genetic ancestry from human molecular data other than whole-genome or whole-exome sequences of cancer-free DNA. The current version can handle
-sequences of:
+The **RAIDS** (Robust Ancestry Inference using Data Synthesis) package 
+enables accurate and robust inference of genetic ancestry from human molecular 
+data other than whole-genome or whole-exome sequences of cancer-free DNA. The 
+current version can handle sequences of:
 
 * whole genomes
 * whole exomes
@@ -67,13 +69,14 @@ sequences of:
 * RNA-Seq, scRNA-Seq, 
 * ATAC-Seq, ChIP-Seq
 
-including those from cancer-derived nucleic acids. The **RAIDS** package implements a 
-data synthesis method that, for any given
-molecular profile of an idividual, enables, on the one hand, profile-specific inference
-parameter optimization and, on the other hand, a profile-specific inference
-accuracy estimate. By the molecular profile we mean a table of the individual's 
-germline genotypes at genome positions with sufficient read coverage in the 
-individual's input data, where sequence variants are frequent in the population reference data. 
+including those from cancer-derived nucleic acids. The **RAIDS** package 
+implements a data synthesis method that, for any given
+molecular profile of an individual, enables, on the one hand, profile-specific 
+inference parameter optimization and, on the other hand, a profile-specific 
+inference accuracy estimate. By the molecular profile we mean a table of the 
+individual's germline genotypes at genome positions with sufficient read 
+coverage in the individual's input data, where sequence variants are frequent 
+in the population reference data. 
 
 <br>
 <br>
@@ -190,7 +193,7 @@ cd -
 
 ### 1.3 Install ADMIXTURE for admixture proportion inference
 
-If you project to infere admixture proportion you need to install 
+If you project to infer admixture proportion you need to install 
 ADMIXTURE at least 1.3.0 (the preceding version may works but are not tested).
 You can download from:
 https://dalexander.github.io/admixture/download.html
@@ -445,10 +448,10 @@ print(resOut$Ancestry)
 The *createAUROCGraph()* function enable the visualization of RAIDS 
 performance for the synthetic data, as a function of *D* and *k*.
 
-```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="RAIDS performance for the synthtic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
+```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="RAIDS performance for the synthetic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
 
 ###########################################################################
-## Create a graph showing the perfomance for the synthetic data
+## Create a graph showing the performance for the synthetic data
 ## The output is a ggplot object
 ###########################################################################
 createAUROCGraph(dfAUROC=resOut$paraSample$dfAUROC, title="Example ex1")
