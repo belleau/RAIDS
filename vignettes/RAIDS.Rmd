@@ -39,8 +39,7 @@ set.seed(121444)
 
 # Licensing 
 
-The `r Githubpkg("KrasnitzLab/RAIDS")` package and the underlying 
-`r Githubpkg("KrasnitzLab/RAIDS")` code are distributed under  
+The `r Githubpkg("KrasnitzLab/RAIDS")` package and the underlying `r Githubpkg("KrasnitzLab/RAIDS")` code are distributed under  
 the https://opensource.org/licenses/Apache-2.0 license. You are free to use and 
 redistribute this software.  
 
@@ -67,16 +66,18 @@ If you use the legacy version (release 3.23 or sooner):
 
 # Introduction
 
-The **RAIDS** (Robust Ancestry Inference using Data Synthesis) package 
-enables accurate and robust inference of genetic ancestry from human molecular 
-data other than whole-genome or whole-exome sequences of cancer-free DNA. The 
-current version can handle sequences of:
+The **RAIDS** (**R**obust **A**ncestry **I**nference using **D**ata 
+**S**ynthesis) package enables accurate and robust inference of genetic 
+ancestry from human molecular data other than whole-genome or whole-exome 
+sequences of cancer-free DNA. The current version can handle sequences of:
 
 * whole genomes
 * whole exomes
 * targeted gene panels 
-* RNA-Seq, scRNA-Seq, 
-* ATAC-Seq, ChIP-Seq
+* RNA-Seq
+* scRNA-Seq 
+* ATAC-Seq
+* ChIP-Seq
 
 including those from cancer-derived nucleic acids. The **RAIDS** package 
 implements a data synthesis method that, for any given
@@ -107,7 +108,6 @@ BiocManager::install("RAIDS")
 <br>
 <br>
 
-<a name="mains"></a>
 
 # Using RAIDS: step-by-step explanation
 
@@ -147,8 +147,8 @@ First, the following working directory structure should be created:
 #############################################################################
 workingDirectory/  
 	data/  
-		refGDS  
-		profileGDS 
+		refGDS/  
+		profileGDS/ 
 
 ```
 
@@ -199,6 +199,8 @@ wget  https://labshare.cshl.edu/shares/krasnitzlab/RAIDSref/v0.2.0/matAnnot1000g
 cd -
 
 ```
+
+<br>
 
 ### 1.3 Install ADMIXTURE for admixture proportion inference
 
