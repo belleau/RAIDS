@@ -202,36 +202,7 @@ cd -
 
 <br>
 
-### 1.3 Install ADMIXTURE for admixture proportion inference
 
-If you plan to infer admixture proportions, you need to install 
-ADMIXTURE version 1.3.0 or later (earlier versions may work but have not 
-been tested) [@Alexander2009]. You can download it from:
-https://dalexander.github.io/admixture/download.html
-
-Example for Linux and Mac:
-```
-
-#############################################################################
-## How to download the pre-processed files for 1000 Genomes (1KG) (15 GB)
-#############################################################################
-cd workingDirectory
-mkdir admixture
-cd admixture
-
-wget https://dalexander.github.io/admixture/binaries/admixture_linux-1.4.0.tar.gz
-tar -xzvf admixture_linux-1.4.0.tar.gz
-ADMIX=$(pwd)/admixture_linux-1.4.0/admixture
-
-# For Mac:
-# wget https://dalexander.github.io/admixture/binaries/admixture_macosx-1.3.0.tar.gz
-# tar -xzvf admixture_macosx-1.3.0.tar.gz
-# export ADMIX=$(pwd)/dist/admixture_macosx-1.3.0/admixture
-cd -
-
-```
-
-<br>
 
 For illustrative purposes, a small **population reference GDS file** (called _ex1_good_small_1KG.gds_) and a small 
 **population reference SNV Annotation GDS file** (called 
@@ -270,14 +241,84 @@ file.copy(fileAnnotGDS, file.path(pathWorkingDirectoryData, "refGDS"))
 ```
 
 <br>
+
+### 1.3 Install ADMIXTURE for admixture proportion inference
+
+If you plan to infer admixture proportions, you need to install 
+ADMIXTURE version 1.3.0 or later (earlier versions may work but have not 
+been tested) [@Alexander2009]. You can download it from:
+https://dalexander.github.io/admixture/download.html
+
+Example for Linux and Mac:
+```
+
+#############################################################################
+## How to download the pre-processed files for 1000 Genomes (1KG) (15 GB)
+#############################################################################
+cd workingDirectory
+mkdir admixture
+cd admixture
+
+wget https://dalexander.github.io/admixture/binaries/admixture_linux-1.4.0.tar.gz
+tar -xzvf admixture_linux-1.4.0.tar.gz
+ADMIX=$(pwd)/admixture_linux-1.4.0/admixture
+
+# For Mac:
+# wget https://dalexander.github.io/admixture/binaries/admixture_macosx-1.3.0.tar.gz
+# tar -xzvf admixture_macosx-1.3.0.tar.gz
+# export ADMIX=$(pwd)/dist/admixture_macosx-1.3.0/admixture
+cd -
+
+```
+
+<br>
 <br>
 
-## Step 2 Ancestry inference with RAIDS
+## Step 2 Pre-processing sequence read data into a profile genotype file
 
-### 2.1 Set-up the required directories
 
-All required directories are created at this point. In addition, the paths to 
-the reference files are stored in variables for later use.
+A formatted profile genotype file, associated to the sample which genetic 
+ancestry will be inferred, is required as input to **RAIDS**.
+
+The genotype file can be in a VCF format, with the following 
+mandatory fields: GT, AD and DP. The VCF file must be gzipped.
+
+Also allowed is a “generic” file format, specified 
+as a comma-separated table The following columns are mandatory:
+
+* _Chromosome_: The name of the chromosome can be formatted as chr1 or 1
+* _Position_: The position on the chromosome
+* _Ref_: The reference nucleotide
+* _Alt_: The alternative nucleotide
+* _Count_: The total read count
+* _File1R_: Read count for the reference nucleotide
+* _File1A_: Read count for the alternative nucleotide
+ 
+Note: a header with identical column names is required.
+
+In **RAIDS** package, a demo SNP VCF file is available from a DNA profile done. 
+
+```{r step2, echo=TRUE}
+
+## Path to the demo files inside this package
+dataDir <- system.file("extdata", package="RAIDS")
+
+#######################################################################
+## The demo SNP VCF file of the DNA profile donor
+#######################################################################
+fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
+
+```
+
+<br>
+<br>
+
+## Step 3 Ancestry inference with RAIDS
+
+### 3.1 Set-up the required directories
+
+All required directories have been created in Step 1. The paths to 
+the reference files should be stored in variables for later use.
 
 ```{r installRaids, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
@@ -304,10 +345,9 @@ if (!dir.exists(pathProfileGDS)) {
 
 ```
 
-
 <br>
 
-### 2.3 Infer ancestry
+### 3.2 Infer genetic ancestry
 
 Within a single function call, data synthesis is performed, the synthetic 
 data are used to optimize the inference parameters and, with these, the 
@@ -315,27 +355,19 @@ ancestry is inferred from the input sequence profile.
 
 According to the type of input data (RNA or DNA sequence), a specific function 
 should be called. The *inferAncestry()* function (*inferAncestryDNA()* is 
-the same as *inferAncestry()* ) is used for DNA profiles while 
+the same as *inferAncestry()*) is used for DNA profiles while 
 the *inferAncestryGeneAware()* function is RNA specific.
 
-The *inferAncestry()* function requires a specific input format for the individual's 
-genotyping profile as explained in the Introduction. The format is set by 
-the *genoSource* parameter. 
+The *inferAncestry()* function requires a specific input format for the 
+individual's genotyping profile as explained in the Introduction. The format 
+is set by the *genoSource* parameter. 
 
 One of the allowed formats is VCF (*genoSource=c("VCF")*), with the following 
 mandatory fields: _GT_, _AD_ and _DP_. 
 The VCF file must be gzipped.
 
-Also allowed is a  "generic" file format  (*genoSource=c("generic")*), specified as 
-a comma-separated table The following columns are mandatory:
+Also allowed is a  "generic" file format  (*genoSource=c("generic")*).
 
-* _Chromosome_: The name of the chromosome can be formatted as chr1 or 1
-* _Position_: The position on the chromosome
-* _Ref_: The reference nucleotide
-* _Alt_: The alternative nucleotide
-* _Count_: The total read count
-* _File1R_: Read count for the reference nucleotide
-* _File1A_: Read count for the alternative nucleotide
  
 Note: a header with identical column names is required.
 
@@ -406,7 +438,7 @@ unlink(pathWorkingDirectory, recursive=TRUE, force=TRUE)
 <br>
 
 
-## Step 3. Examine the value of the inference call
+## Post-Analysis. Examine the value of the inference call
 
 The inferred ancestry and the optimal parameters are present in the *list* 
 object generated by the *inferAncestry()* and *inferAncestryGeneAware()* 
@@ -426,16 +458,16 @@ names(resOut)
 
 <br>
 
-### 3.1 Inspect the inference and the optimal parameters
+### Inspect the inference and the optimal parameters
 
 
 Global ancestry is inferred using principal-component decomposition
-followed by nearest neighbor classification. Two parameters are defined and optimized: 
-*D*, the number of the top principal directions retained and *k*, the number of nearest 
-neighbors.  
+followed by nearest neighbor classification. Two parameters are defined and 
+optimized: *D*, the number of the top principal directions retained and *k*, 
+the number of nearest neighbors.  
 
-The results of the inference are provided as the *Ancestry* item in the *resOut* list. 
-It is a *data.frame* with the following columns:
+The results of the inference are provided as the *Ancestry* item in 
+the *resOut* list. It is a *data.frame* with the following columns:
 
 * _sample.id_: The unique identifier of the sample 
 * _D_: The optimal *D* inference parameter
@@ -454,13 +486,13 @@ print(resOut$Ancestry)
 
 <br>
 
-### 3.2 Visualize the RAIDS performance for the synthetic data
+### Visualize the RAIDS performance for the synthetic data
 
 
 The *createAUROCGraph()* function enables the visualization of RAIDS 
 performance for the synthetic data, as a function of *D* and *k*.
 
-```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="RAIDS performance for the synthetic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
+```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="Visualisation of RAIDS performance for the synthetic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
 
 ###########################################################################
 ## Create a graph showing the performance for the synthetic data
@@ -500,7 +532,7 @@ the [Population reference dataset GDS files](Create_Reference_GDS_File.html)
 vignette.
 
 <span style="color:darkred;font-weight:bold">The reference files associated to 
-the Cancer Research associated paper are available. Note that these 
+the Cancer Research paper are available. Note that these 
 pre-processed files are for 1000 Genomes (1KG), in hg38. The files are 
 available here:</span>
 
