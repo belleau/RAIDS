@@ -353,28 +353,32 @@ Within a single function call, data synthesis is performed, the synthetic
 data are used to optimize the inference parameters and, with these, the 
 ancestry is inferred from the input sequence profile.
 
-The function to infer categorical ancestry is *ancestryInferencePCAKNN*. 
-The parameters for RAIDS are now keep in an object RAIDS_param. 
+The function to infer categorical ancestry is *ancestryInferencePCAKNN()*. 
+
+The parameters for **RAIDS** are now all kept in an object *RAIDS_param*.
+
 The principal parameters are:
-*profileFile*: the file with the read depth information.
-*genoSource*: the format of profileFile, it can be VCF, bam, 
-generic, or snp-pileup.
-*pathProfileGDS*: The path where the gds specific to the profile will be save.
-*fileReferenceGDS*:
-*fileReferenceAnnotGDS*:
-*studyType*: Can be LD or GeneAware, LD in the case of DNA and ChIP-Seq, and 
-GeneAware for RNA-Seq, scRNA-Seq and ATAC-Seq.
+
+* *profileFile*: the file with the read depth information.
+* *genoSource*: the format of file used in the *profileFile* parameter; it can be VCF, BAM, generic, or snp-pileup.
+* *pathProfileGDS*: The path where the GDS specific to the profile will be saved
+* *fileReferenceGDS*:
+* *fileReferenceAnnotGDS*:
+* *studyType*: The valid options are LD or GeneAware; LD is used in the case of DNA and ChIP-Seq, and 
+GeneAware for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
 
 One of the allowed formats is VCF (*genoSource=c("VCF")*), with the following 
 mandatory fields: _GT_, _AD_ and _DP_. 
 The VCF file must be gzipped.
 
-Also allowed is a  "generic" file format  (*genoSource=c("generic")*).
+Also allowed is a  "generic" file format  (*genoSource=c("generic")*).
 
  
 Note: a header with identical column names is required.
 
+In this demonstration, a demo profile in SNP VCF format, as included in the 
+package, is used.
 
 ```{r infere, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
@@ -397,17 +401,19 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 
     #######################################################################
-    ## The ancestry inference call
+    ## The parameter object required to run the ancestry inference
     #######################################################################
-
     pRAIDS <- RAIDS:::RAIDSparam(profileFile=fileDonorVCF,
         genoSource=c("VCF"),
         pathProfileGDS=pathProfileGDS,
         fileReferenceGDS=refGenotype,
         fileReferenceAnnotGDS=refAnnotation,
         chrInfo=chrInfo,
-        )
+    )
 
+    #######################################################################
+    ## The ancestry inference call
+    #######################################################################
     resOut <- ancestryInferencePCAKNN(pRAIDS = pRAIDS)
 
     #######################################################################
