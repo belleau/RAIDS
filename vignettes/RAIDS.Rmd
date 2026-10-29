@@ -277,14 +277,14 @@ cd -
 ## Step 2 Pre-processing sequence read data into a profile genotype file
 
 
-A formatted profile genotype file, associated to the sample which genetic 
+A formatted profile genotype file, associated with the sample whose genetic 
 ancestry will be inferred, is required as input to **RAIDS**.
 
 The genotype file can be in a VCF format, with the following 
-mandatory fields: GT, AD and DP. The VCF file must be gzipped.
+mandatory fields: _GT_, _AD_ and _DP_. The VCF file must be gzipped.
 
-Also allowed is a “generic” file format, specified 
-as a comma-separated table The following columns are mandatory:
+Also allowed is a "generic" file format, specified 
+as a comma-separated table. The following columns are mandatory:
 
 * _Chromosome_: The name of the chromosome can be formatted as chr1 or 1
 * _Position_: The position on the chromosome
@@ -296,7 +296,8 @@ as a comma-separated table The following columns are mandatory:
  
 Note: a header with identical column names is required.
 
-In **RAIDS** package, a demo SNP VCF file is available from a DNA profile done. 
+For demonstration purposes, the **RAIDS** package includes a SNP VCF file 
+generated from a DNA sequencing profile.
 
 ```{r step2, echo=TRUE}
 
@@ -355,30 +356,21 @@ ancestry is inferred from the input sequence profile.
 
 The function to infer categorical ancestry is *ancestryInferencePCAKNN()*. 
 
-The parameters for **RAIDS** are now all kept in an object *RAIDS_param*.
+The parameters for **RAIDS** are now all kept in a *RAIDSparam* object.
 
 The principal parameters are:
 
-* *profileFile*: the file with the read depth information.
-* *genoSource*: the format of file used in the *profileFile* parameter; it can be VCF, BAM, generic, or snp-pileup.
-* *pathProfileGDS*: The path where the GDS specific to the profile will be saved
-* *fileReferenceGDS*:
-* *fileReferenceAnnotGDS*:
-* *studyType*: The valid options are LD or GeneAware; LD is used in the case of DNA and ChIP-Seq, and 
-GeneAware for RNA-Seq, scRNA-Seq, and ATAC-Seq.
+* *profileFile*: The file with the read depth information.
+* *genoSource*: The format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", or "snp-pileup".
+* *pathProfileGDS*: The path where the GDS specific to the profile will be saved.
+* *fileReferenceGDS*: The path where the Reference GDS is located.
+* *fileReferenceAnnotGDS*:  The path where the Population Reference GDS Annotation is located.
+* *studyType*: The valid options are "LD" or "GeneAware"; "LD" is used in the case of DNA and ChIP-Seq, and 
+"GeneAware" for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
 
-One of the allowed formats is VCF (*genoSource=c("VCF")*), with the following 
-mandatory fields: _GT_, _AD_ and _DP_. 
-The VCF file must be gzipped.
-
-Also allowed is a  "generic" file format  (*genoSource=c("generic")*).
-
- 
-Note: a header with identical column names is required.
-
-In this demonstration, a demo profile in SNP VCF format, as included in the 
-package, is used.
+In this demonstration, the demo SNP VCF profile included in the package 
+is used.
 
 ```{r infere, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
@@ -403,27 +395,27 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     #######################################################################
     ## The parameter object required to run the ancestry inference
     #######################################################################
-    pRAIDS <- RAIDS:::RAIDSparam(profileFile=fileDonorVCF,
-        genoSource=c("VCF"),
+    paramRAIDS <- RAIDSparam(profileFile=fileDonorVCF,
+        genoSource="VCF",
+        studyType="LD",
         pathProfileGDS=pathProfileGDS,
         fileReferenceGDS=refGenotype,
         fileReferenceAnnotGDS=refAnnotation,
-        chrInfo=chrInfo,
-    )
+        chrInfo=chrInfo)
 
     #######################################################################
     ## The ancestry inference call
     #######################################################################
-    resOut <- ancestryInferencePCAKNN(pRAIDS = pRAIDS)
+    resOut <- ancestryInferencePCAKNN(pRAIDS=paramRAIDS)
 
     #######################################################################
     ## The admixture proportions inference
     ## you have to uncomment this section
     ## and specify the path of ADMIXTURE software
     #######################################################################
-    # pRAIDS <- resOut$pRAIDS
-    # pathADMIXTURE(pRAIDS) = "PATH/admixture"
-    # resAdmixture <- computeAdmixtureProportions(pRAIDS=pRAIDS)
+    # paramRAIDS <- resOut$paramRAIDS
+    # pathADMIXTURE(paramRAIDS) = "PATH/admixture"
+    # resAdmixture <- computeAdmixtureProportions(pRAIDS=paramRAIDS)
 
 }
 
