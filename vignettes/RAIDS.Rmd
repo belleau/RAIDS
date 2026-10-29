@@ -490,7 +490,7 @@ print(resOut$Ancestry)
 The *createAUROCGraph()* function enables the visualization of RAIDS 
 performance for the synthetic data, as a function of *D* and *k*.
 
-```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="Visualisation of RAIDS performance for the synthetic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
+```{r visualize, echo=TRUE, eval=TRUE, fig.align="center", fig.cap="Visualization of RAIDS performance for the synthetic data.", results='asis', collapse=FALSE, warning=FALSE, message=FALSE}
 
 ###########################################################################
 ## Create a graph showing the performance for the synthetic data
