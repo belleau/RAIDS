@@ -315,7 +315,7 @@ fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 
 ## Step 3. Ancestry inference with RAIDS
 
-### 3.1 Set up the required directories
+### 3.1 Define the input file paths
 
 All required directories have been created in Step 1. The paths to 
 the reference files should be stored in variables for later use.
