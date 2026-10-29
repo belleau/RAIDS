@@ -19,7 +19,7 @@ Authors@R: c(person("Pascal", "Belleau", email="pascal_belleau@hotmail.com",
     role=c("aut"), comment=c(ORCID="0000-0002-8017-2712")),
     person("Alexander", "Krasnitz", email="krasnitz@cshl.edu",
     role=c("aut")),
-    person(given="National Institute of Health", role="fnd", 
+    person(given="National Institutes of Health", role="fnd", 
     comment=c(ROR="https://ror.org/01cwqze88")))
 License: Apache License (>= 2)
 Encoding: UTF-8

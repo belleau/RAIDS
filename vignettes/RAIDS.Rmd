@@ -51,12 +51,12 @@ redistribute this software.
 If you use the **RAIDS** package for a publication, we would ask you to cite 
 one of the following.
 
-If you use a more recent version (release 3.24 or later):
+If you use a more recent version (Bioconductor release 3.24 or later):
 
 > Pascal Belleau, Xintong Li, Astrid Deschênes, Laine Marrah, Alexander Krasnitz. A versatile set of computational tools for inference of genetic ancestry from human molecular data. 
 bioRxiv 2026.10.09.758080; doi: https://doi.org/10.64898/2026.10.09.758080
 
-If you use the legacy version (release 3.23 or sooner):
+If you use the legacy version (Bioconductor release 3.23 or earlier):
 
 > Pascal Belleau, Astrid Deschênes, Nyasha Chambwe, David A. Tuveson, Alexander Krasnitz; Genetic Ancestry Inference from Cancer-Derived Molecular Data across Genomic and Transcriptomic Platforms. Cancer Res 1 January 2023; 83 (1): 49–58. https://doi.org/10.1158/0008-5472.CAN-22-0682
 
@@ -274,8 +274,7 @@ cd -
 <br>
 <br>
 
-## Step 2 Pre-processing sequence read data into a profile genotype file
-
+## Step 2. Pre-processing sequence read data into a profile genotype file
 
 A formatted profile genotype file, associated with the sample whose genetic 
 ancestry will be inferred, is required as input to **RAIDS**.
@@ -314,7 +313,7 @@ fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 <br>
 <br>
 
-## Step 3 Ancestry inference with RAIDS
+## Step 3. Ancestry inference with RAIDS
 
 ### 3.1 Set-up the required directories
 
@@ -364,7 +363,7 @@ The principal parameters are:
 * *genoSource*: The format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", or "snp-pileup".
 * *pathProfileGDS*: The path where the GDS specific to the profile will be saved.
 * *fileReferenceGDS*: The path to the population reference GDS file.
-* *fileReferenceAnnotGDS*:  The path to the Population Reference GDS Annotation file.
+* *fileReferenceAnnotGDS*: The path to the population reference GDS annotation file.
 * *studyType*: The valid options are "LD" or "GeneAware"; "LD" is used in the case of DNA and ChIP-Seq, and 
 "GeneAware" for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
@@ -510,7 +509,7 @@ with a realistic sequence profile and a complete reference population file.
 # Format population reference dataset (optional)
 
 
-```{r graphStep1, echo=FALSE, fig.align="center", fig.cap="Step 1 - Provide population reference data", out.width='120%', results='asis', warning=FALSE, message=FALSE}
+```{r graphStep1, echo=FALSE, fig.align="center", fig.cap="Provide population reference data", out.width='120%', results='asis', warning=FALSE, message=FALSE}
 knitr::include_graphics("Step1_population_file_v01.png")
 ```
 
@@ -518,7 +517,7 @@ knitr::include_graphics("Step1_population_file_v01.png")
 A population reference dataset with known ancestry is required to infer 
 ancestry. 
 
-Three important reference files, containing formatted information about 
+Important reference files, containing formatted information about 
 the reference dataset, are required:
 
 - The population reference GDS File
@@ -530,8 +529,8 @@ The formats of those files are described in
 the [Population reference dataset GDS files](Create_Reference_GDS_File.html) 
 vignette.
 
-<span style="color:darkred;font-weight:bold">The reference files associated to 
-the Cancer Research paper are available. Note that these 
+<span style="color:darkred;font-weight:bold">The reference files associated 
+with the Cancer Research paper are available. Note that these 
 pre-processed files are for 1000 Genomes (1KG), in hg38. The files are 
 available here:</span>
 
@@ -542,7 +541,7 @@ available here:</span>
 <span style="color:darkred;font-weight:bold">The size of the 1KG GDS file 
 is 15GB.</span>
 
-<span style="color:darkred;font-weight:bold">The 1KG GDS file is mapped on 
+<span style="color:darkred;font-weight:bold">The 1KG GDS file is mapped to 
 hg38 [@Lowy-Gallego2019a].</span>
 
 <span style="color:darkred;font-weight:bold">This section can be skipped if 
@@ -553,7 +552,7 @@ you choose to use the pre-processed files.</span>
 
 # Acknowledgments
 
-This work was supported by a National Institute of Health award U01 
+This work was supported by a National Institutes of Health award U01 
 CA289357 to AK.
 
 <br>
