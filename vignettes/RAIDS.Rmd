@@ -121,11 +121,11 @@ The main steps are:
 
 **Step 1.** Set up working directory and provide population reference files
 
-**Step 2** Pre-processing sequence read data into a profile genotype file
+**Step 2.** Pre-process sequence read data into a profile genotype file
 
-**Step 3** Infer ancestry
+**Step 3.** Infer genetic ancestry
 
-**Post-Analysis** Summarize and visualize the results
+**Post-Analysis.** Summarize and visualize the results
 
 These steps are described in detail in the following. 
 
