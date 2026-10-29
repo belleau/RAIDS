@@ -363,8 +363,8 @@ The principal parameters are:
 * *profileFile*: The file with the read depth information.
 * *genoSource*: The format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", or "snp-pileup".
 * *pathProfileGDS*: The path where the GDS specific to the profile will be saved.
-* *fileReferenceGDS*: The path where the Reference GDS is located.
-* *fileReferenceAnnotGDS*:  The path where the Population Reference GDS Annotation is located.
+* *fileReferenceGDS*: The path to the population reference GDS file.
+* *fileReferenceAnnotGDS*:  The path to the Population Reference GDS Annotation file.
 * *studyType*: The valid options are "LD" or "GeneAware"; "LD" is used in the case of DNA and ChIP-Seq, and 
 "GeneAware" for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
@@ -413,7 +413,7 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     ## you have to uncomment this section
     ## and specify the path of ADMIXTURE software
     #######################################################################
-    # paramRAIDS <- resOut$paramRAIDS
+    # paramRAIDS <- resOut$pRAIDS
     # pathADMIXTURE(paramRAIDS) = "PATH/admixture"
     # resAdmixture <- computeAdmixtureProportions(pRAIDS=paramRAIDS)
 
