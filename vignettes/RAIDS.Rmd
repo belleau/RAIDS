@@ -355,17 +355,17 @@ ancestry is inferred from the input sequence profile.
 
 The function to infer categorical ancestry is *ancestryInferencePCAKNN()*. 
 
-The parameters for **RAIDS** are now all kept in an *RAIDSparam* object.
+The parameters for **RAIDS** are now all kept in a *RAIDSparam* object.
 
 The principal parameters are:
 
-* *profileFile*: the file with the read depth information.
-* *genoSource*: the format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", and "snp-pileup".
+* *profileFile*: The file with the read depth information.
+* *genoSource*: The format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", or "snp-pileup".
 * *pathProfileGDS*: The path where the GDS specific to the profile will be saved.
-* *fileReferenceGDS*:
-* *fileReferenceAnnotGDS*:
-* *studyType*: The valid options are LD or GeneAware; LD is used in the case of DNA and ChIP-Seq, and 
-GeneAware for RNA-Seq, scRNA-Seq, and ATAC-Seq.
+* *fileReferenceGDS*: The path where the Reference GDS is located.
+* *fileReferenceAnnotGDS*:  The path where the Population Reference GDS Annotation is located.
+* *studyType*: The valid options are "LD" or "GeneAware"; "LD" is used in the case of DNA and ChIP-Seq, and 
+"GeneAware" for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
 
 In this demonstration, the demo SNP VCF profile included in the package 
@@ -394,8 +394,9 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     #######################################################################
     ## The parameter object required to run the ancestry inference
     #######################################################################
-    pRAIDS <- RAIDSparam(profileFile=fileDonorVCF,
-        genoSource=c("VCF"),
+    paramRAIDS <- RAIDSparam(profileFile=fileDonorVCF,
+        genoSource="VCF",
+        studyType="LD",
         pathProfileGDS=pathProfileGDS,
         fileReferenceGDS=refGenotype,
         fileReferenceAnnotGDS=refAnnotation,
@@ -404,16 +405,16 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     #######################################################################
     ## The ancestry inference call
     #######################################################################
-    resOut <- ancestryInferencePCAKNN(pRAIDS = pRAIDS)
+    resOut <- ancestryInferencePCAKNN(pRAIDS=paramRAIDS)
 
     #######################################################################
     ## The admixture proportions inference
     ## you have to uncomment this section
     ## and specify the path of ADMIXTURE software
     #######################################################################
-    # pRAIDS <- resOut$pRAIDS
-    # pathADMIXTURE(pRAIDS) = "PATH/admixture"
-    # resAdmixture <- computeAdmixtureProportions(pRAIDS=pRAIDS)
+    # paramRAIDS <- resOut$paramRAIDS
+    # pathADMIXTURE(paramRAIDS) = "PATH/admixture"
+    # resAdmixture <- computeAdmixtureProportions(pRAIDS=paramRAIDS)
 
 }
 
