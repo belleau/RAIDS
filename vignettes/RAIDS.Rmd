@@ -277,14 +277,14 @@ cd -
 ## Step 2 Pre-processing sequence read data into a profile genotype file
 
 
-A formatted profile genotype file, associated to the sample which genetic 
+A formatted profile genotype file, associated with the sample whose genetic 
 ancestry will be inferred, is required as input to **RAIDS**.
 
 The genotype file can be in a VCF format, with the following 
-mandatory fields:  _GT_, _AD_ and _DP_. The VCF file must be gzipped.
+mandatory fields: _GT_, _AD_ and _DP_. The VCF file must be gzipped.
 
-Also allowed is a “generic” file format, specified 
-as a comma-separated table The following columns are mandatory:
+Also allowed is a "generic" file format, specified 
+as a comma-separated table. The following columns are mandatory:
 
 * _Chromosome_: The name of the chromosome can be formatted as chr1 or 1
 * _Position_: The position on the chromosome
@@ -296,7 +296,8 @@ as a comma-separated table The following columns are mandatory:
  
 Note: a header with identical column names is required.
 
-In **RAIDS** package, a demo SNP VCF file is available from a DNA profile done. 
+For demonstration purposes, the **RAIDS** package includes a SNP VCF file 
+generated from a DNA sequencing profile.
 
 ```{r step2, echo=TRUE}
 
