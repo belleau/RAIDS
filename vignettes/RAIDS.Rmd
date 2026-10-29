@@ -460,8 +460,8 @@ names(resOut)
 
 
 Global ancestry is inferred using principal-component decomposition
-followed by nearest neighbor classification. Two parameters are defined and 
-optimized: *D*, the number of the top principal directions retained and *k*, 
+followed by nearest-neighbor classification. Two parameters are defined and 
+optimized: *D*, the number of top principal directions retained and *k*, 
 the number of nearest neighbors.  
 
 The results of the inference are provided as the *Ancestry* item in 
