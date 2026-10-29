@@ -413,7 +413,7 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     ## and specify the path of ADMIXTURE software
     #######################################################################
     # paramRAIDS <- resOut$pRAIDS
-    # pathADMIXTURE(paramRAIDS) = "PATH/admixture"
+    # pathADMIXTURE(paramRAIDS) <- "PATH/admixture"
     # resAdmixture <- computeAdmixtureProportions(pRAIDS=paramRAIDS)
 
 }
@@ -520,7 +520,7 @@ ancestry.
 Important reference files, containing formatted information about 
 the reference dataset, are required:
 
-- The population reference GDS File
+- The population reference GDS file
 - The population reference SNV Annotation GDS file
 - The population reference SNV Retained VCF file (optional)
 
