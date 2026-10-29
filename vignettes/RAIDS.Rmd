@@ -121,11 +121,11 @@ The main steps are:
 
 **Step 1.** Set up working directory and provide population reference files
 
-**Step 2** Sample the reference data for donors whose genotypes will be used for synthesis and optimize ancestry inference parameters using synthetic data
+**Step 2.** Pre-process sequence read data into a profile genotype file
 
-**Step 3** Infer ancestry
+**Step 3.** Infer genetic ancestry
 
-**Step 4** Summarize and visualize the results
+**Post-Analysis.** Summarize and visualize the results
 
 These steps are described in detail in the following. 
 
@@ -274,7 +274,7 @@ cd -
 <br>
 <br>
 
-## Step 2. Pre-processing sequence read data into a profile genotype file
+## Step 2. Pre-process sequence read data into a profile genotype file
 
 A formatted profile genotype file, associated with the sample whose genetic 
 ancestry will be inferred, is required as input to **RAIDS**.
@@ -320,7 +320,7 @@ fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 All required directories have been created in Step 1. The paths to 
 the reference files should be stored in variables for later use.
 
-```{r installRaids, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
+```{r defineFilePaths, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
 #############################################################################
 ## The file path to the population reference GDS file 
@@ -500,8 +500,9 @@ createAUROCGraph(dfAUROC=resOut$paraSample$dfAUROC, title="Example ex1")
 
 ```
 
-In this illustrative example, the performance estimates are lower than expected 
-with a realistic sequence profile and a complete reference population file.
+In this illustrative example, the performance estimates are lower than would 
+be expected with a realistic sequence profile and a complete reference 
+population file.
 
 <br>
 <br>
