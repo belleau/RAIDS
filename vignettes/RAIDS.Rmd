@@ -274,7 +274,7 @@ cd -
 <br>
 <br>
 
-## Step 2. Pre-processing sequence read data into a profile genotype file
+## Step 2. Pre-process sequence read data into a profile genotype file
 
 A formatted profile genotype file, associated with the sample whose genetic 
 ancestry will be inferred, is required as input to **RAIDS**.
