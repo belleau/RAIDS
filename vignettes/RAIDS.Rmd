@@ -281,7 +281,7 @@ A formatted profile genotype file, associated to the sample which genetic
 ancestry will be inferred, is required as input to **RAIDS**.
 
 The genotype file can be in a VCF format, with the following 
-mandatory fields: GT, AD and DP. The VCF file must be gzipped.
+mandatory fields:  _GT_, _AD_ and _DP_. The VCF file must be gzipped.
 
 Also allowed is a “generic” file format, specified 
 as a comma-separated table The following columns are mandatory:
@@ -355,30 +355,21 @@ ancestry is inferred from the input sequence profile.
 
 The function to infer categorical ancestry is *ancestryInferencePCAKNN()*. 
 
-The parameters for **RAIDS** are now all kept in an object *RAIDS_param*.
+The parameters for **RAIDS** are now all kept in an *RAIDSparam* object.
 
 The principal parameters are:
 
 * *profileFile*: the file with the read depth information.
-* *genoSource*: the format of file used in the *profileFile* parameter; it can be VCF, BAM, generic, or snp-pileup.
-* *pathProfileGDS*: The path where the GDS specific to the profile will be saved
+* *genoSource*: the format of file used in the *profileFile* parameter; it can be "VCF", "bam", "generic", and "snp-pileup".
+* *pathProfileGDS*: The path where the GDS specific to the profile will be saved.
 * *fileReferenceGDS*:
 * *fileReferenceAnnotGDS*:
 * *studyType*: The valid options are LD or GeneAware; LD is used in the case of DNA and ChIP-Seq, and 
 GeneAware for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
 
-One of the allowed formats is VCF (*genoSource=c("VCF")*), with the following 
-mandatory fields: _GT_, _AD_ and _DP_. 
-The VCF file must be gzipped.
-
-Also allowed is a  "generic" file format  (*genoSource=c("generic")*).
-
- 
-Note: a header with identical column names is required.
-
-In this demonstration, a demo profile in SNP VCF format, as included in the 
-package, is used.
+In this demonstration, the demo SNP VCF profile included in the package 
+is used.
 
 ```{r infere, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
@@ -403,13 +394,12 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     #######################################################################
     ## The parameter object required to run the ancestry inference
     #######################################################################
-    pRAIDS <- RAIDS:::RAIDSparam(profileFile=fileDonorVCF,
+    pRAIDS <- RAIDSparam(profileFile=fileDonorVCF,
         genoSource=c("VCF"),
         pathProfileGDS=pathProfileGDS,
         fileReferenceGDS=refGenotype,
         fileReferenceAnnotGDS=refAnnotation,
-        chrInfo=chrInfo,
-    )
+        chrInfo=chrInfo)
 
     #######################################################################
     ## The ancestry inference call
