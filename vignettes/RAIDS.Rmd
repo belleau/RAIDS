@@ -119,7 +119,7 @@ knitr::include_graphics("MainSteps_v05.png")
 
 The main steps are:
 
-**Step 1.** Set-up working directory and provide population reference files
+**Step 1.** Set up working directory and provide population reference files
 
 **Step 2** Sample the reference data for donors whose genotypes will be used for synthesis and optimize ancestry inference parameters using synthetic data
 
@@ -133,7 +133,7 @@ These steps are described in detail in the following.
 <br>
 
 
-## Step 1. Set-up working directory and provide population reference files
+## Step 1. Set up working directory and provide population reference files
 
 
 ### 1.1 Create a working directory structure
@@ -315,7 +315,7 @@ fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 
 ## Step 3. Ancestry inference with RAIDS
 
-### 3.1 Set-up the required directories
+### 3.1 Set up the required directories
 
 All required directories have been created in Step 1. The paths to 
 the reference files should be stored in variables for later use.
