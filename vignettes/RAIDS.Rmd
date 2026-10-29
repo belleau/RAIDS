@@ -119,7 +119,7 @@ knitr::include_graphics("MainSteps_v05.png")
 
 The main steps are:
 
-**Step 1.** Set-up working directory and provide population reference files
+**Step 1.** Set up working directory and provide population reference files
 
 **Step 2** Sample the reference data for donors whose genotypes will be used for synthesis and optimize ancestry inference parameters using synthetic data
 
@@ -133,7 +133,7 @@ These steps are described in detail in the following.
 <br>
 
 
-## Step 1. Set-up working directory and provide population reference files
+## Step 1. Set up working directory and provide population reference files
 
 
 ### 1.1 Create a working directory structure
@@ -315,7 +315,7 @@ fileDonorVCF <- file.path(dataDir, "example", "snpPileup", "ex1.vcf.gz")
 
 ## Step 3. Ancestry inference with RAIDS
 
-### 3.1 Set-up the required directories
+### 3.1 Define the input file paths
 
 All required directories have been created in Step 1. The paths to 
 the reference files should be stored in variables for later use.
@@ -381,7 +381,7 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
 
     #######################################################################
     ## Chromosome length information is required
-    ## chr23 is chrX, chr24 is chrY and chrM is 25
+    ## chr23 is chrX, chr24 is chrY and chrM is chr25
     #######################################################################
     genome <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
     chrInfo <- Seqinfo::seqlengths(genome)[1:25]
@@ -413,7 +413,7 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
     ## and specify the path of ADMIXTURE software
     #######################################################################
     # paramRAIDS <- resOut$pRAIDS
-    # pathADMIXTURE(paramRAIDS) = "PATH/admixture"
+    # pathADMIXTURE(paramRAIDS) <- "PATH/admixture"
     # resAdmixture <- computeAdmixtureProportions(pRAIDS=paramRAIDS)
 
 }
@@ -460,8 +460,8 @@ names(resOut)
 
 
 Global ancestry is inferred using principal-component decomposition
-followed by nearest neighbor classification. Two parameters are defined and 
-optimized: *D*, the number of the top principal directions retained and *k*, 
+followed by nearest-neighbor classification. Two parameters are defined and 
+optimized: *D*, the number of top principal directions retained and *k*, 
 the number of nearest neighbors.  
 
 The results of the inference are provided as the *Ancestry* item in 
@@ -520,7 +520,7 @@ ancestry.
 Important reference files, containing formatted information about 
 the reference dataset, are required:
 
-- The population reference GDS File
+- The population reference GDS file
 - The population reference SNV Annotation GDS file
 - The population reference SNV Retained VCF file (optional)
 
