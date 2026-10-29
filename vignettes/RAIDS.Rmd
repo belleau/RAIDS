@@ -37,11 +37,13 @@ set.seed(121444)
 **License**: `r packageDescription("RAIDS")[["License"]]`<br>
 
 
+<br>
+
 # Licensing 
 
-The `r Githubpkg("KrasnitzLab/RAIDS")` package and the underlying `r Githubpkg("KrasnitzLab/RAIDS")` code are distributed under  
-the https://opensource.org/licenses/Apache-2.0 license. You are free to use and 
-redistribute this software.  
+The **RAIDS** package and the underlying **RAIDS** code are distributed 
+under the https://opensource.org/licenses/Apache-2.0 
+license. You are free to use and redistribute this software.  
 
 <br>
 <br>
