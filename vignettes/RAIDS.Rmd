@@ -381,7 +381,7 @@ if (requireNamespace("Seqinfo", quietly=TRUE) &&
 
     #######################################################################
     ## Chromosome length information is required
-    ## chr23 is chrX, chr24 is chrY and chrM is 25
+    ## chr23 is chrX, chr24 is chrY and chrM is chr25
     #######################################################################
     genome <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
     chrInfo <- Seqinfo::seqlengths(genome)[1:25]
