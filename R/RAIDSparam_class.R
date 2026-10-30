@@ -98,7 +98,7 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' If 'genoSource' is "bam", then "*.bam" (the file needs to be indexed with a
 #' existing corresponding "*.bai" file). Default: \code{NULL}.
 #' 
-#' @slot profileFileGeno TODO
+#' @slot profileFileGeno not used in the current version
 #' 
 #' @slot pathProfileGDS a single \code{character} string representing the 
 #' path to the directory where the GDS Profile files will be created. If 
@@ -128,11 +128,11 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' identifier for the batch. Beware, this field is not stored anymore. 
 #' Default: \code{1L}.
 #' 
-#' @slot prefix a single \code{character} string representing TODO.
-#' Default: \code{"1"}.
+#' @slot prefix a single \code{character} string representing at the
+#' beginning of the synthetic name id. Default: \code{"1"}.
 #' 
-#' @slot nbSim a positive \code{integer} representing TODO. 
-#' Default: \code{1L}.
+#' @slot nbSim a positive \code{integer} representing number of 
+#' replicated synthitic data. Default: \code{1L}.
 #' 
 #' @slot posOffset a single \code{integer} that is added to the SNP position to
 #' switch from 0-based to 1-based coordinate when needed (or reverse).

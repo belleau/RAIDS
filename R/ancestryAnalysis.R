@@ -78,13 +78,6 @@
 #' @export
 pruningProfile2 <- function(pRAIDS) {
 
-    
-    # TODO manage specificSNV with paramRAIDS
-    # not important without new reference
-    # if(!is.null(specificSNV(pRAIDS))){
-    #     pRAIDS <- specificSNVKeep(pRAIDS)
-    # }
-    
     ## Matches a character method against a table of candidate values
     # method <- arg_match(method)
     gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
@@ -140,6 +133,10 @@ pruningProfile2 <- function(pRAIDS) {
     listKeepPos <- listGeno
 
     if(!is.null(specificSNV(pRAIDS))){
+        # we need to intersect 
+        if(!("snvKeep" %in% colnames(specificSNV(pRAIDS)))){
+            pRAIDS <- specificSNVColKeep(pRAIDS)
+        }
         listKeepPos <- intersect(specificSNV(pRAIDS)$snvKeep[specificSNV(pRAIDS)$snvKeep > 0], listKeepPos)
     }
 

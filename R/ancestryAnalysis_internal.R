@@ -782,3 +782,58 @@ syntheticJSD <- function(syntheticQ, pRAIDS) {
     return(syntheticQ)
 }
 
+#' @title Add a column snvKeep to the \code{data.frame} keep 
+#' in the specificSNV(pRAIDS)
+#' 
+#' @description TODO
+#'
+#'
+#' @param pRAIDS a \code{RAIDSparam} an object with all the RAIDS
+#' parameters 
+#' 
+#' @return The function returns a \code{RAIDSparam} an object with all the RAIDS
+#' parameters updated.
+#'
+#'
+#' @details TODO
+#'
+#'
+#' @examples
+#'
+#' ## No example for the moment
+#'
+#'
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @importFrom gdsfmt index.gdsn read.gdsn
+#' @importFrom SNPRelate snpgdsOpen snpgdsClose
+#' @encoding UTF-8
+#' @keywords internal
+specificSNVColKeep <- function(pRAIDS){
+    if(!is.null(specificSNV(pRAIDS))){
+        if(! "snvKeep" %in% colnames(specificSNV(pRAIDS))){
+            gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+            snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
+            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
+
+            z <- cbind(c(specificSNV(pRAIDS)$snp.chromosome,
+                         snp.chromosome,
+                         specificSNV(pRAIDS)$snp.chromosome),
+                       c(specificSNV(pRAIDS)$snp.position,
+                         snp.position,
+                         specificSNV(pRAIDS)$snp.position),
+                       c(-1 * seq_len(nrow(specificSNV(pRAIDS))),
+                         rep(0, length(snp.position)),
+                         seq_len(nrow(specificSNV(pRAIDS)))),
+                       c(rep(0, nrow(specificSNV(pRAIDS))),
+                         seq_len(length(snp.position)),
+                         rep(0, nrow(specificSNV(pRAIDS)))))
+            z <- z[order(z[,1], z[,2], z[,3]),]
+            df <- specificSNV(pRAIDS)
+            df$snvKeep <- rep(-1, nrow(pRAIDS$specificSNV$snvKeep))
+            df$snvKeep[-1*cumsum(z[,3])[z[,3] == 0]] <- z[cumsum(z[,3]) < 0 & z[,3] == 0, 4]
+            specificSNV(pRAIDS) <- df
+        }
+    }
+
+    return(pRAIDS)
+}
