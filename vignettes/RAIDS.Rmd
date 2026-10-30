@@ -92,7 +92,7 @@ coverage in the individual's input data, where sequence variants are frequent
 in the population reference data. 
 
 In addition, the **RAIDS** package can now yield both global ancestry and 
-ancestral admixture proportions of the donor.
+admixture proportions of the individual.
 
 <br>
 <br>
