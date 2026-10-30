@@ -377,7 +377,7 @@ The principal parameters are:
 In this demonstration, the demo SNP VCF profile included in the package 
 is used.
 
-```{r infere, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
+```{r inferAncestry, echo=TRUE, eval=TRUE, collapse=TRUE, warning=FALSE, message=FALSE}
 
 ###########################################################################
 ## Seqinfo and BSgenome are required libraries to run this example
