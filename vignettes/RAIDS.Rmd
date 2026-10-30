@@ -373,6 +373,7 @@ The principal parameters are:
 * *studyType*: The valid options are "LD" or "GeneAware"; "LD" is used in the case of DNA and ChIP-Seq, and 
 "GeneAware" for RNA-Seq, scRNA-Seq, and ATAC-Seq.
 
+See *?RAIDSparam* for the complete list of parameters.
 
 In this demonstration, the demo SNP VCF profile included in the package 
 is used.
