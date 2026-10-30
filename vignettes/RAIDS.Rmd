@@ -91,6 +91,9 @@ individual's germline genotypes at genome positions with sufficient read
 coverage in the individual's input data, where sequence variants are frequent 
 in the population reference data. 
 
+In addition, the **RAIDS** package can now yield both global ancestry and 
+ancestral admixtures of the donor.
+
 <br>
 <br>
 
