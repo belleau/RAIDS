@@ -91,6 +91,9 @@ individual's germline genotypes at genome positions with sufficient read
 coverage in the individual's input data, where sequence variants are frequent 
 in the population reference data. 
 
+In addition, the **RAIDS** package can now yield both global ancestry and 
+ancestral admixture proportions of the donor.
+
 <br>
 <br>
 
@@ -256,7 +259,7 @@ Example for Linux and Mac:
 ```
 
 #############################################################################
-## How to download the pre-processed files for 1000 Genomes (1KG) (15 GB)
+## How to download and install the ADMIXTURE software
 #############################################################################
 cd workingDirectory
 mkdir admixture
