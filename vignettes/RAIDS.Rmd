@@ -259,7 +259,7 @@ Example for Linux and Mac:
 ```
 
 #############################################################################
-## How to download the pre-processed files for 1000 Genomes (1KG) (15 GB)
+## How to download and install the ADMIXTURE software
 #############################################################################
 cd workingDirectory
 mkdir admixture
