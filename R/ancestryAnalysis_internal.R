@@ -839,7 +839,8 @@ specificSNVColKeep <- function(pRAIDS){
             
             snpgdsClose(gdsReference)
             df <- specificSNV(pRAIDS)
-            df$snp.chromosome <- gsub("chr", "", df$snp.chromosome)
+            df$snp.chromosome <- as.integer(gsub("chr", "", df$snp.chromosome))
+            
             df <- df[!duplicated(df[,c("snp.chromosome", "snp.position")]),]
             z <- cbind(c(df$snp.chromosome,
                          snp.chromosome,
