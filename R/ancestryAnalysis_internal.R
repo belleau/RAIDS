@@ -833,11 +833,13 @@ specificSNVColKeep <- function(pRAIDS){
             keepPos <- seq_len(length(snp.chromosome))
             if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
                 keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+                snp.chromosome <- snp.chromosome[keepPos]
             }
             snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))[keepPos]
             
             snpgdsClose(gdsReference)
             df <- specificSNV(pRAIDS)
+            df$snp.chromosome <- gsub("chr", "", df$snp.chromosome)
             df <- df[!duplicated(df[,c("snp.chromosome", "snp.position")]),]
             z <- cbind(c(df$snp.chromosome,
                          snp.chromosome,
