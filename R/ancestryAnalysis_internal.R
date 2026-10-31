@@ -800,7 +800,24 @@ syntheticJSD <- function(syntheticQ, pRAIDS) {
 #'
 #' @examples
 #'
-#' ## No example for the moment
+#' dataDir <- system.file("extdata/tests", package="RAIDS")
+#' fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
+#' pRAIDS <- RAIDSparam( fileReferenceGDS=fileGDS)
+#' 
+#' gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+#' snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
+#' snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
+#' snpgdsClose(gdsReference)
+#' set.seed(4235)
+#' tmp <- sample(seq_len(length(snp.position )),100)
+#' 
+#' df <- data.frame(snp.chromosome=c(snp.chromosome[tmp], rep(1,10)),
+#'                  snp.position=c(snp.position[tmp], 1987486 +10+seq_len(10))  )
+#' 
+#' specificSNV(pRAIDS) <- df
+#' pRAIDS <- RAIDS:::specificSNVColKeep(pRAIDS)
+#' head(specificSNV(pRAIDS))
+#' tail(specificSNV(pRAIDS))
 #'
 #'
 #' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
@@ -813,24 +830,31 @@ specificSNVColKeep <- function(pRAIDS){
         if(! "snvKeep" %in% colnames(specificSNV(pRAIDS))){
             gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
             snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
-            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
-
-            z <- cbind(c(specificSNV(pRAIDS)$snp.chromosome,
-                         snp.chromosome,
-                         specificSNV(pRAIDS)$snp.chromosome),
-                       c(specificSNV(pRAIDS)$snp.position,
-                         snp.position,
-                         specificSNV(pRAIDS)$snp.position),
-                       c(-1 * seq_len(nrow(specificSNV(pRAIDS))),
-                         rep(0, length(snp.position)),
-                         seq_len(nrow(specificSNV(pRAIDS)))),
-                       c(rep(0, nrow(specificSNV(pRAIDS))),
-                         seq_len(length(snp.position)),
-                         rep(0, nrow(specificSNV(pRAIDS)))))
-            z <- z[order(z[,1], z[,2], z[,3]),]
+            keepPos <- seq_len(length(snp.chromosome))
+            if("snp.KeepDefault" %in% ls.gdsn(gdsReference) ){
+                keepPos <- read.gdsn(index.gdsn(gdsReference, "snp.KeepDefault"))
+            }
+            snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))[keepPos]
+            
+            snpgdsClose(gdsReference)
             df <- specificSNV(pRAIDS)
-            df$snvKeep <- rep(-1, nrow(pRAIDS$specificSNV$snvKeep))
-            df$snvKeep[-1*cumsum(z[,3])[z[,3] == 0]] <- z[cumsum(z[,3]) < 0 & z[,3] == 0, 4]
+            df <- df[!duplicated(df[,c("snp.chromosome", "snp.position")]),]
+            z <- cbind(c(df$snp.chromosome,
+                         snp.chromosome,
+                         df$snp.chromosome),
+                       c(df$snp.position,
+                         snp.position,
+                         df$snp.position),
+                       c(-1 * seq_len(nrow(df)),
+                         rep(0, length(snp.position)),
+                         seq_len(nrow(df))),
+                       c(rep(0, nrow(df)),
+                         seq_len(length(snp.position)),
+                         rep(0, nrow(df))))
+            z <- z[order(z[,1], z[,2], z[,3]),]
+            
+            df$snvKeep <- as.integer(rep(-1, nrow(df)))
+            df$snvKeep[-1*cumsum(z[,3])[z[,3] == 0]] <- as.integer(z[cumsum(z[,3]) < 0 & z[,3] == 0, 4])
             specificSNV(pRAIDS) <- df
         }
     }

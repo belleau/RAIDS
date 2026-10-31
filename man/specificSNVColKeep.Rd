@@ -24,7 +24,24 @@ TODO
 }
 \examples{
 
-## No example for the moment
+dataDir <- system.file("extdata/tests", package="RAIDS")
+fileGDS <- file.path(dataDir, "ex1_good_small_1KG.gds")
+pRAIDS <- RAIDSparam( fileReferenceGDS=fileGDS)
+
+gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
+snp.chromosome <- read.gdsn(node=index.gdsn(gdsReference, "snp.chromosome"))
+snp.position <- read.gdsn(node=index.gdsn(gdsReference, "snp.position"))
+snpgdsClose(gdsReference)
+set.seed(4235)
+tmp <- sample(seq_len(length(snp.position )),100)
+
+df <- data.frame(snp.chromosome=c(snp.chromosome[tmp], rep(1,10)),
+                 snp.position=c(snp.position[tmp], 1987486 +10+seq_len(10))  )
+
+specificSNV(pRAIDS) <- df
+pRAIDS <- RAIDS:::specificSNVColKeep(pRAIDS)
+head(specificSNV(pRAIDS))
+tail(specificSNV(pRAIDS))
 
 
 }

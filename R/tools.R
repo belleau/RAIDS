@@ -1274,6 +1274,7 @@ runADMIXTURE <- function( pathOut, fileBed, seedAdmix=3435L, pRAIDS) {
 
     pathCur <- getwd()
     setwd(pathOut)
+    on.exit(setwd(pathCur), add=TRUE)
     cmdAdmix <- c("-s", seedAdmix, "-P",
             fileBed,
             nrow(popSelected))
