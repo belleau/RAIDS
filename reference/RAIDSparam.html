@@ -116,6 +116,10 @@ in the RAIDS workflow.</p>
 <span>  fieldPopInRef <span class="op">=</span> <span class="st">"superPop"</span>,</span>
 <span>  fieldPopInfAnc <span class="op">=</span> <span class="st">"superPop"</span>,</span>
 <span>  fieldSubPop <span class="op">=</span> <span class="st">"pop.group"</span>,</span>
+<span>  anchorId <span class="op">=</span> <span class="st">"sp0.95v0.2"</span>,</span>
+<span>  pathADMIXTURE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seedADMIXTURE <span class="op">=</span> <span class="fl">432L</span>,</span>
+<span>  cleanADMIXTUREFiles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -271,8 +275,9 @@ Default: <code>"1"</code>.</p></dd>
 
 
 <dt id="arg-nbsim">nbSim<a class="anchor" aria-label="anchor" href="#arg-nbsim"></a></dt>
-<dd><p>a positive <code>integer</code> representing TODO.
-Default: <code>1L</code>.</p></dd>
+<dd><p>a positive <code>integer</code> representing the number
+of replicated simulation (Only 1 is supported for the
+moment). Default: <code>1L</code>.</p></dd>
 
 
 <dt id="arg-posoffset">posOffset<a class="anchor" aria-label="anchor" href="#arg-posoffset"></a></dt>
@@ -372,7 +377,9 @@ is used during the pruning step. Default: <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-genotype">genoType<a class="anchor" aria-label="anchor" href="#arg-genotype"></a></dt>
-<dd><p>TODO</p></dd>
+<dd><p>a single <code>character</code> string representing the field
+in the GDS profile file that contains all the genotype information.
+Default: <code>"geno.ref"</code>.</p></dd>
 
 
 <dt id="arg-phasetype">phaseType<a class="anchor" aria-label="anchor" href="#arg-phasetype"></a></dt>
@@ -444,6 +451,28 @@ information for the samples. The column should be present in the Population
 Reference GDS file. Default: <code>"pop.group"</code>.</p></dd>
 
 
+<dt id="arg-anchorid">anchorId<a class="anchor" aria-label="anchor" href="#arg-anchorid"></a></dt>
+<dd><p>a <code>character</code> string representing the name of the
+identifier of the quasi non-admixed profile from the reference.
+Default: <code>"sp0.95v0.2"</code></p></dd>
+
+
+<dt id="arg-pathadmixture">pathADMIXTURE<a class="anchor" aria-label="anchor" href="#arg-pathadmixture"></a></dt>
+<dd><p>a <code>character</code> string representing the path pf
+the software ADMIXTURE and the binary. If specified, the file must exist.
+Default: <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-seedadmixture">seedADMIXTURE<a class="anchor" aria-label="anchor" href="#arg-seedadmixture"></a></dt>
+<dd><p>a single <code>integer</code> seed for
+the ADMIXTURE program. Default: <code>432L</code>.</p></dd>
+
+
+<dt id="arg-cleanadmixturefiles">cleanADMIXTUREFiles<a class="anchor" aria-label="anchor" href="#arg-cleanadmixturefiles"></a></dt>
+<dd><p>a single <code>logical</code> indicating if RAIDS
+removes ADMIXTURE files after processing. Default: <code>TRUE</code>.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>a <code>logical</code> indicating if message information should be
 printed. Default: <code>FALSE</code></p></dd>
@@ -481,7 +510,7 @@ length of the chromosomes can be obtain through the
 <span class="r-in"><span><span class="co">## New object of class "RAIDSparam" with non-default parameters</span></span></span>
 <span class="r-in"><span><span class="va">newParam2</span> <span class="op">&lt;-</span> <span class="fu">RAIDSparam</span><span class="op">(</span>studyDF<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>study.id<span class="op">=</span><span class="st">"Test1"</span>,</span></span>
 <span class="r-in"><span>    study.desc<span class="op">=</span><span class="st">"Test Desc"</span>, study.platform<span class="op">=</span><span class="st">"Test"</span>, stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    nbSim<span class="op">=</span><span class="fl">12L</span>, minCov<span class="op">=</span><span class="fl">8L</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    nbSim<span class="op">=</span><span class="fl">1L</span>, minCov<span class="op">=</span><span class="fl">8L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -493,7 +522,7 @@ length of the chromosomes can be obtain through the
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">

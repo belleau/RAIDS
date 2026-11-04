@@ -88,7 +88,7 @@ identifier.</p></dd>
 
 
 <dt id="arg-praids">pRAIDS<a class="anchor" aria-label="anchor" href="#arg-praids"></a></dt>
-<dd><p>a <code>parametersRAIDS</code> an object with all the RAIDS
+<dd><p>a <code>RAIDSparam</code> an object with all the RAIDS
 parameters</p></dd>
 
 </dl></div>
@@ -145,7 +145,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span>                             stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">pedStudy</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pedStudy</span><span class="op">$</span><span class="va">Name.ID</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="paramRAIDS.html">paramRAIDS</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
+<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="RAIDSparam.html">RAIDSparam</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
 <span class="r-in"><span>                      pedStudy<span class="op">=</span><span class="va">pedStudy</span>,</span></span>
 <span class="r-in"><span>                      pathProfileGDS<span class="op">=</span><span class="va">pathProfileGDS</span>,</span></span>
 <span class="r-in"><span>                      fileReferenceGDS<span class="op">=</span><span class="va">fileReferenceGDS</span>,</span></span>
@@ -153,9 +153,9 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">listPCARef</span> <span class="op">&lt;-</span> <span class="fu">RAIDS</span><span class="fu">:::</span><span class="fu"><a href="computePCARefRMMulti2.html">computePCARefRMMulti2</a></span><span class="op">(</span>listRM <span class="op">=</span> <span class="cn">NULL</span>, pRAIDS <span class="op">=</span> <span class="va">pRAIDS</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">listPCAProfile</span> <span class="op">&lt;-</span> <span class="fu">RAIDS</span><span class="fu">:::</span><span class="fu">computePCAProfile</span><span class="op">(</span>listPCA<span class="op">=</span><span class="va">listPCARef</span>, </span></span>
-<span class="r-in"><span>                      profileId<span class="op">=</span><span class="va">pRAIDS</span><span class="op">$</span><span class="va">pedStudy</span><span class="op">$</span><span class="va">Name.ID</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span>                      profileId<span class="op">=</span><span class="fu"><a href="pedStudy.html">pedStudy</a></span><span class="op">(</span><span class="va">pRAIDS</span><span class="op">)</span><span class="op">$</span><span class="va">Name.ID</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, </span></span>
 <span class="r-in"><span>                      pRAIDS<span class="op">=</span><span class="va">pRAIDS</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hint: it is suggested to call `snpgdsOpen' to open a SNP GDS file instead of `openfn.gds'.</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -167,7 +167,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">

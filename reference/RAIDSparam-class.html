@@ -176,7 +176,7 @@ existing corresponding "</em>.bai" file). Default: <code>NULL</code>.</p></dd>
 
 
 <dt><code>profileFileGeno</code></dt>
-<dd><p>TODO</p></dd>
+<dd><p>not used in the current version</p></dd>
 
 
 <dt><code>pathProfileGDS</code></dt>
@@ -220,13 +220,14 @@ Default: <code>1L</code>.</p></dd>
 
 
 <dt><code>prefix</code></dt>
-<dd><p>a single <code>character</code> string representing TODO.
-Default: <code>"1"</code>.</p></dd>
+<dd><p>a single <code>character</code> string representing at the
+beginning of the synthetic name id. Default: <code>"1"</code>.</p></dd>
 
 
 <dt><code>nbSim</code></dt>
-<dd><p>a positive <code>integer</code> representing TODO.
-Default: <code>1L</code>.</p></dd>
+<dd><p>a positive <code>integer</code> representing number of
+replicated synthitic data (restricted to 1 for
+the moment). Default: <code>1L</code>.</p></dd>
 
 
 <dt><code>posOffset</code></dt>
@@ -326,7 +327,9 @@ is used during the pruning step. Default: <code>NULL</code>.</p></dd>
 
 
 <dt><code>genoType</code></dt>
-<dd><p>a TODO. Default: <code>"geno.ref"</code>.</p></dd>
+<dd><p>a single <code>character</code> string representing the field
+in the GDS profile file that contains all the genotype information.
+Default: <code>"geno.ref"</code>.</p></dd>
 
 
 <dt><code>phaseType</code></dt>
@@ -400,6 +403,29 @@ information for the samples. The column should be present in the Population
 Reference GDS file. Default: <code>"pop.group"</code>.</p></dd>
 
 
+<dt><code>anchorId</code></dt>
+<dd><p>a <code>character</code> string representing the name of the
+identifier of the quasi non-admixed profile from the reference.
+Default: <code>"sp0.95v0.2"</code>.</p></dd>
+
+
+<dt><code>pathADMIXTURE</code></dt>
+<dd><p>a <code>character</code> string representing the path pf
+the software ADMIXTURE and the binary. If it use a function using ADMIXTURE, then
+if it is null, it will try to find it with <code>Sys.which("admixture")</code>.
+Default: <code>NULL</code>.</p></dd>
+
+
+<dt><code>seedADMIXTURE</code></dt>
+<dd><p>a single <code>integer</code> seed for
+ADMIXTURE program. Default: <code>432L</code>.</p></dd>
+
+
+<dt><code>cleanADMIXTUREFiles</code></dt>
+<dd><p>a single <code>logical</code> indicating if RAIDS
+removes ADMIXTURE files after processing. Default: <code>TRUE</code>.</p></dd>
+
+
 <dt><code>verbose</code></dt>
 <dd><p>a <code>logical</code> indicating if message information should be
 printed. Default: <code>FALSE</code>.</p></dd>
@@ -419,7 +445,7 @@ printed. Default: <code>FALSE</code>.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">

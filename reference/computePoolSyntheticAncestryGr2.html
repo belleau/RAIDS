@@ -102,7 +102,7 @@ identifiers are used as names for the <code>vector</code>.</p></dd>
 
 
 <dt id="arg-praids">pRAIDS<a class="anchor" aria-label="anchor" href="#arg-praids"></a></dt>
-<dd><p>a <code>parametersRAIDS</code> an object containing all RAIDS
+<dd><p>a <code>RAIDSparam</code> an object containing all RAIDS
 parameters.</p></dd>
 
 </dl></div>
@@ -179,7 +179,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span>                             stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">pedStudy</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pedStudy</span><span class="op">$</span><span class="va">Name.ID</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="paramRAIDS.html">paramRAIDS</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
+<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="RAIDSparam.html">RAIDSparam</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
 <span class="r-in"><span>                      pedStudy<span class="op">=</span><span class="va">pedStudy</span>,</span></span>
 <span class="r-in"><span>                      pathProfileGDS<span class="op">=</span><span class="va">pathProfileGDS</span>,</span></span>
 <span class="r-in"><span>                      fileReferenceGDS<span class="op">=</span><span class="va">fileReferenceGDS</span><span class="op">)</span></span></span>
@@ -187,7 +187,6 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">computePoolSyntheticAncestryGr2</span><span class="op">(</span>sampleRM<span class="op">=</span><span class="va">samplesRM</span>,</span></span>
 <span class="r-in"><span>                             spRef<span class="op">=</span><span class="va">demoKnownSuperPop1KG</span>,</span></span>
 <span class="r-in"><span>                             pRAIDS<span class="op">=</span><span class="va">pRAIDS</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hint: it is suggested to call `snpgdsOpen' to open a SNP GDS file instead of `openfn.gds'.</span>
 <span class="r-in"><span><span class="co">## The ancestry inference for the synthetic data using</span></span></span>
 <span class="r-in"><span><span class="co">## different K and D values</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">matKNN</span><span class="op">)</span></span></span>
@@ -210,7 +209,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">

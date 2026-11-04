@@ -85,7 +85,7 @@ the file name of the new bim file.</p></dd>
 
 
 <dt id="arg-praids">pRAIDS<a class="anchor" aria-label="anchor" href="#arg-praids"></a></dt>
-<dd><p>a <code>parametersRAIDS</code> an object with all the RAIDS
+<dd><p>a <code>RAIDSparam</code> an object with all the RAIDS
 parameters</p></dd>
 
 </dl></div>
@@ -101,31 +101,51 @@ parameters</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Required library</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/zhengxwen/gdsfmt" class="external-link">gdsfmt</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Load the known ancestry for the demo 1KG reference profiles</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">demoKnownSuperPop1KG</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Path to the demo pedigree file is located in this package</span></span></span>
-<span class="r-in"><span><span class="va">dataDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Path to the demo Profile GDS file is located in this package</span></span></span>
+<span class="r-in"><span><span class="va">dataDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/demoAncestryCall"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Demo 1KG Reference GDS file</span></span></span>
-<span class="r-in"><span><span class="va">fileGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/openfn.gds.html" class="external-link">openfn.gds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span>,</span></span>
-<span class="r-in"><span>                    <span class="st">"PopulationReferenceDemo.gds"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pathOut</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"out.tmp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">pathOut</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">pathOut</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Output VCF file that will be created (temporary)</span></span></span>
-<span class="r-in"><span><span class="va">vcfFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Demo_TMP_01.vcf"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># The name of the synthetic study</span></span></span>
+<span class="r-in"><span><span class="va">studyID</span> <span class="op">&lt;-</span> <span class="st">"MYDATA"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Create a VCF file with the SNV dataset present in the GDS file</span></span></span>
-<span class="r-in"><span><span class="co">## No cutoff on frequency, so all SNVs are saved</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="snvListVCF.html">snvListVCF</a></span><span class="op">(</span>gdsReference<span class="op">=</span><span class="va">fileGDS</span>, fileOut<span class="op">=</span><span class="va">vcfFile</span>, offset<span class="op">=</span><span class="fl">0L</span>,</span></span>
-<span class="r-in"><span>                    freqCutoff<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>appending column names to file</span>
+<span class="r-in"><span><span class="va">studyDF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>study.id<span class="op">=</span><span class="va">studyID</span>,</span></span>
+<span class="r-in"><span>                             study.desc<span class="op">=</span><span class="va">studyID</span>,</span></span>
+<span class="r-in"><span>                             study.platform<span class="op">=</span><span class="st">"NotDef"</span>,</span></span>
+<span class="r-in"><span>                             stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pathProfileGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dataDir</span><span class="op">)</span> <span class="co"># , "ex1.gds"</span></span></span>
+<span class="r-in"><span><span class="va">fileReferenceGDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/tests/ex1_good_small_1KG.gds"</span>, package<span class="op">=</span><span class="st">"RAIDS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pedStudy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Name.ID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ex1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             Case.ID<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ex1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             Sample.Type<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"type"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             Diagnosis<span class="op">=</span><span class="st">"NotDef"</span>,</span></span>
+<span class="r-in"><span>                             Source<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NotDef"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                             stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">pedStudy</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pedStudy</span><span class="op">$</span><span class="va">Name.ID</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="RAIDSparam.html">RAIDSparam</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
+<span class="r-in"><span>                      pedStudy<span class="op">=</span><span class="va">pedStudy</span>,</span></span>
+<span class="r-in"><span>                      pathProfileGDS<span class="op">=</span><span class="va">pathProfileGDS</span>,</span></span>
+<span class="r-in"><span>                      fileReferenceGDS<span class="op">=</span><span class="va">fileReferenceGDS</span>,</span></span>
+<span class="r-in"><span>                      fieldPopInfAnc<span class="op">=</span><span class="st">"SuperPop"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">writeBimPruned</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathOut</span>, <span class="st">"test.bim"</span><span class="op">)</span>, <span class="va">pRAIDS</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Writing: /tmp/RtmpzLPgFR/out.tmp/test.bim</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Close GDS file (IMPORTANT)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/gdsfmt/man/closefn.gds.html" class="external-link">closefn.gds</a></span><span class="op">(</span><span class="va">fileGDS</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathOut</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "test.bim"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Remove temporary VCF file</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">vcfFile</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathOut</span>, <span class="st">"test.bim"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pathOut</span><span class="op">)</span>, recursive<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -137,7 +157,7 @@ parameters</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">

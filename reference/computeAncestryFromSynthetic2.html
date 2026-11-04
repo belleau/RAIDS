@@ -111,7 +111,7 @@ representing the list of possible ancestry assignations. Default:
 
 
 <dt id="arg-praids">pRAIDS<a class="anchor" aria-label="anchor" href="#arg-praids"></a></dt>
-<dd><p>a <code>parametersRAIDS</code> an object with all the RAIDS
+<dd><p>a <code>RAIDSparam</code> an object with all the RAIDS
 parameters</p></dd>
 
 </dl></div>
@@ -342,7 +342,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span>                             stringsAsFactors<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">pedStudy</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pedStudy</span><span class="op">$</span><span class="va">Name.ID</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="paramRAIDS.html">paramRAIDS</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
+<span class="r-in"><span><span class="va">pRAIDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="RAIDSparam.html">RAIDSparam</a></span><span class="op">(</span>studyDF<span class="op">=</span><span class="va">studyDF</span>,</span></span>
 <span class="r-in"><span>                      pedStudy<span class="op">=</span><span class="va">pedStudy</span>,</span></span>
 <span class="r-in"><span>                      pathProfileGDS<span class="op">=</span><span class="va">pathProfileGDS</span>,</span></span>
 <span class="r-in"><span>                      fileReferenceGDS<span class="op">=</span><span class="va">fileReferenceGDS</span>,</span></span>
@@ -358,7 +358,10 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 <span class="r-in"><span>                      pRAIDS<span class="op">=</span><span class="va">pRAIDS</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>A K smaller than 3 could not give robust results.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>ci.auc() of a ROC curve with AUC == 1 is always 1-1 and can be misleading.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Hint: it is suggested to call `snpgdsOpen' to open a SNP GDS file instead of `openfn.gds'.</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">resCall</span><span class="op">$</span><span class="va">Ancestry</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample.id D  K SuperPop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80       ex1 7 11      EAS</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -372,7 +375,7 @@ doi: 10.1016/j.ajhg.2015.12.022. Epub 2016 Feb 25.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz.</p>
+  <p></p><p>Developed by Pascal Belleau, Astrid Deschênes, David A. Tuveson, Alexander Krasnitz, National Institutes of Health.</p>
 </div>
 
 <div class="pkgdown">
