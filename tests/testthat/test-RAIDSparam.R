@@ -697,15 +697,15 @@ test_that("create a RAIDSparam class with integer for listPos parameter should g
 test_that("create a RAIDSparam class with snp.position column missing for listPos parameter should generate an error", {
 
     expect_error(new("RAIDSparam", listPos=data.frame("snp.chromosome"=c("1", "2"))),
-        paste0("'listPos' slot must be NULL or a data.frame with 2 columns",
-            " named \"snp.chromosome\" and \"snp.position\""))
+        paste0("'listPos' slot must be NULL or a data.frame with ",
+            "at least 2 columns named \"snp.chromosome\" and \"snp.position\"."))
 })
 
 test_that("create a RAIDSparam class with snp.chromosome column missing for listPos parameter should generate an error", {
 
     expect_error(new("RAIDSparam", listPos=data.frame("snp.position"=c("1", "2"))),
-        paste0("'listPos' slot must be NULL or a data.frame with 2 columns",
-            " named \"snp.chromosome\" and \"snp.position\""))
+        paste0("'listPos' slot must be NULL or a data.frame with ",
+            "at least 2 columns named \"snp.chromosome\" and \"snp.position\"."))
 })
 
 test_that("create a RAIDSparam class with sample.id column missing for syntheticRefDF parameter should generate an error", {

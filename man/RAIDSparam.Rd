@@ -134,11 +134,12 @@ is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "}.txt.gz".
 If 'genoSource' is "bam", then "\emph{.bam" (the file need to be indexed with a
 existing corresponding "}.bai" file). Default: \code{NULL}.}
 
-\item{profileFileGeno}{TODO}
+\item{profileFileGeno}{a single \code{character} string representing
+the file name and is path. Default: \code{NULL}.}
 
-\item{pathProfileGDS}{a single \code{character} string
-representing the path to the directory where the GDS Profile files will
-be created. If specified, the directory must exist.
+\item{pathProfileGDS}{a single \code{character} string representing the
+path to the directory where the GDS Profile files will be created. If
+specified, the directory must exist.
 Default: \code{NULL}.}
 
 \item{fileReferenceGDS}{a single \code{character} string representing
@@ -197,8 +198,8 @@ synthetic profiles. Default: \code{0.01}.}
 \item{np}{a single positive \code{integer} specifying the number of
 threads to be used. Default: \code{1L}.}
 
-\item{listPos}{a \code{data.frame} containing 2 columns named:
-"snp.chromosome" and "snp.position". The first column,
+\item{listPos}{a \code{data.frame} containing at least 2 columns
+named: "snp.chromosome" and "snp.position". The first column,
 called "snp.chromosome", contains the name of the chromosome where the
 SNV is located. The second column, called "snp.position", contains the
 position of the SNV on the chromosome. Default: \code{NULL}.}

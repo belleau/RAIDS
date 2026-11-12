@@ -98,11 +98,9 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' If 'genoSource' is "bam", then "*.bam" (the file needs to be indexed with a
 #' existing corresponding "*.bai" file). Default: \code{NULL}.
 #' 
-#' @slot profileFileGeno not used in the current version
 #' 
 #' @slot pathProfileGDS a single \code{character} string representing the 
-#' path to the directory where the GDS Profile files will be created. If 
-#' specified, the directory must exist. 
+#' path to the directory where the GDS Profile files will be created.
 #' Default: \code{NULL}.
 #' 
 #' @slot fileReferenceGDS a single \code{character} string representing 
@@ -161,8 +159,8 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot np a single positive \code{integer} specifying the number of
 #' threads to be used. Default: \code{1L}.
 #' 
-#' @slot listPos a \code{data.frame} containing 2 columns named: 
-#' "snp.chromosome" and "snp.position". The first column,
+#' @slot listPos a \code{data.frame} containing at least 2 columns  
+#' named: "snp.chromosome" and "snp.position". The first column,
 #' called "snp.chromosome", contains the name of the chromosome where the
 #' SNV is located. The second column, called "snp.position", contains the
 #' position of the SNV on the chromosome. Default: \code{NULL}.
@@ -204,6 +202,9 @@ setClassUnion("CharacterOrNULL", members = c("character", "NULL"))
 #' @slot genoType a single \code{character} string representing the field 
 #' in the GDS profile file that contains all the genotype information. 
 #' Default: \code{"geno.ref"}.
+#' 
+#' @slot profileFileGeno a single \code{character} string representing 
+#' the file name and is path. Default: \code{NULL}.
 #' 
 #' @slot phaseType a TODO. Default: \code{"phase.ref"}.
 #' 
@@ -533,8 +534,7 @@ setValidity("RAIDSparam",
                     "string representing an existing file."))
         }
       
-        ## Validate the profileFileGeno parameter TODO
-      
+        
         ## Validate the pathProfileGDS parameter
         if ((!is.null(object@pathProfileGDS) && 
                     length(object@pathProfileGDS) != 1) || 
@@ -632,11 +632,11 @@ setValidity("RAIDSparam",
         }
 
         ## Validate the listPos parameter
-        if (!(is.null(object@listPos) || (ncol(object@listPos) == 2 && 
-                all(colnames(object@listPos) %in% c("snp.chromosome", 
-                "snp.position"))))) {
+        if (!(is.null(object@listPos) || (ncol(object@listPos) >= 2 && 
+                all(c("snp.chromosome", 
+                "snp.position") %in% colnames(object@listPos) )))) {
             return(paste0("'listPos' slot must be NULL or a data.frame with ", 
-                "2 columns named \"snp.chromosome\" and \"snp.position\"."))
+                "at least 2 columns named \"snp.chromosome\" and \"snp.position\"."))
         }
 
         ## Validate the syntheticRefDF parameter
@@ -684,7 +684,13 @@ setValidity("RAIDSparam",
         if (length(object@genoType) != 1) {
           return("'genoType' slot must have one character string.")
         }
-      
+        
+        ## Validate the profileFileGeno parameter 
+        if ((!is.null(object@profileFileGeno) && 
+                    length(object@profileFileGeno) != 1) ){
+            return(paste0("'fileReferenceGDS' slot must have one character ", 
+                    "string representing a file."))
+        }
         ## Validate the phaseType parameter
         if (length(object@phaseType) != 1) {
             return("'phaseType' slot must be one character string.")
@@ -2597,6 +2603,57 @@ setMethod("genoType", "RAIDSparam", function(x) {
   return(x@genoType)
 })
 
+#' Generic function for getting the profileFileGeno slot in a class
+#' 
+#' @description A generic function for getting the profileFileGeno slot in a 
+#' S4 object.
+#' 
+#' @param x a S4 object.
+#' 
+#' @return a value from the profileFileGeno slot in the S4 object.
+#' 
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(profileFileGeno="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", profileFileGeno="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # profileFileGeno(obj)
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("profileFileGeno", function(x) standardGeneric("profileFileGeno"))
+
+
+#' A getter for the profileFileGeno slot in a RAIDSparam class
+#' 
+#' @description A function for getting the profileFileGeno slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @return a single \code{character} string representing 
+#' the file name and is path. 
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Extract the profileFileGeno slot for the object
+#' profileFileGeno(paramDemo)
+#' 
+#' @export
+setMethod("profileFileGeno", "RAIDSparam", function(x) {
+  return(x@profileFileGeno)
+})
 
 #' Generic function for getting the phaseType slot in a class
 #' 
@@ -5589,6 +5646,68 @@ setMethod("genoType<-", "RAIDSparam", function(x, value) {
   return(x)
 })
 
+#' Generic function for replacement of profileFileGeno slot in a class
+#' 
+#' @description A generic function for replacement of profileFileGeno  
+#' slot in a S4 object. 
+#' 
+#' @param x a S4 object.
+#' 
+#' @param value the new value to assign or update.
+#' 
+#' @return the modified S4 object when the new value is valid.
+#'  
+#' @examples
+#' 
+#' # Define a dummy class to show usage
+#' setClass("MyClass", slots = list(profileFileGeno="character"))
+#' 
+#' # Create an instance
+#' obj <- new("MyClass", profileFileGeno="123")
+#' 
+#' # Call the generic (assuming a method is implemented)
+#' # profileFileGeno(obj) <- "333"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' @export
+setGeneric("profileFileGeno<-", 
+  function(x, value) standardGeneric("profileFileGeno<-"))
+
+
+#' Setter function for replacement of profileFileGeno slot in 
+#' a RAIDSparam class
+#' 
+#' @description A function for replacement of profileFileGeno slot in a 
+#' \code{RAIDSparam} class. 
+#' 
+#' @param x a \code{RAIDSparam} object.
+#' 
+#' @param value a single \code{character} string representing the 
+#' path to the directory where the GDS Profile files will be created. 
+#' 
+#' @return the modified \code{RAIDSparam} object when the new value is valid.
+#' 
+#' @examples
+#' 
+#' ## Create a RAIDSparam object
+#' paramDemo <- RAIDSparam()
+#' 
+#' ## Assign new value to the profileFileGeno slot in the object
+#' profileFileGeno(paramDemo) <- "ex1.vcf.gz"
+#' 
+#' @author Pascal Belleau, Astrid Deschênes and Alexander Krasnitz
+#' @encoding UTF-8
+#' 
+#' @importFrom methods validObject
+#' @export
+setMethod("profileFileGeno<-", "RAIDSparam", function(x, value) {
+  x@profileFileGeno <- value
+
+  # Validate and return the modified object
+  validObject(x) 
+  return(x)
+})
 
 #' Generic function for replacement of phaseType slot in a class
 #' 
@@ -6705,8 +6824,6 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' If 'genoSource' is "bam", then "*.bam" (the file need to be indexed with a
 #' existing corresponding "*.bai" file). Default: \code{NULL}.
 #' 
-#' @param profileFileGeno TODO
-#' 
 #' @param pathProfileGDS  a single \code{character} string 
 #' representing the path to the directory where the GDS Profile files will 
 #' be created. If specified, the directory must exist. 
@@ -6768,8 +6885,8 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' @param np a single positive \code{integer} specifying the number of
 #' threads to be used. Default: \code{1L}.
 #' 
-#' @param listPos a \code{data.frame} containing 2 columns named: 
-#' "snp.chromosome" and "snp.position". The first column,
+#' @param listPos a \code{data.frame} containing at least 2 columns 
+#' named: "snp.chromosome" and "snp.position". The first column,
 #' called "snp.chromosome", contains the name of the chromosome where the
 #' SNV is located. The second column, called "snp.position", contains the
 #' position of the SNV on the chromosome. Default: \code{NULL}.
@@ -6811,6 +6928,14 @@ setMethod("verbose<-", "RAIDSparam", function(x, value) {
 #' @param genoType a single \code{character} string representing the field 
 #' in the GDS profile file that contains all the genotype information. 
 #' Default: \code{"geno.ref"}.
+#' 
+#' @param profileFileGeno a single \code{character} string representing 
+#' the file name and is path. Default: \code{NULL}.
+#' 
+#' @param pathProfileGDS a single \code{character} string representing the 
+#' path to the directory where the GDS Profile files will be created. If 
+#' specified, the directory must exist. 
+#' Default: \code{NULL}.
 #' 
 #' @param phaseType a TODO. Default: \code{"phase.ref"}.
 #' 

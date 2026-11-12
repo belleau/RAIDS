@@ -96,11 +96,8 @@ is "VCF". If 'genoSource' is "generic" or "snp-pileup", then "}.txt.gz".
 If 'genoSource' is "bam", then "\emph{.bam" (the file needs to be indexed with a
 existing corresponding "}.bai" file). Default: \code{NULL}.}
 
-\item{\code{profileFileGeno}}{not used in the current version}
-
 \item{\code{pathProfileGDS}}{a single \code{character} string representing the
-path to the directory where the GDS Profile files will be created. If
-specified, the directory must exist.
+path to the directory where the GDS Profile files will be created.
 Default: \code{NULL}.}
 
 \item{\code{fileReferenceGDS}}{a single \code{character} string representing
@@ -159,8 +156,8 @@ synthetic profiles. Default: \code{0.01}.}
 \item{\code{np}}{a single positive \code{integer} specifying the number of
 threads to be used. Default: \code{1L}.}
 
-\item{\code{listPos}}{a \code{data.frame} containing 2 columns named:
-"snp.chromosome" and "snp.position". The first column,
+\item{\code{listPos}}{a \code{data.frame} containing at least 2 columns
+named: "snp.chromosome" and "snp.position". The first column,
 called "snp.chromosome", contains the name of the chromosome where the
 SNV is located. The second column, called "snp.position", contains the
 position of the SNV on the chromosome. Default: \code{NULL}.}
@@ -202,6 +199,9 @@ is used during the pruning step. Default: \code{NULL}.}
 \item{\code{genoType}}{a single \code{character} string representing the field
 in the GDS profile file that contains all the genotype information.
 Default: \code{"geno.ref"}.}
+
+\item{\code{profileFileGeno}}{a single \code{character} string representing
+the file name and is path. Default: \code{NULL}.}
 
 \item{\code{phaseType}}{a TODO. Default: \code{"phase.ref"}.}
 
