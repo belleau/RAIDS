@@ -441,7 +441,7 @@ addGenotypeProfile <- function(pRAIDS) {
     gdsProfile <- openfn.gds(fileProfileGDS, readonly=FALSE)
     if(! ("pruned.study" %in% ls.gdsn(gdsProfile))){
         closefn.gds(gdsProfile)
-        stop(paste0("Call addGenotypeProfileGDS without pruned.study\n"))
+        stop(paste0("Call addGenotypeProfile without pruned.study\n"))
     }
 
     gdsReference <- snpgdsOpen(filename=fileReferenceGDS(pRAIDS))
